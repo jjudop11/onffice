@@ -42,7 +42,7 @@
                                   <li><a class="dropdown-item" href="#">No new mail</a></li>
                               </ul>
                           </li>
-                          <li class="nav-item dropdown me-1">
+                          <li class="nav-item dropdown me-1"><!-- 채팅 아이콘 -->
                               <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
                                   aria-expanded="false">
                                   <i class='bi bi-chat bi-sub fs-4 text-gray-600'></i>
