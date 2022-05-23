@@ -6,14 +6,17 @@
 <configuration>
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
 	</settings>
 	
 	<typeAliases>
-		
+		<typeAlias alias="Company" type="com.uni.spring.company.model.dto.Company"/>
+		<typeAlias alias="Member" type="com.uni.spring.member.model.dto.Member"/>
 	</typeAliases>
 	
 	<mappers>
-		
+		<mapper resource="/mappers/company-mapper.xml"/>
+		<mapper resource="/mappers/member-mapper.xml"/>
 	</mappers>
 	
 </configuration>

@@ -18,15 +18,16 @@
     <link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="resources/assets/css/app.css">
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body style="background-color:#F0FFF0">
-	<!-- 이상화 커밋 테스트 -->
+
 	<div id="main" class='layout-navbar'>
       <header class='mb-3'>
           <nav class="navbar navbar-expand navbar-light ">
               <div class="container-fluid">
-              		
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                       	  
@@ -79,25 +80,31 @@
                           </a>
                           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                               <li>
-                                  <h6 class="dropdown-header">Hello, John!</h6>
+                                  <h6 class="dropdown-header">Hello?</h6>
                               </li>
                               <div class="card">
 	                            <div class="card-body py-4 px-5">
-	                                <div class="d-flex align-items-center">
+	                                <div class="card-body text-center">
 	                                    <div class="avatar avatar-xl">
 	                                        <img src="resources/assets/images/faces/1.jpg" alt="Face 1">
 	                                    </div>
-	                                    <div class="ms-3 name">
-	                                        <h5 class="font-bold">John Duck</h5>
-	                                        <h6 class="text-muted mb-0">@johnducky</h6>
-	                                    </div>
 	                                </div>
 	                            </div>
+	                            <div class="name text-center">          	
+	                            	<h4 class="font-bold">${ sessionScope.loginUser.MName } ${ sessionScope.loginUser.JName }</h4>
+	                                <h5 class="text-muted mb-0">${ sessionScope.loginUser.DName }</h5>
+                            	</div>
 	                         </div>
-	                         <li><a class="dropdown-item" href="#"><i
-                                          class="icon-mid bi bi-box-arrow-left me-2"></i> 개인정보</a></li>
-                              <li><a class="dropdown-item" href="#"><i
-                                          class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
+	                         
+	                         <li>
+		                         <c:if test="${ sessionScope.loginUser.MManager eq 'N' }">
+		                         	<a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> 개인정보관리</a>
+		                         </c:if>
+		                         <c:if test="${ sessionScope.loginUser.MManager eq 'Y' }">
+		                         	<a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> 관리자페이지</a>
+		                         </c:if>
+	                         </li>
+                              <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
                           </ul>
                       </div>
                   </div>
