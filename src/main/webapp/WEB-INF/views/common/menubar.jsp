@@ -211,7 +211,7 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="layout-default.html">Default Layout</a>
+                                    <a href="enrollFormApproval.do">기안작성</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="layout-vertical-1-column.html">1 Column</a>
