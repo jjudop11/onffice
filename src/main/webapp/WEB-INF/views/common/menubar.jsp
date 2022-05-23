@@ -266,16 +266,10 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="form-editor-quill.html">Quill</a>
+                                    <a href="form-editor-quill.html">내 보관함</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="form-editor-ckeditor.html">CKEditor</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="form-editor-summernote.html">Summernote</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="form-editor-tinymce.html">TinyMCE</a>
+                                    <a href="form-editor-ckeditor.html">부서 보관함</a>
                                 </li>
                             </ul>
                         </li>
@@ -287,13 +281,10 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="ui-widgets-chatbox.html">Chatbox</a>
+                                    <a href="ui-widgets-chatbox.html">전체 프로젝트</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="ui-widgets-pricing.html">Pricing</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="ui-widgets-todolist.html">To-do List</a>
+                                    <a href="ui-widgets-pricing.html">내 프로젝트</a>
                                 </li>
                             </ul>
                         </li>
