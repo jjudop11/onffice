@@ -9,6 +9,7 @@
 <bean id="LoggerAspect1" class="com.uni.spring.common.aop.LoggerAspect"/>
 <aop:config>
 	<aop:aspect id="LoggerAspect" ref="LoggerAspect1">
+		<aop:pointcut expression="execution(* com.uni.spring.company..*(..))" id="pcForAll"/>
 		<aop:pointcut expression="execution(* com.uni.spring.member..*(..))" id="pcForAll"/>
 		<aop:around method="loggerAdvice" pointcut-ref="pcForAll"/>
 	</aop:aspect>

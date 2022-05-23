@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="companyMapper">
+   <insert id="insertCompany" parameterType="Company">
+		INSERT INTO COMPANY
+		VALUES 
+		(SEQ_C_NO.NEXTVAL, #{cName}, #{cId}, #{cPwd}, #{cEmail}, #{cRNumber})
+	</insert>
+	
+	<select id="idCheck" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE M_ID=#{id}
+	</select>
+	
+	<select id="rNumCheck" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM COMPANY
+		WHERE C_RNUMBER=#{rNum}
+	</select>
+</mapper>

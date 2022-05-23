@@ -20,7 +20,6 @@
                     <i class="bi bi-justify fs-3"></i>
                 </a>
             </header> 
-
             <div class="page-heading">
                 <h3>이구역부터 메인</h3>
             </div>
