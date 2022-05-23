@@ -43,7 +43,7 @@
                                   <li><a class="dropdown-item" href="#">No new mail</a></li>
                               </ul>
                           </li>
-                          <li class="nav-item dropdown me-1"><!-- 채팅 아이콘 -->
+                          <li class="nav-item dropdown me-1" ><!-- 채팅 아이콘 -->
                               <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
                                   aria-expanded="false">
                                   <i class='bi bi-chat bi-sub fs-4 text-gray-600'></i>
@@ -52,7 +52,8 @@
                                   <li>
                                       <h6 class="dropdown-header">채팅</h6>
                                   </li>
-                                  <li><a class="dropdown-item" href="#">chat</a></li>
+                                  <li><a class="dropdown-item" href="selectCommunityList.do">community</a></li>
+                                  <li><a class="dropdown-item" href="selectChatRoomList.do">chat</a></li>
                               </ul>
                           </li>
                           <li class="nav-item dropdown me-1">
