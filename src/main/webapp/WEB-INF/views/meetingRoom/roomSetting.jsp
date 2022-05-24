@@ -187,16 +187,7 @@
 	</div>
 
 	<script>
-		function add() { //
-			const table = document.getElementById("meetingRoom");
-
-			const newRow = table.insertRow();
-			const newCell_1 = newRow.insertCell(0);
-			const newCell_2 = newRow.insertCell(1);
-			const newCell_3 = newRow.insertCell(2);
-			const newCell_4 = newRow.insertCell(3);
-
-		}
+		
 	</script>
 
 	<script

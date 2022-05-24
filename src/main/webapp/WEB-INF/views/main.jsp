@@ -306,6 +306,15 @@
         </div>
     </div>
 
+    
+    
+    <c:if test="${ !empty msg }">
+		<script>
+			alert("${msg}");
+		</script>
+		<c:remove var="msg" scope="session"/>
+	</c:if>
+	
 </body>
 
 </html>

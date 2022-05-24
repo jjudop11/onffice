@@ -17,6 +17,8 @@
 	<mappers>
 		<mapper resource="/mappers/company-mapper.xml"/>
 		<mapper resource="/mappers/member-mapper.xml"/>
+		
+		<mapper resource="/mappers/meetingroom-mapper.xml"/>
 	</mappers>
 	
 </configuration>
