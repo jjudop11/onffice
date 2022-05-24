@@ -1,14 +1,18 @@
 package com.uni.spring.member.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.member.model.dao.MemberDao;
 import com.uni.spring.member.model.dto.Member;
+
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -51,6 +55,18 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		return logUser;
+	}
+
+	@Override
+	public int selectMemListCount(int cNo) {
+		
+		return memberDao.selectMemListCount(sqlsession, cNo);
+	}
+
+	@Override
+	public ArrayList<Member> selectMemList(PageInfo pi, int cNo) {
+		// TODO Auto-generated method stub
+		return memberDao.selectMemList(sqlsession, pi, cNo);
 	}
 
 }

@@ -30,7 +30,7 @@
               <div class="container-fluid">
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                      	  
+                      		  
                           <li class="nav-item dropdown me-1">
                               <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
                                   aria-expanded="false">
@@ -99,13 +99,13 @@
 	                         
 	                         <li>
 		                         <c:if test="${ sessionScope.loginUser.MManager eq 'N' }">
-		                         	<a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> 개인정보관리</a>
+		                         	<a class="dropdown-item" href="mypageForm"><i class="icon-mid bi bi-file-diff me-2"></i> 개인정보관리</a>
 		                         </c:if>
 		                         <c:if test="${ sessionScope.loginUser.MManager eq 'Y' }">
-		                         	<a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> 관리자페이지</a>
+		                         	<a class="dropdown-item" href="managerpageForm"><i class="icon-mid bi bi-file-diff me-2"></i> 관리자페이지</a>
 		                         </c:if>
 	                         </li>
-                              <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
+                              <li><a class="dropdown-item" href="logout"><i class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
                           </ul>
                       </div>
                   </div>
@@ -119,7 +119,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="index.jsp"><img src="resources/assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                            <a href="main"><img src="resources/assets/images/logo/logo.png" alt="Logo" srcset=""></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -265,16 +265,10 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="form-editor-quill.html">Quill</a>
+                                    <a href="form-editor-quill.html">내 보관함</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="form-editor-ckeditor.html">CKEditor</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="form-editor-summernote.html">Summernote</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="form-editor-tinymce.html">TinyMCE</a>
+                                    <a href="form-editor-ckeditor.html">부서 보관함</a>
                                 </li>
                             </ul>
                         </li>
@@ -286,13 +280,10 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="ui-widgets-chatbox.html">Chatbox</a>
+                                    <a href="ui-widgets-chatbox.html">전체 프로젝트</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="ui-widgets-pricing.html">Pricing</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="ui-widgets-todolist.html">To-do List</a>
+                                    <a href="ui-widgets-pricing.html">내 프로젝트</a>
                                 </li>
                             </ul>
                         </li>
@@ -436,6 +427,11 @@
                
             </div>
         </div>
-
+       
+    <script src="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="resources/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="resources/assets/vendors/apexcharts/apexcharts.js"></script>
+    <script src="resources/assets/js/pages/dashboard.js"></script>
+    <script src="resources/assets/js/main.js"></script>
 </body>
 </html>
