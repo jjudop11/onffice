@@ -44,7 +44,8 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="writer">작성자</label>
-									<input type="text" id="writer" class="form-control round" placeholder="이름을 입력해주세요">
+									<input type="text" id="writer" class="form-control round" name="writer" readonly>
+									<%-- <input type="text" id="writer" class="form-control round" value="${ loginUser.mId }" name="writer" readonly> --%>
 								</div>
 							</div>
 						</div>
@@ -314,26 +315,30 @@
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
-									<label for="roundText">사유</label>
-									<textarea class="form-control" id="exampleFormControlTextarea1"
+									<label for="content">사유</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1 content"
                                             rows="3"></textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
-									<label for="roundText">첨부파일</label>
+									<label for="upfile">첨부파일</label>
 									<div class="input-group mb-3">
-                                                    <div class="input-group mb-3">
-                                                        <label class="input-group-text" for="inputGroupFile01"><i
-                                                                class="bi bi-upload"></i></label>
-                                                        <input type="file" class="form-control" id="inputGroupFile01">
-                                                    </div>
-                                                </div>
+	                                    <div class="input-group mb-3">
+	                                        <label class="input-group-text" for="inputGroupFile01"><i
+	                                                class="bi bi-upload"></i></label>
+	                                        <input type="file" class="form-control" id="inputGroupFile01 upfile">
+	                                    </div>
+	                                </div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				
+				<div class="buttons" align="center">
+                	<button type="submit" class="btn btn-secondary">결재요청</button>
+                </div>
 			</form>
 		</div>
 	</div>
