@@ -26,4 +26,10 @@ public class ChatServiceImpl implements ChatService{
 		return chatDao.selectChatRoomList(sqlSession);
 	}
 
+	@Override
+	public ArrayList<Chat> selectCount() {
+		// TODO Auto-generated method stub
+		return chatDao.selectCount(sqlSession);
+	}
+
 }

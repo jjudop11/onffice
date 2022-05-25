@@ -8,4 +8,6 @@ public interface ChatService {
 
 	ArrayList<Chat> selectChatRoomList();
 
+	ArrayList<Chat> selectCount();
+
 }

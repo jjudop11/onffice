@@ -20,4 +20,5 @@ public class Chat {
 	private String crImage; // 채팅방 이미지 파일명
 	private String crImageRoot; // 채팅방 이미지 파일 경로
 	private int crFounderNo; // 개설자 사번
+	private int crCount; // 참가자 총 명수
 }

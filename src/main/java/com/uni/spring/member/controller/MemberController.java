@@ -31,6 +31,7 @@ import com.uni.spring.dept.model.dto.Dept;
 import com.uni.spring.dept.model.service.DeptService;
 import com.uni.spring.job.model.dto.Job;
 import com.uni.spring.job.model.service.JobService;
+
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
 import com.uni.spring.member.model.service.MemberService;
@@ -43,7 +44,7 @@ public class MemberController {
 	
 	@Autowired 
 	private MemberService memberService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
@@ -95,7 +96,7 @@ public class MemberController {
 		model.addAttribute("pi", pi);
 		return "member/managerpageForm"; 
 	}
-	
+
 	@GetMapping("detailMember")
 	public String selectMember(String mNo, Model model) {
 		
