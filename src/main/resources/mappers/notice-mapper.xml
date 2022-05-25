@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="noticeMapper">
+
+	<select id="selectListCount" resultType="_int">
+		select count(*) from notice
+		where No_Status='Y'
+	</select>
+	
+	<select id="selectList" resultType="_int">
+		select * from notice
+		where No_Status='Y'
+		order by No_Num desc
+	</select>
+	
+	<select id="selectNotice" parameterType="Notice">
+		select * from notice
+		where No_Num=#{bno} and No_Status='Y'
+	</select>
+	
+	<update id="updateCount" parameterType="Notice">
+		update notice
+		set count=count+1
+		where No_Num=#{bno}
+	</update>
+	
+	<insert id="insertNotice" parameterType="Notice">
+		INSERT INTO notice
+		VALUES(SEQ_NOTICE.NEXTVAL, #{No_Title}, #{No_Content}, #{No_Write}, DEFAULT, #{No_View}, SYSDATE)
+	</insert>
+	
+	<update id="deleteNotice" parameterType="Notice">
+		update notice
+		set No_Status='N'
+		where No_Num=#{bno}
+	</update>
+	
+	<update id="updateNotice" parameterType="Notice">
+		update notice
+		set No_Title=#{No_Title}, No_Content=#{No_Content}
+		where No_Num=#{No_Num}
+	</update>
+	
+</mapper>
