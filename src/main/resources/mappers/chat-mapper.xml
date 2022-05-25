@@ -4,10 +4,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="chatMapper">
 
+	<!-- 채팅방 인원수 -->
+	<select id="selectCount" resultType="Chat">
+		SELECT CR_NO, COUNT(M_NO) AS CRCOUNT
+		FROM CR_USER
+		GROUP BY CR_NO
+	</select>
+
 	<!-- 채팅방 전체 목록 -->
 	<select id="selectChatRoomList" resultType="Chat">
-		SELECT *
-		FROM VIEW_CHAT
+		SELECT DISTINCT A.CR_NO, CR_TITLE, CR_PW
+		FROM CHATROOM A
+		JOIN CR_USER B ON A.CR_NO = B.CR_NO
 	</select>
 	
 </mapper>

@@ -26,14 +26,30 @@ public class ChatController {
 	}
 	
 	
-	
 	@RequestMapping("selectChatRoomList.do")
 	public ModelAndView selectChatRoomList(ModelAndView mv) {
 		
+		// 채팅방 당 참가자 수 구하기
+		ArrayList<Chat> count = chatService.selectCount();
+		
 		ArrayList<Chat> list = chatService.selectChatRoomList();
 		
+		for(int i = 0; i < list.size(); i++) {
+			
+			for(int j = 0; j < count.size(); j++) {
+				if(count.get(j).getCrNo() == list.get(i).getCrNo()) {
+					list.get(i).setCrCount(count.get(j).getCrCount());
+				}
+				
+			}
+			
+			
+		}
+		
 		mv.addObject("list", list);
-		//System.out.println("list =====  " + list);
+		System.out.println("list =====  " + list);
+		
+		
 		mv.setViewName("chat/chatList");
 		
 		return mv;

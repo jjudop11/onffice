@@ -15,4 +15,9 @@ public class ChatDao {
 		return (ArrayList)sqlSession.selectList("chatMapper.selectChatRoomList");
 	}
 
+	public ArrayList<Chat> selectCount(SqlSessionTemplate sqlSession) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("chatMapper.selectCount");
+	}
+
 }

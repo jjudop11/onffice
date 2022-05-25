@@ -14,10 +14,6 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
-import com.uni.spring.dept.model.dto.Dept;
-import com.uni.spring.dept.model.service.DeptService;
-import com.uni.spring.job.model.dto.Job;
-import com.uni.spring.job.model.service.JobService;
 import com.uni.spring.member.model.dto.Member;
 
 import com.uni.spring.member.model.service.MemberService;
@@ -30,13 +26,7 @@ public class MemberController {
 	
 	@Autowired 
 	private MemberService memberService;
-	
-	@Autowired 
-	private DeptService deptService;
-	
-	@Autowired 
-	private JobService jobService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
@@ -92,16 +82,4 @@ public class MemberController {
 		return "member/managerpageForm"; 
 	}
 	
-	@GetMapping("/insertMemberForm")
-	public String insertMemberForm(Model model) {	
-		
-		Member loginUser = (Member)model.getAttribute("loginUser");
-		
-		ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
-		ArrayList<Dept> dList = deptService.selectDeptList(loginUser.getCNo());
-		
-		model.addAttribute("jList", jList);
-		model.addAttribute("dList", dList);
-		return "member/insertMemberForm"; 
-	}
 }
