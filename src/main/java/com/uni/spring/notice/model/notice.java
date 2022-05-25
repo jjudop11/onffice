@@ -2,12 +2,6 @@ package com.uni.spring.notice.model;
 
 import java.sql.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 public class notice {
 	
 	private int No_Num;
@@ -18,6 +12,7 @@ public class notice {
 	private int count;
 	private Date No_Date;
 	private String No_status;
+	
 	public int getNo_Num() {
 		return No_Num;
 	}

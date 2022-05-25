@@ -2,21 +2,21 @@ package com.uni.spring.notice.service;
 
 import java.util.ArrayList;
 
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.notice.model.notice;
-import com.uni.spring.notice.model.noticeInfo;
 
 public interface noticeService  {
 
 	int selectListCount();
 
-	ArrayList<notice> selectList(noticeInfo pi);
+	ArrayList<notice> selectList(PageInfo pi);
 
-	notice selectBoard(int bno);
+	notice selectNotice(int bno);
 
-	void insertBoard(notice n);
+	void insertNotice(notice n);
 
-	void deleteBoard(int bno);
+	void deleteNotice(int bno);
 
-	void updateBoard(notice n);
+	void updateNotice(notice n);
 
 }
