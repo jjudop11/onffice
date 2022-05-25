@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.spring.approval.model.dto.Approval;
+import com.uni.spring.approval.model.dto.ApprovalLine;
 import com.uni.spring.approval.model.dto.formAtt;
 import com.uni.spring.approval.model.service.ApprovalService;
 import com.uni.spring.common.exception.CommException;
@@ -32,22 +33,27 @@ public class ApprovalController {
 	
 	// 기안작성 결재요청 
 	@RequestMapping("insertApproval.do")
-	public String insertApproval(Approval ap, // 결재문서기본정보 
-			formAtt att,
+	public String insertApproval(Approval ap, ApprovalLine apline, formAtt att,
 			HttpServletRequest request, // 뷰단에서 컨트롤러로 데이터 전달 
 			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
 		
-		System.out.println("ap : " + ap);
+		System.out.println("CTROLLER : " + ap);
+		System.out.println("CTROLLER : " + apline);
+		System.out.println("CTROLLER : " + att);
 		
 		// 업로드된 파일이 있을 때 
-		if(!file.getOriginalFilename().equals("")) {
-			String changeName = saveFile(file, request); // 글 등록, 수정할 때 파일 공통적으로 처리할 saveFile 메소드 생성 
-			
-			if(changeName != null) {
-				att.setOriginName(file.getOriginalFilename());
-				att.setChangeName(changeName);
-			}
-		}
+//		if(!file.getOriginalFilename().equals("")) {
+//			String changeName = saveFile(file, request); // 글 등록, 수정할 때 파일 공통적으로 처리할 saveFile 메소드 생성 
+//			
+//			if(changeName != null) {
+//				att.setOriginName(file.getOriginalFilename());
+//				att.setChangeName(changeName);
+//				
+//				approvalService.insertApprovalAtt(att);
+//			}
+//		}
+//		
+//		approvalService.insertApproval(ap, apline);
 		
 		return "redirect:/"; 
 	}

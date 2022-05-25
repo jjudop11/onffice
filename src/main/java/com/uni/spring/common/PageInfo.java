@@ -1,6 +1,7 @@
 package com.uni.spring.common;
 
 public class PageInfo {
+	
 	private int currentPage;
 	private int listCount;
 
