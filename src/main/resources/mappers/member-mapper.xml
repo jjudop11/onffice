@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="MemberMapper">
-  <insert id="insertCMember" parameterType="Company">
+  	<insert id="insertCMember" parameterType="Company">
 		INSERT INTO MEMBER
 		VALUES 
-		(SEQ_MEMBER.NEXTVAL, #{cId}, #{cName}, #{cEmail}, '회사계정', '회사계정', #{cPwd}, SYSDATE, null, DEFAULT, 'Y', '0', '1', SEQ_C_NO.CURRVAL, null, null)
+		(SEQ_MEMBER.NEXTVAL, #{cId}, #{cName}, #{cEmail}, '회사계정', '회사계정', #{cPwd}, SYSDATE, null, DEFAULT, 'Y', '0', 1, SEQ_C_NO.CURRVAL, null, null, DEFAULT)
 	</insert>
 	
 	<select id="loginUser" parameterType="Member" resultType="Member">
@@ -33,6 +33,59 @@
 		SELECT M_NO, M_ID, M_NAME, J_NAME, D_NAME, M_WORK
 		FROM VIEW_LOGINUSER 
 		WHERE C_NO = #{cNo}
-		ORDER BY M_NO, M_WORK
+		ORDER BY M_WORK DESC, M_NO
 	</select>
+	
+	<insert id="insertMember" parameterType="Member">
+		INSERT INTO MEMBER
+		VALUES 
+		(#{mNo}, #{mId}, #{mName}, #{mEmail}, #{mPhone}, #{mAddress}, #{mPwd}, SYSDATE, NULL,
+		DEFAULT, DEFAULT, DEFAULT, SEQ_PHOTO.CURRVAL, #{cNo}, #{dNo}, #{jNo}, DEFAULT)
+	</insert>
+	
+	<select id="selectMember" parameterType="string" resultType="Member">
+		<![CDATA[
+		SELECT * 
+		FROM VIEW_LOGINUSER
+		WHERE M_No=#{mNo} 
+		]]>
+	</select>
+	
+	<update id="updateMember" parameterType="Member">
+		UPDATE MEMBER
+		SET M_EMAIL=#{mEmail}, M_PHONE=#{mPhone}, M_ADDRESS=#{mAddress}, M_ENT_DATE=#{mEntDate}, M_HIRE_DATE = #{mHireDate},
+			 M_MANAGER=#{mManager}, D_NO=#{dNo}, J_NO=#{jNo}
+		WHERE M_NO=#{mNo}
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER
+		SET M_WORK = 'N', M_HIRE_DATE = SYSDATE
+		WHERE M_NO=#{mNo}
+	</update>
+	
+	<update id="updateMypage" parameterType="Member">
+		UPDATE MEMBER
+		SET M_EMAIL=#{mEmail}, M_PHONE=#{mPhone}, M_ADDRESS=#{mAddress}
+		WHERE M_NO=#{mNo}
+	</update>
+	
+	<update id="updatePassword" parameterType="Member">
+		UPDATE MEMBER
+		SET M_PWD=#{mPwd}
+		WHERE M_NO=#{mNo}
+	</update>
+	
+	<update id="resetPwd" parameterType="Member">
+		UPDATE MEMBER
+		SET M_PWD=#{mPwd}, M_PWDERROR = 0
+		WHERE M_NO=#{mNo}
+	</update>
+
+	<insert id="insertPhoto" parameterType="Photo">
+		INSERT INTO PHOTO
+		VALUES
+		(SEQ_PHOTO.NEXTVAL, #{pName}, #{pPath})
+	</insert>
+	
 </mapper>
