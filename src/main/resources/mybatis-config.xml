@@ -12,6 +12,7 @@
 	<typeAliases>
 		<typeAlias alias="Company" type="com.uni.spring.company.model.dto.Company"/>
 		<typeAlias alias="Member" type="com.uni.spring.member.model.dto.Member"/>
+		<typeAlias alias="Notice" type="com.uni.spring.notice.model.notice"/>
 		<typeAlias type="com.uni.spring.chat.model.dto.Chat" alias="Chat"/>
 	</typeAliases>
 	
@@ -19,7 +20,8 @@
 		<mapper resource="/mappers/company-mapper.xml"/>
 		<mapper resource="/mappers/member-mapper.xml"/>
 		<mapper resource="/mappers/meetingroom-mapper.xml"/>
-    <mapper resource="/mappers/chat-mapper.xml"/>
+    	<mapper resource="/mappers/chat-mapper.xml"/>
+    	<mapper resource="/mappers/notice-mapper.xml"/>
 	</mappers>
 	
 </configuration>
