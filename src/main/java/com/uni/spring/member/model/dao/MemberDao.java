@@ -82,7 +82,7 @@ public class MemberDao {
 
 	public int insertPhoto(SqlSessionTemplate sqlsession, Photo p) {
 		// TODO Auto-generated method stub
-		return sqlsession.insert("MemberMapper.insertPhoto", p);
+		return sqlsession.insert("MemberMapper.insertPhoto", p); 
 	}
 
 }
