@@ -12,7 +12,7 @@ import com.uni.spring.common.exception.CommException;
 import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.member.model.dao.MemberDao;
 import com.uni.spring.member.model.dto.Member;
-
+import com.uni.spring.member.model.dto.Photo;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -37,24 +37,24 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member loginUser(BCryptPasswordEncoder bCryptPasswordEncoder, Member m) {
 		
-		Member logUser = memberDao.loginUser(sqlsession, m);
+		Member loginUser = memberDao.loginUser(sqlsession, m);
 		
-		if(logUser == null) {
+		if(loginUser == null) {
 			throw new CommException("해당 ID로 가입한 계정이 없거나 잠긴계정입니다");
 		}
 		
-		if(!bCryptPasswordEncoder.matches(m.getMPwd(), logUser.getMPwd())) { // 일치하지않을때
+		if(!bCryptPasswordEncoder.matches(m.getMPwd(), loginUser.getMPwd())) { // 일치하지않을때
 			
 			int result = memberDao.updatePwd(sqlsession, m.getMId());
 			
 			if(result > 0) {
-				int pwdError = Integer.parseInt(logUser.getMPwdError()) + 1;
-				throw new CommException("비밀번호를" + pwdError +"회 틀렸습니다");
+				int pwdError = Integer.parseInt(loginUser.getMPwdError()) + 1;
+				//throw new CommException("비밀번호를" + pwdError +"회 틀렸습니다");
 			}
 			
 		}
 		
-		return logUser;
+		return loginUser;
 	}
 
 	@Override
@@ -67,6 +67,109 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<Member> selectMemList(PageInfo pi, int cNo) {
 		// TODO Auto-generated method stub
 		return memberDao.selectMemList(sqlsession, pi, cNo);
+	}
+
+	@Override
+	public void insertMember(Member m) {
+		
+		int result = memberDao.insertMember(sqlsession, m);
+		
+		if(result < 0) { // 신규사원실패
+			throw new CommException("사원등록에 실패하였습니다"); 
+		}
+		
+	}
+
+	@Override
+	public Member selectMember(String mNo) {
+		
+		Member m = memberDao.selectMember(sqlsession, mNo);
+		
+		if(m != null) {
+			return  m;
+		} else {
+			throw new CommException("사원 상세 조회 실패하였습니다");
+		}
+	}
+
+	@Override
+	public Member updateMember(Member m) {
+		
+		int result = memberDao.updateMember(sqlsession, m);
+		
+		if(result > 0) { 
+			Member updateMem = memberDao.selectMember(sqlsession, m.getMNo());
+			return updateMem;
+		} else {
+			throw new CommException("사원정보수정 실패하였습니다");
+		}
+	}
+
+	@Override
+	public void deleteMember(String mNo) {
+		
+		int result = memberDao.deleteMember(sqlsession, mNo);
+		
+		if(result < 0) { // 퇴사 등록실패
+			throw new CommException("퇴사자 등록 실패하였습니다"); 
+		}
+	}
+
+	@Override
+	public Member updateMypage(Member m) {
+		
+		int result = memberDao.updateMypage(sqlsession, m);
+		
+		if(result > 0) { 
+			Member loginUser = memberDao.loginUser(sqlsession, m);
+			return loginUser;
+		} else {
+			throw new CommException("내정보수정 실패하였습니다");
+		}
+	}
+
+	@Override
+	public Member updatePassword(BCryptPasswordEncoder bCryptPasswordEncoder, Member loginUser, String pwd,
+			String encPwd) {
+		
+		if(!bCryptPasswordEncoder.matches(pwd, loginUser.getMPwd())) {
+			throw new CommException("기존 비밀번호 불일치");
+			
+		} else {
+			loginUser.setMPwd(encPwd);
+			int result = memberDao.updatePassword(sqlsession, loginUser);
+			
+			if(result > 0) { 
+				Member updateMem = memberDao.loginUser(sqlsession, loginUser);
+				return updateMem;	
+			} else {
+				throw new CommException("비밀번호변경 실패");
+			}
+		}
+	}
+
+	@Override
+	public Member resetPwd(Member m) {
+		
+		int result = memberDao.resetPwd(sqlsession, m);
+		
+		if(result < 0) { 
+			throw new CommException("비밀번호 초기화 실패하였습니다"); 
+		} else {
+			Member updateMem = memberDao.loginUser(sqlsession, m);
+			return updateMem;	
+		}
+	}
+
+	@Override
+	public void insertPhoto(Photo p) {
+		
+		int result = memberDao.insertPhoto(sqlsession, p);
+		
+		if(result < 0) { 
+			throw new CommException("사진등록에 실패하였습니다"); 
+		}	
+		
 	}
 
 }

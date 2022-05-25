@@ -105,17 +105,10 @@
 	    padding: 0.85rem 1.5rem;
 	    border-color: rgba(24,28,33,0.03) !important;
 	}
-	#final, #postcodify_search_button {
+	#final {
 		float: right;
 	}
 	#pagingArea{width:fit-content;margin:auto;}
-	
-	#imgThum {postiion : relative;}
-	#imgreset {
-		position: absolute;
-  		top: 80px;
-  		left : 100px; 
-  	}
   </style>
 </head>
 
@@ -145,24 +138,22 @@
 		          <div class="tab-content">
 		            <section class="section">
                           
-                      <form id="insertForm" action="insertMember" method="post" enctype="multipart/form-data">
+                      <form id="updateForm" action="updateMember" method="post">
 		              <div class="d-flex align-items-center">
 		                <div class="avatar avatar-xl mt-5"> &nbsp;  &nbsp; &nbsp;  &nbsp;
-		                	<div id="imgThum"></div>
-                            <label><img src="resources/assets/images/faces/1.jpg" style="width:150px; height:150px;" alt="Face 1" id="img"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)"></label>
-                        	<button type="button" class="btn btn-dark mt-5" id="imgreset">delete</button> 
+                            <label><img src="resources/assets/images/faces/1.jpg" alt="Face 1"><input type="file" class="account-settings-fileinput"></label> 
                         </div>    
 		                <div class="ms-3 name mt-5">
-                            <h5 class="font-bold" id="mname"></h5>
+                            <h5 class="font-bold" id="mname">${ m.MName }</h5>
                             <h6 class="text-muted mb-0" id="dname"></h6>
-                            <input type="hidden" class="form-control" id="cNo" name="cNo" value="${ sessionScope.loginUser.CNo }" readonly>
+                            <input type="hidden" class="form-control" id="cNo" name="cNo" value="${ m.CNo }" readonly>
                         </div>
 		              </div>
 		              <div class="card-body">
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">사번</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="사번 (자동생성) " id="mNo" name="mNo" readonly>
+                              <input type="text" class="form-control" placeholder="사번 (자동생성) " id="mNo" name="mNo" value="${ m.MNo }" readonly>
                               <div class="form-control-icon">
                                   <i class="bi bi-person"></i>
                               </div>
@@ -171,16 +162,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">아이디</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="아이디" id="mId" name="mId">
-                              <div class="form-control-icon">
-                                  <i class="bi bi-person"></i>
-                              </div>
-                          </div>
-		                </div>
-		                <div class="form-group has-icon-left">
-		                  <label for="email-id-icon">이름</label>
-                          <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="이름" id="mName" name="mName">
+                              <input type="text" class="form-control" placeholder="아이디" id="mId" name="mId" value="${ m.MId }" readonly>
                               <div class="form-control-icon">
                                   <i class="bi bi-person"></i>
                               </div>
@@ -191,7 +173,7 @@
                        	    <label for="email-id-icon">직급</label>
                        	    <select class="choices form-select" id="job" name="jNo">
                        	    <c:forEach items="${ jList }" var="j">
-                               <option value="${ j.JNo }">${ j.JName }</option>
+                               <option value="${ j.JNo }" <c:if test ="${m.JNo eq j.JNo}">selected</c:if>>${ j.JName }</option>
                            	</c:forEach>
                            	</select>
                          </div>
@@ -200,14 +182,14 @@
                        	    <label for="email-id-icon">부서</label>
                             <select class="choices form-select" id="dNo" name="dNo">
                        	    <c:forEach items="${ dList }" var="d">
-                               <option value="${ d.DNo }">${ d.DName }</option>
+                               <option value="${ d.DNo }"<c:if test ="${m.DNo eq d.DNo}">selected</c:if>>${ d.DName }</option>
                            	</c:forEach>
                            	</select>
                          </div>
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">Email</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail">
+                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail" value="${ m.MEmail }">
                               <div class="form-control-icon">
                                   <i class="bi bi-envelope"></i>
                               </div>
@@ -216,27 +198,82 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">전화번호</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="전화번호" id="mPhone" name="mPhone">
+                              <input type="text" class="form-control" placeholder="전화번호" id="mPhone" name="mPhone" value="${ m.MPhone }">
                               <div class="form-control-icon">
                                   <i class="bi bi-phone"></i>
                               </div>
                           </div>
 		                </div>
 		                <br>
+		                <c:forTokens var="addr" items="${ m.MAddress }" delims="/" varStatus="status">
+							<c:if test="${ status.index eq 0 && addr >= '0' && addr <= '99999' }">
+							<c:set var="post" value="${ addr }"/>
+							</c:if>
+							<c:if test="${ status.index eq 0 && !(addr >= '0' && addr <= '99999') }">
+							<c:set var="address1" value="${ addr }"/>
+							</c:if>
+							<c:if test="${ status.index eq 1 }">
+							<c:set var="address1" value="${ addr }"/>
+							</c:if>
+							<c:if test="${ status.index eq 2 }">
+							<c:set var="address2" value="${ addr }"/>
+							</c:if>
+						</c:forTokens>
 		             	<div class="form-group has-icon-left"> 
                           <label>우편번호 :</label>
-                          <button type="button" class="btn btn-primary" id="postcodify_search_button">검색</button>
-						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" size="6">
+                          <button type="button" class="btn btn-primary" id="postcodify_search_button" >검색</button>
+						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" value="${ post }">
                           <label>도로명주소 : </label>
-						  <input type="text" name="address1" class="form-control postcodify_address" size="30">
+						  <input type="text" name="address1" class="form-control postcodify_address" value="${ address1 }">
                        	  <label>상세주소 : </label>
-						  <input type="text" name="address2" class="form-control postcodify_extra_info"  size="30">
+						  <input type="text" name="address2" class="form-control postcodify_extra_info"  value="${ address2 }">
 		               </div>
+		                <div class="form-group has-icon-left">
+		                  <label for="email-id-icon">입사일</label>
+                          <div class="position-relative">
+                              <input type="text" class="form-control" placeholder="입사일" id="mEntDate" name="mEntDate" value="${ m.MEntDate}">
+                              <div class="form-control-icon">
+                                  <i class="bi bi-house"></i>
+                              </div>
+                          </div>
+		                </div>
+		                <div class="form-group has-icon-left">
+		                  <c:if test ="${m.MWork eq 'Y'}">
+                          <div class="position-relative">
+                          	<input type="hidden" class="form-control" placeholder="퇴사일" id="mHireDate" name="mHireDate" value="2022-05-24">
+                          </div>	  
+                          		
+                          </c:if>	
+                          <c:if test ="${m.MWork eq 'N'}">
+                          	<label for="email-id-icon">퇴사일</label>
+                          	<div class="position-relative">
+	                      		<input type="text" class="form-control" placeholder="퇴사일" id="mHireDate" name="mHireDate" value="${ m.MHireDate }">
+	                          	<div class="form-control-icon">
+	                              <i class="bi bi-house"></i>
+	                          	</div>
+                          	</div>
+                          </c:if>
+                          
+		                </div>
+		                <div class="form-group has-icon-left">
+		                  <label for="email-id-icon">관리자유무</label>
+                          <div class="position-relative">
+                              <select class="choices form-select" id="mManager" name="mManager">
+                       	       <option value="Y"<c:if test ="${m.MManager eq 'Y'}">selected</c:if>>Y</option>
+                               <option value="N"<c:if test ="${m.MManager eq 'N'}">selected</c:if>>N</option>
+                           	</select>
+                          </div>
+		                </div>
 		                <div class="mt-3 mb-3 float-right" id="final">
-						<button type="submit" class="btn btn-outline-primary">등록</button>
+						<button type="submit" class="btn btn-outline-primary">수정</button>
+						<c:if test ="${m.MWork eq 'Y'}">
+						<button type="button" class="btn btn-outline-dark" id="reset">비밀번호 초기화</button>
+						<button type="button" class="btn btn-outline-danger" id="delete">퇴사 등록</button>
+						</c:if>
 						</div>
 		              </div>
-		            </form>   
+		            </form>
+                   
                 	</section>
 		      		</div>
 		   	 	</div>
@@ -247,7 +284,14 @@
         </div>
     </div>
     
-    <script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
+    <c:if test="${ !empty msg }">
+		<script>
+			alert("${msg}");
+		</script>
+		<c:remove var="msg" scope="session"/>
+	</c:if>
+	
+	<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 	<script>
 		// 검색 단추를 누르면 팝업 레이어가 열리도록 설정한다.
 		$(function(){
@@ -255,37 +299,28 @@
 		});
 	</script>
 	
-    <c:if test="${ !empty msg }">
-		<script>
-			alert("${msg}");
-		</script>
-		<c:remove var="msg" scope="session"/>
-	</c:if>
     <script>
     	$(function(){
     		
-			$('#imgreset').click(function(){			
-				$("#imgThum").html(""); 
-				$("#img").show();
+    		$('#delete').click(function(){
+    			
+    			if(confirm("퇴사 처리 하시겠습니까?")) {
+    				$("#updateForm").attr("action", "deleteMember");
+    				$("#updateForm").submit();
+    			}
+    			
+    		})
+    		
+    		$('#reset').click(function(){
+    			
+    			if(confirm("비밀번호를 초기화 하시겠습니까?")) {
+    				$("#updateForm").attr("action", "resetPwd");
+    				$("#updateForm").submit();
+    			}
+    			
     		})
     		
     	})
-    	
-    	function setThum(event) { //파일이 첨부되면
-
-            let reader = new FileReader(); // File API 비동기적 파일의 내용을 읽어옴
-
-            reader.onload = function(event) {  // 파일 읽기 완료시
-                let img = document.createElement("img"); 
-                img.setAttribute("src", event.target.result); // 파일경로를 src 속성에 추가
-                img.style.width = "155px";
-                img.style.height = "155px";
-                $("#imgThum").html(img); 
-                $("#img").hide();
-            }; 
-            
-            reader.readAsDataURL(event.target.files[0]); // 바이너리 파일을 Base64 Encode 문자열로 반환
-        }
     </script>
 </body>
 
