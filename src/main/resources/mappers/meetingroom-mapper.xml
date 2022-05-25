@@ -9,4 +9,16 @@
 		AND M_SETTING = 'Y'	
 	</select>
 	
+	<select id="selectList" parameterType="_int" resultType="Meetingroom">
+		SELECT *
+		FROM MEETINGROOM
+		WHERE C_NO = #{userCNo}
+	</select>
+	
+	<insert id="insertMeetingroom" parameterType="Meetingroom">
+		INSERT INTO MEETINGROOM
+		VALUES
+		(#{roomNo}, #{roomName}, #{roomCapa}, #{roomNote}, #{cNo})	
+	</insert>
+	
 </mapper>

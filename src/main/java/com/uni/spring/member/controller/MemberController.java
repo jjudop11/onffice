@@ -48,6 +48,12 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+   @Autowired 
+   private JobService jobService;
+   
+   @Autowired 
+   private DeptService deptService;
+	
 	@GetMapping("main")
 	public void main() {
 		
