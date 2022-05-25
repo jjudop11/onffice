@@ -20,6 +20,11 @@
 	<div id="app">
 		<div id="main">
 			<form id="enrollForm" method="post" action="insertApproval.do" enctype="multipart/form-data">
+			
+				<!-- hidden 으로 넘길 정보 -->
+				<input type="hidden" id="cNo" name="cNo" value="${ loginUser.CNo }">
+				<input type="hidden" id="dNo" name="dNo" value="${ loginUser.DNo }">
+				<input type="hidden" id="mNo" name="mNo" value="${ loginUser.MNo }">
 				
 				<!-- 기본설정 -->
 				<div class="card">
@@ -33,10 +38,10 @@
 								<div class="form-group">
 									<label for="formSelect">문서종류</label>
 									<fieldset class="form-group">
-										<select class="form-select" id="formSelect">
-											<option>휴가신청서</option>
-											<option>사업기획서</option>
-											<option>지출결의서</option>
+										<select class="form-select" id="foNo" name="foNo">
+											<option value="10">휴가신청서</option>
+											<option value="20">사업기획서</option>
+											<option value="30">지출결의서</option>
 										</select>
 									</fieldset>
 								</div>
@@ -44,8 +49,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="writer">작성자</label>
-									<input type="text" id="writer" class="form-control round" name="writer" readonly>
-									<%-- <input type="text" id="writer" class="form-control round" value="${ loginUser.mId }" name="writer" readonly> --%>
+									<input type="text" id="writer" class="form-control round" value="${ loginUser.MName }" name="writer" readonly>
 								</div>
 							</div>
 						</div>
@@ -63,7 +67,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="apprLine">사원번호</label>
-									<input type="text" id="apprLine" class="form-control round" placeholder="사원번호를 입력해주세요">
+									<input type="text" id="aplineNo" name="aplineNo" class="form-control round" placeholder="사원번호를 입력해주세요">
 								</div>
 							</div>
 							<!-- <table border="1" class="table">

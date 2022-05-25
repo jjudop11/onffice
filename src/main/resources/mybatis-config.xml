@@ -13,13 +13,17 @@
 		<typeAlias alias="Company" type="com.uni.spring.company.model.dto.Company"/>
 		<typeAlias alias="Member" type="com.uni.spring.member.model.dto.Member"/>
 		<typeAlias type="com.uni.spring.chat.model.dto.Chat" alias="Chat"/>
+		<typeAlias alias="Approval" type="com.uni.spring.approval.model.dto.Approval"/>
+		<typeAlias alias="ApprovalLine" type="com.uni.spring.approval.model.dto.ApprovalLine"/>
+		<typeAlias alias="formAtt" type="com.uni.spring.approval.model.dto.formAtt"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="/mappers/company-mapper.xml"/>
 		<mapper resource="/mappers/member-mapper.xml"/>
 		<mapper resource="/mappers/meetingroom-mapper.xml"/>
-    <mapper resource="/mappers/chat-mapper.xml"/>
+    	<mapper resource="/mappers/chat-mapper.xml"/>
+    	<mapper resource="/mappers/approval-mapper.xml"/>
 	</mappers>
 	
 </configuration>
