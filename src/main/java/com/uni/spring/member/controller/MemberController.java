@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
+
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.dept.model.dto.Dept;
@@ -35,7 +36,6 @@ import com.uni.spring.member.model.dto.Photo;
 import com.uni.spring.member.model.service.MemberService;
 
 import lombok.Builder;
-import oracle.net.aso.b;
 
 @SessionAttributes({"loginUser", "msg"})
 @Controller
@@ -43,12 +43,6 @@ public class MemberController {
 	
 	@Autowired 
 	private MemberService memberService;
-	
-	@Autowired 
-	private DeptService deptService;
-	
-	@Autowired 
-	private JobService jobService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
