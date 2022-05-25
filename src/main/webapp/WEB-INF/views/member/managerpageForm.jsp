@@ -128,8 +128,8 @@
 		      <div class="row no-gutters row-bordered row-border-light">
 		        <div class="col-md-3 pt-0">
 		          <div class="list-group list-group-flush account-settings-links">
-		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">개인정보수정</a>
-		            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">비밀번호변경</a>
+		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="managerpageForm">전체사원조회</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="modal" data-target= "#deleteCheckModal" data-title="data">비밀번호초기화</a>
 		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">근태통계</a>
 		          </div>
 		        </div>
@@ -157,12 +157,22 @@
                                             </thead>
                                             <tbody>
                                             	<c:forEach items="${ list }" var="m">
-                                                <tr>
-                                                    <td>${ m.MNo }</td>
-                                                    <td>${ m.MName }</td>
-                                                    <td>${ m.JName }</td>
-                                                    <td>${ m.DName }</td>
-                                                </tr>
+	                                            	<c:if test="${ m.MWork eq 'Y'}">
+	                                                <tr>
+	                                                    <td>${ m.MNo }</td>
+	                                                    <td>${ m.MName }</td>
+	                                                    <td>${ m.JName }</td>
+	                                                    <td>${ m.DName }</td>
+	                                                </tr>
+	                                                </c:if>
+	                                                <c:if test="${ m.MWork eq 'N'}">
+	                                                <tr>
+	                                                    <td style="background-color:gray; color:white;">${ m.MNo }</span></td>
+	                                                    <td style="background-color:gray; color:white;">${ m.MName }</td>
+	                                                    <td style="background-color:gray; color:white;">${ m.JName }</td>
+	                                                    <td style="background-color:gray; color:white;">${ m.DName }</td>
+	                                                </tr>
+	                                                </c:if>
                                                 </c:forEach>
                                             </tbody>
                                         </table><!--  -->
@@ -219,6 +229,21 @@
     		</div>
         </div>
     </div>
+    <c:if test="${ !empty msg }">
+		<script>
+			alert("${msg}");
+		</script>
+		<c:remove var="msg" scope="session"/>
+	</c:if>
+    
+    <script>
+    	$(function(){
+    		$("#memberList tbody tr").click(function(){
+    			location.href="detailMember?mNo=" + $(this).children().eq(0).text();
+    		});
+    	});
+    </script>
+    
 </body>
 
 </html>
