@@ -8,4 +8,8 @@ public interface DeptService {
 
 	ArrayList<Dept> selectDeptList(int cNo);
 
+	ArrayList<Dept> deletejd(Dept dept);
+
+	ArrayList<Dept> insertjd(Dept dept);
+
 }

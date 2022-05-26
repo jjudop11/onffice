@@ -85,4 +85,14 @@ public class MemberDao {
 		return sqlsession.insert("MemberMapper.insertPhoto", p); 
 	}
 
+	public int updatePhoto(SqlSessionTemplate sqlsession, Photo p) {
+		// TODO Auto-generated method stub
+		return sqlsession.update("MemberMapper.updatePhoto", p);
+	}
+
+	public Member findPwd(SqlSessionTemplate sqlsession, Member m) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MemberMapper.findPwd", m);
+	}
+
 }
