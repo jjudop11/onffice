@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.uni.spring.chat.model.dao.ChatDao;
 import com.uni.spring.chat.model.dto.Chat;
+import com.uni.spring.member.model.dto.Member;
 
 
 
@@ -30,6 +31,12 @@ public class ChatServiceImpl implements ChatService{
 	public ArrayList<Chat> selectCount() {
 		// TODO Auto-generated method stub
 		return chatDao.selectCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Member> selectMemList(int cNo) {
+		// TODO Auto-generated method stub
+		return chatDao.selectMemList(sqlSession, cNo);
 	}
 
 }

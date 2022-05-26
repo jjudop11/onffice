@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="resources/assets/css/app.css">
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body style="background-color:#F0FFF0">
