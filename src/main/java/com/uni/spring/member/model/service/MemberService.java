@@ -38,4 +38,8 @@ public interface MemberService {
 
 	void insertPhoto(Photo p);
 
+	void updatePhoto(Photo p);
+
+	Member findPwd(Member m);
+
 }

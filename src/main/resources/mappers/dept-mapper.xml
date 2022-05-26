@@ -5,5 +5,17 @@
 		SELECT *
 		FROM DEPT
 		WHERE C_NO = #{cNo}
+		ORDER BY D_NO
 	</select>
+	
+	<delete id="deletejd" parameterType="Dept">
+		DELETE DEPT
+		WHERE C_NO = #{cNo} AND D_NAME = #{dName} 
+	</delete>
+	
+	<insert id="insertjd" parameterType="Dept">
+		INSERT INTO DEPT
+		VALUES
+		(SEQ_D_NO.NEXTVAL, #{dName}, #{cNo})
+	</insert>
 </mapper>

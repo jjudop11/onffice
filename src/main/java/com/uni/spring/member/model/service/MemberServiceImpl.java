@@ -172,4 +172,27 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 
+	@Override
+	public void updatePhoto(Photo p) {
+		
+		int result = memberDao.updatePhoto(sqlsession, p);
+		
+		if(result < 0) { 
+			throw new CommException("사진변경에 실패하였습니다"); 
+		}	
+		
+	}
+
+	@Override
+	public Member findPwd(Member m) {
+		
+		Member mem = memberDao.findPwd(sqlsession, m);
+		
+		if(mem != null) {
+			return  mem;
+		} else {
+			throw new CommException("해당 ID와 EMAIL로 가입된 계정이 없습니다");
+		}
+	}
+
 }

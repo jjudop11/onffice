@@ -108,6 +108,12 @@
 	#final, #postcodify_search_button {
 		float: right;
 	}
+	#imgThum {postiion : relative;}
+	#imgreset {
+		position: absolute;
+  		top: 80px;
+  		left : 100px; 
+  	}
   </style>
 </head>
 
@@ -134,15 +140,18 @@
 		        <div class="col-md-9">
 		          <div class="tab-content">
 		            <div class="tab-pane fade active show" id="account-general">
-		            <form id="updateForm" action="updateMypage" method="post">
+		            <form id="updateForm" action="updateMypage" method="post" enctype="multipart/form-data">
 		              <div class="d-flex align-items-center">
 		                <div class="avatar avatar-xl mt-5"> &nbsp;  &nbsp; &nbsp;  &nbsp;
-                            <label><img src="resources/assets/images/faces/1.jpg" alt="Face 1"><input type="file" class="account-settings-fileinput"></label> 
-                        </div>    
+		                	<div id="imgThum"></div>
+                            <label><img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" style="width:150px; height:150px;" alt="" id="space"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)"></label>
+                        	<button type="button" class="btn btn-dark mt-5" id="imgreset">delete</button> 
+                        </div>     
 		                <div class="ms-3 name mt-5">
                             <h5 class="font-bold">${ sessionScope.loginUser.MName } / ${ sessionScope.loginUser.JName }</h5>
                             <h6 class="text-muted mb-0">${ sessionScope.loginUser.DName }</h6>
                         	<input type="hidden" class="form-control" id="cNo" name="cNo" value="${ sessionScope.loginUser.CNo }" readonly>
+                        	<input type="hidden" class="form-control" id="pNo" name="pNo" value="${ sessionScope.loginUser.PNo }" readonly>
                         </div>
 		              </div>
 		              <div class="card-body">
@@ -213,10 +222,34 @@
     
     <script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
 	<script>
-		// 검색 단추를 누르면 팝업 레이어가 열리도록 설정한다.
+		
 		$(function(){
+			
 			$("#postcodify_search_button").postcodifyPopUp();
+		
+			$('#imgreset').click(function(){			
+    			$("#imgThum").html(""); 
+				$("#space").attr("src","resources/assets/images/faces/1.jpg"); 
+				$("#space").show();
+    		})
+
 		});
+		
+		function setThum(event) { //파일이 첨부되면
+
+            let reader = new FileReader(); // File API 비동기적 파일의 내용을 읽어옴
+
+            reader.onload = function(event) {  // 파일 읽기 완료시
+                let img = document.createElement("img"); 
+                img.setAttribute("src", event.target.result); // 파일경로를 src 속성에 추가
+                img.style.width = "155px";
+                img.style.height = "155px";
+                $("#imgThum").html(img); 
+                $("#space").hide();
+            }; 
+            
+            reader.readAsDataURL(event.target.files[0]); // 바이너리 파일을 Base64 Encode 문자열로 반환
+        }
 	</script>
 </body>
 
