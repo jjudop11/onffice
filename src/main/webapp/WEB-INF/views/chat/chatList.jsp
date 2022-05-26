@@ -4,9 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
 <meta charset="UTF-8">
 <style>
 	.cast {
@@ -43,6 +40,11 @@
 		align:center;
 	}
 	
+	.CRdivLine{
+		width:100%;
+		align:center;
+	}
+	
 	.title1 {
 		flex:1; 
 		width:20%;
@@ -51,6 +53,8 @@
 	.title2{
 		flext:1; 
 		width:10%;
+		font-size:20px;
+		color: inherit;
 	}
 	
 	.modal-dialog.modal-fullsize {
@@ -77,7 +81,7 @@
 	<div class="cast">
 		<div class="title" style="display:flex; margin:0 0 20px 0">
 			<div class="title1"><h2>채팅방 </h2></div>
-			<div class="title2"><button id="createRoom">채팅방 생성</button></div>
+			<div class="title2"><a data-toggle="modal" data-target="#loginModal" class="createCR">채팅방 생성</a></div>
 		</div>
 		<hr class="divLine">
   		<table id="boardList">
@@ -104,8 +108,6 @@
                     </c:forEach>
                 </tbody>
             </table>
-		
-	 <a data-toggle="modal" data-target="#loginModal">로그인</a>
 	
 
 	 <!-- 로그인 클릭 시 뜨는 모달  -->
@@ -115,7 +117,7 @@
             <!-- Modal Header -->
             <div class="modal-header">
                 <h4 class="modal-title">채팅방 생성</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button> 
+                <button type="button" class="close" data-dismiss="modal" onclick="exitModal()">&times;</button> 
             </div>
 
             <form action="login.do" method="post">
@@ -124,7 +126,8 @@
                     <label for="crTitle" class="mr-sm-2">그룹명 :</label>
                     <input type="text" class="form-control mb-2 mr-sm-2" placeholder="그룹명을 입력하세요." id="crTitle" name="crTitle"> <br>
                     <label for="userPwd" class="mr-sm-2">초대할 대상 :</label>
-                    <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="userPwd" name="userPwd"> <br>
+                    <a data-toggle="modal" href="#myModal2" class="btn btn-primary" id="btn btn-primary" onclick="ajaxStart()">추가하기</a>
+                    <input type="text" class="form-control mb-2 mr-sm-2" id="inviteList" name="inviteList"><br>
                     <label for="userPwd" class="mr-sm-2">비밀번호 설정 <input class="" type="checkbox" id="pwCheck"></label>
                     <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="crPw" name="crPw" readOnly>
                 </div>
@@ -132,9 +135,35 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">로그인</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="exitModal()">취소</button>
                 </div>
             </form>
+            </div>
+        </div>
+    </div>
+    
+     <div class="modal" id="myModal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            	<!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">검색하기</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div><input type="text" class="form-control mb-2 mr-sm-2" placeholder="사원명 검색" id="searchUser" name="searchUser"> <br></div>
+                <div class="container"></div>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <table class="CR_mList" id="CR_mlist">
+                    	
+                    </table>
+                    
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn">Close</a>
+                    <a href="#" class="btn btn-primary">Save changes</a>
+                </div>
             </div>
         </div>
     </div>
@@ -167,12 +196,58 @@
 				}			
 	        }
 			
+			function exitModal(){
 			$('.modal').on('hidden.bs.modal', function (e) {
 				  $(this).find('form')[0].reset()
-				  window.location.reload();
+				  $('#pwCheck').attr("checked" , false);
+				  $("#crPw").attr("readOnly", true);
+				  
 				});
+			}
+	</script>
+	
+	<script type="text/javascript">
+	
+	window.onload = function ajaxStart(){
+		$('#btn btn-primary').onclick(function(){
+			console.log("함수동작확인");
+			$.ajax({
+				
+				url:"CR_selectUserList.do",
+				type:"get",
+				success: function(mList){
+					
+					var value="";
+					
+					$.each(mList, function(i, m){
+						
+						value += 
+							
+							"<tr>" +
+							"<th rowspan=2><label><img src='resources/assets/images/faces/" + ${m.pNo} + ".jpg' alt= Face " + i + "></label></th>" +
+							"<td>" + m.mName + "<td>" +
+							"<td><input type='radio'></td>" +
+							"</tr>" +
+							"<tr><td colspan=4><hr class='CRdivLine'><td></tr>
+						
+							
+					})
+					
+					$('#searchUser').html(value);
+					
+					
+				},error:function(request, error){
+		   	   		
+		   	   		//alert("fail");
+		   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
+		   	   		
+			   		//console.log("ajax통신실패");
+			   		//console.log(list)
+	   		
+				  }
 			
-			$('')
+		})
+	}
 	</script>
 </body>
 </html>
