@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
-public class form {
+public class Form {
 	
 	private int foNo; // 서식번호 
 	private String foName; // 서식이름 

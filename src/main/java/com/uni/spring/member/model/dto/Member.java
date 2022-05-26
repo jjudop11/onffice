@@ -39,3 +39,4 @@ public class Member {
 	private int jNo; // 직급번호
 
 }
+

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import com.uni.spring.approval.model.dao.ApprovalDao;
 import com.uni.spring.approval.model.dto.Approval;
 import com.uni.spring.approval.model.dto.ApprovalLine;
-import com.uni.spring.approval.model.dto.formAtt;
+import com.uni.spring.approval.model.dto.DayoffForm;
+import com.uni.spring.approval.model.dto.FormAtt;
+import com.uni.spring.approval.model.dto.PaymentForm;
+import com.uni.spring.approval.model.dto.ProposalForm;
 import com.uni.spring.common.exception.CommException;
 
 @Service
@@ -18,45 +21,75 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	@Autowired
 	private ApprovalDao approvalDao;
-
-//	@Override
-//	public void insertApproval(Approval ap, formAtt att) { // 기안작성 결재요청
-//		
-//		int result1 = approvalDao.insertApproval(sqlSession, ap); // 전자결재문서
-//		
-//		int result2 = 1;
-//		if(att != null) {
-//			result2 = approvalDao.insertApprovalAtt(sqlSession, att); // 첨부파일 
-//		}
-//		
-//		if(result1 * result2 < 0) {
-//			throw new CommException("게시글 등록 실패");
-//		}
-//		
-//	}
 	
+	// 전자결재문서 
 	@Override
-	public void insertApproval(Approval ap, ApprovalLine apline) { // 기안작성
+	public void insertApproval(Approval ap) { 
 		
-		int result1 = approvalDao.insertApproval(sqlSession, ap);
-		int result2 = approvalDao.insertApprovalLine(sqlSession, apline);
+		int result = approvalDao.insertApproval(sqlSession, ap);
 		
-		System.out.println("SERVICE : " + ap);
-		System.out.println("SERVICE : " + apline);
-		
-		if(result1 * result2 < 0) {
+		if(result < 0) {
 			throw new CommException("기안 작성 실패");
 		}
 		
 	}
-
+	
+	// 결재선 
 	@Override
-	public void insertApprovalAtt(formAtt att) {
+	public void insertApprovalLine(ApprovalLine apline) {
 		
-		int result = approvalDao.insertApprovalAtt(sqlSession, att);
+		int result = approvalDao.insertApprovalLine(sqlSession, apline);
+		
+		if(result < 0) {
+			throw new CommException("결재선 등록 실패");
+		}
+		
+	}
+
+	// 첨부파일 
+	@Override
+	public void insertFormAtt(FormAtt att) {
+		
+		int result = approvalDao.insertFormAtt(sqlSession, att);
 		
 		if(result < 0) {
 			throw new CommException("첨부파일 등록 실패");
+		}
+		
+	}
+
+	// 휴가신청서 
+	@Override
+	public void insertDayoffForm(DayoffForm doForm) {
+		
+		int result = approvalDao.insertDayoffForm(sqlSession, doForm);
+		
+		if(result < 0) {
+			throw new CommException("휴가신청서 등록 실패");
+		}
+		
+	}
+
+	// 사업기획서
+	@Override
+	public void insertProposalForm(ProposalForm prForm) {
+		
+		int result = approvalDao.insertProposalForm(sqlSession, prForm);
+		
+		if(result < 0) {
+			throw new CommException("사업기획서 등록 실패");
+		}
+		
+	}
+
+	// 지출결의서 
+	@Override
+	public void insertPaymentForm(PaymentForm payForm) {
+		
+		int result = approvalDao.insertPaymentForm(sqlSession, payForm);
+		
+		if(result < 0) {
+			throw new CommException("지출결의서 등록 실패");
 		}
 		
 	}
