@@ -20,6 +20,7 @@
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <body style="background-color:#F0FFF0">
@@ -74,7 +75,7 @@
                               <div class="user-menu d-flex">
                                   <div class="user-img d-flex align-items-center">
                                       <div class="avatar avatar-md">
-                                          <img src="resources/assets/images/faces/1.jpg">
+	                                        <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" alt="사진" id="img">
                                       </div>
                                   </div>
                               </div>
@@ -85,9 +86,9 @@
                               </li>
                               <div class="card">
 	                            <div class="card-body py-4 px-5">
-	                                <div class="card-body text-center">
+	                                <div class="text-center">
 	                                    <div class="avatar avatar-xl">
-	                                        <img src="resources/assets/images/faces/1.jpg" alt="Face 1">
+	                                        <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" style="width:100px; height:100px;" alt="사진" id="img">
 	                                    </div>
 	                                </div>
 	                            </div>

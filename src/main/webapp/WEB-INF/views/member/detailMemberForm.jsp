@@ -68,6 +68,7 @@
 	    height: 1px;
 	    opacity: 0;
 	}
+	
 	.account-settings-links .list-group-item.active {
 	    font-weight: bold !important;
 	}
@@ -105,10 +106,18 @@
 	    padding: 0.85rem 1.5rem;
 	    border-color: rgba(24,28,33,0.03) !important;
 	}
-	#final {
+	#final, #postcodify_search_button {
 		float: right;
 	}
+	
 	#pagingArea{width:fit-content;margin:auto;}
+	
+	#imgThum {postiion : relative;}
+	#imgreset {
+		position: absolute;
+  		top: 80px;
+  		left : 100px; 
+  	}
   </style>
 </head>
 
@@ -129,7 +138,8 @@
 		        <div class="col-md-3 pt-0">
 		          <div class="list-group list-group-flush account-settings-links">
 		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="managerpageForm">전체사원조회</a>
-		            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">비밀번호변경</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="list" href="updateMPwdForm">비밀번호변경</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="list" href="jdForm">직급/부서관리</a>
 		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">근태통계</a>
 		          </div>
 		        </div>
@@ -138,15 +148,18 @@
 		          <div class="tab-content">
 		            <section class="section">
                           
-                      <form id="updateForm" action="updateMember" method="post">
+                      <form id="updateForm" action="updateMember" method="post" enctype="multipart/form-data">
 		              <div class="d-flex align-items-center">
 		                <div class="avatar avatar-xl mt-5"> &nbsp;  &nbsp; &nbsp;  &nbsp;
-                            <label><img src="resources/assets/images/faces/1.jpg" alt="Face 1"><input type="file" class="account-settings-fileinput"></label> 
-                        </div>    
+		                	<div id="imgThum"></div>
+                            <label><img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${m.PName}" style="width:150px; height:150px;" alt="" id="space"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)"></label>
+                        	<button type="button" class="btn btn-dark mt-5" id="imgreset">delete</button> 
+                        </div>      
 		                <div class="ms-3 name mt-5">
-                            <h5 class="font-bold" id="mname">${ m.MName }</h5>
-                            <h6 class="text-muted mb-0" id="dname"></h6>
+                            <h5 class="font-bold" id="mname">${ m.MName } / ${ m.JName }</h5>
+                            <h5 class="text-muted mb-0" id="dname">${ m.DName }</h5>
                             <input type="hidden" class="form-control" id="cNo" name="cNo" value="${ m.CNo }" readonly>
+                            <input type="hidden" class="form-control" id="pNo" name="pNo" value="${ m.PNo }" readonly>
                         </div>
 		              </div>
 		              <div class="card-body">
@@ -265,10 +278,10 @@
                           </div>
 		                </div>
 		                <div class="mt-3 mb-3 float-right" id="final">
-						<button type="submit" class="btn btn-outline-primary">수정</button>
+						<button type="submit" class="btn btn-primary">수정</button>
 						<c:if test ="${m.MWork eq 'Y'}">
-						<button type="button" class="btn btn-outline-dark" id="reset">비밀번호 초기화</button>
-						<button type="button" class="btn btn-outline-danger" id="delete">퇴사 등록</button>
+						<button type="button" class="btn btn-secondary" id="reset">비밀번호 초기화</button>
+						<button type="button" class="btn btn-danger" id="delete">퇴사 등록</button>
 						</c:if>
 						</div>
 		              </div>
@@ -320,7 +333,29 @@
     			
     		})
     		
+    		$('#imgreset').click(function(){			
+    			$("#imgThum").html(""); 
+				$("#space").attr("src","resources/assets/images/faces/1.jpg"); 
+				$("#space").show();
+    		})
+    		
     	})
+    	
+    	function setThum(event) { //파일이 첨부되면
+
+            let reader = new FileReader(); // File API 비동기적 파일의 내용을 읽어옴
+
+            reader.onload = function(event) {  // 파일 읽기 완료시
+                let img = document.createElement("img"); 
+                img.setAttribute("src", event.target.result); // 파일경로를 src 속성에 추가
+                img.style.width = "155px";
+                img.style.height = "155px";
+                $("#imgThum").html(img); 
+                $("#space").hide();
+            }; 
+            
+            reader.readAsDataURL(event.target.files[0]); // 바이너리 파일을 Base64 Encode 문자열로 반환
+        }
     </script>
 </body>
 

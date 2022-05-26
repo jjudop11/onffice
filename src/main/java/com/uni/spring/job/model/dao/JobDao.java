@@ -15,4 +15,14 @@ public class JobDao {
 		return (ArrayList)sqlsession.selectList("JobMapper.selectJobList", cNo);
 	}
 
+	public int deletejd(SqlSessionTemplate sqlsession, Job job) {
+		// TODO Auto-generated method stub
+		return sqlsession.delete("JobMapper.deletejd", job);
+	}
+
+	public int insertjd(SqlSessionTemplate sqlsession, Job job) {
+		// TODO Auto-generated method stub
+		return sqlsession.insert("JobMapper.insertjd", job);
+	}
+
 }

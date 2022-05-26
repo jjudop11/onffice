@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -26,7 +25,6 @@ import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 
 import com.uni.spring.common.exception.CommException;
-import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.dept.model.dto.Dept;
 import com.uni.spring.dept.model.service.DeptService;
 import com.uni.spring.job.model.dto.Job;
@@ -58,8 +56,25 @@ public class MemberController {
 	public void main() {
 		
 	}
+
+	@GetMapping("/passwordForm")
+	public String passwordForm(SessionStatus status) {
+		status.setComplete();
+		return "member/forgotPassword";
+	}
 	
-	@GetMapping("logout")
+	@PostMapping("/findPwd")
+	public String findPwd(Member m, Model model) { 
+		
+		System.out.println("찾기전=============:"+m);
+		Member mem = memberService.findPwd(m);
+		System.out.println("찾기후=============:"+mem);
+
+		return "member/login";
+
+	}
+	
+	@GetMapping("/logout")
 	public String logout(SessionStatus status) {
 		status.setComplete();
 		return "redirect:/";
@@ -72,7 +87,7 @@ public class MemberController {
 		
 		System.out.println("DB정보: "+loginUser);
 		
-		if(m.getMPwd().equals("0") && loginUser != null) {
+		if(m.getMPwd().equals("0")) {
 			mv.addObject("loginUser", loginUser).addObject("msg","첫로그인 입니다. 비밀번호를 변경하세요").setViewName("member/updatePwdForm");
 		} else {
 			mv.addObject("loginUser", loginUser).setViewName("main");
@@ -143,7 +158,7 @@ public class MemberController {
 		
 		if(!file.getOriginalFilename().equals("")) { 
 			String changeName = saveFile(file, request);
-			System.out.println("changeNamechangeNamechangeNamechangeName"+changeName);
+
 			if(changeName != null) {
 				String resources = request.getSession().getServletContext().getRealPath("resources"); 
 				String savePath = resources + "\\id_pictures\\";
@@ -153,7 +168,6 @@ public class MemberController {
 						.pPath(savePath)
 						.build();
 				memberService.insertPhoto(p);
-				System.out.println("=============================사진 삽입");
 			}
 		}
 		m.setMAddress(post +"/"+ address1 +"/"+ address2);
@@ -189,22 +203,57 @@ public class MemberController {
 	
 	@PostMapping("/updateMember")
 	public String updateMember(Member m, @RequestParam("post") String post,
-			@RequestParam("address1") String address1, @RequestParam("address2") String address2, Model model) {
+			@RequestParam("address1") String address1, @RequestParam("address2") String address2, 
+			HttpServletRequest request, @RequestParam(name = "file", required = false) MultipartFile file, Model model) {
 		
 		//Member loginUser = (Member)model.getAttribute("loginUser");
 		if(m.getMEntDate().equals(2022-05-24)) {
 			m.setMEntDate(null);
 		}
 		m.setMAddress(post +"/"+ address1 +"/"+ address2);
+		
+		String originalP = m.getPName(); // 기존파일이있을때 기존변경된파일명 변수에 초기화
+	
+		if(!file.isEmpty()) { // 새로넘어온 파일이 있는 경우 
+			
+			String changeName = saveFile(file, request);
+			m.setPName(changeName); // 바꾼 파일 이름 저장
+			
+			Photo p = Photo.builder()
+					.pNo(String.valueOf(m.getPNo())) // 원래 있던 사진번호
+					.pName(changeName) // 바꿀 사진 이름
+					.build();
+			
+			memberService.updatePhoto(p); // 사진 변경	
+			deleteFile(originalP, request); // 기존 사진 삭제
+		} 
+		
 		Member updateM = memberService.updateMember(m);
 		
 		ArrayList<Job> jList = jobService.selectJobList(m.getCNo());
 		ArrayList<Dept> dList = deptService.selectDeptList(m.getCNo());
-
+		
 		model.addAttribute("jList", jList);
 		model.addAttribute("dList", dList);
 		model.addAttribute("m", updateM);
+		
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		if(loginUser.getMId().equals(updateM.getMId())) {
+			model.addAttribute("loginUser", updateM);
+		}
+		
 		return "member/detailMemberForm"; 
+	}
+	
+	private void deleteFile(String fileName, HttpServletRequest request) {
+		
+		String resources = request.getSession().getServletContext().getRealPath("resources"); // 웹컨터이너에서의 resources 폴더까지의 경로
+
+		String savePath = resources + "\\id_pictures\\";
+		
+		File deleteFile = new File(savePath + fileName);
+		deleteFile.delete();
+		
 	}
 	
 	@PostMapping("/deleteMember")
@@ -218,11 +267,26 @@ public class MemberController {
 	
 	@PostMapping("/updateMypage")
 	public String updateMypage(Member m, @RequestParam("post") String post,
-			@RequestParam("address1") String address1, @RequestParam("address2") String address2, Model model) {
-		
-		Member loginUser = (Member)model.getAttribute("loginUser");
+			@RequestParam("address1") String address1, @RequestParam("address2") String address2, 
+			HttpServletRequest request, @RequestParam(name = "file", required = false) MultipartFile file, Model model) {
 		
 		m.setMAddress(post +"/"+ address1 +"/"+ address2);
+		
+		String originalP = m.getPName(); // 기존파일이있을때 기존변경된파일명 변수에 초기화
+		
+		if(!file.isEmpty()) { // 새로넘어온 파일이 있는 경우 
+			
+			String changeName = saveFile(file, request);
+			m.setPName(changeName); // 바꾼 파일 이름 저장
+			
+			Photo p = Photo.builder()
+					.pNo(String.valueOf(m.getPNo())) // 원래 있던 사진번호
+					.pName(changeName) // 바꿀 사진 이름
+					.build();
+			
+			memberService.updatePhoto(p); // 사진 변경	
+			deleteFile(originalP, request); // 기존 사진 삭제
+		} 
 		
 		Member updateM = memberService.updateMypage(m);
 		model.addAttribute("loginUser", updateM);
@@ -235,19 +299,29 @@ public class MemberController {
 		return "member/updatePwdForm"; 
 	}
 	
+	@GetMapping("/updateMPwdForm")
+	public String updateMPwdForm() {	
+		return "member/updateMPwdForm"; 
+	}
+	
 	@PostMapping("/updatePassword")
-	public String updatePassword(String pwd, String newPwd, Model model) {
+	public ModelAndView updatePassword(String pwd, String newPwd, Model model, ModelAndView mv) {
 		
 		Member loginUser = (Member)model.getAttribute("loginUser");
 		
 		String encPwd = bCryptPasswordEncoder.encode(newPwd);
 		
 		Member updateUser =  memberService.updatePassword(bCryptPasswordEncoder, loginUser, pwd, encPwd);
-
-		model.addAttribute("loginUser", updateUser);
-		model.addAttribute("msg", "비밀번호가 변경되었습니다");
 		
-		return "member/updatePwdForm";
+		if(loginUser.getMManager().equals("Y")) {
+			mv.setViewName("member/updateMPwdForm");
+		} else {
+			mv.setViewName("member/updatePwdForm");
+		}
+		mv.addObject("loginUser", updateUser);
+		mv.addObject("msg", "비밀번호가 변경되었습니다");
+		
+		return mv;
 	}
 	
 	@PostMapping("resetPwd")
@@ -265,6 +339,89 @@ public class MemberController {
 		model.addAttribute("m", updateM);
 		model.addAttribute("msg", "비밀번호가 초기화됐습니다");
 		return "member/detailMemberForm"; 
+	}
+	
+	@GetMapping("/jdForm")
+	public String jdForm(Model model) {	
+		
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
+		model.addAttribute("lists", jList);
+		model.addAttribute("set", "1");
+		
+		return "member/jdForm"; 
+	}
+	
+	@GetMapping("/updatejdList")
+	public String updatejdList(String val, Model model) {	
+		
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		if(val.equals("1")) {
+			ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
+			model.addAttribute("lists", jList);
+			model.addAttribute("set", "1");
+		} else {
+			ArrayList<Dept> dList = deptService.selectDeptList(loginUser.getCNo());
+			model.addAttribute("lists", dList);
+			model.addAttribute("set", "2");
+		}
+		
+		return "member/jdForm"; 
+
+	}
+	
+	@GetMapping("/deletejd")
+	public String deletejd(String del, String val, Model model) {	
+
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		
+		if(val.equals("1")) {
+			Job job = new Job().builder()
+					.jName(del)
+					.cNo(loginUser.getCNo())
+					.build();
+			ArrayList<Job> jList = jobService.deletejd(job);
+			model.addAttribute("lists", jList);
+			model.addAttribute("set", "1");
+			return "member/jdForm";
+		} else {
+			Dept dept = new Dept().builder()
+					.dName(del)
+					.cNo(loginUser.getCNo())
+					.build();
+			ArrayList<Dept> dList = deptService.deletejd(dept);
+			model.addAttribute("lists", dList);
+			model.addAttribute("set", "2");
+			return "member/jdForm";
+		}
+
+	}
+	
+	@GetMapping("/insertjd")
+	public String insertjd(String ins, String val, Model model) {	
+
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		
+		if(val.equals("1")) {
+			Job job = new Job().builder()
+					.jName(ins)
+					.cNo(loginUser.getCNo())
+					.build();
+			ArrayList<Job> jList = jobService.insertjd(job);
+			model.addAttribute("lists", jList);
+			model.addAttribute("set", "1");
+			return "member/jdForm";
+		} else {
+			Dept dept = new Dept().builder()
+					.dName(ins)
+					.cNo(loginUser.getCNo())
+					.build();
+			ArrayList<Dept> dList = deptService.insertjd(dept);
+			model.addAttribute("lists", dList);
+			model.addAttribute("set", "2");
+			return "member/jdForm";
+		}
+
 	}
 	
 }

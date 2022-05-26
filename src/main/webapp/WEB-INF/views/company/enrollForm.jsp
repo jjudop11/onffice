@@ -29,7 +29,7 @@
                     
                     <form id="enrollForm" method="post">
                     	<div class="form-group position-relative has-icon-left mb-1">
-                            <input type="text" class="form-control form-control-xl" name="cId" id="cId" placeholder="아이디">
+                            <input type="text" class="form-control form-control-xl" name="cId" id="cId" placeholder="아이디" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
@@ -37,7 +37,7 @@
                         <div id="idResult"></div>
                         
                         <div class="form-group position-relative has-icon-left mb-1">
-                            <input type="password" class="form-control form-control-xl" name="cPwd" id="cPwd" maxlength="15" placeholder="비밀번호">
+                            <input type="password" class="form-control form-control-xl" name="cPwd" id="cPwd" maxlength="15" placeholder="비밀번호" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
@@ -45,7 +45,7 @@
                         <div id="pwdResult"></div>
                       
                         <div class="form-group position-relative has-icon-left mb-1">
-                            <input type="text" class="form-control form-control-xl" name="cEmail" id="cEmail" placeholder="이메일">
+                            <input type="text" class="form-control form-control-xl" name="cEmail" id="cEmail" placeholder="이메일" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-envelope"></i>
                             </div>
@@ -53,19 +53,19 @@
                         <div id="emailResult"></div>
                         
                         <div class="form-group position-relative has-icon-left mb-1">
-                            <input type="text" class="form-control form-control-xl" name="cName" id="cName" placeholder="회사명">
+                            <input type="text" class="form-control form-control-xl" name="cName" id="cName" placeholder="회사명" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-building"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-1">
-                            <input type="text" class="form-control form-control-xl" name="cRNumber" id="cRNumber" maxlength="12" placeholder="사업자등록번호" onchange="cknum(this.value)">
+                            <input type="text" class="form-control form-control-xl" name="cRNumber" id="cRNumber" maxlength="12" placeholder="사업자등록번호" onchange="cknum(this.value)" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-clipboard-check"></i>
                             </div>
                         </div>
                         <div id="rNumResult"></div>
-                        <button class="btn btn-outline-success btn-block btn-lg shadow-lg mt-2" id="save">생성</button>
+                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-2" id="save">생성</button>
                         
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
@@ -187,30 +187,10 @@
 		}
 	
 		$("#save").click(function(){
-			if($("#cId").val() == "") {
-				alert("아이디를 입력하세요");
-				$("#cId").focus();
-				return false;
-			} else if($("#cPwd").val() == "") {
-				alert("비밀번호를 입력하세요");
-				$("#cPwd").focus();
-				return false;
-			} else if($("#cEmail").val() == "") {
-				alert("이메일을 입력하세요");
-				$("#cEmail").focus();
-				return false;
-			} else if($("#cName").val() == "") {
-				alert("회사명을 입력하세요");
-				$("#cName").focus();
-				return false;
-			} else if($("#cRNumber").val() == "") {
-				alert("사업자등록번호를 입력하세요");
-				$("#cRNumber").focus();
-				return false;
-			} else {
-				$("#enrollForm").attr("action", "insertCompany.do");
-				$("#enrollForm").submit();
-			}
+			
+			$("#enrollForm").attr("action", "insertCompany.do");
+			$("#enrollForm").submit();
+		
 		})
 			
 		

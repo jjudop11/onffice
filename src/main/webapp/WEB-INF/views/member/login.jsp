@@ -14,9 +14,11 @@
     <link rel="stylesheet" href="resources/assets/css/pages/auth.css">
 </head>
 <body class="bg-light">
-<div id="auth">
-        <div class="row h-100">
-            <div class="col-lg-4 col-12 offset-lg-4" >
+<div id="app">
+	<section class="section">
+        <div class="container">
+        	<div class="row">
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4" >
                 <div id="auth">
                     <div class="auth-logo text-center mt-5 mb-5">
                         <a href="index.jsp"><img src="resources/assets/images/logo/logo.png" alt="Logo"></a>
@@ -26,13 +28,13 @@
 
                     <form action="login" method="post">
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" class="form-control form-control-xl" name="mId" placeholder="ID">
+                            <input type="text" class="form-control form-control-xl" name="mId" placeholder="ID" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="password" class="form-control form-control-xl" name="mPwd" placeholder="Password">
+                            <input type="password" class="form-control form-control-xl" name="mPwd" placeholder="Password" required>
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
@@ -43,19 +45,20 @@
                                 Keep me logged in
                             </label>
                         </div>
-                        <button class="btn btn-outline-success btn-block btn-lg mt-5">로그인</button>
+                        <button class="btn btn-primary btn-block btn-lg mt-5">로그인</button>
                     </form>
                     <div class="text-center mt-2 mb-2 text-lg">
-                    	<a href="auth-register.html" class="font-bold">비밀번호찾기</a>    
+                    	<a href="passwordForm" class="font-bold">비밀번호찾기</a>    
                     </div>
                     <div class="text-center mt-5 text-lg">
                         <a href="enrollForm" class="font-bold">회사등록하기</a>    
                     </div>
                 </div>
             </div>
+            </div>
         </div>
-
-    </div>
+	</section>
+</div>
     
     <c:if test="${ !empty msg }">
 		<script>

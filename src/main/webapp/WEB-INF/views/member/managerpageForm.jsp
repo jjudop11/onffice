@@ -129,7 +129,8 @@
 		        <div class="col-md-3 pt-0">
 		          <div class="list-group list-group-flush account-settings-links">
 		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="managerpageForm">전체사원조회</a>
-		            <a class="list-group-item list-group-item-action" data-toggle="modal" data-target= "#deleteCheckModal" data-title="data">비밀번호초기화</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="list" href="updateMPwdForm">비밀번호변경</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="list" href="jdForm">직급/부서관리</a>
 		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">근태통계</a>
 		          </div>
 		        </div>
@@ -167,7 +168,7 @@
 	                                                </c:if>
 	                                                <c:if test="${ m.MWork eq 'N'}">
 	                                                <tr>
-	                                                    <td style="background-color:gray; color:white;">${ m.MNo }</span></td>
+	                                                    <td style="background-color:gray; color:white;">${ m.MNo }</td>
 	                                                    <td style="background-color:gray; color:white;">${ m.MName }</td>
 	                                                    <td style="background-color:gray; color:white;">${ m.JName }</td>
 	                                                    <td style="background-color:gray; color:white;">${ m.DName }</td>
@@ -181,7 +182,7 @@
 							                <ul class="pagination">
 							                	<c:choose>
 							                		<c:when test="${ pi.currentPage ne 1 }">
-							                			<li class="page-item"><a class="page-link" href="listBoard.do?currentPage=${ pi.currentPage-1 }">Previous</a></li>
+							                			<li class="page-item"><a class="page-link" href="managerpageForm?currentPage=${ pi.currentPage-1 }">Previous</a></li>
 							                		</c:when>
 							                		<c:otherwise>
 							                			<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
@@ -191,7 +192,7 @@
 							                    <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
 							                    	<c:choose>
 								                		<c:when test="${ pi.currentPage ne p }">
-							                    			<li class="page-item"><a class="page-link" href="listBoard.do?currentPage=${ p }">${ p }</a></li>
+							                    			<li class="page-item"><a class="page-link" href="managerpageForm?currentPage=${ p }">${ p }</a></li>
 								                		</c:when>
 								                		<c:otherwise>
 								                			<li class="page-item disabled"><a class="page-link" href="">${ p }</a></li>
@@ -202,10 +203,10 @@
 							                    
 							                    <c:choose>
 							                		<c:when test="${ pi.currentPage ne pi.maxPage }">
-							                			<li class="page-item"><a class="page-link" href="listBoard.do?currentPage=${ pi.currentPage+1 }">Next</a></li>
+							                			<li class="page-item"><a class="page-link" href="managerpageForm?currentPage=${ pi.currentPage+1 }">Next</a></li>
 							                		</c:when>
 							                		<c:otherwise>
-							                			<li class="page-item disabled"><a class="page-link" href="listBoard.do?currentPage=${ pi.currentPage+1 }">Next</a></li>
+							                			<li class="page-item disabled"><a class="page-link" href="managerpageForm?currentPage=${ pi.currentPage+1 }">Next</a></li>
 							                		</c:otherwise>
 							                	</c:choose>
 							                </ul>
