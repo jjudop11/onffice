@@ -1,10 +1,7 @@
 package com.uni.spring.notice.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,14 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.GsonBuilder;
-import com.uni.spring.common.PageInfo;
-import com.uni.spring.common.Pagination;
-import com.uni.spring.common.exception.CommException;
 import com.uni.spring.notice.model.notice;
 import com.uni.spring.notice.service.noticeService;
 
@@ -31,16 +23,16 @@ public class noticeController {
 	public noticeService noticeService;
 	
 	@RequestMapping("listNotice.do")
-	public String selectList(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, Model model) {
+	public String selectList(Model model) {
 
-		int listCount = noticeService.selectListCount();
+		//int listCount = noticeService.selectListCount();
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
-		
-		ArrayList<notice> list = noticeService.selectList(pi);
-		
+		ArrayList<notice> list = noticeService.selectList();
+		for (notice notice : list) {
+			System.out.println(notice);
+		}
+		System.out.println(list.size());
 		model.addAttribute("list",list);
-		model.addAttribute("pi", pi);
 		
 		return "notice/noticeListView";
 	}
@@ -51,12 +43,12 @@ public class noticeController {
 	}
 	
 	@RequestMapping("detailNotice.do")
-	public ModelAndView selectBoard(int bno, ModelAndView mv) {
-		notice n = noticeService.selectNotice(bno);
+	public String selectNotice(/*@RequestParam("no_Num") int bno,*/ ModelAndView mv) {
+		/*notice n = noticeService.selectNotice(bno);
 		
-		mv.addObject("n", n).setViewName("notice/noticeDetailView");
+		mv.addObject("n", n).setViewName("notice/noticeDetailView");*/
 		
-		return mv; 
+		return "notice/noticeDetailView"; 
 	}
 
 	@RequestMapping("insertNotice.do")
@@ -123,7 +115,7 @@ public class noticeController {
 	
 	@RequestMapping("updateFormNotice.do")
 	public ModelAndView updateForm(int bno, ModelAndView mv) {
-		mv.addObject("n", noticeService.selectNotice(bno)).setViewName("notice/noticeUpdateForm");
+		//mv.addObject("n", noticeService.selectNotice()).setViewName("notice/noticeUpdateForm");
 		
 		return mv;
 	}

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uni.spring.notice.model.notice;
-import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.notice.model.noticeDao;
 
@@ -25,10 +24,14 @@ public class noticeServiceImpl implements noticeService {
 		// TODO Auto-generated method stub
 		return noticedao.selectListCount(sqlsession);
 	}
+	
+	@Override
+	public ArrayList<notice> selectList() {
+		return noticedao.selectList(sqlsession);
+	}
 
 	@Override
 	public notice selectNotice(int bno) {
-		noticedao.updateCount(sqlsession, bno);
 		return noticedao.selectNotice(sqlsession, bno);
 	}
 
@@ -57,11 +60,6 @@ public class noticeServiceImpl implements noticeService {
 		if(result < 0) {
 			throw new CommException("게시글 수정 실패");
 		}
-	}
-
-	@Override
-	public ArrayList<notice> selectList(PageInfo pi) {
-		return noticedao.selectList(sqlsession, pi);
 	}
 
 }
