@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="resources/assets/css/app.css">
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body style="background-color:#F0FFF0">
@@ -74,7 +74,7 @@
                               <div class="user-menu d-flex">
                                   <div class="user-img d-flex align-items-center">
                                       <div class="avatar avatar-md">
-	                                        <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" alt="사진" id="img">
+                                          <img src="resources/assets/images/faces/1.jpg">
                                       </div>
                                   </div>
                               </div>
@@ -85,9 +85,9 @@
                               </li>
                               <div class="card">
 	                            <div class="card-body py-4 px-5">
-	                                <div class="text-center">
+	                                <div class="card-body text-center">
 	                                    <div class="avatar avatar-xl">
-	                                        <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" style="width:100px; height:100px;" alt="사진" id="img">
+	                                        <img src="resources/assets/images/faces/1.jpg" alt="Face 1">
 	                                    </div>
 	                                </div>
 	                            </div>
@@ -240,7 +240,7 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="roomReservation.do">회의실 예약</a>
+                                    <a href="form-element-input.html">회의실 예약</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="form-element-input.html">온라인 회의실</a>
@@ -289,7 +289,7 @@
                         </li>
                         
                         <li class="sidebar-item  ">
-                            <a href="table.html" class='sidebar-link'>
+                            <a href="listNotice.do" class='sidebar-link'>
                                 <i class="bi bi-grid-1x2-fill"></i>
                                 <span>공지사항</span>
                             </a>

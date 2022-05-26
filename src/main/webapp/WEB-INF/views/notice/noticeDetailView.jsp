@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>공지사항</title>
 </head>
 <body>
     <jsp:include page="../common/menubar.jsp"/>
@@ -13,20 +13,18 @@
     <div class="content">
         <br><br>
         <div class="innerOuter">
-            <h2>게시글 상세보기</h2>
+            <h2>공지사항</h2>
             <br>
             
             <br><br>
             <table id="contentArea" align="center" class="table">
                 <tr>
                     <th width="100">제목</th>
-                    <td colspan="3">${ n.No_Title }</td>
+                    <td colspan="3">${ n.no_Title }</td>
                 </tr>
                 <tr>
-                    <th>작성자</th>
-                    <td>${ n.No_Write }</td>
                     <th>작성일</th>
-                    <td>${ n.No_Date }</td>
+                    <td>${ n.no_Date }</td> 
                 </tr>
                 <!--  <tr>
                     <th>첨부파일</th>
@@ -44,12 +42,12 @@
                     <td colspan="3"></td>
                 </tr>
                 <tr>
-                    <td colspan="4"><p style="height:150px">${ n.No_Content }</p></td>
+                    <td colspan="4"><p style="height:150px">${ n.no_Content }</p></td>
                 </tr>
             </table>
             <br>
 	
-			<c:if test="${ sessionScope.loginUser.MNo eq n.No_Write }">
+			<c:if test="${ sessionScope.loginUser.MNo eq n.no_Write }">
 	            <div align="center">
 	                <button class="btn btn-primary" onclick="postFormSubmit(1);">수정하기</button>
 	                <button class="btn btn-danger" onclick="postFormSubmit(2);">삭제하기</button>

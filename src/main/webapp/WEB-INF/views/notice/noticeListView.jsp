@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>공지사항</title>
 </head>
 <body>
@@ -17,28 +18,25 @@
             <h2>공지사항</h2>
             <br>
             <!-- 매니저 권한만 가진 사람만 보여지는 글쓰기 버튼-->
-            <c:if test="${ !empty loginUser }">
+            <c:if test="${ !empty loginUser }"> <!-- sessionScope.loginUser.MManager == 'Y' -->
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
             </c:if>
             <br>
             <table id="boardList" class="table table-hover" align="center">
                 <thead>
                   <tr>
-                    <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
-                    <th>조회수</th>
                     <th>작성일</th>
                   </tr>
                 </thead>
                 <tbody>
                 	<c:forEach items="${ list }" var="n">
 	                    <tr>
-	                    	<td>${n}</td>
-	                       <!--  <td>${ n.No_Title }</td>
+	                    	<td style="display: none;">${ n.no_Num }</td>
+	                        <td style="width:75%;"><a href="detailNotice.do?bno=${ n.no_Num }">${ n.no_Title }</a></td>
 	                        <td>${ n.no_Write }</td>
-	                        <td>${ n.no_View }</td>
-	                        <td>${ n.no_Date }</td> --> 
+	                        <td>${ n.no_Date }</td>
 	                    </tr>
                     </c:forEach>
                 </tbody>
@@ -87,12 +85,12 @@
         <br><br>
     </div>
     
-    <script>
+    <!-- <script>
     	$(function(){
     		$("#boardList tbody tr").click(function(){
-    			location.href="detailNotice.do?bno=" + $(this).children().eq(0).text();
+    			location.href="detailNotice.do?bno=" + ${ n.no_Num };
     		});
     	});
-    </script>
+    </script> -->
 </body>
 </html>
