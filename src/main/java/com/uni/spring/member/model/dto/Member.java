@@ -2,8 +2,6 @@ package com.uni.spring.member.model.dto;
 
 import java.sql.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,3 +39,4 @@ public class Member {
 	private int jNo; // 직급번호
 
 }
+

@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<% String num = "1-"; %>
+<%
+//로그인유저 세션에서 받아와서 그 사람 회사번호 뿌리고, 그거 회사번호 텍스트 태그에 반영하기
+%>
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
@@ -22,7 +24,7 @@
 <link rel="stylesheet" href="resources/assets/css/app.css">
 <link rel="shortcut icon" href="resources/assets/images/favicon.svg"
 	type="image/x-icon">
-	
+
 <!-- jQuery library -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -32,24 +34,37 @@
 <!-- Latest compiled JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	
-<style>
-	tr, th {		
-	  	text-align: center;	
-	}
-	.btn btn-primary{
-		width: 70px;
-		height: 30px;
-	}
-	.card-body {
-		width: 140%;
-		align: center;
-	}
 
-	.buttons {
-		width: 150px;
-		margin: auto;
-	}
+<style>
+tr, th {
+	text-align: center;
+}
+
+.btn btn-primary {
+	width: 70px;
+	height: 30px;
+}
+
+.card-body {
+	width: 140%;
+	align: center;
+}
+
+.card-header {
+	width: 150px;
+	height: 50px;
+	margin: 0 0 0 90%;
+}
+
+.buttons {
+	display: flex;
+ 	justify-content: center;
+}
+
+#Pagenation{
+	display: flex;
+ 	justify-content: center;
+}
 </style>
 </head>
 
@@ -76,8 +91,13 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="card">
-							<div class="card-header"></div>
-							
+							<div class="card-header">
+								<button type="button" id="addRow" class="btn btn-light"
+									onclick="addRow()">+</button>
+								<button type="button" id="deleteRow" class="btn btn-light"
+									onclick="deleteRow()">-</button>
+							</div>
+
 							<div class="card-body">
 								<section class="section">
 									<div class="row" id="basic-table">
@@ -89,9 +109,11 @@
 
 														<!-- Table with outer spacing -->
 														<div class="table-responsive">
-															<table class="table table-lg" id="meetingRoom">
-																<thead>
+															<table class="table table-lg" id="meetingroom">
+																<thead id="meetingroomRow">
 																	<tr>
+																		<th><input type="checkbox" id="checkboxTop"
+																			class="form-check-input"></th>
 																		<th>No</th>
 																		<th>MettingRoom</th>
 																		<th>Capacity</th>
@@ -99,30 +121,47 @@
 																	</tr>
 																</thead>
 																<tbody>
-																	<tr>
-																		<td class="text-bold-500">1-01</td>
-																		<td>Test1</td>
-																		<td class="text-bold-500">20</td>
-																		<td>테스트용</td>
-																	</tr>
-																	<tr>
-																		<td class="text-bold-500">1-02</td>
-																		<td>Test2</td>
-																		<td class="text-bold-500">15</td>
-																		<td>테스트회의실</td>
-																	</tr>
-																	
+																	<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
+																	<c:forEach items="${ roomList }" var="r">
+																		<tr>
+																			<th><input type="checkbox" id="checkbox"
+																				class="form-check-input"></th>
+																			<th>${ r.roomNo }</th>
+																			<th>${ r.roomName }</th>
+																			<th>${ r.roomCapa }</th>
+																			<th>${ r.roomNote }</th>
+																		</tr>
+																	</c:forEach>
 																</tbody>
 															</table>
 														</div>
+														
+														<br>
 
+														<!-- 페이징 처리 해야함 -->
+														<div id="Pagenation">
+															<ul class="pagination pagination-primary">
+															
+																<li class="page-item"><a class="page-link" href="#">
+																		<span aria-hidden="true"><i
+																			class="bi bi-chevron-left"></i></span>
+																</a></li>
+																<li class="page-item"><a class="page-link" href="#">1</a></li>
+																<li class="page-item active"><a class="page-link"
+																	href="#">2</a></li>
+																<li class="page-item"><a class="page-link" href="#">3</a></li>
+																<li class="page-item"><a class="page-link" href="#">
+																		<span aria-hidden="true"><i
+																			class="bi bi-chevron-right"></i></span>
+																</a></li>
+															</ul>
+														</div>
+
+														<br>
+														
 														<div class="buttons">
-															<a href="#" class="btn btn-primary">저장</a> <a href="#"
-																class="btn btn-light">취소</a>
-															<!-- <a href="#"	class="btn btn-light" onclick="add()">추가</a> -->
-															<button type="button" class="btn btn-primary"
-																data-toggle="modal" data-target="#myModal">
-																모달테스트</button>
+															<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">추가</button>
+															<a href="#" class="btn btn-danger">삭제</a>
 
 															<div class="modal" id="myModal">
 																<div class="modal-dialog">
@@ -134,12 +173,12 @@
 																				data-dismiss="modal"></button>
 																		</div>
 
-																		<div class="modal-body">
+																		<div class="modal-body" id="modal-body">
 																			<form name="insertRoom" method="post" action="#">
 
 																				<div class="form-insertRoom">
-																					<label for="label-insertRoom" class="control-label">회의실 번호</label>
-																					<input type="text" class="form-control" id="room_no" name="room_no" value=<%= num %>>
+																					<label for="label-insertRoom" class="control-label">회의실번호</label> 
+																					<input type="text" class="form-control" id="room_no" name="room_no">
 																				</div>
 																				<br>
 																				<div class="form-insertRoom">
@@ -156,13 +195,12 @@
 																					<label for="label-insertRoom" class="control-label">비고</label>
 																					<input type="text" class="form-control" id="room_note" name="room_note">
 																				</div>
- 
-																			</form>													
+
+																			</form>
 																		</div>
 
 																		<div class="modal-footer">
-																			<button type="button" class="btn btn-danger"
-																				data-dismiss="modal">추가</button>
+																			<button type="button" class="btn btn-primary" id="addRoom" data-dismiss="modal" onclick="addRoom()">확인</button>
 																		</div>
 																	</div>
 																</div>
@@ -187,17 +225,105 @@
 	</div>
 
 	<script>
+		/* function addRow() {
+			$("tbody")
+					.append(
+							"<tr>"
+									+ "<th><input type='checkbox' id='checkbox' class='form-check-input'></th>"
+									+ "<th><input type='text' class='addRoom' id='addRoomNo'></th>"
+									+ "<th><input type='text' class='addRoom' id='addRoomName'></th>"
+									+ "<th><input type='text' class='addRoom' id='addRoomCapa'></th>"
+									+ "<th><input type='text' class='addRoom' id='addRoomNote'></th>"
+									+ "</tr>")
+		} */ //아이디.val() 가져와서 ajax로 넘기기
+
+		function deleteRow() {
+			//이건 제목행까지 삭제됨
+			//$("input[type=checkbox]:checked").parent().parent().remove();
+
+		}
 		
+		/* $(function() {
+			$("#saveRoom").click(function() {
+				let addRoomNo = $("#addRoomNo").val();
+				let addRoomName = $("#addRoomName").val();
+				let addRoomCapa = $("#addRoomCapa").val();
+				let addRoomNote = $("#addRoomNote").val();
+
+				//let roomObject = {
+				//addRoomNo: addRoomNo,
+				//addRoomName: addRoomName,
+				//addRoomCapa: addRoomCapa,
+				//addRoomNote: addRoomNote
+				
+
+				$.ajax({
+					url : "saveRoom.do",
+					data : {
+						addRoomNo : addRoomNo,
+						addRoomName : addRoomName,
+						addRoomCapa : addRoomCapa,
+						addRoomNote : addRoomNote
+					},
+					type : "post",
+					success : function(success) {
+						console.log("데이터 전달 성공" + success)
+					},
+					error : function(error) {
+						console.log("ajax 통신 실패")
+					}
+				})
+			})
+		}) */
+			
+		//회의실 추가 모달에서 Controller로 데이터 넘기기 -> 성공
+		//Controller에서 데이터 받고 화면에 뿌리기 -> 아직
+		$(function() {
+			$("#addRoom").click(function() {
+				let addRoomNo = $("#room_no").val();
+				let addRoomName = $("#room_name").val();
+				let addRoomCapa = $("#room_capa").val();
+				let addRoomNote = $("#room_note").val();
+
+				$.ajax({
+					url : "insertRoom.do",
+					data : {
+						roomNo : addRoomNo,
+						roomName : addRoomName,
+						roomCapa : addRoomCapa,
+						roomNote : addRoomNote
+					},
+					type : "post",
+					success : function(obj) {
+						console.log("데이터 전달 성공")
+						console.log(obj)
+						let newRoom = "";
+						newRoom += "<tr>" + 
+								   "<th><input type='checkbox' id='checkbox' class='form-check-input'></th>" +
+								   "<th>" + obj.roomNo + "</th>" +
+								   "<th>" + obj.roomName + "</th>" +
+								   "<th>" + obj.roomCapa + "</th>" +
+								   "<th>" + obj.roomNote + "</th>" +
+								   "</tr>"
+						
+						let room = $("#meetingroom tbody");
+						room += newRoom;
+					},
+					error : function(error) {
+						console.log("ajax 통신 실패")
+					}
+				})
+			})
+		})
 	</script>
 
-	<script
-		src="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-	<script src="resources/assets/js/bootstrap.bundle.min.js"></script>
-	<script src="resources/assets/vendors/apexcharts/apexcharts.js"></script>
-	<script src="resources/assets/js/pages/dashboard.js"></script>
-	<script src="resources/assets/js/main.js"></script>
+	<c:if test="${ !empty msg }">
+		<script>
+			alert("${msg}");
+		</script>
+		<c:remove var="msg" scope="session" />
+	</c:if>
 
 </body>
 
 </html>
-							

@@ -8,5 +8,23 @@
 		WHERE M_ID = #{settingUserId}
 		AND M_SETTING = 'Y'	
 	</select>
+		
+	<insert id="insertMeetingroom" parameterType="Meetingroom">
+		INSERT INTO MEETINGROOM
+		VALUES
+		(#{roomNo}, #{roomName}, #{roomCapa}, #{roomNote}, #{cNo})	
+	</insert>
+	
+	<select id="selectRoomListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEETINGROOM
+		WHERE C_NO = #{userCNo}
+	</select>
+	
+	<select id="selectRoomList" parameterType="_int" resultType="Meetingroom">
+		SELECT *
+		FROM MEETINGROOM
+		WHERE C_NO = #{userCNo}
+	</select>
 	
 </mapper>

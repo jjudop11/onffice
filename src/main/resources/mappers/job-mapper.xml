@@ -5,5 +5,17 @@
 		SELECT *
 		FROM JOB
 		WHERE C_NO = #{cNo}
+		ORDER BY J_NO
 	</select>
+	
+	<delete id="deletejd" parameterType="Job">
+		DELETE JOB
+		WHERE C_NO = #{cNo} AND J_NAME = #{jName} 
+	</delete>
+	
+	<insert id="insertjd" parameterType="Job">
+		INSERT INTO JOB
+		VALUES
+		(SEQ_JOB.NEXTVAL, #{jName}, #{cNo})
+	</insert>
 </mapper>

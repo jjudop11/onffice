@@ -15,4 +15,14 @@ public class DeptDao {
 		return (ArrayList)sqlsession.selectList("DeptMapper.selectDeptList", cNo);
 	}
 
+	public int deletejd(SqlSessionTemplate sqlsession, Dept dept) {
+		// TODO Auto-generated method stub
+		return sqlsession.delete("DeptMapper.deletejd", dept);
+	}
+
+	public int insertjd(SqlSessionTemplate sqlsession, Dept dept) {
+		// TODO Auto-generated method stub
+		return sqlsession.insert("DeptMapper.insertjd", dept);
+	}
+
 }

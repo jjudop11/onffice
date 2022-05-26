@@ -16,10 +16,14 @@
 		<typeAlias type="com.uni.spring.chat.model.dto.Chat" alias="Chat"/>
 		<typeAlias alias="Approval" type="com.uni.spring.approval.model.dto.Approval"/>
 		<typeAlias alias="ApprovalLine" type="com.uni.spring.approval.model.dto.ApprovalLine"/>
-		<typeAlias alias="formAtt" type="com.uni.spring.approval.model.dto.formAtt"/>
+		<typeAlias alias="FormAtt" type="com.uni.spring.approval.model.dto.FormAtt"/>
+		<typeAlias alias="DayoffForm" type="com.uni.spring.approval.model.dto.DayoffForm"/>
+		<typeAlias alias="ProposalForm" type="com.uni.spring.approval.model.dto.ProposalForm"/>
+		<typeAlias alias="PaymentForm" type="com.uni.spring.approval.model.dto.PaymentForm"/>
 		<typeAlias alias="Job" type="com.uni.spring.job.model.dto.Job"/>
 		<typeAlias alias="Dept" type="com.uni.spring.dept.model.dto.Dept"/>
 		<typeAlias alias="Photo" type="com.uni.spring.member.model.dto.Photo"/>
+		<typeAlias alias="Meetingroom" type="com.uni.spring.meetingroom.model.dto.Meetingroom"/>
 	</typeAliases>
 	
 	<mappers>

@@ -4,7 +4,7 @@
   	<insert id="insertCMember" parameterType="Company">
 		INSERT INTO MEMBER
 		VALUES 
-		(SEQ_MEMBER.NEXTVAL, #{cId}, #{cName}, #{cEmail}, '회사계정', '회사계정', #{cPwd}, SYSDATE, null, DEFAULT, 'Y', '0', 1, SEQ_C_NO.CURRVAL, null, null, DEFAULT)
+		(SEQ_MEMBER.NEXTVAL, #{cId}, #{cName}, #{cEmail}, '회사계정', '회사계정', #{cPwd}, SYSDATE, null, DEFAULT, 'Y', '0', SEQ_PHOTO.CURRVAL, SEQ_C_NO.CURRVAL, null, null, DEFAULT)
 	</insert>
 	
 	<select id="loginUser" parameterType="Member" resultType="Member">
@@ -88,4 +88,15 @@
 		(SEQ_PHOTO.NEXTVAL, #{pName}, #{pPath})
 	</insert>
 	
+	<update id="updatePhoto" parameterType="Photo">
+		UPDATE PHOTO
+		SET P_NAME=#{pName}
+		WHERE P_NO=#{pNo}
+	</update>
+	
+	<select id="findPwd" parameterType="Member" resultType="Member">
+		SELECT *
+		FROM VIEW_LOGINUSER
+		WHERE M_ID=#{mId} AND M_EMAIL=#{mEmail}
+	</select>
 </mapper>

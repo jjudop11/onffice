@@ -19,9 +19,4 @@ public class ApprovalLine {
 	private String aplineStatus; // 결재상태
 	private String aplineNo; // 결재사원번호 
 	
-	@Override
-	public String toString() {
-		return "ApprovalLine [apNo=" + apNo + ", aplineStatus=" + aplineStatus + ", aplineNo=" + aplineNo + "]";
-	}
-	
 }

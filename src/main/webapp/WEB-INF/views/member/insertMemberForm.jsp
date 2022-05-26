@@ -108,6 +108,7 @@
 	#final, #postcodify_search_button {
 		float: right;
 	}
+	
 	#pagingArea{width:fit-content;margin:auto;}
 	
 	#imgThum {postiion : relative;}
@@ -136,7 +137,8 @@
 		        <div class="col-md-3 pt-0">
 		          <div class="list-group list-group-flush account-settings-links">
 		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="managerpageForm">전체사원조회</a>
-		            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">비밀번호변경</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="list" href="updateMPwdForm">비밀번호변경</a>
+		            <a class="list-group-item list-group-item-action" data-toggle="list" href="jdForm">직급/부서관리</a>
 		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">근태통계</a>
 		          </div>
 		        </div>
@@ -149,7 +151,7 @@
 		              <div class="d-flex align-items-center">
 		                <div class="avatar avatar-xl mt-5"> &nbsp;  &nbsp; &nbsp;  &nbsp;
 		                	<div id="imgThum"></div>
-                            <label><img src="resources/assets/images/faces/1.jpg" style="width:150px; height:150px;" alt="Face 1" id="img"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)"></label>
+                            <label><img src="resources/assets/images/faces/1.jpg" style="width:150px; height:150px;" alt="Face 1" id="space"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)"></label>
                         	<button type="button" class="btn btn-dark mt-5" id="imgreset">delete</button> 
                         </div>    
 		                <div class="ms-3 name mt-5">
@@ -266,7 +268,8 @@
     		
 			$('#imgreset').click(function(){			
 				$("#imgThum").html(""); 
-				$("#img").show();
+				$("#space").attr("src","resources/assets/images/faces/1.jpg"); 
+				$("#space").show();
     		})
     		
     	})
@@ -281,7 +284,7 @@
                 img.style.width = "155px";
                 img.style.height = "155px";
                 $("#imgThum").html(img); 
-                $("#img").hide();
+                $("#space").hide();
             }; 
             
             reader.readAsDataURL(event.target.files[0]); // 바이너리 파일을 Base64 Encode 문자열로 반환

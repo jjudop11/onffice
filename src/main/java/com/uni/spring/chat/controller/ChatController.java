@@ -32,7 +32,6 @@ public class ChatController {
 		return mv;
 	}
 	
-	
 	@RequestMapping("selectChatRoomList.do")
 	public ModelAndView selectChatRoomList(ModelAndView mv) {
 		
