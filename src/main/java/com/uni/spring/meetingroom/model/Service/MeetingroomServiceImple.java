@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.meetingroom.model.dao.MeetingroomDao;
 import com.uni.spring.meetingroom.model.dto.Meetingroom;
 
@@ -30,17 +31,33 @@ public class MeetingroomServiceImple implements MeetingroomService {
 	}
 
 	@Override
-	public ArrayList<Meetingroom> selectList(int userCNo) {
-		
-		return meetingroomDao.seletcList(sqlsession, userCNo);
-	}
-
-	@Override
 	public int insertMeetingroom(Meetingroom m) {
 		
 		int result = meetingroomDao.insertMeetingroom(sqlsession, m);
 		
 		return result;
 	}
+
+	@Override
+	public int selectRoomListCount(int userCNo) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.selectRoomListCount(sqlsession, userCNo);
+	}
+
+	//회의실 추가 삭제 
+	@Override
+	public ArrayList<Meetingroom> selectRoomList(PageInfo pi, int userCNo) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.selectRoomList(sqlsession, pi, userCNo);
+	}
+
+	//회의실 예약 하단 회의실 현황
+	@Override
+	public ArrayList<Meetingroom> selectList(int userCNo) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.selectList(sqlsession, userCNo);
+	}
+
+
 
 }
