@@ -19,4 +19,5 @@ public class Photo {
 	private String pName;
 	private String pPath;
 	
+	
 }

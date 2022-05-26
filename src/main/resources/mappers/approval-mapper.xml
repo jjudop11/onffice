@@ -2,25 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ApprovalMapper">
 	
-	<!-- 기안작성 - 전자결재문서 -->
+	<!-- 전자결재문서 -->
 	<insert id="insertApproval" parameterType="Approval">
 		INSERT INTO APPROVAL
 		VALUES
 		(SEQ_APPROVAL.NEXTVAL, null, DEFAULT, #{foNo}, #{cNo}, #{dNo}, #{mNo})
 	</insert>
 	
-	<!-- 기안작성 - 결재라인 -->
+	<!-- 결재선 -->
 	<insert id="insertApprovalLine" parameterType="ApprovalLine">
 		INSERT INTO APPROVAL_LINE
 		VALUES
 		(SEQ_APPROVAL.CURRVAL, null, #{aplineNo})
 	</insert>
 	
-	<!-- 기안작성 - 첨부파일 -->
-	<insert id="insertApprovalAtt" parameterType="formAtt">
+	<!-- 첨부파일 -->
+	<insert id="insertFormAtt" parameterType="FormAtt">
 		INSERT INTO FORM_ATT
 		VALUES
 		(SEQ_APPROVAL.CURRVAL, #{originName}, #{changeName}, #{filePath}, DEFAULT, #{foNo})
 	</insert>
+	
+	<!-- 휴가신청서 -->
+	<insert id="insertDayoffForm" parameterType="DayoffForm">
+		INSERT INTO DAYOFF_FORM
+		VALUES
+		(SEQ_DAYOFF_FORM.NEXTVAL, SYSDATE, #{doTitle}, #{doStartDate}, #{doEndDate}, #{doContent}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo}, 10)
+	</insert>
+	
+	<!-- 사업기획서 -->
+	<insert id="insertProposalForm" parameterType="ProposalForm">
+		INSERT INTO PROPOSAL_FORM
+		VALUES
+		(SEQ_PROPOSAL_FORM.NEXTVAL, SYSDATE, #{prTitle}, #{prGoal}, #{prPlan}, #{prStartDate}, #{prEndDate}, #{prPerson}, #{prAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
+	</insert> 
+	
+	<!-- 지출결의서 -->
+	<insert id="insertPaymentForm" parameterType="PaymentForm">
+		INSERT INTO PAYMENT_FORM
+		VALUES
+		(SEQ_PAYMENT_FORM.NEXTVAL, SYSDATE, #{payTitle}, #{payDay}, #{payList}, #{payAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
+	</insert> 
 	
 </mapper>

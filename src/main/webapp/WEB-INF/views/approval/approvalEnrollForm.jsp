@@ -278,16 +278,16 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="title">제목</label>
-									<input type="text" id="title" class="form-control round" placeholder="제목을 입력해주세요">
+									<input type="text" id="doTitle" name="doTitle" class="form-control round" placeholder="제목을 입력해주세요">
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="date">기간</label>
 									<div class="col-sm-3">
-										<input type="date" id="datePicker startDate" class="form-control" placeholder="시작일"/>
+										<input type="date" id="datePicker" name="doStartDate" class="form-control" placeholder="시작일"/>
 										~
-										<input type="date" id="datePicker endDate" class="form-control" placeholder="종료일"/>
+										<input type="date" id="datePicker" name="doEndDate" class="form-control" placeholder="종료일"/>
 									</div>
 								</div>
 							</div>
@@ -295,22 +295,22 @@
 								<div class="form-group">
 									<label for="dayoffType">반차 여부</label>
 									<div class="form-check"> 
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                            id="flexRadioDefault1"> 
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault doType"
+                                            id="flexRadioDefault1 dayoffType" value="10"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             일차
                                         </label>
                                    </div>
                                    <div class="form-check"> 
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                            id="flexRadioDefault1"> 
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault doType"
+                                            id="flexRadioDefault1 dayoffType" value="20"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             오전반차
                                         </label>
                                    </div>
                                    <div class="form-check"> 
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                            id="flexRadioDefault1"> 
+                                        <input class="form-check-input" type="radio" name="flexRadioDefault doType"
+                                            id="flexRadioDefault1 dayoffType" value="30"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             오후반차
                                         </label>
@@ -320,7 +320,7 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="content">사유</label>
-									<textarea class="form-control" id="exampleFormControlTextarea1 content"
+									<textarea class="form-control" id="exampleFormControlTextarea1" name="doContent"
                                             rows="3"></textarea>
 								</div>
 							</div>
@@ -331,7 +331,7 @@
 	                                    <div class="input-group mb-3">
 	                                        <label class="input-group-text" for="inputGroupFile01"><i
 	                                                class="bi bi-upload"></i></label>
-	                                        <input type="file" class="form-control" id="inputGroupFile01 upfile">
+	                                        <input type="file" class="form-control" id="inputGroupFile01 upfile" name="upfile">
 	                                    </div>
 	                                </div>
 								</div>
@@ -346,6 +346,15 @@
 			</form>
 		</div>
 	</div>
+	
+	<!-- 휴가타입 선택값 전달 --> 
+	<%-- <script type="text/javascript">
+		$(function(){
+			let doType = Number($('input[name=doType]:checked').val());
+			console.log(doType)
+			location.href = "<%=request.getContextPath()%>/insertApproval.do?doType="+doType;
+		})
+	</script> --%>
 	
 </body>
 </html>

@@ -39,5 +39,8 @@ public class Member {
 	private int cNo; // 회사번호
 	private int dNo; // 부서번호
 	private int jNo; // 직급번호
+	
+	
+	
 
 }

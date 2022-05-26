@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -24,14 +23,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
-
 import com.uni.spring.common.exception.CommException;
-import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.dept.model.dto.Dept;
 import com.uni.spring.dept.model.service.DeptService;
 import com.uni.spring.job.model.dto.Job;
 import com.uni.spring.job.model.service.JobService;
-
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
 import com.uni.spring.member.model.service.MemberService;
@@ -47,6 +43,12 @@ public class MemberController {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired 
+	private JobService jobService;
+	   
+	@Autowired 
+	private DeptService deptService;
 	
 	@GetMapping("main")
 	public void main() {
