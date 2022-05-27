@@ -11,7 +11,8 @@
 <body>
 
     <jsp:include page="../common/menubar.jsp"/>
-
+    <div id="app">
+	<div id="main">
     <div class="content">
         <br><br>
         <div class="innerOuter" style="padding:5% 10%;">
@@ -34,7 +35,7 @@
                 	<c:forEach items="${ list }" var="n">
 	                    <tr>
 	                    	<td style="display: none;">${ n.no_Num }</td>
-	                        <td style="width:75%;"><a href="detailNotice.do?bno=${ n.no_Num }">${ n.no_Title }</a></td>
+	                        <td style="width:75%;" onclick="location.href='detailNotice.do?bno=${ n.no_Num }'">${ n.no_Title }</td>
 	                        <td>${ n.no_Write }</td>
 	                        <td>${ n.no_Date }</td>
 	                    </tr>
@@ -84,13 +85,14 @@
         </div>
         <br><br>
     </div>
-    
-    <!-- <script>
+    </div>
+    </div>
+    <script>
     	$(function(){
     		$("#boardList tbody tr").click(function(){
-    			location.href="detailNotice.do?bno=" + ${ n.no_Num };
+    			location.href="detailNotice.do?bno=${ n.no_Num }";
     		});
     	});
-    </script> -->
+    </script>
 </body>
 </html>

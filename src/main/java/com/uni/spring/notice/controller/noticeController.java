@@ -28,12 +28,11 @@ public class noticeController {
 		//int listCount = noticeService.selectListCount();
 		
 		ArrayList<notice> list = noticeService.selectList();
-		for (notice notice : list) {
-			System.out.println(notice);
-		}
-		System.out.println(list.size());
 		model.addAttribute("list",list);
-		
+		/*for (notice notice : n) {
+		System.out.println(notice);
+		}
+		System.out.println(n.size());*/
 		return "notice/noticeListView";
 	}
 	
@@ -43,10 +42,10 @@ public class noticeController {
 	}
 	
 	@RequestMapping("detailNotice.do")
-	public String selectNotice(/*@RequestParam("no_Num") int bno,*/ ModelAndView mv) {
-		/*notice n = noticeService.selectNotice(bno);
+	public String selectNotice(@RequestParam(value= "no_Num",  defaultValue="26") int no_Num, Model model) {
+		notice n = noticeService.selectNotice(no_Num);
 		
-		mv.addObject("n", n).setViewName("notice/noticeDetailView");*/
+		model.addAttribute("n", n);
 		
 		return "notice/noticeDetailView"; 
 	}
@@ -94,13 +93,13 @@ public class noticeController {
 	}*/
 	
 	@RequestMapping("deleteNotice.do")
-	public String deleteBoard(int bno, String fileName, HttpServletRequest request) {
+	public String deleteNotice(int bno, String fileName, HttpServletRequest request) {
 		
 		noticeService.deleteNotice(bno);
 		
-		if(!fileName.equals("")) {
+		/*if(!fileName.equals("")) {
 			deleteFile(fileName, request);
-		}
+		}*/
 		
 		return "redirect:listNotice.do";
 	}
@@ -115,7 +114,7 @@ public class noticeController {
 	
 	@RequestMapping("updateFormNotice.do")
 	public ModelAndView updateForm(int bno, ModelAndView mv) {
-		//mv.addObject("n", noticeService.selectNotice()).setViewName("notice/noticeUpdateForm");
+		mv.addObject("n", noticeService.selectNotice(bno)).setViewName("notice/noticeUpdateForm");
 		
 		return mv;
 	}

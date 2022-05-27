@@ -21,10 +21,6 @@ public class noticeDao {
 		return (ArrayList)sqlsession.selectList("noticeMapper.selectList");
 	}
 
-	public void updateCount(SqlSessionTemplate sqlsession) {
-		sqlsession.update("noticeMapper.updateCount");
-	}
-
 	public int insertNotice(SqlSessionTemplate sqlsession, notice n) {
 		return sqlsession.insert("noticeMapper.insertNotice", n);
 	}
@@ -37,8 +33,9 @@ public class noticeDao {
 		return sqlsession.update("noticeMapper.updateNotice", n);
 	}
 
-	public notice selectNotice(SqlSessionTemplate sqlsession, int bno) {
-		return sqlsession.selectOne("noticeMapper.selectNotice");
+	public notice selectNotice(SqlSessionTemplate sqlsession, int no_Num) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("noticeMapper.selectNotice", no_Num);
 	}
 
 	/*public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
