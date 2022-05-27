@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM VIEW_LOGINUSER 
 		WHERE C_NO = #{cNo}
         AND M_WORK = 'Y'
-		ORDER BY J_NO DESC;
+		ORDER BY J_NO DESC
 	</select>
 	
 </mapper>
