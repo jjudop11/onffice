@@ -53,10 +53,10 @@
 	                <button class="btn btn-danger" onclick="postFormSubmit(2);">삭제하기</button>
 	            </div>
 	            
-	           <!--  <form id="postForm" action="" method="post">
-					<input type="hidden" name="bno" value="${ n.No_Num }">
-					 <input type="hidden" name="fileName" value="${ b.changeName }"> 
-				</form> -->
+	           <form id="postForm" action="" method="post">
+					<input type="hidden" name="bno" value="${ n.no_Num }">
+					 <!-- <input type="hidden" name="fileName" value="${ b.changeName }">  -->
+				</form>
 				<script>
 					function postFormSubmit(num){
 						var postForm = $("#postForm");

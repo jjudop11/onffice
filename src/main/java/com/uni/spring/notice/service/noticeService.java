@@ -16,6 +16,6 @@ public interface noticeService  {
 
 	void updateNotice(notice n);
 
-	notice selectNotice(int bno);
+	notice selectNotice(int no_Num);
 
 }

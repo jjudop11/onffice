@@ -31,8 +31,8 @@ public class noticeServiceImpl implements noticeService {
 	}
 
 	@Override
-	public notice selectNotice(int bno) {
-		return noticedao.selectNotice(sqlsession, bno);
+	public notice selectNotice(int no_Num) {
+		return noticedao.selectNotice(sqlsession, no_Num);
 	}
 
 	@Override
