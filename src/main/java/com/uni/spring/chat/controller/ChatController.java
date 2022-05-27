@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.GsonBuilder;
@@ -15,6 +17,7 @@ import com.uni.spring.chat.model.service.ChatService;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.service.MemberService;
 
+@SessionAttributes({"loginUser", "msg"})
 @Controller
 public class ChatController {
 
@@ -24,18 +27,32 @@ public class ChatController {
 	@Autowired 
 	private MemberService memberService;
 	
-	@RequestMapping("selectCommunityList.do")
-	public ModelAndView selectCommunityList(ModelAndView mv) {
-	
-		mv.setViewName("chat/community");
+	@RequestMapping("selectCommunityList")
+	public ModelAndView selectCommunityList(ModelAndView mv, Model model) {
+
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			mv.setViewName("member/login");
+		}else{
+			mv.setViewName("chat/community");
+		}
+		
+		
 	
 		return mv;
 	}
 	
-	@RequestMapping("selectChatRoomList.do")
-	public ModelAndView selectChatRoomList(ModelAndView mv) {
+	
+	@RequestMapping("selectChatRoomList")
+	public ModelAndView selectChatRoomList(ModelAndView mv, Model model) {
 		
-		int cNo = 1;
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			mv.setViewName("member/login");
+	
+		}else {
 		
 		// 채팅방 당 참가자 수 구하기
 		ArrayList<Chat> count = chatService.selectCount();
@@ -58,11 +75,11 @@ public class ChatController {
 		
 		
 		mv.setViewName("chat/chatList");
-		
+		}
 		return mv;
 	}
 	
-	@RequestMapping("createChatRoom.do")
+	@GetMapping("createChatRoom")
 	public ModelAndView createChatRoom(ModelAndView mv) {
 		
 		mv.setViewName("chat/createChatRoom");
@@ -70,16 +87,26 @@ public class ChatController {
 		return mv;
 	}
 	
-	@RequestMapping(value="CR_selectUserList.do", produces="application/json; charset=utf-8")
-	public String selectUserList(Model model, Member m){
+	@ResponseBody
+	@RequestMapping(value="CR_selectUserList", produces="application/json; charset=utf-8")
+	public String selectUserList(Model model){
 		
 	Member loginUser = (Member)model.getAttribute("loginUser");
 	
-	int cNo = m.getCNo();
-	System.out.println("cNo ======  " + cNo);
-	System.out.println("loginUSer ==== = " + loginUser);
 	ArrayList<Member> mList = chatService.selectMemList(loginUser.getCNo());
+	System.out.println("mList =======  " + mList);
 	
-	return new GsonBuilder().setDateFormat("yyyy년 MM월 dd일 HH:mm:ss").create().toJson(mList);
+	return new GsonBuilder().create().toJson(mList);
 	}
+	
+	
+	@RequestMapping("modal1")
+	public void createCR(ModelAndView mv) {
+		
+		mv.setViewName("chat/createChatRoom");
+		
+	}
+	
+	
+	
 }

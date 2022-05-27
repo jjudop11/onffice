@@ -52,8 +52,8 @@
                                   <li>
                                       <h6 class="dropdown-header">채팅</h6>
                                   </li>
-                                  <li><a class="dropdown-item" href="selectCommunityList.do">community</a></li>
-                                  <li><a class="dropdown-item" href="selectChatRoomList.do">chat</a></li>
+                                  <li><a class="dropdown-item" href="selectCommunityList">community</a></li>
+                                  <li><a class="dropdown-item" href="selectChatRoomList">chat</a></li>
                               </ul>
                           </li>
                           <li class="nav-item dropdown me-1">
