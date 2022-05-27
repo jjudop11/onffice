@@ -58,12 +58,12 @@ tr, th {
 
 .buttons {
 	display: flex;
- 	justify-content: center;
+	justify-content: center;
 }
 
-#Pagenation{
+#Pagenation {
 	display: flex;
- 	justify-content: center;
+	justify-content: center;
 }
 </style>
 </head>
@@ -112,7 +112,7 @@ tr, th {
 															<table class="table table-lg" id="meetingroom">
 																<thead id="meetingroomRow">
 																	<tr>
-																		<th><input type="checkbox" id="checkboxTop"
+																		<th><input type="checkbox" id="checkbox-Top"
 																			class="form-check-input"></th>
 																		<th>No</th>
 																		<th>MettingRoom</th>
@@ -126,22 +126,22 @@ tr, th {
 																		<tr>
 																			<th><input type="checkbox" id="checkbox"
 																				class="form-check-input"></th>
-																			<th>${ r.roomNo }</th>
-																			<th>${ r.roomName }</th>
-																			<th>${ r.roomCapa }</th>
-																			<th>${ r.roomNote }</th>
+																			<th class="roomNo">${ r.roomNo }</th>
+																			<th class="roomName">${ r.roomName }</th>
+																			<th class="roomCapa">${ r.roomCapa }</th>
+																			<th class="roomNote">${ r.roomNote }</th>
 																		</tr>
 																	</c:forEach>
 																</tbody>
 															</table>
 														</div>
-														
+
 														<br>
 
 														<!-- 페이징 처리 해야함 -->
 														<div id="Pagenation">
 															<ul class="pagination pagination-primary">
-															
+
 																<li class="page-item"><a class="page-link" href="#">
 																		<span aria-hidden="true"><i
 																			class="bi bi-chevron-left"></i></span>
@@ -158,10 +158,11 @@ tr, th {
 														</div>
 
 														<br>
-														
+
 														<div class="buttons">
-															<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">추가</button>
-															<a href="#" class="btn btn-danger">삭제</a>
+															<button type="button" class="btn btn-primary"
+																data-toggle="modal" data-target="#myModal">추가</button>
+															<button href="#" class="btn btn-danger" id="deleteRoom">삭제</button>
 
 															<div class="modal" id="myModal">
 																<div class="modal-dialog">
@@ -177,30 +178,40 @@ tr, th {
 																			<form name="insertRoom" method="post" action="#">
 
 																				<div class="form-insertRoom">
-																					<label for="label-insertRoom" class="control-label">회의실번호</label> 
-																					<input type="text" class="form-control" id="room_no" name="room_no">
+																					<label for="label-insertRoom" class="control-label">회의실번호</label>
+																					<input type="text" class="form-control"
+																						id="room_no" name="room_no" 
+																						placeholder="회사번호(0)-회의실번호(00)">	 <!-- 자동으로 회사번호 받아오는 방법 추가하기 -->
+																				</div>
+																				<div>
+																					 <a id="room_no_check"></a>
 																				</div>
 																				<br>
 																				<div class="form-insertRoom">
 																					<label for="label-insertRoom" class="control-label">회의실명</label>
-																					<input type="text" class="form-control" id="room_name" name="room_name">
+																					<input type="text" class="form-control"
+																						id="room_name" name="room_name">
 																				</div>
 																				<br>
 																				<div class="form-insertRoom">
 																					<label for="label-insertRoom" class="control-label">수용인원</label>
-																					<input type="text" class="form-control" id="room_capa" name="room_capa">
+																					<input type="text" class="form-control"
+																						id="room_capa" name="room_capa">
 																				</div>
 																				<br>
 																				<div class="form-insertRoom">
 																					<label for="label-insertRoom" class="control-label">비고</label>
-																					<input type="text" class="form-control" id="room_note" name="room_note">
+																					<input type="text" class="form-control"
+																						id="room_note" name="room_note">
 																				</div>
 
 																			</form>
 																		</div>
 
 																		<div class="modal-footer">
-																			<button type="button" class="btn btn-primary" id="addRoom" data-dismiss="modal" onclick="addRoom()">확인</button>
+																			<button type="button" class="btn btn-primary"
+																				id="addRoom" data-dismiss="modal"
+																				onclick="addRoom()">확인</button>
 																		</div>
 																	</div>
 																</div>
@@ -236,12 +247,6 @@ tr, th {
 									+ "<th><input type='text' class='addRoom' id='addRoomNote'></th>"
 									+ "</tr>")
 		} */ //아이디.val() 가져와서 ajax로 넘기기
-
-		function deleteRow() {
-			//이건 제목행까지 삭제됨
-			//$("input[type=checkbox]:checked").parent().parent().remove();
-
-		}
 		
 		/* $(function() {
 			$("#saveRoom").click(function() {
@@ -275,9 +280,20 @@ tr, th {
 				})
 			})
 		}) */
-			
+		
+		//체크박스 전체체크, 해제
+		$(function(){
+			$("#checkbox-Top").click(function(){
+				if($("#checkbox-Top").is(":checked")){
+					$(".form-check-input").prop("checked", true);			
+				}else{
+					$(".form-check-input").prop("checked", false);
+				}
+			})
+		})
+		
 		//회의실 추가 모달에서 Controller로 데이터 넘기기 -> 성공
-		//Controller에서 데이터 받고 화면에 뿌리기 -> 아직
+		//Controller에서 데이터 받고 화면에 뿌리기 -> 페이지 새로고침 메소드 추가, 성공
 		$(function() {
 			$("#addRoom").click(function() {
 				let addRoomNo = $("#room_no").val();
@@ -295,26 +311,117 @@ tr, th {
 					},
 					type : "post",
 					success : function(obj) {
-						console.log("데이터 전달 성공")
+						alert("회의실을 추가하였습니다.");
 						console.log(obj)
-						let newRoom = "";
-						newRoom += "<tr>" + 
-								   "<th><input type='checkbox' id='checkbox' class='form-check-input'></th>" +
-								   "<th>" + obj.roomNo + "</th>" +
-								   "<th>" + obj.roomName + "</th>" +
-								   "<th>" + obj.roomCapa + "</th>" +
-								   "<th>" + obj.roomNote + "</th>" +
-								   "</tr>"
-						
-						let room = $("#meetingroom tbody");
-						room += newRoom;
+						location.reload();		
 					},
 					error : function(error) {
-						console.log("ajax 통신 실패")
+						alert("회의실 추가에 실패하였습니다.");
 					}
 				})
 			})
 		})
+		
+		//회의실 삭제 -> 한개만 삭제할 떄 코드
+		$(function() {
+			$("#deleteRoom").click(function() {							
+				let checkedBox = $("#checkbox:checked") //제목행은 아이디 다르게 줘서 삭제되지 않게
+				let checkedRow = checkedBox.parent().parent(); //tr
+				console.log(checkedRow);
+						
+				let roomNo = checkedRow.children().eq(1).text(); //val()은 안되고 text()는 되네... 차이점은?
+				console.log(roomNo);
+	
+				checkedRow.remove();
+				console.log("행 삭제 완료");
+				
+				$.ajax({
+					url : "deleteRoom.do",
+					data : {
+						roomNo : roomNo,
+					},
+					type : "post",
+					success : function(obj) {
+						alert("회의실을 삭제하였습니다.");
+						console.log(obj)
+					
+						location.reload();		
+					},
+					error : function(error) {
+						alert("회의실 삭제에 실패하였습니다.");
+					}
+				})					
+			})
+		}) 
+		
+		//회의실 여러개 삭제
+		/* $(function() {
+			$("#deleteRoom").click(function() {			
+				let checkedArr = [];
+				$("#checkbox").each(function(i){   //each() : 모든 $("#checkbox") 요소를 검사함
+					
+					//배열에 체크된 행의 회의실번호 담기... i 
+					//checkedArr.push($('#checkbox:checked:eq(' + i + ')').next().val());
+					checkedArr.push($('#checkbox:checked:parent:parent:eq(' + i + ')').next().text());
+					console.log("넘어갈 배열 : " + checkedArr);
+				})
+					
+				$.ajax({
+					url: "deleteRooms.do",
+					type: "post",
+					dataType: 'json',
+					data: {
+						checkedRoomNo: checkedArr
+					},
+					success: function(data){
+						location.reload();
+					},
+					error: function(){
+						alert("회의실 삭제에 실패하였습니다.");
+					}
+				})		
+			})
+		}) */
+		
+		//회의실번호 중복체크
+		$(function(){
+			let roomNoCheck = $("#room_no");
+			
+			roomNoCheck.keyup(function(){
+			
+				if(roomNoCheck.val().length >= 4){
+					
+					$.ajax({
+						url: "roomNoCheck.do",
+						data: {
+							roomNo: roomNoCheck.val()	
+						},
+						type: "post",
+						success: function(result){
+							if(result > 0){
+								roomNoCheckValidate(1)
+							}else{
+								roomNoCheckValidate(0)
+							}			
+						},
+						error: function(){
+							console.log("ajax 통신 실패")
+						}	
+					})			
+				} else{
+					$("#room_no_check").css("color", "red").text("네자리 이상 작성하세요.");
+				}
+			})
+		})
+		
+		function roomNoCheckValidate(num){
+			if(num > 0){
+				$("#room_no_check").css("color", "red").text("회의실번호는 중복될 수 없습니다.");
+			}else if(num == 0){
+				$("#room_no_check").css("color", "green").text("사용가능한 회의실번호입니다.");
+			}
+		}
+		
 	</script>
 
 	<c:if test="${ !empty msg }">

@@ -19,5 +19,12 @@ public interface MeetingroomService {
 
 	ArrayList<Meetingroom> selectList(int userCNo);
 
+	int deleteMeetingroom(String roomNo);
+
+	int roomNoCheck(String roomNo);
+
+	//
+	int deleteRooms(int checkedRoomNo);
+
 	
 }
