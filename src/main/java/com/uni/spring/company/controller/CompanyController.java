@@ -22,9 +22,6 @@ public class CompanyController {
 	private CompanyService companyService;
 	
 	@Autowired
-	private MemberService memberservice;
-	
-	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/enrollForm")

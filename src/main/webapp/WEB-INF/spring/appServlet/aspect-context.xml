@@ -13,6 +13,7 @@
 		<aop:pointcut expression="execution(* com.uni.spring.member..*(..))" id="pcForAll"/>
 		<aop:pointcut expression="execution(* com.uni.spring.approval..*(..))" id="pcForAll"/>
 		<aop:pointcut expression="execution(* com.uni.spring.meetingroom..*(..))" id="pcForAll"/>
+		<aop:pointcut expression="execution(* com.uni.spring.attendance..*(..))" id="pcForAll"/>
 		<aop:around method="loggerAdvice" pointcut-ref="pcForAll"/>
 	</aop:aspect>
 </aop:config>

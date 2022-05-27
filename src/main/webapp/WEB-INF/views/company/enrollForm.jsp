@@ -27,7 +27,7 @@
                     	<br>
                    	</div>
                     
-                    <form id="enrollForm" method="post">
+                    <form id="enrollForm" method="post" action="insertCompany.do">
                     	<div class="form-group position-relative has-icon-left mb-1">
                             <input type="text" class="form-control form-control-xl" name="cId" id="cId" placeholder="아이디" required autofocus>
                             <div class="form-control-icon">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
                         <div id="rNumResult"></div>
-                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-2" id="save">생성</button>
+                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-2" id="save" type="submit">생성</button>
                         
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
@@ -186,14 +186,6 @@
 			}
 		}
 	
-		$("#save").click(function(){
-			
-			$("#enrollForm").attr("action", "insertCompany.do");
-			$("#enrollForm").submit();
-		
-		})
-			
-		
 		
     </script>
 </body>
