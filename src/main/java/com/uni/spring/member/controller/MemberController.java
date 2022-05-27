@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +36,15 @@ import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
 import com.uni.spring.member.model.service.MemberService;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+
+
 import lombok.Builder;
 
-@SessionAttributes({"loginUser", "msg"})
+@SessionAttributes({"loginUser", "msg", "mNo"})
 @Controller
 public class MemberController {
 	
@@ -46,15 +54,22 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-   @Autowired 
-   private JobService jobService;
+	@Autowired 
+	private JobService jobService;
    
-   @Autowired 
-   private DeptService deptService;
+	@Autowired 
+	private DeptService deptService;
 	
-	@GetMapping("main")
-	public void main() {
-		
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@GetMapping("/")
+	public String defalut() {	
+		return "main";
+	}
+	
+	@GetMapping("/main")
+	public void main() {	
 	}
 
 	@GetMapping("/passwordForm")
@@ -66,12 +81,57 @@ public class MemberController {
 	@PostMapping("/findPwd")
 	public String findPwd(Member m, Model model) { 
 		
-		System.out.println("찾기전=============:"+m);
 		Member mem = memberService.findPwd(m);
-		System.out.println("찾기후=============:"+mem);
+		
+		Random r = new Random();
+		int num = r.nextInt(999999); // 랜덤난수설정
+		
+		String from = "jjudop11@naver.com";
+		String to = mem.getMEmail(); // DB에서 가져온 Member객체의 이메일주소
+		String title = "[ONFFICE] 비밀번호변경 인증 이메일 입니다"; 
+		String content = "<img src=\"https://s3.us-west-2.amazonaws.com/secure.notion-static.com/eb5fa8b3-51d6-4643-88a7-363e92bf78be/logo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220526%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220526T024331Z&X-Amz-Expires=86400&X-Amz-Signature=a1903135bee523ddd3e526112cc83ded0a196da6867fffc15ad94adb24ce9585&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22logo.PNG.png%22&x-id=GetObject\">" 
+				+"<br><br><br>" + "안녕하세요 "+ mem.getMName() +"님 " +"<br>"
+				+ "비밀번호찾기(변경) 인증번호는 " + num + " 입니다.";
+		
+        try {
+        	MimeMessage mail = mailSender.createMimeMessage();
+			MimeMessageHelper mailHelper = new MimeMessageHelper(mail,true,"UTF-8");  // true는 멀티파트 메세지를 사용 -> 파일첨부가능
+			// MimeMessageHelper mailHelper = new MimeMessageHelper(mail,"UTF-8");
+			
+			mailHelper.setFrom(from);
+			mailHelper.setTo(to); // to 값을 넣어야하지만 테스트 및 시연을 위해 개인 이메일 작성
+		 	mailHelper.setSubject(title);
+            mailHelper.setText(content, true); // true는 html을 사용
+            // mailHelper.setText(content);
+            mailSender.send(mail);
+            
+		} catch (Exception  e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        model.addAttribute("num", num);
+        model.addAttribute("mNo", mem.getMNo());
+        
+		return "member/checkEmailForm";
 
+	}
+	
+	@GetMapping("/resetPwd2")
+	public String resetPwd(String num, String checkNum, Model model, SessionStatus status) {
+		
+		String mNo = (String) model.getAttribute("mNo");
+		String encPwd = bCryptPasswordEncoder.encode("0");
+		
+		Member m = Member.builder()
+				.mNo(mNo)
+				.mPwd(encPwd)
+				.build();
+		
+		memberService.resetPwd(m);
+		status.setComplete(); // 세션 mNo 초기화
+		model.addAttribute("msg", "비밀번호가 0으로 초기화 되었습니다");
 		return "member/login";
-
 	}
 	
 	@GetMapping("/logout")
@@ -154,7 +214,9 @@ public class MemberController {
 			Model model, HttpSession session) {
 		
 		String encPwd = bCryptPasswordEncoder.encode("0");
-		int ran = (int)(Math.random() * 1000) + 1;
+		
+		Random r = new Random();
+		int ran = r.nextInt(9999); // 랜덤난수설정
 		
 		if(!file.getOriginalFilename().equals("")) { 
 			String changeName = saveFile(file, request);
@@ -403,7 +465,7 @@ public class MemberController {
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		
 		if(val.equals("1")) {
-			Job job = new Job().builder()
+			Job job = Job.builder()
 					.jName(ins)
 					.cNo(loginUser.getCNo())
 					.build();
@@ -412,7 +474,7 @@ public class MemberController {
 			model.addAttribute("set", "1");
 			return "member/jdForm";
 		} else {
-			Dept dept = new Dept().builder()
+			Dept dept = Dept.builder()
 					.dName(ins)
 					.cNo(loginUser.getCNo())
 					.build();
