@@ -74,7 +74,11 @@
                               <div class="user-menu d-flex">
                                   <div class="user-img d-flex align-items-center">
                                       <div class="avatar avatar-md">
+
+                                          
+
                                           <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" />
+
                                       </div>
                                   </div>
                               </div>
@@ -84,11 +88,15 @@
                                   <h6 class="dropdown-header">Hello?</h6>
                               </li>
                               <div class="card">
+
+	                            
+
                                 <div class="card-body text-center">
                                     <div class="avatar">
                                         <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" style="width:100px; height:100px;"/>
                                     </div>
                                 </div>
+
 	                            <div class="name text-center">          	
 	                            	<h4 class="font-bold">${ sessionScope.loginUser.MName } ${ sessionScope.loginUser.JName }</h4>
 	                                <h5 class="text-muted mb-0">${ sessionScope.loginUser.DName }</h5>

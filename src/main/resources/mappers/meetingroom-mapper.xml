@@ -1,30 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="MeetingroomMapper">
- 
+ 	
+ 	<!-- 회의실 관리권한 유저 -->
 	<select id="selecRoomsettUser" parameterType="string" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEMBER
 		WHERE M_ID = #{settingUserId}
 		AND M_SETTING = 'Y'	
 	</select>
-		
+	
+	<!-- 회의실 추가 -->
 	<insert id="insertMeetingroom" parameterType="Meetingroom">
 		INSERT INTO MEETINGROOM
 		VALUES
 		(#{roomNo}, #{roomName}, #{roomCapa}, #{roomNote}, #{cNo})	
 	</insert>
 	
+	<!-- 회의실번호 중복체크 -->
+	<select id="roomNoCheck" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEETINGROOM
+		WHERE ROOM_NO=#{roomNo}
+	</select>
+	
+	<!-- 페이징 처리용 -->
 	<select id="selectRoomListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEETINGROOM
 		WHERE C_NO = #{userCNo}
 	</select>
 	
+	<!-- 총 회의실 목록 -->
 	<select id="selectRoomList" parameterType="_int" resultType="Meetingroom">
 		SELECT *
 		FROM MEETINGROOM
 		WHERE C_NO = #{userCNo}
 	</select>
+	
+	<!-- 회의실 삭제 -->
+	<delete id="deleteMeetingroom" parameterType="string">
+		DELETE
+		FROM MEETINGROOM
+		WHERE ROOM_NO = #{roomNo}
+	</delete>
+	
+	<!-- 회의실 삭제 -->
+	<delete id="deleteRooms" parameterType="_int">
+		DELETE
+		FROM MEETINGROOM
+		WHERE ROOM_NO = #{checkedRoomNo}
+	</delete>
 	
 </mapper>

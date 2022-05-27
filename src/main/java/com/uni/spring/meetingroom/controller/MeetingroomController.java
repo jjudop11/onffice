@@ -1,6 +1,7 @@
 package com.uni.spring.meetingroom.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,8 +32,9 @@ public class MeetingroomController {
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		System.out.println("로그인유저 : " + loginUser);
+		
 		int userCNo = loginUser.getCNo();
-		System.out.println(userCNo);
+		System.out.println("유저의 회사번호 : " + userCNo);
 		
 		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
 		model.addAttribute("roomList", roomList);
@@ -51,7 +53,7 @@ public class MeetingroomController {
 
 		String roomsetUserId = loginUser.getMId(); // 로그인유저의 사번
 		int userCNo = loginUser.getCNo(); // 로그인유저의 회사번호
-		System.out.println(userCNo);
+		System.out.println("유저의 회사번호 : " + userCNo);
 
 		int result = meetingroomService.selectRoomsetUser(roomsetUserId);
 		
@@ -82,7 +84,18 @@ public class MeetingroomController {
 		}
 
 	}
+	
+	//회의실번호 중복체크
+	@RequestMapping("roomNoCheck.do")
+	@ResponseBody
+	public String roomNoCheck(@RequestParam("roomNo") String roomNo) {
+		
+		int count = meetingroomService.roomNoCheck(roomNo);
+		return String.valueOf(count);
+		
+	}
 
+	//회의실 추가
 	@RequestMapping("insertRoom.do")
 	@ResponseBody //json 사용 용도
 	public String insertMeetingroom(@ModelAttribute Meetingroom m, @RequestParam("roomNo") String roomNo,
@@ -111,5 +124,40 @@ public class MeetingroomController {
 		return new GsonBuilder().create().toJson(m);
 
 	}
+
+	//회의실 삭제
+	@RequestMapping("deleteRoom.do")
+	@ResponseBody
+	public String deleteMeetingroom(HttpSession session, Model model, @RequestParam("roomNo") String roomNo) {
+		
+		//선택된 회의실 삭제하고
+		int result = meetingroomService.deleteMeetingroom(roomNo);
+		System.out.println("회의실 삭제 완료 : " + result);
+		
+		
+		//로그인 유저의 회사번호로 현재 회의실 리스트 다시 불러오기
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		System.out.println("로그인유저 : " + loginUser);
+		
+		int userCNo = loginUser.getCNo();
+		System.out.println(userCNo);
+		
+		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
+		model.addAttribute("roomList", roomList);
+		
+		return "meetingRoom/roomSetting";
+	}
+	
+	//회의실 여러개 삭제
+	@RequestMapping("deleteRooms.do")
+	@ResponseBody
+	public String deleteRooms(@RequestParam(value="checkedRoomNo[]") List<Integer> checkedRoomNo){
+       
+		for(int i = 0; i < checkedRoomNo.size(); i++) {
+			meetingroomService.deleteRooms(checkedRoomNo.get(i));
+		}
+		
+        return String.valueOf(checkedRoomNo);
+       }
 
 }
