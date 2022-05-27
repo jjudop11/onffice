@@ -1,5 +1,8 @@
 package com.uni.spring.approval.model.dao;
 
+import java.util.ArrayList;
+
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +12,8 @@ import com.uni.spring.approval.model.dto.DayoffForm;
 import com.uni.spring.approval.model.dto.FormAtt;
 import com.uni.spring.approval.model.dto.PaymentForm;
 import com.uni.spring.approval.model.dto.ProposalForm;
+import com.uni.spring.common.PageInfo;
+import com.uni.spring.member.model.dto.Member;
 
 @Repository
 public class ApprovalDao {
@@ -41,6 +46,19 @@ public class ApprovalDao {
 	// 지출결의서 
 	public int insertPaymentForm(SqlSession sqlSession, PaymentForm payForm) {
 		return sqlSession.insert("ApprovalMapper.insertPaymentForm", payForm);
+	}
+
+	// 전체사원명수조회 
+	public int selectMemberListCount(SqlSession sqlSession) {
+		return sqlSession.selectOne("ApprovalMapper.selectMemberListCount");
+	}
+
+	public ArrayList<Member> selectMemberList(SqlSession sqlSession, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", null, rowBounds);
 	}
 
 }

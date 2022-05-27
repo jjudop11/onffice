@@ -1,5 +1,7 @@
 package com.uni.spring.approval.model.service;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,9 @@ import com.uni.spring.approval.model.dto.DayoffForm;
 import com.uni.spring.approval.model.dto.FormAtt;
 import com.uni.spring.approval.model.dto.PaymentForm;
 import com.uni.spring.approval.model.dto.ProposalForm;
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.exception.CommException;
+import com.uni.spring.member.model.dto.Member;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
@@ -92,6 +96,17 @@ public class ApprovalServiceImpl implements ApprovalService {
 			throw new CommException("지출결의서 등록 실패");
 		}
 		
+	}
+
+	// 전체사원명수조회 
+	@Override
+	public int selectMemberListCount() {
+		return approvalDao.selectMemberListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<Member> selectMemberList(PageInfo pi) {
+		return approvalDao.selectMemberList(sqlSession, pi);
 	}
 	
 }
