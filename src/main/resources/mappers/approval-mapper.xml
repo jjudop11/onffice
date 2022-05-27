@@ -27,7 +27,7 @@
 	<insert id="insertDayoffForm" parameterType="DayoffForm">
 		INSERT INTO DAYOFF_FORM
 		VALUES
-		(SEQ_DAYOFF_FORM.NEXTVAL, SYSDATE, #{doTitle}, #{doStartDate}, #{doEndDate}, #{doContent}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo}, 10)
+		(SEQ_DAYOFF_FORM.NEXTVAL, SYSDATE, #{doTitle}, #{doStartDate}, #{doEndDate}, #{doContent}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo}, #{doType})
 	</insert>
 	
 	<!-- 사업기획서 -->
@@ -43,5 +43,18 @@
 		VALUES
 		(SEQ_PAYMENT_FORM.NEXTVAL, SYSDATE, #{payTitle}, #{payDay}, #{payList}, #{payAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
 	</insert> 
+	
+	<select id="selectMemberListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE M_WORK = 'Y'
+	</select>
+	
+	<select id="selectMemberList" parameterType="Member">
+		SELECT * 
+		FROM MEMBER 
+		WHERE M_WORK = 'Y'
+		ORDER BY M_NO DESC
+	</select>
 	
 </mapper>

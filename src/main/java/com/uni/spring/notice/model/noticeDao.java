@@ -16,14 +16,9 @@ public class noticeDao {
 		// TODO Auto-generated method stub
 		return sqlsession.selectOne("noticeMapper.selectListCount");
 	}
-
-	public notice selectNotice(SqlSessionTemplate sqlsession, int bno) {
-		// TODO Auto-generated method stub
-		return sqlsession.selectOne("noticeMapper.selectNotice", bno);
-	}
-
-	public void updateCount(SqlSessionTemplate sqlsession, int bno) {
-		sqlsession.update("noticeMapper.updateCount", bno);
+	
+	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession) {
+		return (ArrayList)sqlsession.selectList("noticeMapper.selectList");
 	}
 
 	public int insertNotice(SqlSessionTemplate sqlsession, notice n) {
@@ -38,11 +33,17 @@ public class noticeDao {
 		return sqlsession.update("noticeMapper.updateNotice", n);
 	}
 
-	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+	public notice selectNotice(SqlSessionTemplate sqlsession, int no_Num) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("noticeMapper.selectNotice", no_Num);
+	}
+
+	/*public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlsession.selectList("noticeMapper.selectList", null, rowBounds);
-	}
+	}*/
+
 
 
 }

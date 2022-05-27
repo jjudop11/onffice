@@ -12,6 +12,13 @@
 	
 	<!-- 데이트피커 cdn -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js" integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+	<style>
+		#proposalForm, #paymentForm {
+			display: none;
+		}
+	</style>
+
 </head>
 <body>
 
@@ -38,7 +45,7 @@
 								<div class="form-group">
 									<label for="formSelect">문서종류</label>
 									<fieldset class="form-group">
-										<select class="form-select" id="foNo" name="foNo">
+										<select class="form-select" id="form" name="foNo">
 											<option value="10">휴가신청서</option>
 											<option value="20">사업기획서</option>
 											<option value="30">지출결의서</option>
@@ -67,7 +74,70 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="apprLine">사원번호</label>
-									<input type="text" id="aplineNo" name="aplineNo" class="form-control round" placeholder="사원번호를 입력해주세요">
+									
+									<!-- 결재선 추가 버튼 -->
+									<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#inlineForm">
+									+
+									</button>
+									
+								    <!-- 결재선 추가 모달 -->
+									<div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title" id="myModalLabel33">결재선 검색</h4>
+													<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+														<i data-feather="x"></i>
+													</button>
+												</div>
+												<form action="searchMember.do">
+													<div class="modal-body">
+														<label>사원명</label>
+														<div class="form-group">
+															<input type="text" name="searchName" placeholder="사원명을 검색해주세요" class="form-control">
+															<button type="submit" class="btn btn-primary">SEARCH</button>
+														</div>
+													</div>
+													
+													<div class="table-responsive">
+	                                    				<table class="table table-striped mb-0">
+	                                    					<thead>
+				                                                <tr>
+				                                                    <th>사번</th>
+				                                                    <th>부서</th>
+				                                                    <th>직급</th>
+				                                                    <th>이름</th>
+				                                                </tr>
+				                                            </thead>
+				                                            <tbody>
+				                                            	<%-- <c:forEach items="${ list }" var="ap">
+					                                                <tr>
+					                                                    <td>${ ap.mNo }</td>
+					                                                    <td>${ ap.dNo }</td>
+					                                                    <td>${ ap.jNo }</td>
+					                                                    <td>${ ap.mName }</td>
+					                                                </tr>
+				                                                </c:forEach> --%>
+			                                                </tbody>
+	                                    				</table>
+	                                    			</div>
+	                                    			
+													<!-- <div class="modal-footer">
+														<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+															<i class="bx bx-x d-block d-sm-none"></i>
+															<span class="d-none d-sm-block">Close</span>
+														</button>
+														<button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+															<i class="bx bx-check d-block d-sm-none"></i>
+															<span class="d-none d-sm-block">login</span>
+														</button>
+													</div> -->
+												</form>
+											</div>
+										</div>
+									</div>
+									
+									<input type="text" id="aplineNo" name="aplineNo" class="form-control round">
 								</div>
 							</div>
 							<!-- <table border="1" class="table">
@@ -268,7 +338,7 @@
 				</div>
 				
 				<!-- 휴가신청서 서식입력폼 -->
-				<div class="card">
+				<div class="card" id="dayoffForm">
 					<div class="card-header">
 						<h4 class="card-title">휴가신청서</h4>
 					</div>
@@ -278,16 +348,16 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="title">제목</label>
-									<input type="text" id="doTitle" name="doTitle" class="form-control round" placeholder="제목을 입력해주세요">
+									<input type="text" id="doTitle" name="doTitle" class="form-control round">
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="date">기간</label>
 									<div class="col-sm-3">
-										<input type="date" id="datePicker" name="doStartDate" class="form-control" placeholder="시작일"/>
+										<input type="date" id="datePicker" name="doStartDate" class="form-control">
 										~
-										<input type="date" id="datePicker" name="doEndDate" class="form-control" placeholder="종료일"/>
+										<input type="date" id="datePicker" name="doEndDate" class="form-control">
 									</div>
 								</div>
 							</div>
@@ -295,22 +365,22 @@
 								<div class="form-group">
 									<label for="dayoffType">반차 여부</label>
 									<div class="form-check"> 
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault doType"
-                                            id="flexRadioDefault1 dayoffType" value="10"> 
+                                        <input class="form-check-input" type="radio" name="doType"
+                                            id="flexRadioDefault1" value="10"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             일차
                                         </label>
                                    </div>
                                    <div class="form-check"> 
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault doType"
-                                            id="flexRadioDefault1 dayoffType" value="20"> 
+                                        <input class="form-check-input" type="radio" name="doType"
+                                            id="flexRadioDefault1" value="20"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             오전반차
                                         </label>
                                    </div>
                                    <div class="form-check"> 
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault doType"
-                                            id="flexRadioDefault1 dayoffType" value="30"> 
+                                        <input class="form-check-input" type="radio" name="doType"
+                                            id="flexRadioDefault1" value="30"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             오후반차
                                         </label>
@@ -340,21 +410,153 @@
 					</div>
 				</div>
 				
+				<!-- 사업기획서 서식입력폼 -->
+				<div class="card" id="proposalForm">
+					<div class="card-header">
+						<h4 class="card-title">사업기획서</h4>
+					</div>
+					
+					<div class="card-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="title">프로젝트명</label>
+									<input type="text" id="prTitle" name="prTitle" class="form-control round">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="content">시행목적</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1" name="prGoal"
+                                            rows="3"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="content">운영계획</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1" name="prPlan"
+                                            rows="3"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="date">기간</label>
+									<div class="col-sm-3">
+										<input type="date" id="datePicker" name="prStartDate" class="form-control">
+										~
+										<input type="date" id="datePicker" name="prEndDate" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="content">참여인원</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1" name="prPerson"
+                                            rows="3"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="content">소요예산</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1" name="prAmount"
+                                            rows="3"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="upfile">첨부파일</label>
+									<div class="input-group mb-3">
+	                                    <div class="input-group mb-3">
+	                                        <label class="input-group-text" for="inputGroupFile01"><i
+	                                                class="bi bi-upload"></i></label>
+	                                        <input type="file" class="form-control" id="inputGroupFile01 upfile" name="upfile">
+	                                    </div>
+	                                </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- 지출결의서 서식입력폼 -->
+				<div class="card" id="paymentForm">
+					<div class="card-header">
+						<h4 class="card-title">지출결의서</h4>
+					</div>
+					
+					<div class="card-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="title">제목</label>
+									<input type="text" id="payTitle" name="payTitle" class="form-control round">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="date">결제일자</label>
+									<div class="col-sm-3">
+										<input type="date" id="datePicker" name="payDay" class="form-control">
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="content">결제내역</label>
+									<textarea class="form-control" id="exampleFormControlTextarea1" name="payList"
+                                            rows="3"></textarea>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="title">총지출금액</label>
+									<input type="text" id="payAmount" name="payAmount" class="form-control round">
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="upfile">첨부파일</label>
+									<div class="input-group mb-3">
+	                                    <div class="input-group mb-3">
+	                                        <label class="input-group-text" for="inputGroupFile01"><i
+	                                                class="bi bi-upload"></i></label>
+	                                        <input type="file" class="form-control" id="inputGroupFile01 upfile" name="upfile">
+	                                    </div>
+	                                </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 				<div class="buttons" align="center">
-                	<button type="submit" class="btn btn-secondary">결재요청</button>
+                	<button type="submit" class="btn btn-primary">결재요청</button>
                 </div>
 			</form>
 		</div>
 	</div>
 	
-	<!-- 휴가타입 선택값 전달 --> 
-	<%-- <script type="text/javascript">
-		$(function(){
-			let doType = Number($('input[name=doType]:checked').val());
-			console.log(doType)
-			location.href = "<%=request.getContextPath()%>/insertApproval.do?doType="+doType;
-		})
-	</script> --%>
+	<!-- 셀렉트박스 선택값에 따라 폼화면 변경 -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+	        $('#form').change(function(){ // 셀렉트박스 선택값에 따라 바로 변경 이벤트 발생 
+	            var form = $('#form').val(); //id선택자로 email select box값 추출하여 저장
+	            if(form == 10){ //selectbox value가 10일 때 폼화면 변경
+	            	$('#dayoffForm').css({'display':'block'})
+	            	$('#proposalForm').css({'display':'none'})
+	            	$('#paymentForm').css({'display':'none'})
+	            } else if (form == 20) { //selectbox value가 20일 때 폼화면 변경
+	            	$('#dayoffForm').css({'display':'none'})
+	            	$('#proposalForm').css({'display':'block'})
+	            	$('#paymentForm').css({'display':'none'})
+	            } else if (form == 30) { //selectbox value가 30일 때 폼화면 변경
+	            	$('#dayoffForm').css({'display':'none'})
+	            	$('#proposalForm').css({'display':'none'})
+	            	$('#paymentForm').css({'display':'block'})
+	            }
+	        });
+	    });
+	</script>
 	
 </body>
 </html>
