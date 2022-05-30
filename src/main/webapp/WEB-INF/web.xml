@@ -48,5 +48,15 @@
       <filter-name>encodingFilter</filter-name>
       <url-pattern>/*</url-pattern> <!-- /* 모든 요청이 다 들어오면 거치게 설정 -->
    </filter-mapping>
+   
+   <error-page>
+   	  <error-code>404</error-code>
+   	  <location>/WEB-INF/views/common/errorPage.jsp</location>
+   </error-page>
+   
+   <error-page>
+   	  <error-code>500</error-code>
+   	  <location>/WEB-INF/views/common/errorPage.jsp</location>
+   </error-page>
 
 </web-app>

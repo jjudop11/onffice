@@ -48,10 +48,10 @@ public class MemberServiceImpl implements MemberService {
 			int result = memberDao.updatePwd(sqlsession, m.getMId());
 			
 			if(result > 0) {
-				int pwdError = Integer.parseInt(loginUser.getMPwdError()) + 1;
-				//throw new CommException("비밀번호를" + pwdError +"회 틀렸습니다");
+				loginUser.setMPwd("99");
+			} else {
+				throw new CommException("비밀번호 오류");
 			}
-			
 		}
 		
 		return loginUser;

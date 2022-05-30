@@ -45,7 +45,7 @@
                         <div id="pwdResult"></div>
                       
                         <div class="form-group position-relative has-icon-left mb-1">
-                            <input type="text" class="form-control form-control-xl" name="cEmail" id="cEmail" placeholder="이메일" required autofocus>
+                            <input type="email" class="form-control form-control-xl" name="cEmail" id="cEmail" placeholder="이메일" required autofocus>
                             <div class="form-control-icon">
                                 <i class="bi bi-envelope"></i>
                             </div>
