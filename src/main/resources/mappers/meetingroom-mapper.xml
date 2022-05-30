@@ -36,6 +36,7 @@
 		SELECT *
 		FROM MEETINGROOM
 		WHERE C_NO = #{userCNo}
+		ORDER BY ROOM_NO
 	</select>
 	
 	<!-- 회의실 삭제 -->
@@ -45,11 +46,11 @@
 		WHERE ROOM_NO = #{roomNo}
 	</delete>
 	
-	<!-- 회의실 삭제 -->
-	<delete id="deleteRooms" parameterType="_int">
+	<!-- 회의실 여러개 삭제 -->
+	<delete id="deleteRooms" parameterType="string">
 		DELETE
 		FROM MEETINGROOM
-		WHERE ROOM_NO = #{checkedRoomNo}
+		WHERE ROOM_NO = #{roomNo}
 	</delete>
 	
 </mapper>
