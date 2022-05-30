@@ -11,6 +11,12 @@ public interface ChatService {
 
 	ArrayList<Chat> selectCount();
 
-	ArrayList<Member> selectMemList(int cNo);
+	ArrayList<Member> selectMemList(Member m);
+
+	ArrayList<Member> checkedUserList(Member m);
+
+	void insertSelectUserList(Member m);
+
+	void deleteCheckedUser(Member m);
 
 }

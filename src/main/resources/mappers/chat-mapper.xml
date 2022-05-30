@@ -19,12 +19,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 채팅방 생성 맴버 목록 -->
-	<select id="selectMemList" parameterType="_int" resultType="Member">
-		SELECT M_NO, M_NAME, J_NAME, D_NAME, P_NO
+	<select id="selectMemList" parameterType="Member" resultType="Member">
+
+		SELECT  M_NO, M_NAME, J_NAME, D_NAME, P_NO
 		FROM VIEW_LOGINUSER 
 		WHERE C_NO = #{cNo}
         AND M_WORK = 'Y'
-		ORDER BY J_NO DESC
+        AND M_NO != #{mNo}
+        AND M_NO NOT IN (SELECT  A.M_NO
+                            FROM VIEW_LOGINUSER A
+                            JOIN CR_I_LIST B ON A.M_NO = B.I_MEM_NO
+                            WHERE A.C_NO = #{cNo}
+                            AND M_WORK = 'Y')
+		ORDER BY J_NO DESC        
+	
 	</select>
+	
+	
+	
+	
+	
+	<!-- 선택된 맴버 목록 -->
+	<select id="checkedUserList" parameterType="Member" resultType="Member">
+		SELECT   A.M_NO, M_NAME, J_NAME, D_NAME, P_NO
+			FROM VIEW_LOGINUSER A
+			JOIN CR_I_LIST B ON A.M_NO = B.I_MEM_NO
+			WHERE A.C_NO = #{cNo}
+	        AND B.M_NO = #{mNo}
+	        AND M_WORK = 'Y'
+			ORDER BY J_NO DESC
+	</select>
+	
+	
+	<!-- 선택된 맴버 등록 -->
+	<insert id="insertSelectUserList" parameterType="Member">
+		INSERT INTO CR_I_LIST VALUES (#{cNo} , #{cMNo}, #{mNo})
+	</insert>
+	
+	
+	<!-- 선택된 맴버 삭제 -->
+	<delete id="deleteCheckedUser" parameterType="Member">
+		DELETE FROM CR_I_LIST WHERE C_NO = #{cNo} AND M_NO = #{mNo}
+	</delete>
+	
 	
 </mapper>

@@ -34,9 +34,29 @@ public class ChatServiceImpl implements ChatService{
 	}
 
 	@Override
-	public ArrayList<Member> selectMemList(int cNo) {
+	public ArrayList<Member> selectMemList(Member m) {
 		// TODO Auto-generated method stub
-		return chatDao.selectMemList(sqlSession, cNo);
+		return chatDao.selectMemList(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Member> checkedUserList(Member m) {
+		// TODO Auto-generated method stub
+		return chatDao.checkedUserList(sqlSession, m);
+	}
+
+	@Override
+	public void insertSelectUserList(Member m) {
+		// TODO Auto-generated method stub
+		chatDao.insertSelectUserList(sqlSession, m);
+		
+	}
+
+	@Override
+	public void deleteCheckedUser(Member m) {
+		// TODO Auto-generated method stub
+		chatDao.deleteCheckedUser(sqlSession, m);
+		
 	}
 
 }

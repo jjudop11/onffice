@@ -21,9 +21,25 @@ public class ChatDao {
 		return (ArrayList)sqlSession.selectList("chatMapper.selectCount");
 	}
 
-	public ArrayList<Member> selectMemList(SqlSessionTemplate sqlSession, int cNo) {
+	public ArrayList<Member> selectMemList(SqlSessionTemplate sqlSession, Member m) {
 		// TODO Auto-generated method stub
-		return (ArrayList)sqlSession.selectList("chatMapper.selectMemList", cNo);
+		return (ArrayList)sqlSession.selectList("chatMapper.selectMemList", m);
+	}
+
+	public ArrayList<Member> checkedUserList(SqlSessionTemplate sqlSession, Member m) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("chatMapper.checkedUserList", m);
+	}
+
+	public void insertSelectUserList(SqlSessionTemplate sqlSession, Member m) {
+		// TODO Auto-generated method stub
+		sqlSession.insert("chatMapper.insertSelectUserList" , m);
+		
+	}
+
+	public void deleteCheckedUser(SqlSessionTemplate sqlSession, Member m) {
+		// TODO Auto-generated method stub
+		sqlSession.delete("chatMapper.deleteCheckedUser" , m);
 	}
 
 }

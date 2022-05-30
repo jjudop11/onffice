@@ -37,6 +37,7 @@ public class Member {
 	private int cNo; // 회사번호
 	private int dNo; // 부서번호
 	private int jNo; // 직급번호
+	private String cMNo; // 채팅방 생성 사원번호
 
 }
 
