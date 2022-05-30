@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="AttendanceMapper">
-  	<select id="selectAttendance" parameterType="Attendance" resultType="Attendance">
-		SELECT M_NO, TO_CHAR(A_ENT_DATE,'YYYY-MM-DD') "entDate", A_ATIME, A_LTIME, A_WTIME, A_STATE
+  	<select id="selectAttendance" parameterType="string" resultType="Attendance">
+		SELECT M_NO, A_ENT_DATE, A_ATIME, A_LTIME, A_WTIME, A_STATE
 		FROM ATTENDANCE
-		WHERE M_NO = #{mNo} AND A_ENT_DATE = TO_DATE(#{entDate},'YYYY-MM-DD')
+		WHERE M_NO = #{mNo} AND A_ENT_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+	</select>
+	
+	<select id="selectAttendanceW" parameterType="string" resultType="Attendance">
+		SELECT M_NO, A_ENT_DATE, A_ATIME, A_LTIME, A_WTIME, A_STATE
+		FROM ATTENDANCE
+		WHERE A_ENT_DATE between  (SELECT   TO_CHAR(TRUNC(SYSDATE,'D')  ,'YYYY-MM-DD') 일 FROM DUAL) and 
+                            (SELECT TO_CHAR(TRUNC(SYSDATE,'D')+6,'YYYY-MM-DD') 토 FROM DUAL)
+		AND M_NO = #{mNo}
+		ORDER BY A_ENT_DATE
+	</select>
+	
+	<select id="selectAttendanceM" parameterType="string" resultType="Attendance">
+		SELECT to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy-mm') "A_ENT_DATE", sum(to_number(A_WTIME)) "A_WTIME"             
+		FROM ATTENDANCE
+		WHERE M_NO = #{mNo}
+		GROUP BY to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy-mm')
+		ORDER BY 1
 	</select>
 	
 	<insert id="insertAtime" parameterType="Attendance">
 		INSERT INTO ATTENDANCE
-		(M_NO, A_ENT_DATE, A_ATIME)
+		(M_NO, A_ENT_DATE, A_ATIME, A_STATE)
 		VALUES
-		(#{mNo}, TO_DATE(#{entDate},'YYYY-MM-DD'), TO_DATE(#{aAtime},'YYYY-MM-DD HH24:MI:SS'))  
+		(#{mNo}, TO_CHAR(SYSDATE,'YYYY-MM-DD'), #{aAtime}, #{aState})  
 	</insert>
 	
 	<update id="insertLtime" parameterType="Attendance">
 		UPDATE ATTENDANCE
-		SET A_LTIME = TO_DATE(#{aLtime},'YYYY-MM-DD HH24:MI:SS')
-		WHERE M_NO = #{mNo} AND A_ENT_DATE = TO_DATE(#{entDate},'YYYY-MM-DD')
+		SET A_LTIME = #{aLtime}
+		WHERE M_NO = #{mNo} AND A_ENT_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+	</update>
+	
+	<update id="insertWtime" parameterType="Attendance">
+		UPDATE ATTENDANCE 
+        SET A_WTIME = TO_CHAR(TO_DATE(ROUND((TO_DATE(A_LTIME, 'YYYY-MM-DD HH24:MI:SS') - TO_DATE(A_ATIME, 'YYYY-MM-DD HH24:MI:SS')) * 24 * 60 * 60, 2),'sssss'),'sssss')
+		WHERE M_NO = #{mNo} AND A_ENT_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
 	</update>
 	
 </mapper>
