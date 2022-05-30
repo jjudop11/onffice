@@ -143,16 +143,20 @@ public class MemberController {
 	@PostMapping("/login")
 	public ModelAndView loginUser(Member m, Model model, ModelAndView mv) { 
 
-		Member loginUser = memberService.loginUser(bCryptPasswordEncoder, m);
+		Member loginUser;
+
+		loginUser = memberService.loginUser(bCryptPasswordEncoder, m);
 		
 		System.out.println("DB정보: "+loginUser);
 		
 		if(m.getMPwd().equals("0")) {
 			mv.addObject("loginUser", loginUser).addObject("msg","첫로그인 입니다. 비밀번호를 변경하세요").setViewName("member/updatePwdForm");
+		} else if (loginUser.getMPwd().equals("99")) {
+			mv.addObject("msg", "비밀번호를 틀렸습니다. 5번틀리면 계정이 잠깁니다").setViewName("member/login");
 		} else {
 			mv.addObject("loginUser", loginUser).setViewName("main");
 		}
-		
+			
 		return mv;
 
 	}
@@ -169,7 +173,7 @@ public class MemberController {
 		
 		int listCount = memberService.selectMemListCount(loginUser.getCNo());
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 		
 		ArrayList<Member> list = memberService.selectMemList(pi, loginUser.getCNo());
 		

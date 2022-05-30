@@ -28,7 +28,8 @@ public class MeetingroomController {
 	
 	// 회의실 예약 진입
 	@RequestMapping("roomReservation.do")
-	public String roomReservation(HttpSession session, Model model) {
+	public String roomReservation(HttpSession session, Model model,
+			@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage) {
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		System.out.println("로그인유저 : " + loginUser);
@@ -38,6 +39,10 @@ public class MeetingroomController {
 		
 		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
 		model.addAttribute("roomList", roomList);
+		
+		int listCount = meetingroomService.selectRoomListCount(userCNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		model.addAttribute("pi", pi);
 		
 		return "meetingRoom/roomReservation";
 
@@ -85,6 +90,46 @@ public class MeetingroomController {
 
 	}
 	
+	@RequestMapping("reserve-roomSetting.do")
+	public String reserve_roomSetting(HttpSession session, Model model,
+			@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage) {
+
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		System.out.println("로그인유저 : " + loginUser);
+
+		String roomsetUserId = loginUser.getMId(); // 로그인유저의 사번
+		int userCNo = loginUser.getCNo(); // 로그인유저의 회사번호
+		System.out.println("유저의 회사번호 : " + userCNo);
+
+		int result = meetingroomService.selectRoomsetUser(roomsetUserId);
+		
+		//model.addAttribute("loginUser", loginUser); // 로그인 회원정보 전달용
+		
+		//페이징 처리
+		int listCount = meetingroomService.selectRoomListCount(userCNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		model.addAttribute("pi", pi);
+		
+		ArrayList<Meetingroom> roomList = meetingroomService.selectRoomList(pi, userCNo);
+		System.out.println("회의실 목록 : " + roomList);
+		model.addAttribute("roomList", roomList); // 회의실 목록 출력용
+		
+		if (result > 0) {
+
+			// 현재 로그인한 유저의 회사에 등록된 회의실 가져와서 뿌려줘야함
+			// ArrayList<Meetingroom> list = meetingroomService.selectList(userCNo);
+			// model.addAttribute("list", list);
+
+			// model.addAttribute("roomList", roomList);
+			return "meetingRoom/roomSetting";
+
+		} else {
+			model.addAttribute("msg", "접근권한이 없습니다.");
+			return "meetingRoom/roomReservation";
+		}
+
+	}
+	
 	//회의실번호 중복체크
 	@RequestMapping("roomNoCheck.do")
 	@ResponseBody
@@ -125,8 +170,8 @@ public class MeetingroomController {
 
 	}
 
-	//회의실 삭제
-	@RequestMapping("deleteRoom.do")
+	//회의실 한개 삭제
+	/* @RequestMapping("deleteRoom.do")
 	@ResponseBody
 	public String deleteMeetingroom(HttpSession session, Model model, @RequestParam("roomNo") String roomNo) {
 		
@@ -146,18 +191,29 @@ public class MeetingroomController {
 		model.addAttribute("roomList", roomList);
 		
 		return "meetingRoom/roomSetting";
-	}
+	} */
 	
 	//회의실 여러개 삭제
 	@RequestMapping("deleteRooms.do")
 	@ResponseBody
-	public String deleteRooms(@RequestParam(value="checkedRoomNo[]") List<Integer> checkedRoomNo){
+	public String deleteRooms(@RequestParam(value="checkedArr[]") List<String> checkedArr, HttpSession session, Model model){
        
-		for(int i = 0; i < checkedRoomNo.size(); i++) {
-			meetingroomService.deleteRooms(checkedRoomNo.get(i));
+		
+		
+		for(int i = 0; i < checkedArr.size(); i++) {
+			
+			String roomNo = checkedArr.get(i);
+
+			int result = meetingroomService.deleteRooms(roomNo);
+			System.out.println("삭제된 행 : " + result);
 		}
 		
-        return String.valueOf(checkedRoomNo);
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int userCNo = loginUser.getCNo();
+		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
+			
+		return new GsonBuilder().create().toJson(roomList);
+		
        }
 
 }

@@ -21,8 +21,8 @@ public class MeetingroomServiceImple implements MeetingroomService {
 
 	@Autowired
 	private MeetingroomDao meetingroomDao;
-	
-	//회의실 관리 권한이 부여된 유저 확인
+
+	// 회의실 관리 권한이 부여된 유저 확인
 	@Override
 	public int selectRoomsetUser(String roomsetUserId) {
 
@@ -32,7 +32,7 @@ public class MeetingroomServiceImple implements MeetingroomService {
 
 	@Override
 	public int insertMeetingroom(Meetingroom m) {
-		
+
 		int result = meetingroomDao.insertMeetingroom(sqlsession, m);
 		return result;
 	}
@@ -49,7 +49,7 @@ public class MeetingroomServiceImple implements MeetingroomService {
 		return meetingroomDao.selectRoomList(sqlsession, pi, userCNo);
 	}
 
-	//회의실 예약화면 -> 하단 회의실 현황
+	// 회의실 예약화면 -> 하단 회의실 현황
 	@Override
 	public ArrayList<Meetingroom> selectList(int userCNo) {
 		// TODO Auto-generated method stub
@@ -69,12 +69,9 @@ public class MeetingroomServiceImple implements MeetingroomService {
 	}
 
 	@Override
-	public int deleteRooms(int checkedRoomNo) {
+	public int deleteRooms(String roomNo) {
 		// TODO Auto-generated method stub
-		return meetingroomDao.deleteRooms(sqlsession, checkedRoomNo);
+		return meetingroomDao.deleteRooms(sqlsession, roomNo);
 	}
-	
-	
-
 
 }

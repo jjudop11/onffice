@@ -19,7 +19,7 @@ public class DayoffForm {
 	private int doNo; // 휴가신청번호 
 	private Date doDate; // 작성일 
 	private String doTitle; // 제목 
-	private Date doStartDate; // 시작일 
+	private Date doStartDate; // 시작일
 	private Date doEndDate; // 종료일 
 	private String doContent; // 사유 
 	private int apNo; // 전자결재번호 

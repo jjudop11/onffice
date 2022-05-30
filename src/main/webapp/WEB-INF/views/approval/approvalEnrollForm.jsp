@@ -90,49 +90,37 @@
 														<i data-feather="x"></i>
 													</button>
 												</div>
-												<form action="searchMember.do">
-													<div class="modal-body">
-														<label>사원명</label>
-														<div class="form-group">
-															<input type="text" name="searchName" placeholder="사원명을 검색해주세요" class="form-control">
-															<button type="submit" class="btn btn-primary">SEARCH</button>
-														</div>
+												
+												<div class="modal-body">
+													<label>사원명</label>
+													<div class="form-group">
+														<input type="text" id="searchName" name="searchName" placeholder="사원명을 검색해주세요" class="form-control">
+														<button type="button" id="search" class="btn btn-primary">SEARCH</button>
 													</div>
-													
-													<div class="table-responsive">
-	                                    				<table class="table table-striped mb-0">
-	                                    					<thead>
+												</div>
+												<div class="table-responsive">
+                                    				<table class="table table-striped mb-0">
+                                    					<thead>
+			                                                <tr>
+			                                                    <th>사번</th>
+			                                                    <th>부서</th>
+			                                                    <th>직급</th>
+			                                                    <th>이름</th>
+			                                                </tr>
+			                                            </thead>
+			                                            <tbody>
+			                                            	<c:forEach items="${ list }" var="ap">
 				                                                <tr>
-				                                                    <th>사번</th>
-				                                                    <th>부서</th>
-				                                                    <th>직급</th>
-				                                                    <th>이름</th>
+				                                                    <td>${ ap.mNo }</td>
+				                                                    <td>${ ap.dNo }</td>
+				                                                    <td>${ ap.jNo }</td>
+				                                                    <td>${ ap.mName }</td>
 				                                                </tr>
-				                                            </thead>
-				                                            <tbody>
-				                                            	<%-- <c:forEach items="${ list }" var="ap">
-					                                                <tr>
-					                                                    <td>${ ap.mNo }</td>
-					                                                    <td>${ ap.dNo }</td>
-					                                                    <td>${ ap.jNo }</td>
-					                                                    <td>${ ap.mName }</td>
-					                                                </tr>
-				                                                </c:forEach> --%>
-			                                                </tbody>
-	                                    				</table>
-	                                    			</div>
-	                                    			
-													<!-- <div class="modal-footer">
-														<button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-															<i class="bx bx-x d-block d-sm-none"></i>
-															<span class="d-none d-sm-block">Close</span>
-														</button>
-														<button type="button" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-															<i class="bx bx-check d-block d-sm-none"></i>
-															<span class="d-none d-sm-block">login</span>
-														</button>
-													</div> -->
-												</form>
+			                                                </c:forEach>
+		                                                </tbody>
+                                    				</table>
+                                    			</div>
+                                    			
 											</div>
 										</div>
 									</div>
@@ -410,7 +398,7 @@
 					</div>
 				</div>
 				
-				<!-- 사업기획서 서식입력폼 -->
+				<!-- 사업기획서 서식입력폼 
 				<div class="card" id="proposalForm">
 					<div class="card-header">
 						<h4 class="card-title">사업기획서</h4>
@@ -476,9 +464,9 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				
-				<!-- 지출결의서 서식입력폼 -->
+				<!-- 지출결의서 서식입력폼 
 				<div class="card" id="paymentForm">
 					<div class="card-header">
 						<h4 class="card-title">지출결의서</h4>
@@ -496,7 +484,7 @@
 								<div class="form-group">
 									<label for="date">결제일자</label>
 									<div class="col-sm-3">
-										<input type="date" id="datePicker" name="payDay" class="form-control">
+										<input type="date" name="payDay" class="form-control">
 									</div>
 								</div>
 							</div>
@@ -527,17 +515,18 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				
 				<div class="buttons" align="center">
                 	<button type="submit" class="btn btn-primary">결재요청</button>
                 </div>
 			</form>
 		</div>
-	</div>
+	</div> 
 	
-	<!-- 셀렉트박스 선택값에 따라 폼화면 변경 -->
 	<script type="text/javascript">
+	
+		<!-- 셀렉트박스 선택값에 따라 폼화면 변경 -->
 		$(document).ready(function(){
 	        $('#form').change(function(){ // 셀렉트박스 선택값에 따라 바로 변경 이벤트 발생 
 	            var form = $('#form').val(); //id선택자로 email select box값 추출하여 저장
@@ -556,6 +545,44 @@
 	            }
 	        });
 	    });
+		
+		<!-- 검색 버튼 클릭하면 컨트롤러에 검색값 전달 
+		$(document).ready(function(){
+			$(document).on('click', '#search', function(e){
+				let searchName = $('#searchName').val();
+				console.log(searchName)
+				
+				$.ajax({
+					url : "searchApprovalLine.do",
+					type : "post",
+					data : {searchName:searchName},
+					success : function(){
+					},
+					error : funcgion(){
+						alert("error")
+					}
+				})
+			});
+		});-->
+		
+		$(function(){
+			$('#search').click(function(){
+				/* var searchName = $('#searchName').val(); */
+				
+				$.ajax({
+					url : "searchApprovalLine.do",
+					type : "post",
+					date : searchName:$('#searchName').val(),
+					success : function(){
+						alert("성공")
+					},
+					error : function(){
+						alert("실패")
+					}
+				});
+			});
+		});
+		
 	</script>
 	
 </body>
