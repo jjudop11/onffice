@@ -12,7 +12,7 @@ public interface noticeService  {
 
 	void insertNotice(notice n);
 
-	void deleteNotice(int bno);
+	void deleteNotice(int No_Num);
 
 	void updateNotice(notice n);
 

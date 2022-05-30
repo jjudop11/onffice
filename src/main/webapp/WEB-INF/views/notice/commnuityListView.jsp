@@ -18,7 +18,8 @@
         <div class="innerOuter" style="padding:5% 10%;">
             <h2>공지사항</h2>
             <br>
-            <c:if test="${ session.loginUser.mManager == 'Y' }">
+            <!-- 매니저 권한만 가진 사람만 보여지는 글쓰기 버튼-->
+            <c:if test="${ !empty loginUser }"> <!-- sessionScope.loginUser.MManager == 'Y' -->
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
             </c:if>
             <br>
@@ -34,11 +35,8 @@
                 	<c:forEach items="${ list }" var="n">
 	                    <tr>
 	                    	<td style="display: none;">${ n.no_Num }</td>
-	                    	<td style="width:75%;" onclick="location.href='detailNotice.do?no_Num=${ n.no_Num }'">
-	                    	<c:if test="${ n.no_Important == 'Y' }">
-				            	<a class="badge bg-danger">중요</a>
-				            </c:if>${ n.no_Title }</td>
-				            <td>${ n.no_Write }</td>
+	                        <td style="width:75%;" onclick="location.href='detailNotice.do?bno=${ n.no_Num }'">${ n.no_Title }</td>
+	                        <td>${ n.no_Write }</td>
 	                        <td>${ n.no_Date }</td>
 	                    </tr>
                     </c:forEach>
@@ -89,5 +87,12 @@
     </div>
     </div>
     </div>
+    <script>
+    	$(function(){
+    		$("#boardList tbody tr").click(function(){
+    			location.href="detailNotice.do?bno=${ n.no_Num }";
+    		});
+    	});
+    </script>
 </body>
 </html>

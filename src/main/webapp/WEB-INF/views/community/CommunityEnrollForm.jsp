@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>커뮤니티</title>
 <style>
  	#enrollForm>table{width:100%;}
     #enrollForm>table *{ margin:5px;}
@@ -18,21 +18,21 @@
         <br><br>
         <div class="innerOuter">
             <br>
-            <form id="enrollForm" method="post" action="insertNotice.do" enctype="multipart/form-data">
+            <form id="enrollForm" method="post" action="insertCommu.do" enctype="multipart/form-data">
                 <table align="center">
                     <tr>
                         <th><label for="title">제목</label></th>
-                        <td><input type="checkbox" id="important_notice" name="No_Important" value="Y">중요 ! <input type="text" id="title" class="form-control" name="No_Title" required></td>
+                        <td><input type="text" id="title" class="form-control" name="ComTitle" required></td>
                     </tr>
                     <tr style="display: none;">
                         <th><label for="writer">작성자</label></th>
-                        <td><input type="text" id="writer" class="form-control" value="${ sessionScope.loginUser.MNo }" name="No_Write" readonly></td>
+                        <td><input type="text" id="writer" class="form-control" value="${ sessionScope.loginUser.MNo }" name="ComWrite" readonly></td>
                     </tr>
                     <tr>
                         <th colspan="2"><label for="content">내용</label></th>
                     </tr>
                     <tr>
-                        <th colspan="2"><textarea class="form-control" required name="No_Content" id="content" rows="10" style="resize:none;"></textarea></th>
+                        <th colspan="2"><textarea class="form-control" required name="ComContent" id="content" rows="10" style="resize:none;"></textarea></th>
                     </tr>
                 </table>
                 <br>

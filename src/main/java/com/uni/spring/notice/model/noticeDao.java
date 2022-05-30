@@ -25,8 +25,8 @@ public class noticeDao {
 		return sqlsession.insert("noticeMapper.insertNotice", n);
 	}
 
-	public int deleteNotice(SqlSessionTemplate sqlsession, int bno) {
-		return sqlsession.update("noticeMapper.deleteNotice", bno);
+	public int deleteNotice(SqlSessionTemplate sqlsession, int No_Num) {
+		return sqlsession.update("noticeMapper.deleteNotice", No_Num);
 	}
 
 	public int updateNotice(SqlSessionTemplate sqlsession, notice n) {

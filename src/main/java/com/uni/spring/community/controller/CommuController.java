@@ -1,4 +1,4 @@
-package com.uni.spring.notice.controller;
+package com.uni.spring.community.controller;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,48 +10,39 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.uni.spring.notice.model.notice;
-import com.uni.spring.notice.service.noticeService;
+import com.google.gson.GsonBuilder;
+import com.uni.spring.community.model.Community;
+import com.uni.spring.community.model.Reply;
+import com.uni.spring.community.service.CommuService;
 
 @Controller
-public class noticeController {
+public class CommuController {
 	
 	@Autowired
-	public noticeService noticeService;
+	public CommuService commuService;
 	
-	@RequestMapping("listNotice.do")
+	@RequestMapping("listCommunity.do")
 	public String selectList(Model model) {
 
-		int listCount = noticeService.selectListCount();
+		int listCount = commuService.selectListCount();
 		
-		ArrayList<notice> list = noticeService.selectList();
+		ArrayList<Community> list = commuService.selectList();
 		model.addAttribute("list",list);
-		/*for (notice notice : list) {
-		System.out.println(notice);
-		}
-		System.out.println(list.size());*/
-		return "notice/noticeListView";
-	}
-	
-	@RequestMapping("enrollFormNotice.do")
-	public String enrollForm() {
-		return "notice/noticeEnrollForm";
-	}
-	
-	@RequestMapping("detailNotice.do")
-	public String selectNotice(@RequestParam(value= "no_Num") int no_Num, Model model) {
-		notice n = noticeService.selectNotice(no_Num);
-		
-		model.addAttribute("n", n);
-		
-		return "notice/noticeDetailView"; 
-	}
 
-	@RequestMapping("insertNotice.do")
-	public String insertBoard(notice n, HttpServletRequest request, @RequestParam(name="No_Important", required = false) String imp, @RequestParam(name="uploadFile", required = false) MultipartFile file) {
+		return "community/CommunityListView";
+	}
+	
+	@RequestMapping("enrollFormCommunity.do")
+	public String enrollForm() {
+		return "community/CommunityEnrollForm";
+	}
+	
+	@RequestMapping("insertCommu.do")
+	public String insertBoard(Community c, HttpServletRequest request, @RequestParam(name="uploadFile", required = false) MultipartFile file) {
 
 		/*if(!file.getOriginalFilename().equals("")) { 
 			String changeName = saveFile(file, request);
@@ -61,16 +52,37 @@ public class noticeController {
 			}
 		}*/
 
-		if( imp == null ) { n.setNo_Important("N"); }
-		if( imp == "Y") { n.setNo_Important("Y"); }
-		System.out.println(imp);
-		noticeService.insertNotice(n);
+		commuService.insertCommu(c);
 		
-		return "redirect:listNotice.do";
+		return "redirect:listCommunity.do";
+	}
+	
+	@RequestMapping("detailCommunity.do")
+	public String selectNotice(@RequestParam(value= "Com_Num") int cn, Model model) {
+		Community c = commuService.selectCommu(cn);
+		
+		model.addAttribute("c", c);
+		System.out.println(c);
+		return "community/CommunityDetailView"; 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "rinsertCommunity.do", produces = "application/json; charset=UTF-8")
+	public String selectReplyList(int rn) {
+		ArrayList<Reply> list = commuService.selectReplyList(rn);
+		return new GsonBuilder().setDateFormat("MM월 dd일 HH:mm:ss").create().toJson(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "rinsertCommunity.do")
+	public String insertReply(Reply r) {
+		int result = commuService.insertReply(r);
+		return String.valueOf(result);
 	}
 
+	/*
 	// 전달 받은 파일을 업로드 시킨후 파일명을 리턴하는 역할
-	/*private String saveFile(MultipartFile file, HttpServletRequest request) {
+	private String saveFile(MultipartFile file, HttpServletRequest request) {
 		String resources = request.getSession().getServletContext().getRealPath("resources"); // 웹 컨텐트에서의 resources 폴더까지의 경로 지정
 		String savePath = resources+"\\upload_files\\";
 		
@@ -93,16 +105,16 @@ public class noticeController {
 		}
 		
 		return changeName;
-	}*/
+	}
 	
-	@RequestMapping("deleteNotice.do")
+	@RequestMapping("deleteCommu.do")
 	public String deleteNotice(int No_Num, String fileName, HttpServletRequest request) {
 		
 		noticeService.deleteNotice(No_Num);
 		
-		/*if(!fileName.equals("")) {
+		if(!fileName.equals("")) {
 			deleteFile(fileName, request);
-		}*/
+		}
 		
 		return "redirect:listNotice.do";
 	}
@@ -125,23 +137,23 @@ public class noticeController {
 	@RequestMapping("updateNotice.do")
 	public ModelAndView updateBoard(notice n, ModelAndView mv, HttpServletRequest request, @RequestParam(name="reUploadFile", required = false) MultipartFile file) {
 
-		/*String orgChangeName = n.getChangeName(); 
+		String orgChangeName = n.getChangeName(); 
 		
 		if(!file.getOriginalFilename().equals("")) { // 새로 넘어온 파일이 있는 경우 / !file.isEmpty()도 가능
 			String changeName = saveFile(file, request);
 			n.setOriginName(file.getOriginalFilename());
 			n.setChangeName(changeName);
-		}*/
+		}
 		
 		noticeService.updateNotice(n);
 		
-		/*if(orgChangeName != null) { // 새로 넘어온 파일이 있는데 기존 파일이 있는 경우
+		if(orgChangeName != null) { // 새로 넘어온 파일이 있는데 기존 파일이 있는 경우
 			deleteFile(orgChangeName, request);
-		}*/
+		}
 		
 		mv.addObject("No_Num", n.getNo_Num()).setViewName("redirect:detailNotice.do");
 		
 		return mv;
-	}
+	}*/
 	
 }

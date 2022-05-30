@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>공지사항</title>
 <style>
 	#updateForm>table{width:100%;}
     #updateForm>table *{ margin:5px;}
@@ -14,19 +14,18 @@
 <body>
 
     <jsp:include page="../common/menubar.jsp"/>
-
+	<div id="app">
+	<div id="main">
     <div class="content">
         <br><br>
         <div class="innerOuter">
-            <h2>게시글 수정하기</h2>
             <br>
-
             <form id="updateForm" method="post" action="updateNotice.do" enctype="multipart/form-data">
-            	<input type="hidden" name="boardNo" value="${ n.no_Num }">
+            	<input type="hidden" name="No_Num" value="${ n.no_Num }">
                 <table align="center">
                     <tr>
                         <th><label for="title">제목</label></th>
-                        <td><input type="text" id="title" class="form-control" name="boardTitle" value="${ n.no_Title }" required></td>
+                        <td><input type="checkbox" id="important_notice" name="No_Important" value="${ n.no_Important }">중요 !<input type="text" id="title" class="form-control" name="No_Title" value="${ n.no_Title }" required></td>
                     </tr>
                     <!-- <tr>
                         <th><label for="upfile">첨부파일</label></th>
@@ -40,10 +39,10 @@
                         </td>
                     </tr> -->
                     <tr>
-                        <th colspan="2"><label for="content">내용</label></th>
+                        <th colspan="2"><label for="No_content">내용</label></th>
                     </tr>
                     <tr>
-                        <th colspan="2"><textarea class="form-control" required name="no_Content" id="content" rows="10" style="resize:none;">${ n.no_Content }</textarea></th>
+                        <th colspan="2"><textarea class="form-control" required name="No_Content" id="content" rows="10" style="resize:none;">${ n.no_Content }</textarea></th>
                     </tr>
                 </table>
                 <br>
@@ -56,6 +55,7 @@
         </div>
         <br><br>
     </div>
-
+    </div>
+    </div>
 </body>
 </html>
