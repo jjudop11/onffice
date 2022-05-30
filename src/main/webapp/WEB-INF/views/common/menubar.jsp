@@ -223,7 +223,7 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="form-element-input.html">회의실 예약</a>
+                                    <a href="roomReservation.do">회의실 예약</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="form-element-input.html">온라인 회의실</a>
