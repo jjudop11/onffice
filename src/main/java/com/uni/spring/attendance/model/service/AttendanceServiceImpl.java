@@ -1,5 +1,7 @@
 package com.uni.spring.attendance.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,24 @@ public class AttendanceServiceImpl implements AttendanceService {
 	private AttendanceDao attendanceDao;
 	
 	@Override
-	public Attendance selectAttendance(Attendance a) {
+	public Attendance selectAttendance(String mNo) {
 		
-		return attendanceDao.selectAttendance(sqlsession, a);
+		return attendanceDao.selectAttendance(sqlsession, mNo);
 	}
+	
+	@Override
+	public ArrayList<Attendance> selectAttendanceW(String mNo) {
+		// TODO Auto-generated method stub
+		return attendanceDao.selectAttendanceW(sqlsession, mNo);
+	}
+	
+	@Override
+	public ArrayList<Attendance> selectAttendanceM(String mNo) {
+		// TODO Auto-generated method stub
+		return attendanceDao.selectAttendanceM(sqlsession, mNo);
+	}
+
+
 
 	@Override
 	public int insertAtime(Attendance a) {
@@ -40,11 +56,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public int insertLtime(Attendance a) {
 		
 		int result = attendanceDao.insertLtime(sqlsession, a);
+		int result2 = attendanceDao.insertWtime(sqlsession, a);
 		
-		if(result < 1) {
-			throw new CommException("퇴근 등록 실패");
-		} 
-		return result;
+		return result * result2;
 	}
 
+
+	
 }

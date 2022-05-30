@@ -45,8 +45,8 @@ public class noticeServiceImpl implements noticeService {
 	}
 
 	@Override
-	public void deleteNotice(int bno) {
-		int result = noticedao.deleteNotice(sqlsession, bno);
+	public void deleteNotice(int No_Num) {
+		int result = noticedao.deleteNotice(sqlsession, No_Num);
 		
 		if(result < 0) {
 			throw new CommException("게시글 삭제 실패");

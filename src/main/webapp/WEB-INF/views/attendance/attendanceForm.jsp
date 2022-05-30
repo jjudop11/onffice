@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
     <style>
 	body{
 	    background: #f5f5f5;
@@ -118,6 +119,10 @@
   		top: 80px;
   		left : 100px; 
   	}
+	
+	td, .card-body1 {
+	  text-align: center;
+	}
   </style>
 </head>
 
@@ -146,52 +151,95 @@
                     <div class="row">
                         <div class="col-xl-3 col-md-3 col-sm-3">
                             <div class="card">
-                                <div class="card-content">
+                                <div class="card-content ">
                                     <div class="card-body">
                                         <h6 class="card-text" id="ymd"></h6>
                                         <h1 class="card-text" id="clock"></h1>
+                                        <br>
+                                        <h6 class="card-text">주간근무시간</h6>
+                                        <div class="progress progress-primary mt-4 mb-2">
+		                                <div class="progress-bar progress-label" role="progressbar" style="width: 0%"
+		                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="bar"></div>
+		                            	</div>
+		                            	<br>
                                         <h6 class="card-text" id="aTime">출근시간:</h6>
                                         <h6 class="card-text" id="lTime">퇴근시간:</h6>
-                                        <h6 class="card-text" id="wTime"></h6>
+                                        <h6 class="card-text" id="wTime">근무시간</h6>
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between">
                                     <button class="btn btn-primary btn" id="plus">출근하기</button>
                                     <button class="btn btn-danger btn" id="minus">퇴근하기</button>
                                 </div>
-                            </div>
-                            
+                            </div>   
                         </div>
-                        <div class="col-xl-9 col-md-9 col-sm-9">
+                        <div class="col-xl-9 col-md-9 col-sm-9 mb-3">
                             <div class="card">
-                                <div class="card-group">
+                                <div class="card-group mt-3">
                                 <div class="card">
                                     <div class="card-content">
-                                        <div class="card-body">
+                                        <div class="card-body1 mt-4">
                                             <h4 class="card-title">총연차</h4>
+                                             <br>
                                             <h1 class="card-text">0</h1>
                                         </div>
                                     </div>
+                                    <br>
                                 </div>
                                 <div class="card">
-                                    <div class="card-content">
-                                       
-                                        <div class="card-body">
+                                    <div class="card-content">    
+                                        <div class="card-body1 mt-4">
                                             <h4 class="card-title">사용연차</h4>
+                                             <br>
                                             <h1 class="card-text">0</h1>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="card-content">
-                                        <div class="card-body">
-                                            <h4 class="card-title">잔여연차</h4>
+                                        <div class="card-body1">
+                                            <h4 class="card-title mt-4">잔여연차</h4>
+                                             <br>
                                             <h1 class="card-text">0</h1>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12 mt-5">
+                            <div class="card">
+                                <div class="card-group mt-3">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body1 mt-4">
+                                            <h4 class="card-title " >이번주 누적근무시간</h4>
+                                             <br>
+                                            <h1 class="card-text" id="attendanceW">0</h1>
+                                        </div>
+                                    </div>  <br>
+                                </div>
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body1 mt-4">
+                                            <h4 class="card-title">이번주 초과근무시간</h4>
+                                             <br>
+                                            <h1 class="card-text" id="overW">0</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body1 mt-4">
+                                            <h4 class="card-title">이번주 잔여근무시간</h4>
+                                             <br>
+                                            <h1 class="card-text" id="minusW">0</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                     </div>
                     
                     <div class="row">
@@ -200,7 +248,7 @@
                             
                     <div class="row match-height">
                         <div class="col-12 mt-3 mb-1">
-                            <h4 class="section-title text-uppercase">월간현황</h4>
+                            <h4 class="section-title text-uppercase">주간근태현황</h4>
                         </div>
                     </div>
                     <div class="row match-height">
@@ -209,11 +257,39 @@
                                 <div class="card">
                                     <div class="card-content">
                                         <div class="card-body">
-                                            <p class="card-text">
-                                                This card has supporting text below as a natural lead-in to additional
-                                                content.</p>
-                                            <small class="text-muted">Last updated 3 mins ago</small>
+                                        	<table id="attendanceList" class="table table-borderess mb-0">
+                                        		<thead>
+								                    <tr>
+										               <td style="width:20%"><h4>기준일</h4></td>
+										                <td><h4>출근시간</h4></td>
+										                <td><h4>퇴근시간</h4></td>
+										                <td><h4>근무시간</h4></td>
+								                     </tr>
+								                 </thead>
+								                 <tbody id="here">
+								                 </tbody>
+                                        	</table>
+                                            
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row match-height">
+                        <div class="col-12 mt-5 mb-1">
+                            <h4 class="section-title text-uppercase">월별근태현황</h4>
+                        </div>
+                    </div>
+                    <div class="row match-height">
+                        <div class="col-12">
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <canvas class="card-body" id="line-chart">
+                                        
+                                        </canvas>
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +312,9 @@
 			
 			getClock();
 			setInterval(getClock, 1000);
-			selectReplyList();
+			selectAttendance();
+			selectAttendanceW();
+			selectAttendanceM();
 					
 			$("#plus").on('click', function() { 
 				
@@ -247,10 +325,11 @@
 					success:function(result){
 						
 						if(result == "1") {
-							$("#aTime").text("출근시간 : "+val);
 							getClock();
 							setInterval(getClock, 1000);
-							selectReplyList();
+							selectAttendance();
+							selectAttendanceW();
+							selectAttendanceM();
 						}
 
 					},error:function(){
@@ -263,25 +342,31 @@
 			$("#minus").on('click', function() { 
 			
 				let val = $("#clock").text();
+		
 				$.ajax({
 					url:"insertLtime",
 					type:"post",
 					success:function(result){
 						
 						if(result == "1") {
-							$("#LTime").text("퇴근시간: "+val);
 							getClock();
 							setInterval(getClock, 1000);
-							selectReplyList();
+							selectAttendance();
+							selectAttendanceW();
+							selectAttendanceM();
 						}
 
 					},error:function(){
+						alert("출근 먼저 등록해주세요")
 						console.log("퇴근 등록 ajax 통신 실패");
 					}
 					
 				});
 			
 			})
+			
+			
+			
 					
 		})
 
@@ -300,19 +385,21 @@
 
 		}
 		
-		function selectReplyList(){
+		function selectAttendance(){
 			$.ajax({
 				url:"selectAttendance",
 				type:"post",
 				success:function(result){
 					
-					if(result == null) {
-
-					} else {
-						$("#aTime").text("출근시간 : "+result.aAtime.substr(10,9))
+					if(result != null) {
+						$("#aTime").text("출근시간 : "+result.aAtime.substr(10,9)+" / "+result.aState)
 						$("#plus").attr("disabled", true);
-						$("#lTime").text("퇴근시간 : "+result.aLtime.substr(10,9))
-					}
+						
+						if(result.aLtime != null) {
+							$("#lTime").text("퇴근시간 : "+result.aLtime.substr(10,9))
+							$("#wTime").text("오늘근무시간 : "+result.aWtime);
+						}
+					} 
 				},
 				error:function(){
 					console.log("출퇴근 시간 ajax 통신 실패");
@@ -320,6 +407,111 @@
 			});
 				
 		}
+		
+		function selectAttendanceW(){ // 이번주 근무시간 
+			
+			$.ajax({
+				url:"selectAttendanceW",
+				type:"post",
+				success:function(list){
+					
+					let v = "";
+					for(let i in list) {
+						$("#attendanceW").text(list[0].allWtime);
+	
+						let h = list[i].allWtime.substr(0,2);
+						let m = list[i].allWtime.substr(3,2);
+						let s = list[i].allWtime.substr(6,2);
+						
+						if(parseInt(40-h) < 0) {
+							$("#overW").text(String(parseInt(52-h)).padStart(2,"0") +":"+ m +":" + s);
+						} else {
+							$("#overW").text("00:00:00");
+						}
+						
+						if(parseInt(40-h) < 0) {
+							$("#minusW").text("00:00:00");
+						} else {
+							$("#minusW").text(String(parseInt(40-h)).padStart(2,"0") +":"+ String(parseInt(60-m)).padStart(2,"0")+":" + String(parseInt(60-s)).padStart(2,"0"));
+						}
+						
+						if(list[i].aLtime == null) {
+							v += 
+								'<tr>'+
+									'<td><h6>'+list[i].aEntDate+'</h6></td>'+
+					                '<td><h6>'+list[i].aAtime.substr(11,8)+'</h6></td>'+
+					                '<td><h6></h6></td>'+
+					                '<td><h6></h6></td>'+
+		                      	'</tr>';
+						} else {
+							v += 
+								'<tr>'+
+									'<td><h6>'+list[i].aEntDate+'</h6></td>'+
+					                '<td><h6>'+list[i].aAtime.substr(11,8)+'</h6></td>'+
+					                '<td><h6>'+list[i].aLtime.substr(11,8)+'</h6></td>'+
+					                '<td><h6>'+list[i].aWtime+'</h6></td>'+
+		                      	'</tr>';
+						}
+						
+					}
+					$("#here").html(v);
+					
+					let t = parseInt(list[0].allWtime.replace(":", "").substr(0, 2)) / 40 * 100
+					
+					if(Math.round(t) >= 100) {
+						$("#bar").attr("aria-valuenow", "100");
+						$("#bar").attr("style", "width:100%");
+					} else {
+						$("#bar").attr("aria-valuenow", Math.round(t));
+						$("#bar").attr("style", "width: "+Math.round(t)+"%");
+					}
+					
+				},
+				error:function(){
+					console.log("이번주 근무 시간 ajax 통신 실패");
+				}
+			});
+				
+		}
+		
+		function selectAttendanceM(){ // 올해 이번달 근무시간 평균
+				
+			let mList = [];
+			let vList = [];
+			
+				$.ajax({
+					url:"selectAttendanceM",
+					type:"post",
+					success:function(list){
+						
+						for(let i in list) {
+							mList.push(list[i].aEntDate);
+							vList.push(list[i].aWtime.substr(0, 3));
+						}
+						console.log(mList)
+						console.log(vList)
+						
+						new Chart(document.getElementById("line-chart"), {
+							type: 'line',
+							data: {
+			    		    	labels: mList, // X축 
+			    		    	datasets: [{ 
+			    		    	    data: vList, // 값
+			    		    	    label: "나의 월별 총 근무시간",
+			    		    	    borderColor: "#3cba9f",
+			    		    	    fill: false
+			    		    	  }
+			    		    	]
+			    		    },
+							
+						}); // chart 끝
+					},
+					error:function(){
+						console.log("이번주 근무 시간 ajax 통신 실패");
+					}
+				});
+					
+			}
 
 	</script>
 

@@ -19,12 +19,20 @@ public interface MeetingroomService {
 
 	ArrayList<Meetingroom> selectList(int userCNo);
 
+	//회의실 하나 삭제
 	int deleteMeetingroom(String roomNo);
 
+	//회의실 번호 중복체크
 	int roomNoCheck(String roomNo);
 
-	//
-	int deleteRooms(int checkedRoomNo);
+	int deleteRooms(String roomNo);
+
+	
+	
+
+	
+	
+	
 
 	
 }

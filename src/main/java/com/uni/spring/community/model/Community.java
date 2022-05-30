@@ -1,4 +1,4 @@
-package com.uni.spring.notice.model;
+package com.uni.spring.community.model;
 
 import java.sql.Date;
 
@@ -15,14 +15,14 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class notice {
+public class Community {
 	
-	private int No_Num;
-	private String No_Title;
-	private String No_Content;
-	private String No_Write;
-	private Date No_Date;
-	private String No_Important;
-	private String No_status;
+	private int ComNum;
+	private String ComTitle;
+	private String ComContent;
+	private String ComWrite;
+	private Date ComDate;
+	private int ComView;
+	private String ComStatus;
 
 }

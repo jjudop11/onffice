@@ -13,12 +13,12 @@ import com.uni.spring.meetingroom.model.dto.Meetingroom;
 public class MeetingroomDao {
 
 	public int selectRoomsetUser(SqlSessionTemplate sqlsession, String roomsetUserId) {
-		
+
 		return sqlsession.selectOne("MeetingroomMapper.selecRoomsettUser", roomsetUserId);
 	}
 
 	public ArrayList<Meetingroom> seletcList(SqlSessionTemplate sqlsession, int userCNo) {
-		
+
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectList", userCNo);
 	}
 
@@ -35,7 +35,6 @@ public class MeetingroomDao {
 	}
 
 	// 회의실 삭제
-
 	public int deleteMeetingroom(SqlSessionTemplate sqlsession, String roomNo) {
 
 		return sqlsession.delete("MeetingroomMapper.deleteMeetingroom", roomNo);
@@ -61,9 +60,10 @@ public class MeetingroomDao {
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectRoomList", userCNo);
 	}
 
-	public int deleteRooms(SqlSessionTemplate sqlsession, int checkedRoomNo) {
+	public int deleteRooms(SqlSessionTemplate sqlsession, String roomNo) {
 		// TODO Auto-generated method stub
-		return sqlsession.delete("MeetingroomMapper.deleteRooms", checkedRoomNo);
+		return sqlsession.delete("MeetingroomMapper.deleteRooms", roomNo);
 	}
 
+	
 }
