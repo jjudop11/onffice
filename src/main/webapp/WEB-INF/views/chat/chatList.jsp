@@ -1,14 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <style>
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC');
 
-
-	.main {
+	.cast {
 		position:absolute; left:20%;
 		width:70%;
 		hight:auto;
@@ -90,15 +91,57 @@
 		width:70px;
 		
 	}
+	
+	/* 버튼 css */
+	.button {
+	  border: none;
+	  display: block;
+	  text-align: center;
+	  cursor: pointer;
+	  text-transform: uppercase;
+	  outline: none;
+	  overflow: hidden;
+	  position: relative;
+	  color: #fff;
+	  font-weight: 700;
+	  font-size: 15px;
+	  background-color: #222;
+	  /*padding: 17px 60px;*/
+	  margin: 0 auto;
+		 }
+	
+	.button span {
+	  position: relative; 
+	  z-index: 1;
+	}
+	
+	.button:after {
+	  content: "";
+	  position: absolute;
+	  left: 0;
+	  top: 0;
+	  height: 490%;
+	  width: 140%;
+	  background: #78c7d2;
+	  -webkit-transition: all .5s ease-in-out;
+	  transition: all .5s ease-in-out;
+	  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+	  transform: translateX(-98%) translateY(-25%) rotate(45deg);
+	}
+	
+	.button:hover:after {
+	  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+	  transform: translateX(-9%) translateY(-25%) rotate(45deg);
+	}
 </style>
 </head>
 <body style="background-color:#F0FFF0">
 
 	<jsp:include page="../common/menubar.jsp"/>
-	<div id="app">
-	<div id="main">
+
+	<div class="cast">
 		<div class="title" style="display:flex; margin:0 0 20px 0">
-			<div class="title1"><h2>채팅방 </h2></div>
+			<div class="title1"><h2>채팅방 </h2></div><button class="button" id="createRoom">채팅방 오픈!</button>
 			<div class="title2"><a data-toggle="modal" data-target="#createCRModal" class="createCR">채팅방 생성</a></div>
 		</div>
 		<hr class="divLine">
@@ -146,8 +189,14 @@
                     <label for="userPwd" class="mr-sm-2">초대할 대상 :</label>
                     <a data-toggle="modal" href="#myModal2" class="btn btn-primary" id="inviteUser">추가하기</a>
                     <!-- 선택된 사원 정보 -->
-                    <div class="form-control mb-2 mr-sm-2" id="inviteList" ></div><br>
-                    
+                    <div class="form-control mb-2 mr-sm-2">
+                    	<table id="inviteList" class="form-CR_mList" style="width:100%">
+                    		<tr id="inviteList">
+                    			
+                    		</tr>
+                    	</table>
+                    </div><br>
+                    	
                     <label for="userPwd" class="mr-sm-2">비밀번호 설정 <input class="" type="checkbox" id="pwCheck"></label>
                     <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="crPw" name="crPw" readOnly>
                 </div>
@@ -190,25 +239,24 @@
         </div>
     </div>
 </div>
-</div>
     <br clear="both">
     
     <script>
-		window.onload = function(){
+	
 		// 전화번호 업데이트하는 이벤트
 		$("#createRoom").click(function() {
 			window.name = "parent";
 			// 팝업 url
-			let url = "createChatRoom";
+			let url = "chatRoom";
 			// 팝업 이름
 			let name = "createChatRoomPopup";
 			// 팝업 속성
-			let option = "width = 500, height = 600, top = 50%, left = 50%, location = no";
+			let option = "width = 450, height = 700, top = 50%, left = 50%, location = no";
 			
 			open(url, name, option);
 						
 		})
-		}
+		
 		
 			$("#pwCheck").change(checkedchange)
 			function checkedchange(){
@@ -225,6 +273,21 @@
 				  $('#pwCheck').attr("checked" , false);
 				  $("#crPw").attr("readOnly", true);
 				  
+				  $.ajax({
+					
+					  url:"deleteCheckedUser",
+					  type:"get",
+					  
+					  success : function(data) {
+						  
+						  if(data == 1){
+						  checkedUserList();
+						  }
+						}
+					  
+				  })
+				  
+				  
 				});
 			
 	</script>
@@ -233,9 +296,9 @@
 	
 	$(function(){
 		$("#inviteUser").click(function(){
-			console.log("함수동작확인");
+			//console.log("함수동작확인");
 			$.ajax({
-				url:"CR_selectUserList",
+				url:"crSelectUserList",
 				type:"post",
 				success: function(mList){
 
@@ -252,6 +315,7 @@
 							"<td class='td1'><b>" + m.mName + "</b></td>" +
 							"<td class='td1'></td>" +
 							"<td class='td1'></td>" +
+							"<td class='td1'></td>" +
 							"<td rowspan=2><input class='form-radio' id='CK_User"+i+"' value='" + m.mNo + "' type='checkbox'></td>" +
 							"</tr>" +
 							
@@ -259,16 +323,13 @@
 							"<tr>" +
 							"<td class='td1'>" + m.jName + "</td>" +
 							"<td class='td1'>" + m.dName + "</td>" +
-							"<td class='td1'></td>" +
-							"<td class='td1'></td>" +
+					
 							"</tr>" +
 							
 							
 							"<tr><td colspan=8><hr class='CRdivLine'></td></tr>" +
 							"<input type='hidden' id='mName"+i+"' value='"+m.mName+"'>"
 							
-						
-
 					})
 					
 					$('#CR_mlist').html(value);
@@ -281,12 +342,12 @@
 		   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
 		   	   		
 			   		console.log("ajax통신실패");
-			   		console.log(mList)
+			   		//console.log(mList)
 	   		
 					 }
 				
 				})
-				
+
 		})
 	})
 	
@@ -300,22 +361,84 @@
 				
 				if($('#CK_User'+i).is(":checked")==true){
 				
-					var name = $('#mName'+i).val();
+					var mName = $('#mName'+i).val();
 					var mNo = $('#CK_User'+i).val();
-					console.log(name)
-					console.log(mNo)
+					//console.log(mName)
+					//console.log(mNo)
 			 		arr = {
-			 			name: name,
-			 			mNo: mNo
-			 				
-			 		} 
-				}eList.push(arr);
+			 			mName: mName,
+			 			mNo: mNo		
+			 		}
+					
+			 		eList.push(arr);
+				} 
 				
 			}
 			
 			console.log(eList);
+			
+			if(eList.length > 0){
+			insertCKUserList(eList);
+			}
+			function insertCKUserList(eList){
+				
+				$.ajax({
+					
+					url : "insertSelectUserList",
+					type : "post",
+					contentType:'application/json; charset=UTF-8',
+					dataType:'json' ,
+					data:JSON.stringify(eList),
+					
+					
+					success : function (data) {
+						
+						if(data == 1){
+						checkedUserList();
+						
+						console.log("json전달 성공")
+						
+						}
+					}
+				})
+			}
+			
 		})
+		
+		function checkedUserList(){ 
+		$.ajax({
+					
+			url : "checkedUserList",
+			type : "post",
+				
+			success : function (mList) {
+	        	//console.log(mList)
+				var count = mList.length;
+				
+				var value= "";
+				
+				$.each(mList, function(i, m){
+					
+					value += 
+						"<td><button class='button "+i+"'><span>"+ m.mName +"&nbsp;X</span></button>"
+
+				})
+				
+				$('#inviteList').html(value);
+	            //alert("데이터 받기 성공")
+			},error:function(request, error){
+	   	   		
+				
+	   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
+	   	   		
+		   		console.log("너냐?ajax통신실패");
+
+				 }
+				
+			})
+		}
 	</script>
+	
 	
 
 	 

@@ -1,12 +1,22 @@
 package com.uni.spring.chat.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,9 +33,6 @@ public class ChatController {
 
 	@Autowired
 	public ChatService chatService;
-	
-	@Autowired 
-	private MemberService memberService;
 	
 	@RequestMapping("selectCommunityList")
 	public ModelAndView selectCommunityList(ModelAndView mv, Model model) {
@@ -79,34 +86,101 @@ public class ChatController {
 		return mv;
 	}
 	
-	@GetMapping("createChatRoom")
-	public ModelAndView createChatRoom(ModelAndView mv) {
+	// 채팅방 생성
+	@ResponseBody
+	@RequestMapping("chatRoom")
+	public ModelAndView createChatRoom(ModelAndView mv, 
+			@RequestParam(value="crNo", required = false, defaultValue = "1") int crNo){
 		
-		mv.setViewName("chat/createChatRoom");
+		
+		
+		
+		mv.setViewName("chat/chatRoom");
 		
 		return mv;
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="CR_selectUserList", produces="application/json; charset=utf-8")
+	@RequestMapping(value="crSelectUserList", produces="application/json; charset=utf-8")
 	public String selectUserList(Model model){
 		
 	Member loginUser = (Member)model.getAttribute("loginUser");
 	
-	ArrayList<Member> mList = chatService.selectMemList(loginUser.getCNo());
-	System.out.println("mList =======  " + mList);
+	Member m = new Member();
 	
+	m.setCNo(loginUser.getCNo());
+	m.setMNo(loginUser.getMNo());
+	
+	ArrayList<Member> mList = chatService.selectMemList(m);
+	//System.out.println("mList -====- " + mList);
 	return new GsonBuilder().create().toJson(mList);
 	}
 	
 	
-	@RequestMapping("modal1")
-	public void createCR(ModelAndView mv) {
+	@ResponseBody
+	@RequestMapping(value="insertSelectUserList")
+	public int insertSelectUserList(@RequestBody Member[] eList, Model model) {
+
+	
+		if(eList.length > 0) {
+		Member loginUser = (Member)model.getAttribute("loginUser");
 		
-		mv.setViewName("chat/createChatRoom");
+		Member m = new Member();
+		m.setCMNo(loginUser.getMNo());
+		m.setCNo(loginUser.getCNo());
+		for(Member r: eList){
+		   
+			m.setMNo(r.getMNo());
+			chatService.insertSelectUserList(m);
+			System.out.println("m ================ " + m);
+		  }
 		
+		//Member nm = new Member();
+		
+		//nm.setCNo(loginUser.getCNo());
+		//nm.setMNo(loginUser.getMNo());
+		
+		//ArrayList<Member> mList = chatService.checkedUserList(nm);
+		//System.out.println("mList ================ " + mList);
+	//	return new GsonBuilder().create().toJson(mList);
+		
+		return 1;
+		}
+		return 0;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="checkedUserList", produces="application/json; charset=utf-8")
+	public String checkedUserList(Model model) {
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		Member m = new Member();
+		
+		m.setCNo(loginUser.getCNo());
+		m.setMNo(loginUser.getMNo());
+
+		ArrayList<Member> mList = chatService.checkedUserList(m);
+		
+
+		return new GsonBuilder().create().toJson(mList);
+	}
 	
+	@ResponseBody
+	@RequestMapping("deleteCheckedUser")
+	public int deleteCheckedUser(Model model) {
+		
+		System.out.println("컨트롤러 찍히는지 홧인");
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		Member m = new Member();	
+		
+		m.setCNo(loginUser.getCNo());
+		m.setMNo(loginUser.getMNo());	
+		
+		chatService.deleteCheckedUser(m);
+		
+		return 1;
+	}
 	
 }
