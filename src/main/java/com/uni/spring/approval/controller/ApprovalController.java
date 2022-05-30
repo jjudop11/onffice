@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uni.spring.approval.model.dto.Approval;
@@ -40,7 +42,7 @@ public class ApprovalController {
 	}
 	
 	// 기안작성 결재요청 
-	@RequestMapping("insertApproval.do")
+	@RequestMapping(value = "insertApproval.do", method = RequestMethod.POST)
 	public String insertApproval(Approval ap, ApprovalLine apline, FormAtt att,
 			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
 			@RequestParam(name = "doType") int doType,
@@ -51,8 +53,8 @@ public class ApprovalController {
 		System.out.println("CONTROLLER : " + apline);
 		System.out.println("CONTROLLER : " + doForm);
 		
-		System.out.println("CONTROLLER : " + doType);
-		System.out.println("CONTROLLER : " + doForm.getDoType());
+//		System.out.println("CONTROLLER : " + doForm.getDoStartDate());
+//		System.out.println("CONTROLLER : " + doForm.getDoStartDate().getClass().getName());
 		
 		approvalService.insertApproval(ap); // 전자결재문서 
 		approvalService.insertApprovalLine(apline); // 결재선
@@ -81,7 +83,7 @@ public class ApprovalController {
 			}
 		}
 		
-		return "redirect:/login"; 
+		return "redirect:/main"; 
 		
 	}
 	
@@ -113,26 +115,30 @@ public class ApprovalController {
 	}
 	
 	// 결재선 검색 
-//	@RequestMapping("searchApprovalLine.do")
-//	public String searchMember(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model, 
-//			String searchName) {
-//		
-//		// 페이징처리 
-//		int listCount = approvalService.selectMemberListCount(); // 전체사원명수조회 
-//		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+	@ResponseBody
+	@RequestMapping(value="searchApprovalLine.do", produces="application/json; charset=utf-8")
+	public String searchMember(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model, 
+			String searchName) {
+		
 //		System.out.println("CONTROLLER : " + listCount);
-//		
-//		// 리스트 
-//		ArrayList<Member> list = approvalService.selectMemberList(pi);
-//		
-//		System.out.println("CONTROLLER : " + searchName);
-//		
-//		model.addAttribute("pi", pi);
-//		model.addAttribute("list", list);
-//		model.addAttribute("searchName", searchName);
-//		
-//		return "approval/approvalEnrollForm"; // 기안작성 페이지로 리턴 
-//		
-//	}
+//		System.out.println("CONTROLLER : " + list);
+		System.out.println("CONTROLLER : " + searchName);
+		
+		// 페이징처리 
+		int listCount = approvalService.selectMemberListCount(); // 전체사원명수조회 
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		
+		// 리스트 
+		ArrayList<Member> list = approvalService.selectMemberList(pi);
+		
+		
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		model.addAttribute("searchName", searchName);
+		
+		return "approval/approvalEnrollForm"; // 기안작성 페이지로 리턴 
+		
+	}
 
 }
