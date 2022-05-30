@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CommunityMapper">
+	<resultMap type="Community" id="CommunityResultSet">
+		<id column="COM_NUM" property="ComNum"/>
+		<id column="COM_Title" property="ComTitle"/>
+		<id column="COM_Content" property="ComContent"/>
+		<id column="COM_Write" property="ComWrite"/>
+		<id column="COM_VIEW" property="ComView"/>
+		<id column="COM_Date" property="ComDate"/>
+		<id column="COM_Status" property="ComStatus"/>
+	</resultMap>
+	
+	<resultMap type="Reply" id="ReplyResultSet">
+		<id column="ComRe_Num" property="ComReNum"/>
+		<id column="ComRe_Content" property="ComReContent"/>
+		<id column="Com_PreNum" property="ComPreNum"/>
+		<id column="ComRe_WRITER" property="ComReWriter"/>
+		<id column="ComReE_DATE" property="ComReDate"/>
+		<id column="ComRe_STATUS" property="ComRe_Status"/>
+	</resultMap>
+
+	<select id="selectListCount" resultType="_int">
+		select count(*) from community
+		where Com_Status='Y'
+	</select>
+	
+	<select id="selectList" resultType="Community">
+		select * from community
+		where Com_Status='Y'
+		order by Com_Num desc
+	</select>
+	
+	<insert id="insertCommunity" parameterType="Community">
+		INSERT INTO community
+		VALUES(SEQ_COMMUNITY.NEXTVAL, #{ComTitle}, #{ComContent}, #{ComWrite}, DEFAULT, SYSDATE, DEFAULT)
+	</insert>
+	
+	<select id="selectCommunity" resultMap="CommunityResultSet" parameterType="Community">
+		select * from community
+		where Com_Num=#{ComNum} and Com_Status='Y'
+	</select>
+	
+	<select id="selectReplyList" parameterType="_int" resultMap="ReplyResultSet">
+		select reply_no, reply_content, reply_writer, create_date
+		from reply
+		where ref_bno = #{ComNum} and status='Y'
+		order by reply_no desc
+	</select>
+	
+	<insert id="insertReply" parameterType="Reply">
+		INSERT INTO reply
+		VALUES(SEQ_REPLY.NEXTVAL, #{ComReContent}, #{ComPreNum}, #{ComReWriter}, SYSDATE, DEFAULT)
+	</insert>
+</mapper>

@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>공지사항</title>
+<title>커뮤니티</title>
 </head>
 <body>
 
@@ -16,13 +16,11 @@
     <div class="content">
         <br><br>
         <div class="innerOuter" style="padding:5% 10%;">
-            <h2>공지사항</h2>
+            <h2>커뮤니티</h2>
             <br>
-            <c:if test="${ session.loginUser.mManager == 'Y' }">
-            	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
-            </c:if>
+            <a class="btn btn-secondary" style="float:right" href="enrollFormCommunity.do">글쓰기</a>
             <br>
-            <table id="boardList" class="table table-hover" align="center">
+            <table id="commuList" class="table table-hover" align="center">
                 <thead>
                   <tr>
                     <th>제목</th>
@@ -33,13 +31,10 @@
                 <tbody>
                 	<c:forEach items="${ list }" var="n">
 	                    <tr>
-	                    	<td style="display: none;">${ n.no_Num }</td>
-	                    	<td style="width:75%;" onclick="location.href='detailNotice.do?no_Num=${ n.no_Num }'">
-	                    	<c:if test="${ n.no_Important == 'Y' }">
-				            	<a class="badge bg-danger">중요</a>
-				            </c:if>${ n.no_Title }</td>
-				            <td>${ n.no_Write }</td>
-	                        <td>${ n.no_Date }</td>
+	                    	<td style="display: none;">${ n.comNum }</td>
+	                    	<td style="width:75%;" onclick="location.href='detailCommunity.do?Com_Num=${ n.comNum }'">${ n.comTitle }</td>
+	                    	<td>익명</td>
+	                        <td>${ n.comDate }</td>
 	                    </tr>
                     </c:forEach>
                 </tbody>
@@ -50,7 +45,7 @@
                 <ul class="pagination">
                 	<c:choose>
                 		<c:when test="${ pi.currentPage ne 1 }">
-                			<li class="page-item"><a class="page-link" href="listNotice.do?currentPage=${ pi.currentPage-1 }">Previous</a></li>
+                			<li class="page-item"><a class="page-link" href="listCommunity.do?currentPage=${ pi.currentPage-1 }">Previous</a></li>
                 		</c:when>
                 		<c:otherwise>
                 			<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
@@ -60,7 +55,7 @@
                     <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
                     	<c:choose>
 	                		<c:when test="${ pi.currentPage ne p }">
-                    			<li class="page-item"><a class="page-link" href="listNotice.do?currentPage=${ p }">${ p }</a></li>
+                    			<li class="page-item"><a class="page-link" href="listCommunity.do?currentPage=${ p }">${ p }</a></li>
 	                		</c:when>
 	                		<c:otherwise>
 	                			<li class="page-item disabled"><a class="page-link" href="">${ p }</a></li>
@@ -71,10 +66,10 @@
                     
                     <c:choose>
                 		<c:when test="${ pi.currentPage ne pi.maxPage }">
-                			<li class="page-item"><a class="page-link" href="listNotice.do?currentPage=${ pi.currentPage+1 }">Next</a></li>
+                			<li class="page-item"><a class="page-link" href="listCommunity.do?currentPage=${ pi.currentPage+1 }">Next</a></li>
                 		</c:when>
                 		<c:otherwise>
-                			<li class="page-item disabled"><a class="page-link" href="listNotice.do?currentPage=${ pi.currentPage+1 }">Next</a></li>
+                			<li class="page-item disabled"><a class="page-link" href="listCommunity.do?currentPage=${ pi.currentPage+1 }">Next</a></li>
                 		</c:otherwise>
                 	</c:choose>
                 </ul>

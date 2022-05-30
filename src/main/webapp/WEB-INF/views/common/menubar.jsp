@@ -20,6 +20,7 @@
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body style="background-color:#F0FFF0">
@@ -285,7 +286,7 @@
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="table-datatable.html" class='sidebar-link'>
+                            <a href="listCommunity.do" class='sidebar-link'>
                                 <i class="bi bi-file-earmark-spreadsheet-fill"></i>
                                 <span>커뮤니티</span>
                             </a>
