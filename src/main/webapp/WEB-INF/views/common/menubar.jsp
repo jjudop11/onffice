@@ -20,8 +20,7 @@
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body style="background-color:#F0FFF0">
@@ -54,8 +53,8 @@
                                   <li>
                                       <h6 class="dropdown-header">채팅</h6>
                                   </li>
-                                  <li><a class="dropdown-item" href="selectCommunityList.do">community</a></li>
-                                  <li><a class="dropdown-item" href="selectChatRoomList.do">chat</a></li>
+                                  <li><a class="dropdown-item" href="selectCommunityList">community</a></li>
+                                  <li><a class="dropdown-item" href="selectChatRoomList">chat</a></li>
                               </ul>
                           </li>
                           <li class="nav-item dropdown me-1">
@@ -76,7 +75,7 @@
                               <div class="user-menu d-flex">
                                   <div class="user-img d-flex align-items-center">
                                       <div class="avatar avatar-md">
-                                          <img src="resources/assets/images/faces/1.jpg">
+                                          <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" />
                                       </div>
                                   </div>
                               </div>
@@ -86,13 +85,12 @@
                                   <h6 class="dropdown-header">Hello?</h6>
                               </li>
                               <div class="card">
-	                            <div class="card-body py-4 px-5">
-	                                <div class="card-body text-center">
-	                                    <div class="avatar avatar-xl">
-	                                        <img src="resources/assets/images/faces/1.jpg" alt="Face 1">
-	                                    </div>
-	                                </div>
-	                            </div>
+                                <div class="card-body text-center">
+                                    <div class="avatar">
+                                        <img src="${ pageContext.servletContext.contextPath }/resources/id_pictures/${sessionScope.loginUser.PName}" style="width:100px; height:100px;"/>
+                                    </div>
+                                </div>
+
 	                            <div class="name text-center">          	
 	                            	<h4 class="font-bold">${ sessionScope.loginUser.MName } ${ sessionScope.loginUser.JName }</h4>
 	                                <h5 class="text-muted mb-0">${ sessionScope.loginUser.DName }</h5>
@@ -189,29 +187,12 @@
                                 </li>
                             </ul>
                         </li>
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
+						
+						<li class="sidebar-item  ">
+                            <a href="attendanceForm" class='sidebar-link'>
                                 <i class="bi bi-collection-fill"></i>
                                 <span>근태관리</span>
                             </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="extra-component-avatar.html">Avatar</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="extra-component-sweetalert.html">Sweet Alert</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="extra-component-toastify.html">Toastify</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="extra-component-rating.html">Rating</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="extra-component-divider.html">Divider</a>
-                                </li>
-                            </ul>
                         </li>
 
                         <li class="sidebar-item  has-sub">
@@ -242,7 +223,7 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="roomReservation.do">회의실 예약</a>
+                                    <a href="form-element-input.html">회의실 예약</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="form-element-input.html">온라인 회의실</a>
@@ -291,14 +272,14 @@
                         </li>
                         
                         <li class="sidebar-item  ">
-                            <a href="table.html" class='sidebar-link'>
+                            <a href="listNotice.do" class='sidebar-link'>
                                 <i class="bi bi-grid-1x2-fill"></i>
                                 <span>공지사항</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="listCommunity.do" class='sidebar-link'>
+                            <a href="table-datatable.html" class='sidebar-link'>
                                 <i class="bi bi-file-earmark-spreadsheet-fill"></i>
                                 <span>커뮤니티</span>
                             </a>
@@ -432,7 +413,6 @@
   
     <script src="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="resources/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="resources/assets/vendors/apexcharts/apexcharts.js"></script>
     <script src="resources/assets/js/pages/dashboard.js"></script>
     <script src="resources/assets/js/main.js"></script>
 </body>
