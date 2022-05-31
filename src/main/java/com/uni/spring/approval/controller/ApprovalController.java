@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.GsonBuilder;
 import com.uni.spring.approval.model.dto.Approval;
 import com.uni.spring.approval.model.dto.ApprovalLine;
 import com.uni.spring.approval.model.dto.DayoffForm;
@@ -116,28 +119,24 @@ public class ApprovalController {
 	
 	// 결재선 검색 
 	@ResponseBody
-	@RequestMapping(value="searchApprovalLine.do", produces="application/json; charset=utf-8")
-	public String searchMember(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model, 
-			String searchName) {
+    @RequestMapping(value="searchApprovalLine.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+    public String searchMember(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model,
+    		@RequestParam(value="searchName", required=false) String searchName,
+    		@RequestParam(value="cNo", required=false) int cNo) {
 		
-//		System.out.println("CONTROLLER : " + listCount);
-//		System.out.println("CONTROLLER : " + list);
 		System.out.println("CONTROLLER : " + searchName);
+		System.out.println("CONTROLLER : " + cNo);
 		
-		// 페이징처리 
-		int listCount = approvalService.selectMemberListCount(); // 전체사원명수조회 
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		// 검색한 쿼리, 로그인 유저의 회사번호 Map 에 담기 
+		Map<String, Object> memberMap = new HashMap<>();
+		memberMap.put("searchName", searchName);
+		memberMap.put("cNo", cNo);
 		
-		// 리스트 
-		ArrayList<Member> list = approvalService.selectMemberList(pi);
+		// Map에 담은 정보와 일치하는 사원 리스트로 받기  
+		ArrayList<Member> list = approvalService.selectMemberList(memberMap);
+		System.out.println("CONTROLLER : " + list);
 		
-		
-		
-		model.addAttribute("pi", pi);
-		model.addAttribute("list", list);
-		model.addAttribute("searchName", searchName);
-		
-		return "approval/approvalEnrollForm"; // 기안작성 페이지로 리턴 
+		return new GsonBuilder().create().toJson(list);
 		
 	}
 

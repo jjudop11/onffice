@@ -1,6 +1,7 @@
 package com.uni.spring.approval.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,15 +99,14 @@ public class ApprovalServiceImpl implements ApprovalService {
 		
 	}
 
-	// 전체사원명수조회 
-	@Override
-	public int selectMemberListCount() {
-		return approvalDao.selectMemberListCount(sqlSession);
-	}
+//	@Override
+//	public ArrayList<Member> selectMemberList(String searchName, int cNo) {
+//		return approvalDao.selectMemberList(sqlSession, searchName, cNo);
+//	}
 
 	@Override
-	public ArrayList<Member> selectMemberList(PageInfo pi) {
-		return approvalDao.selectMemberList(sqlSession, pi);
+	public ArrayList<Member> selectMemberList(Map<String, Object> memberMap) {
+		return approvalDao.selectMemberList(sqlSession, memberMap);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.uni.spring.approval.model.dao;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -48,17 +49,12 @@ public class ApprovalDao {
 		return sqlSession.insert("ApprovalMapper.insertPaymentForm", payForm);
 	}
 
-	// 전체사원명수조회 
-	public int selectMemberListCount(SqlSession sqlSession) {
-		return sqlSession.selectOne("ApprovalMapper.selectMemberListCount");
-	}
+//	public ArrayList<Member> selectMemberList(SqlSession sqlSession, String searchName, int cNo) {
+//		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", cNo);
+//	}
 
-	public ArrayList<Member> selectMemberList(SqlSession sqlSession, PageInfo pi) {
-		
-		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		
-		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", null, rowBounds);
+	public ArrayList<Member> selectMemberList(SqlSession sqlSession, Map<String, Object> memberMap) {
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", memberMap);
 	}
 
 }

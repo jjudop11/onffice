@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="ApprovalMapper">
+
+	<resultMap type="Member" id="memberResultSet">
+		<id property="mNo" column="M_NO"/>
+		<result property="mWork" column="M_WORK"/>
+		<result property="cNo" column="C_NO"/>
+	</resultMap>
 	
 	<!-- 전자결재문서 -->
 	<insert id="insertApproval" parameterType="Approval">
@@ -44,16 +50,18 @@
 		(SEQ_PAYMENT_FORM.NEXTVAL, SYSDATE, #{payTitle}, #{payDay}, #{payList}, #{payAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
 	</insert> 
 	
-	<select id="selectMemberListCount" resultType="_int">
+	<!-- <select id="selectMemberListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEMBER
 		WHERE M_WORK = 'Y'
-	</select>
+	</select> -->
 	
-	<select id="selectMemberList" parameterType="Member">
+	<select id="selectMemberList" parameterType="Map" resultMap="memberResultSet">
 		SELECT * 
 		FROM MEMBER 
 		WHERE M_WORK = 'Y'
+			AND C_NO = #{cNo}
+			AND M_NAME = #{searchName}
 		ORDER BY M_NO DESC
 	</select>
 	
