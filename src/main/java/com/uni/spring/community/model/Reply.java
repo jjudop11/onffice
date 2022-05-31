@@ -21,5 +21,5 @@ public class Reply {
 	private String ComReWriter;
 	//private Date createDate;
 	private Timestamp ComReDate;
-	private String ComRe_Status;
+	private String ComReStatus;
 }

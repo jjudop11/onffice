@@ -63,7 +63,7 @@ public class noticeController {
 
 		if( imp == null ) { n.setNo_Important("N"); }
 		if( imp == "Y") { n.setNo_Important("Y"); }
-		System.out.println(imp);
+		
 		noticeService.insertNotice(n);
 		
 		return "redirect:listNotice.do";

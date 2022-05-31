@@ -9,6 +9,7 @@
 		<id column="No_Date" property="No_Date"/>
 		<id column="No_Important" property="No_Important"/>
 		<id column="No_Status" property="No_status"/>
+		<id column="M_NAME" property="No_WirterName"/>
 	</resultMap>
 	
 	<select id="selectListCount" resultType="_int">
@@ -17,9 +18,9 @@
 	</select>
 	
 	<select id="selectList" resultMap="noticeResultSet">
-		select * from notice
-		where No_Status='Y'
-		order by DECODE(No_Important,'Y',1), No_Num desc
+		select No_Num,No_Title,No_Content, No_Write ,No_Date,No_Important,No_Status,m.M_NAME from notice, member m
+		where No_Status='Y' and m.M_No = No_write
+		order by DECODE( No_Important,'Y',1), No_Num desc
 	</select>
 	
 	<select id="selectNotice" resultMap="noticeResultSet" parameterType="Notice">

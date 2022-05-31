@@ -15,7 +15,7 @@ public interface CommuService  {
 
 	Community selectCommu(int cn);
 
-	ArrayList<Reply> selectReplyList(int rn);
+	ArrayList<Reply> selectReplyList(int cn);
 
 	int insertReply(Reply r);
 

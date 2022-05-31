@@ -33,8 +33,8 @@ public class CommunityDao {
 		return sqlsession.insert("CommunityMapper.insertReply", r);
 	}
 
-	public ArrayList<Reply> selectReplyList(SqlSessionTemplate sqlsession, int rn) {
-		return (ArrayList)sqlsession.selectList("CommunityMapper.selectReplyList", rn);
+	public ArrayList<Reply> selectReplyList(SqlSessionTemplate sqlsession, int cn) {
+		return (ArrayList)sqlsession.selectList("CommunityMapper.selectReplyList", cn);
 	}
 
 	/*

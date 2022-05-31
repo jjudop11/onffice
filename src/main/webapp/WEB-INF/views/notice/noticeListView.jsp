@@ -7,6 +7,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>공지사항</title>
+<style type="text/css">
+.search {
+  position: relative;
+  width: 300px;
+}
+
+input {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+img {
+  position : absolute;
+  width: 17px;
+  top: 10px;
+  right: 12px;
+  margin: 0;
+}
+</style>
 </head>
 <body>
 
@@ -14,7 +36,7 @@
     <div id="app">
 	<div id="main">
     <div class="content">
-        <br><br>
+        <br>
         <div class="innerOuter" style="padding:5% 10%;">
             <h2>공지사항</h2>
             <br>
@@ -22,6 +44,10 @@
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
             </c:if>
             <br>
+            <div class="search">
+			  <input type="text">
+			  <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			</div>
             <table id="boardList" class="table table-hover" align="center">
                 <thead>
                   <tr>
@@ -38,7 +64,7 @@
 	                    	<c:if test="${ n.no_Important == 'Y' }">
 				            	<a class="badge bg-danger">중요</a>
 				            </c:if>${ n.no_Title }</td>
-				            <td>${ n.no_Write }</td>
+				            <td>${ n.no_WirterName }</td>
 	                        <td>${ n.no_Date }</td>
 	                    </tr>
                     </c:forEach>

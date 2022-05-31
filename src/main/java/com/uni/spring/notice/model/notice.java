@@ -24,5 +24,7 @@ public class notice {
 	private Date No_Date;
 	private String No_Important;
 	private String No_status;
+	
+	private String No_WirterName;
 
 }
