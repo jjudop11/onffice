@@ -16,7 +16,6 @@
 </head>
 <body class="bg-light">
     <div id="auth">
-
         <div class="row h-100">
             <div class="col-lg-4 col-12 offset-lg-4">
                 <div id="auth">

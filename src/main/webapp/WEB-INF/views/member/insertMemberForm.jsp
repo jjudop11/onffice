@@ -139,7 +139,7 @@
 		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="managerpageForm">전체사원조회</a>
 		            <a class="list-group-item list-group-item-action" data-toggle="list" href="updateMPwdForm">비밀번호변경</a>
 		            <a class="list-group-item list-group-item-action" data-toggle="list" href="jdForm">직급/부서관리</a>
-		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">근태통계</a>
+		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="managerAttendance">근태통계</a>
 		          </div>
 		        </div>
 		        
@@ -151,7 +151,7 @@
 		              <div class="d-flex align-items-center">
 		                <div class="avatar avatar-xl mt-5"> &nbsp;  &nbsp; &nbsp;  &nbsp;
 		                	<div id="imgThum"></div>
-                            <label><img src="resources/assets/images/faces/1.jpg" style="width:150px; height:150px;" alt="Face 1" id="space"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)"></label>
+                            <label><img src="resources/assets/images/faces/1.jpg" style="width:150px; height:150px;" alt="Face 1" id="space"><input type="file" class="account-settings-fileinput" id="file" name="file" onchange="setThum(event)" required></label>
                         	<button type="button" class="btn btn-dark mt-5" id="imgreset">delete</button> 
                         </div>    
 		                <div class="ms-3 name mt-5">
@@ -173,7 +173,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">아이디</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="아이디" id="mId" name="mId">
+                              <input type="text" class="form-control" placeholder="아이디" id="mId" name="mId" required>
                               <div class="form-control-icon">
                                   <i class="bi bi-person"></i>
                               </div>
@@ -182,7 +182,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">이름</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="이름" id="mName" name="mName">
+                              <input type="text" class="form-control" placeholder="이름" id="mName" name="mName" required>
                               <div class="form-control-icon">
                                   <i class="bi bi-person"></i>
                               </div>
@@ -209,7 +209,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">Email</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail">
+                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail" required>
                               <div class="form-control-icon">
                                   <i class="bi bi-envelope"></i>
                               </div>
@@ -218,7 +218,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">전화번호</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="전화번호" id="mPhone" name="mPhone">
+                              <input type="text" class="form-control" placeholder="전화번호" id="mPhone" name="mPhone" required>
                               <div class="form-control-icon">
                                   <i class="bi bi-phone"></i>
                               </div>
@@ -228,11 +228,11 @@
 		             	<div class="form-group has-icon-left"> 
                           <label>우편번호 :</label>
                           <button type="button" class="btn btn-primary" id="postcodify_search_button">검색</button>
-						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" size="6">
+						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" size="6" required>
                           <label>도로명주소 : </label>
-						  <input type="text" name="address1" class="form-control postcodify_address" size="30">
+						  <input type="text" name="address1" class="form-control postcodify_address" size="30" required>
                        	  <label>상세주소 : </label>
-						  <input type="text" name="address2" class="form-control postcodify_extra_info"  size="30">
+						  <input type="text" name="address2" class="form-control postcodify_extra_info"  size="30" required>
 		               </div>
 		                <div class="mt-3 mb-3 float-right" id="final">
 						<button type="submit" class="btn btn-outline-primary">등록</button>

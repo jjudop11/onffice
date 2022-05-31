@@ -131,7 +131,7 @@
 		            <a class="list-group-item list-group-item-action" data-toggle="list" href="managerpageForm">전체사원조회</a>
 		            <a class="list-group-item list-group-item-action" data-toggle="list" href="updateMPwdForm">비밀번호변경</a>
 		            <a class="list-group-item list-group-item-action active" data-toggle="list" href="jdForm">직급/부서관리</a>
-		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">근태통계</a>
+		          	<a class="list-group-item list-group-item-action" data-toggle="list" href="managerAttendance">근태통계</a>
 		          </div>
 		        </div>
 		        
