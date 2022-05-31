@@ -19,9 +19,6 @@ import com.uni.spring.attendance.model.dto.Attendance;
 import com.uni.spring.attendance.model.service.AttendanceService;
 import com.uni.spring.member.model.dto.Member;
 
-import oracle.net.aso.a;
-import oracle.net.aso.p;
-
 @Controller
 @SessionAttributes({"loginUser", "msg"})
 public class AttendanceController {
@@ -170,5 +167,12 @@ public class AttendanceController {
 
 		return String.valueOf(result);
 		
+	}
+	
+	@GetMapping("/managerAttendance")
+	public String managerAttendance() {	
+
+		return "member/managerAttendanceForm";
+
 	}
 }

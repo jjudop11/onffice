@@ -20,6 +20,7 @@
 		SELECT to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy-mm') "A_ENT_DATE", sum(to_number(A_WTIME)) "A_WTIME"             
 		FROM ATTENDANCE
 		WHERE M_NO = #{mNo}
+		AND to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy') = to_char(sysdate, 'yyyy')
 		GROUP BY to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy-mm')
 		ORDER BY 1
 	</select>
