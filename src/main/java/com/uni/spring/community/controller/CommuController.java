@@ -67,10 +67,10 @@ public class CommuController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "rinsertCommunity.do", produces = "application/json; charset=UTF-8")
-	public String selectReplyList(int rn) {
-		ArrayList<Reply> list = commuService.selectReplyList(rn);
-		return new GsonBuilder().setDateFormat("MM월 dd일 HH:mm:ss").create().toJson(list);
+	@RequestMapping(value = "rListCommunity.do", produces = "application/json; charset=UTF-8")
+	public String selectReplyList(int cn) {
+		ArrayList<Reply> list = commuService.selectReplyList(cn);
+		return new GsonBuilder().setDateFormat("MM월 dd일 HH:mm").create().toJson(list);
 	}
 	
 	@ResponseBody

@@ -47,8 +47,8 @@ public class CommuServiceImpl implements CommuService {
 	}
 
 	@Override
-	public ArrayList<Reply> selectReplyList(int rn) {
-		return communityDao.selectReplyList(sqlsession, rn);
+	public ArrayList<Reply> selectReplyList(int cn) {
+		return communityDao.selectReplyList(sqlsession, cn);
 	}
 
 	@Override

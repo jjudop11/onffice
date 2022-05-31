@@ -14,10 +14,10 @@
 	<resultMap type="Reply" id="ReplyResultSet">
 		<id column="ComRe_Num" property="ComReNum"/>
 		<id column="ComRe_Content" property="ComReContent"/>
-		<id column="Com_PreNum" property="ComPreNum"/>
+		<id column="Com_Num" property="ComPreNum"/>
 		<id column="ComRe_WRITER" property="ComReWriter"/>
-		<id column="ComReE_DATE" property="ComReDate"/>
-		<id column="ComRe_STATUS" property="ComRe_Status"/>
+		<id column="ComRe_DATE" property="ComReDate"/>
+		<id column="ComRe_STATUS" property="ComReStatus"/>
 	</resultMap>
 
 	<select id="selectListCount" resultType="_int">
@@ -42,10 +42,10 @@
 	</select>
 	
 	<select id="selectReplyList" parameterType="_int" resultMap="ReplyResultSet">
-		select reply_no, reply_content, reply_writer, create_date
+		select ComRe_Num, ComRe_Content, ComRe_Writer, ComRe_Date
 		from reply
-		where ref_bno = #{ComNum} and status='Y'
-		order by reply_no desc
+		where ComRe_Num = #{ComNum} and ComRe_STATUS='Y'
+		order by ComRe_Num desc
 	</select>
 	
 	<insert id="insertReply" parameterType="Reply">
