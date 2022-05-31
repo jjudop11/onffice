@@ -108,15 +108,15 @@
 			                                                    <th>이름</th>
 			                                                </tr>
 			                                            </thead>
-			                                            <tbody>
-			                                            	<c:forEach items="${ list }" var="ap">
+			                                            <tbody id="mList">
+			                                            	<%-- <c:forEach items="${ list }" var="m">
 				                                                <tr>
-				                                                    <td>${ ap.mNo }</td>
-				                                                    <td>${ ap.dNo }</td>
-				                                                    <td>${ ap.jNo }</td>
-				                                                    <td>${ ap.mName }</td>
+				                                                    <td>${ m.mNo }</td>
+				                                                    <td>${ m.dNo }</td>
+				                                                    <td>${ m.jNo }</td>
+				                                                    <td>${ m.mName }</td>
 				                                                </tr>
-			                                                </c:forEach>
+			                                                </c:forEach> --%>
 		                                                </tbody>
                                     				</table>
                                     			</div>
@@ -546,41 +546,51 @@
 	        });
 	    });
 		
-		<!-- 검색 버튼 클릭하면 컨트롤러에 검색값 전달 
-		$(document).ready(function(){
-			$(document).on('click', '#search', function(e){
-				let searchName = $('#searchName').val();
-				console.log(searchName)
-				
-				$.ajax({
-					url : "searchApprovalLine.do",
-					type : "post",
-					data : {searchName:searchName},
-					success : function(){
-					},
-					error : funcgion(){
-						alert("error")
-					}
-				})
-			});
-		});-->
+		<!-- 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌 -->
+		$('#search').click(function(){
+            var searchName = $('#searchName').val();
+            var cNo = $('#cNo').val();
+            console.log(searchName)
+            console.log(cNo)
+            
+            $.ajax({
+               url : "searchApprovalLine.do",
+               type : "post",
+               data : { 
+            	   searchName : $('#searchName').val(), 
+            	   cNo : $("#cNo").val()
+            	   },
+               dataType : "text",
+               success : function(list){
+                   
+            	   var value="";
+            	   var mList = JSON.parse(list)
+            	   
+            	   $.each(mList, function(i, m){
+						
+						console.log(i + " : " + m.mName)
+						value +=
+							"<tr>" +
+							"<td>" + m.mNo + "</td>" +
+							"<td>" + m.dNo + "</td>" +
+							"<td>" + m.jNo + "</td>" +
+							"<td>" + m.mName + "</td>" +
+							"</tr>"
+					});
+					
+					$('#mList').html(value);
+					
+               },
+               error : function(){
+                  alert("실패")
+               }
+            })
+		})
 		
-		$(function(){
-			$('#search').click(function(){
-				/* var searchName = $('#searchName').val(); */
-				
-				$.ajax({
-					url : "searchApprovalLine.do",
-					type : "post",
-					date : searchName:$('#searchName').val(),
-					success : function(){
-						alert("성공")
-					},
-					error : function(){
-						alert("실패")
-					}
-				});
-			});
+		<!-- modal 초기화 -->
+		$('.modal').on('hidden.bs.modal', function (e) {
+		    console.log('modal close');
+			/* $(this).find('#mList').reset(); */
 		});
 		
 	</script>
