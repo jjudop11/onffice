@@ -10,6 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel='icon' type='images/png' href='resources/assets/images/logo/ONLOGO1.png'>
 <link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+
 <title>ONFFICE </title>
 <style>
 	*{
@@ -88,7 +91,6 @@
 			<div class="header-title">
 				<b>채팅방 제목</b>
 			</div>
-			<form onsubmit="submitChatMessageForm(this); return false;">
 			<div>
 				<input  type="text" name="writer" placeholder="작성자" autocomplete="off"/>
 			</div>
@@ -100,7 +102,7 @@
 			<div>
 				<input type="submit" value="작성"/>
 			</div>
-			</form>
+		
 			<div class="header-menu"style="display:flex; width:20%; align-items: center;">
 				<div class="menu-search" style="width:40%;">
 					<svg style="width:30px; height:30px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -115,8 +117,8 @@
 			</div>	
 		</div><!-- header end -->
 	</div><!-- main end -->
-	
 </form>
+
 	
 	<script>
 	const Hyphen = (target) => {
@@ -155,5 +157,9 @@
 	
 	
 	</script>
+	
+
+
+	
 </body>
 </html>
