@@ -17,7 +17,7 @@
 	</select>
 	
 	<select id="selectAttendanceM" parameterType="string" resultType="Attendance">
-		SELECT to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy-mm') "A_ENT_DATE", sum(to_number(A_WTIME)) "A_WTIME"             
+		SELECT to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy-mm') "A_ENT_DATE", sum(nvl(to_number(A_WTIME),0)) "A_WTIME"             
 		FROM ATTENDANCE
 		WHERE M_NO = #{mNo}
 		AND to_char(To_date(A_ENT_DATE,'yyyy-mm-dd'),'yyyy') = to_char(sysdate, 'yyyy')
@@ -43,5 +43,49 @@
         SET A_WTIME = TO_CHAR(TO_DATE(ROUND((TO_DATE(A_LTIME, 'YYYY-MM-DD HH24:MI:SS') - TO_DATE(A_ATIME, 'YYYY-MM-DD HH24:MI:SS')) * 24 * 60 * 60, 2),'sssss'),'sssss')
 		WHERE M_NO = #{mNo} AND A_ENT_DATE = TO_CHAR(SYSDATE,'YYYY-MM-DD')
 	</update>
+	
+	<select id="selectAttendanceACount" parameterType="_int" resultType="_int">
+		SELECT count(M_NO)
+		FROM MEMBER
+		WHERE C_NO = ${cNo}
+	</select>
+
+	<select id="selectAttendanceCount" parameterType="_int" resultType="Attendance">
+		SELECT count(case when (A.a_state = '정상출근') then 1 end) "wCount", count(case when (A.a_state = '지각') then 1 end) "lCount"
+		FROM ATTENDANCE A
+		LEFT JOIN MEMBER B on A.M_NO = B.M_NO
+		WHERE A.A_ENT_DATE = to_char(sysdate, 'yyyy-mm-dd')
+		AND B.c_no = ${cNo}
+	</select>
+	
+	<select id="selectAttendanceCountList" parameterType="_int" resultType="Attendance">
+		SELECT A.M_NO, B.A_ENT_DATE, B.A_ATIME, B.A_LTIME, B.A_WTIME, B.A_STATE
+		FROM MEMBER A
+		LEFT JOIN ATTENDANCE B on A.M_NO = B.M_NO
+		WHERE B.A_ENT_DATE = to_char(SYSDATE,'yyyy-mm-dd')
+		AND A.c_no = ${cNo}
+		ORDER BY A.M_WORK DESC, 1
+	</select>
+	
+	<select id="selectAttendanceAllM" parameterType="_int" resultType="Attendance">
+		SELECT substr(a.A_ENT_DATE,0,7) "aEntDate", sum(nvl(to_number(A.A_WTIME),0)) "A_WTIME", count(distinct(B.M_NO)) "aCount"            
+		FROM ATTENDANCE A
+		LEFT JOIN MEMBER B on A.M_NO = B.M_NO
+		WHERE B.C_NO = ${cNo}
+		AND substr(a.A_ENT_DATE,0,4) = to_char(sysdate,'yyyy')
+		GROUP BY substr(a.A_ENT_DATE,0,7)
+		ORDER BY 1
+	</select>
+	
+	<select id="selectAttendanceWList" parameterType="_int" resultType="Attendance">
+		SELECT A.M_NO, sum(nvl(A.A_WTIME,0)) "allWtime"
+		FROM ATTENDANCE A
+		LEFT JOIN MEMBER B on A.M_NO = B.M_NO
+		where A_ENT_DATE between  (SELECT   TO_CHAR(TRUNC(SYSDATE,'D')  ,'YYYY-MM-DD') 일 FROM DUAL) 
+							and   (SELECT TO_CHAR(TRUNC(SYSDATE,'D')+6,'YYYY-MM-DD') 토 FROM DUAL)
+		AND B.C_NO = ${cNo}
+		group by A.M_NO
+		ORDER BY A.M_NO
+	</select>
 	
 </mapper>

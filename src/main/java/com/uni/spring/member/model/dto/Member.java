@@ -38,6 +38,12 @@ public class Member {
 	private int dNo; // 부서번호
 	private int jNo; // 직급번호
 	private String cMNo; // 채팅방 생성 사원번호
+	
+	private String aAtime; // 출근시간 
+	private String aLtime; // 퇴근시간
+	private String aWtime; // 근무시간 or 월평균근무시간
+	private String aState; // 근무상태
+	private String allWtime; // 이번주근무시간
 
 }
 

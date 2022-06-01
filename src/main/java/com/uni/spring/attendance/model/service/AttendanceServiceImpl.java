@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.uni.spring.attendance.model.dao.AttendanceDao;
 import com.uni.spring.attendance.model.dto.Attendance;
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.member.model.dto.Member;
 
@@ -58,8 +59,49 @@ public class AttendanceServiceImpl implements AttendanceService {
 		int result = attendanceDao.insertLtime(sqlsession, a);
 		int result2 = attendanceDao.insertWtime(sqlsession, a);
 		
+		if(result * result2 < 1) {
+			throw new CommException("퇴근 등록 실패");
+		}
+		
 		return result * result2;
 	}
+	
+	@Override
+	public int selectAttendanceACount(int cNo) {
+	
+		return attendanceDao.selectAttendanceACount(sqlsession, cNo);
+	}
+
+	@Override
+	public Attendance selectAttendanceCount(int cNo) {
+	
+		return attendanceDao.selectAttendanceCount(sqlsession, cNo);
+	}
+
+	@Override
+	public ArrayList<Attendance> selectAttendanceCountList(PageInfo pi, int cNo) {
+		// TODO Auto-generated method stub
+		return attendanceDao.selectAttendanceCountList(sqlsession, pi, cNo);
+	}
+
+	@Override
+	public ArrayList<Attendance> selectAttendanceCountList(int cNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Attendance> selectAttendanceAllM(int cNo) {
+		// TODO Auto-generated method stub
+		return attendanceDao.selectAttendanceAllM(sqlsession, cNo);
+	}
+
+	@Override
+	public ArrayList<Attendance> selectAttendanceWList(PageInfo pi, int cNo) {
+		// TODO Auto-generated method stub
+		return attendanceDao.selectAttendanceWList(sqlsession, cNo);
+	}
+
 
 
 	
