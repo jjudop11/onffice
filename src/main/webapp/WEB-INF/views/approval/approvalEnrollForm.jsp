@@ -14,9 +14,24 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js" integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	
 	<style>
+		
 		#proposalForm, #paymentForm {
 			display: none;
 		}
+		
+		/* 결재선 라인 테이블 */
+		table {
+			width: 100%;
+		}
+		
+		.apprTable {
+			padding: 0;
+			margin: 0;
+			width: 1000px;
+			height: 100%;
+			display: flex;
+		}
+		
 	</style>
 
 </head>
@@ -99,7 +114,7 @@
 													</div>
 												</div>
 												<div class="table-responsive">
-                                    				<table class="table table-striped mb-0">
+                                    				<table class="table table-lg mb-0">
                                     					<thead>
 			                                                <tr>
 			                                                    <th>사번</th>
@@ -109,218 +124,49 @@
 			                                                </tr>
 			                                            </thead>
 			                                            <tbody id="mList">
-			                                            	<%-- <c:forEach items="${ list }" var="m">
-				                                                <tr>
-				                                                    <td>${ m.mNo }</td>
-				                                                    <td>${ m.dNo }</td>
-				                                                    <td>${ m.jNo }</td>
-				                                                    <td>${ m.mName }</td>
-				                                                </tr>
-			                                                </c:forEach> --%>
 		                                                </tbody>
                                     				</table>
                                     			</div>
-                                    			
 											</div>
 										</div>
 									</div>
 									
-									<input type="text" id="aplineNo" name="aplineNo" class="form-control round">
+									<!-- <input type="text" id="aplineNo" name="aplineNo" class="form-control round"> -->
+									
+									<div class="table-responsive apprTable">
+										<table class="table table-bordered mb-0">
+											<tbody>
+												<tr>
+													<td rowspan="3" style="width: 150px">결재선</td>
+													<td id="jName1" style="width: 170px; height: 35px"></td>
+													<td id="jName2" style="width: 170px"></td>
+													<td style="width: 170px"></td>
+													<td style="width: 170px"></td>
+													<td style="width: 170px"></td>
+												</tr>
+												<tr>
+													<td style="height: 100px"></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+												<tr>
+													<td id="mName1" style="height: 35px"></td>
+													<td id="mName2"></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
-							<!-- <table border="1" class="table">
-								<thead>
-									<tr>
-										<th style="width: 30px;" rowspan="3">
-											신청
-											<div class="modal-success me-1 mb-1 d-inline-block">
-	                                            Button trigger for scrolling content modal
-                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModalScrollable">
-                                            +
-                                        </button>
-
-                                        scrolling content Modal
-                                        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-                                            aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-scrollable" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalScrollableTitle">
-                                                            Scrolling long
-                                                            Content</h5>
-                                                        <button type="button" class="close" data-bs-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <i data-feather="x"></i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p>
-                                                            Biscuit powder jelly beans. Lollipop candy canes croissant
-                                                            icing
-                                                            chocolate cake. Cake fruitcake
-                                                            powder pudding pastry
-                                                        </p>
-                                                        <p>
-                                                            Tootsie roll oat cake I love bear claw I love caramels
-                                                            caramels halvah
-                                                            chocolate bar. Cotton
-                                                            candy
-                                                            gummi bears pudding pie apple pie cookie. Cheesecake jujubes
-                                                            lemon drops
-                                                            danish dessert I love
-                                                            caramels powder
-                                                        </p>
-                                                        <p>
-                                                            Chocolate cake icing tiramisu liquorice toffee donut sweet
-                                                            roll cake.
-                                                            Cupcake dessert icing
-                                                            dragée dessert. Liquorice jujubes cake tart pie donut.
-                                                            Cotton candy
-                                                            candy canes lollipop liquorice
-                                                            chocolate marzipan muffin pie liquorice.
-                                                        </p>
-                                                        <p>
-                                                            Powder cookie jelly beans sugar plum ice cream. Candy canes
-                                                            I love
-                                                            powder sugar plum tiramisu.
-                                                            Liquorice pudding chocolate cake cupcake topping biscuit.
-                                                            Lemon drops
-                                                            apple pie sesame snaps
-                                                            tootsie roll carrot cake soufflé halvah. Biscuit powder
-                                                            jelly beans.
-                                                            Lollipop candy canes
-                                                            croissant icing chocolate cake. Cake fruitcake powder
-                                                            pudding pastry.
-                                                        </p>
-                                                        <p>
-                                                            Tootsie roll oat cake I love bear claw I love caramels
-                                                            caramels halvah
-                                                            chocolate bar. Cotton
-                                                            candy gummi bears pudding pie apple pie cookie. Cheesecake
-                                                            jujubes lemon
-                                                            drops danish dessert I
-                                                            love caramels powder.
-                                                        </p>
-                                                        <p>
-                                                            dragée dessert. Liquorice jujubes cake tart pie donut.
-                                                            Cotton candy
-                                                            candy canes lollipop liquorice
-                                                            chocolate marzipan muffin pie liquorice.
-                                                        </p>
-                                                        <p>
-                                                            Powder cookie jelly beans sugar plum ice cream. Candy canes
-                                                            I love
-                                                            powder sugar plum tiramisu.
-                                                            Liquorice pudding chocolate cake cupcake topping biscuit.
-                                                            Lemon drops
-                                                            apple pie sesame snaps
-                                                            tootsie roll carrot cake soufflé halvah.Biscuit powder jelly
-                                                            beans.
-                                                            Lollipop candy canes croissant
-                                                            icing chocolate cake. Cake fruitcake powder pudding pastry.
-                                                        </p>
-                                                        <p>
-                                                            Tootsie roll oat cake I love bear claw I love caramels
-                                                            caramels halvah
-                                                            chocolate bar. Cotton
-                                                            candy gummi bears pudding pie apple pie cookie. Cheesecake
-                                                            jujubes lemon
-                                                            drops danish dessert I
-                                                            love caramels powder.
-                                                        </p>
-                                                        <p>
-                                                            Chocolate cake icing tiramisu liquorice toffee donut sweet
-                                                            roll cake.
-                                                            Cupcake dessert icing
-                                                            dragée dessert. Liquorice jujubes cake tart pie donut.
-                                                            Cotton candy
-                                                            candy canes lollipop liquorice
-                                                            chocolate marzipan muffin pie liquorice.
-                                                        </p>
-                                                        <p>
-                                                            Powder cookie jelly beans sugar plum ice cream. Candy canes
-                                                            I love
-                                                            powder sugar plum tiramisu.
-                                                            Liquorice pudding chocolate cake cupcake topping biscuit.
-                                                            Lemon drops
-                                                            apple pie sesame snaps
-                                                            tootsie roll carrot cake soufflé halvah. Biscuit powder
-                                                            jelly beans.
-                                                            Lollipop candy canes
-                                                            croissant icing chocolate cake. Cake fruitcake powder
-                                                            pudding pastry.
-                                                        </p>
-                                                        <p>
-                                                            Tootsie roll oat cake I love bear claw I love caramels
-                                                            caramels halvah
-                                                            chocolate bar. Cotton
-                                                            candy gummi bears pudding pie apple pie cookie. Cheesecake
-                                                            jujubes lemon
-                                                            drops danish dessert I
-                                                            love caramels powder.
-                                                        </p>
-                                                        <p>
-                                                            Chocolate cake icing tiramisu liquorice toffee donut sweet
-                                                            roll cake.
-                                                            Cupcake dessert icing
-                                                            dragée dessert. Liquorice jujubes cake tart pie donut.
-                                                            Cotton candy
-                                                            candy canes lollipop liquorice
-                                                            chocolate marzipan muffin pie liquorice.
-                                                        </p>
-                                                        <p>
-                                                            Powder cookie jelly beans sugar plum ice cream. Candy canes
-                                                            I love
-                                                            powder sugar plum tiramisu.
-                                                            Liquorice pudding chocolate cake cupcake topping biscuit.
-                                                            Lemon drops
-                                                            apple pie sesame snaps
-                                                            tootsie roll carrot cake soufflé halvah.
-                                                        </p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light-secondary"
-                                                            data-bs-dismiss="modal">
-                                                            <i class="bx bx-x d-block d-sm-none"></i>
-                                                            <span class="d-none d-sm-block">Close</span>
-                                                        </button>
-                                                        <button type="button" class="btn btn-primary ml-1"
-                                                            data-bs-dismiss="modal">
-                                                            <i class="bx bx-check d-block d-sm-none"></i>
-                                                            <span class="d-none d-sm-block">Accept</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    
-										</th>
-										<th style="height: 30px;"></th>
-										<th></th>
-										<th></th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-								</tbody>
-							</table> -->
+							<table border="1">
+								<thead></thead>
+								<tbody></tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -526,7 +372,7 @@
 	
 	<script type="text/javascript">
 	
-		<!-- 셀렉트박스 선택값에 따라 폼화면 변경 -->
+		// 셀렉트박스 선택값에 따라 폼화면 변경 
 		$(document).ready(function(){
 	        $('#form').change(function(){ // 셀렉트박스 선택값에 따라 바로 변경 이벤트 발생 
 	            var form = $('#form').val(); //id선택자로 email select box값 추출하여 저장
@@ -546,10 +392,10 @@
 	        });
 	    });
 		
-		<!-- 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌 -->
+		// 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌
 		$('#search').click(function(){
-            var searchName = $('#searchName').val();
-            var cNo = $('#cNo').val();
+			let searchName = $('#searchName').val();
+			let cNo = $('#cNo').val();
             console.log(searchName)
             console.log(cNo)
             
@@ -563,22 +409,57 @@
                dataType : "text",
                success : function(list){
                    
-            	   var value="";
-            	   var mList = JSON.parse(list)
+            	   let value="";
+            	   let mList = JSON.parse(list);
+            	   
+            	   let mName = ""; // 선택한 사원명 담을 변수 
+            	   let jName = ""; // 선택한 직급 담을 변수 
+            	   let mNo = ""; // 선택한 사원번호 담을 변수 
             	   
             	   $.each(mList, function(i, m){
-						
-						console.log(i + " : " + m.mName)
+            		   
 						value +=
-							"<tr>" +
+							"<tr>" + 
 							"<td>" + m.mNo + "</td>" +
-							"<td>" + m.dNo + "</td>" +
-							"<td>" + m.jNo + "</td>" +
-							"<td>" + m.mName + "</td>" +
+							"<td>" + m.dName + "</td>" +
+							"<td>" + m.jName + "</td>" +
+							'<td>' + m.mName + "</td>" +
 							"</tr>"
+						
+						mName = m.mName; // 사원명 
+						jName = m.jName; // 직급
+						mNo = m.mNo; // 사번 
+						
 					});
 					
-					$('#mList').html(value);
+					$('#mList').html(value); // html 에 추가 
+					
+					// 사원 클릭했을 때 결재선에 추가 
+					$(document).ready(function(){
+						
+						$('table tr').click(function(){
+							
+							let mName1 = document.getElementById("mName1");
+							let jName1 = document.getElementById("jName1");
+							/* let mName2 = document.getElementById("mName2");
+							let jName2 = document.getElementById("jName2"); */
+							
+							mName1.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
+							jName1.innerText = JSON.stringify(jName).replace(/\"/gi, "");
+							
+							/* if(jName2.innerText == null){ 
+								mName1.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
+								jName1.innerText = JSON.stringify(jName).replace(/\"/gi, "");
+							} else if(jName1.innerText != null){
+								mName2.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
+								jName2.innerText = JSON.stringify(jName).replace(/\"/gi, "");
+							} */
+							
+							$('.modal').modal('hide'); // 모달 닫기 
+							
+						})
+						
+					});
 					
                },
                error : function(){

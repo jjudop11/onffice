@@ -99,11 +99,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 		
 	}
 
-//	@Override
-//	public ArrayList<Member> selectMemberList(String searchName, int cNo) {
-//		return approvalDao.selectMemberList(sqlSession, searchName, cNo);
-//	}
-
+	// 결재선 사원 검색
 	@Override
 	public ArrayList<Member> selectMemberList(Map<String, Object> memberMap) {
 		return approvalDao.selectMemberList(sqlSession, memberMap);

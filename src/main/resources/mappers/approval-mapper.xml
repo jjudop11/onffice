@@ -50,19 +50,16 @@
 		(SEQ_PAYMENT_FORM.NEXTVAL, SYSDATE, #{payTitle}, #{payDay}, #{payList}, #{payAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
 	</insert> 
 	
-	<!-- <select id="selectMemberListCount" resultType="_int">
-		SELECT COUNT(*)
-		FROM MEMBER
-		WHERE M_WORK = 'Y'
-	</select> -->
-	
+	<!-- 검색한 사원명에 해당하는 정보 -->
 	<select id="selectMemberList" parameterType="Map" resultMap="memberResultSet">
-		SELECT * 
-		FROM MEMBER 
-		WHERE M_WORK = 'Y'
-			AND C_NO = #{cNo}
-			AND M_NAME = #{searchName}
-		ORDER BY M_NO DESC
+		SELECT A.M_NO, A.M_NAME, B.D_NAME, C.J_NAME
+		FROM MEMBER A
+		JOIN DEPT B ON A.D_NO = B.D_NO
+		JOIN JOB C ON A.J_NO = C.J_NO
+		WHERE A.M_WORK = 'Y'
+			AND A.C_NO = #{cNo}
+			AND A.M_NAME = #{searchName}
+		ORDER BY A.M_NO DESC
 	</select>
 	
 </mapper>

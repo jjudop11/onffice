@@ -49,10 +49,7 @@ public class ApprovalDao {
 		return sqlSession.insert("ApprovalMapper.insertPaymentForm", payForm);
 	}
 
-//	public ArrayList<Member> selectMemberList(SqlSession sqlSession, String searchName, int cNo) {
-//		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", cNo);
-//	}
-
+	// 결재선 사원 검색
 	public ArrayList<Member> selectMemberList(SqlSession sqlSession, Map<String, Object> memberMap) {
 		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", memberMap);
 	}
