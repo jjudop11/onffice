@@ -25,8 +25,6 @@ public interface ApprovalService {
 
 	void insertPaymentForm(PaymentForm payForm); // 지출결의서 
 
-//	ArrayList<Member> selectMemberList(String searchName, int cNo);
-
-	ArrayList<Member> selectMemberList(Map<String, Object> memberMap);
+	ArrayList<Member> selectMemberList(Map<String, Object> memberMap); // 결재선 사원 검색
 	
 }
