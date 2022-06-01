@@ -22,4 +22,9 @@ public class Attendance {
 	private String aWtime; // 근무시간 or 월평균근무시간
 	private String aState; // 근무상태
 	private String allWtime; // 이번주근무시간
+	private int aCount; // 총인원
+	private int wCount; // 정상출근인원 
+ 	private int lCount; // 지각인원
+
+
 }

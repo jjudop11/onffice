@@ -169,7 +169,7 @@
                                 </div>
                                 <div class="card-footer d-flex justify-content-between">
                                     <button class="btn btn-primary btn" id="plus">출근하기</button>
-                                    <button class="btn btn-danger btn" id="minus">퇴근하기</button>
+                                    <button class="btn btn-danger btn" id="minus" disabled>퇴근하기</button>
                                 </div>
                             </div>   
                         </div>
@@ -330,6 +330,7 @@
 							selectAttendance();
 							selectAttendanceW();
 							selectAttendanceM();
+							$("#minus").attr("disabled", false);
 						}
 
 					},error:function(){
@@ -474,10 +475,12 @@
 				
 		}
 		
-		function selectAttendanceM(){ // 올해 이번달 근무시간 평균
+		function selectAttendanceM(){ // 올해 월별 근무시간 평균
 				
 			let mList = [];
 			let vList = [];
+			let mList2 = [];
+			let vList2 = [];
 			
 				$.ajax({
 					url:"selectAttendanceM",
@@ -491,23 +494,51 @@
 						console.log(mList)
 						console.log(vList)
 						
-						new Chart(document.getElementById("line-chart"), {
-							type: 'line',
-							data: {
-			    		    	labels: mList, // X축 
-			    		    	datasets: [{ 
-			    		    	    data: vList, // 값
-			    		    	    label: "나의 월별 총 근무시간",
-			    		    	    borderColor: "#3cba9f",
-			    		    	    fill: false
-			    		    	  }
-			    		    	]
-			    		    },
-							
-						}); // chart 끝
+						
+						$.ajax({
+				
+							url:"selectAttendanceAllM",
+							type:"post",
+							success:function(list){
+			
+								for(let i in list) {
+									mList2.push(list[i].aEntDate);
+									vList2.push(list[i].aWtime.substr(0, 3));
+								}
+								console.log(mList2)
+								console.log(vList2)
+								
+								
+								new Chart(document.getElementById("line-chart"), {
+									type: 'bar',
+									data: {
+					    		    	labels: mList, 
+					    		    	datasets: [{ 
+					    		    	    data: vList, 
+					    		    	    barThickness: 30,
+					    		    	    label: "나의 월별 총 근무시간",
+					    		    	    backgroundColor: "#3cba9f",
+					    		    	    fill: false
+					    		    	  }, {
+					    		    		data: vList2, 
+					    		    		barThickness: 30,
+					    		    	    label: "전체 직원 월별 총 근무시간",
+					    		    	    backgroundColor: "#3e95cd",
+					    		    	    fill: false  
+					    		    	  }
+					    		    	]
+					    		    }
+					    		    
+								}); // chart 끝
+							},
+							error:function(){
+								console.log("이번달 전체사원 평균근무시간 ajax 통신 실패");
+							}
+						});
+						
 					},
 					error:function(){
-						console.log("이번주 근무 시간 ajax 통신 실패");
+						console.log("이번달 평균근무시간 ajax 통신 실패");
 					}
 				});
 					

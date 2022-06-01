@@ -2,10 +2,12 @@ package com.uni.spring.attendance.model.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.uni.spring.attendance.model.dto.Attendance;
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.member.model.dto.Member;
 
 @Repository
@@ -39,6 +41,33 @@ public class AttendanceDao {
 	public ArrayList<Attendance> selectAttendanceM(SqlSessionTemplate sqlSession, String mNo) {
 		// TODO Auto-generated method stub
 		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceM", mNo);
+	}
+
+	public Attendance selectAttendanceCount(SqlSessionTemplate sqlSession, int cNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("AttendanceMapper.selectAttendanceCount", cNo);
+	}
+
+	public int selectAttendanceACount(SqlSessionTemplate sqlSession, int cNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("AttendanceMapper.selectAttendanceACount", cNo);
+	}
+	
+	public ArrayList<Attendance> selectAttendanceCountList(SqlSessionTemplate sqlSession, PageInfo pi ,int cNo) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceCountList", cNo, rowBounds);
+	}
+
+	public ArrayList<Attendance> selectAttendanceAllM(SqlSessionTemplate sqlSession, int cNo) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceAllM", cNo);
+	}
+
+	public ArrayList<Attendance> selectAttendanceWList(SqlSessionTemplate sqlSession, int cNo) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceWList", cNo);
 	}
 
 
