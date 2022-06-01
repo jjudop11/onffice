@@ -7,6 +7,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>커뮤니티</title>
+<style type="text/css">
+.search {
+  position: relative;
+  width: 450px;
+}
+
+input {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+img {
+  position : absolute;
+  width: 17px;
+  top: 14px;
+  right: 130px;
+  margin: 0;
+}
+.selectBox{
+	margin: 10px auto;
+	margin-left: 20px;
+}
+</style>
 </head>
 <body>
 
@@ -14,12 +40,18 @@
     <div id="app">
 	<div id="main">
     <div class="content">
-        <br><br>
         <div class="innerOuter" style="padding:5% 10%;">
             <h2>커뮤니티</h2>
-            <br>
             <a class="btn btn-secondary" style="float:right" href="enrollFormCommunity.do">글쓰기</a>
-            <br>
+            <div class="search" style="display: flex;">
+			  <input type="text">
+			  <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			  <select class="selectBox">
+			  	<option value="title">제목</option>
+			  	<option value="content">내용</option>
+			  	<option value="titleAndContent">제목+내용</option>
+			  </select>
+			</div>
             <table id="commuList" class="table table-hover" align="center">
                 <thead>
                   <tr>
