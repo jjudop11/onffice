@@ -44,8 +44,8 @@
 	<select id="selectReplyList" parameterType="_int" resultMap="ReplyResultSet">
 		select ComRe_Num, ComRe_Content, ComRe_Writer, ComRe_Date
 		from reply
-		where ComRe_Num = #{ComNum} and ComRe_STATUS='Y'
-		order by ComRe_Num desc
+		where Com_Num = #{ComPreNum} and ComRe_STATUS='Y'
+		order by Com_Num desc
 	</select>
 	
 	<insert id="insertReply" parameterType="Reply">

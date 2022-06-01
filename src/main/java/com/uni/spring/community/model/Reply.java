@@ -22,4 +22,6 @@ public class Reply {
 	//private Date createDate;
 	private Timestamp ComReDate;
 	private String ComReStatus;
+	
+	private String ComReWriterName = "익명";
 }

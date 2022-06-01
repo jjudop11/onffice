@@ -10,7 +10,7 @@
 <style type="text/css">
 .search {
   position: relative;
-  width: 300px;
+  width: 450px;
 }
 
 input {
@@ -24,9 +24,13 @@ input {
 img {
   position : absolute;
   width: 17px;
-  top: 10px;
-  right: 12px;
+  top: 14px;
+  right: 130px;
   margin: 0;
+}
+.selectBox{
+	margin: 10px auto;
+	margin-left: 20px;
 }
 </style>
 </head>
@@ -36,17 +40,19 @@ img {
     <div id="app">
 	<div id="main">
     <div class="content">
-        <br>
         <div class="innerOuter" style="padding:5% 10%;">
             <h2>공지사항</h2>
-            <br>
             <c:if test="${ session.loginUser.mManager == 'Y' }">
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
             </c:if>
-            <br>
-            <div class="search">
+            <div class="search" style="display: flex;">
 			  <input type="text">
 			  <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+			  <select class="selectBox">
+			  	<option value="title">제목</option>
+			  	<option value="content">내용</option>
+			  	<option value="titleAndContent">제목+내용</option>
+			  </select>
 			</div>
             <table id="boardList" class="table table-hover" align="center">
                 <thead>
