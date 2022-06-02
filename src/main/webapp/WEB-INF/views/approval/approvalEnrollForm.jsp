@@ -109,6 +109,7 @@
 												<div class="modal-body">
 													<label>사원명</label>
 													<div class="form-group">
+														<input hidden="hidden"/>
 														<input type="text" id="searchName" name="searchName" placeholder="사원명을 검색해주세요" class="form-control">
 														<button type="button" id="search" class="btn btn-primary">SEARCH</button>
 													</div>
@@ -131,18 +132,18 @@
 										</div>
 									</div>
 									
-									<!-- <input type="text" id="aplineNo" name="aplineNo" class="form-control round"> -->
+									<input type="hidden" id="aplineNo" name="aplineNo" class="form-control round">
 									
 									<div class="table-responsive apprTable">
-										<table class="table table-bordered mb-0">
+										<table id="apprTable" class="table table-bordered mb-0">
 											<tbody>
 												<tr>
 													<td rowspan="3" style="width: 150px">결재선</td>
 													<td id="jName1" style="width: 170px; height: 35px"></td>
 													<td id="jName2" style="width: 170px"></td>
-													<td style="width: 170px"></td>
-													<td style="width: 170px"></td>
-													<td style="width: 170px"></td>
+													<td id="jName3" style="width: 170px"></td>
+													<td id="jName4" style="width: 170px"></td>
+													<td id="jName5" style="width: 170px"></td>
 												</tr>
 												<tr>
 													<td style="height: 100px"></td>
@@ -154,9 +155,9 @@
 												<tr>
 													<td id="mName1" style="height: 35px"></td>
 													<td id="mName2"></td>
-													<td></td>
-													<td></td>
-													<td></td>
+													<td id="mName3"></td>
+													<td id="mName4"></td>
+													<td id="mName5"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -242,7 +243,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> 
 				
 				<!-- 사업기획서 서식입력폼 
 				<div class="card" id="proposalForm">
@@ -364,13 +365,21 @@
 				</div> -->
 				
 				<div class="buttons" align="center">
-                	<button type="submit" class="btn btn-primary">결재요청</button>
+                	<button id="insertAppr" type="submit" class="btn btn-primary">결재요청</button>
                 </div>
 			</form>
 		</div>
 	</div> 
 	
 	<script type="text/javascript">
+	
+		// searchName 인풋 엔터키 눌렀을 때 submit 방지 
+		$('input[name="searchName"]').keydown(function() {
+			if (event.keyCode === 13) {
+				event.preventDefault(); // submit 작동 제어 
+				$('#search').click(); // 버튼 클릭 
+			};
+		});
 	
 		// 셀렉트박스 선택값에 따라 폼화면 변경 
 		$(document).ready(function(){
@@ -391,6 +400,9 @@
 	            }
 	        });
 	    });
+		
+		let apprArr = new Array(); // 결재선 번호 담을 배열  
+		/* let j = 0; */
 		
 		// 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌
 		$('#search').click(function(){
@@ -441,21 +453,40 @@
 							
 							let mName1 = document.getElementById("mName1");
 							let jName1 = document.getElementById("jName1");
-							/* let mName2 = document.getElementById("mName2");
-							let jName2 = document.getElementById("jName2"); */
+							let mName2 = document.getElementById("mName2");
+							let jName2 = document.getElementById("jName2");
+							let mName3 = document.getElementById("mName3");
+							let jName3 = document.getElementById("jName3");
+							let mName4 = document.getElementById("mName4");
+							let jName4 = document.getElementById("jName4");
+							let mName5 = document.getElementById("mName5");
+							let jName5 = document.getElementById("jName5");
 							
-							mName1.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
-							jName1.innerText = JSON.stringify(jName).replace(/\"/gi, "");
-							
-							/* if(jName2.innerText == null){ 
+							if(!jName1.innerText){ 
 								mName1.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
 								jName1.innerText = JSON.stringify(jName).replace(/\"/gi, "");
-							} else if(jName1.innerText != null){
+							} else if(!jName2.innerText){
 								mName2.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
 								jName2.innerText = JSON.stringify(jName).replace(/\"/gi, "");
-							} */
+							} else if(!jName3.innerText){
+								mName3.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
+								jName3.innerText = JSON.stringify(jName).replace(/\"/gi, "");
+							} else if(!jName4.innerText){
+								mName4.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
+								jName4.innerText = JSON.stringify(jName).replace(/\"/gi, "");
+							} else if(!jName5.innerText){
+								mName5.innerText = JSON.stringify(mName).replace(/\"/gi, ""); 
+								jName5.innerText = JSON.stringify(jName).replace(/\"/gi, "");
+							} 
+							
+							apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
+							console.log(apprArr)
+							/* $("input[name='aplineNo[]']").eq(j).val(mNo)
+							j++; */
 							
 							$('.modal').modal('hide'); // 모달 닫기 
+							$('#mList').empty(); // html 요소 초기화
+							$('#searchName').val(''); // 인풋 박스 초기화 
 							
 						})
 						
@@ -468,11 +499,11 @@
             })
 		})
 		
-		<!-- modal 초기화 -->
-		$('.modal').on('hidden.bs.modal', function (e) {
-		    console.log('modal close');
-			/* $(this).find('#mList').reset(); */
-		});
+		//
+		$("#insertAppr").click(function(){
+			console.log(apprArr)
+			$("aplineNo").val(apprArr);
+		}); 
 		
 	</script>
 	
