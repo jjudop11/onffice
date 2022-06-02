@@ -33,13 +33,21 @@ public class MeetingroomController {
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		System.out.println("로그인유저 : " + loginUser);
-
+		
 		int userCNo = loginUser.getCNo();
 		System.out.println("유저의 회사번호 : " + userCNo);
+		
+		//예약 모달창에서 보여질 예약자명
+		String userName = loginUser.getMName();
+		String userJob = loginUser.getJName();
+		model.addAttribute("userName", userName);
+		model.addAttribute("userJob", userJob);
 
+		//하단 회의실 리스트
 		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
 		model.addAttribute("roomList", roomList);
 
+		//페이징 : 추후 수정
 		int listCount = meetingroomService.selectRoomListCount(userCNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
 		model.addAttribute("pi", pi);
@@ -105,7 +113,7 @@ public class MeetingroomController {
 
 		// model.addAttribute("loginUser", loginUser); // 로그인 회원정보 전달용
 
-		// 페이징 처리
+		// 페이징 처리 : 추후 수정
 		int listCount = meetingroomService.selectRoomListCount(userCNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
 		model.addAttribute("pi", pi);
