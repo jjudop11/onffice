@@ -2,44 +2,44 @@
 <!DOCTYPE configuration 
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
   "http://mybatis.org/dtd/mybatis-3-config.dtd" >
-	
+   
 <configuration>
-	<settings>
-		<setting name="jdbcTypeForNull" value="NULL"/>
-		<setting name="mapUnderscoreToCamelCase" value="true"/>
-	</settings>
-	
-	<typeAliases>
-		<typeAlias alias="Company" type="com.uni.spring.company.model.dto.Company"/>
-		<typeAlias alias="Member" type="com.uni.spring.member.model.dto.Member"/>
-		<typeAlias alias="Notice" type="com.uni.spring.notice.model.notice"/>
-		<typeAlias alias="Community" type="com.uni.spring.community.model.Community"/>
-		<typeAlias alias="Reply" type="com.uni.spring.community.model.Reply"/>
-		<typeAlias type="com.uni.spring.chat.model.dto.Chat" alias="Chat"/>
-		<typeAlias alias="Approval" type="com.uni.spring.approval.model.dto.Approval"/>
-		<typeAlias alias="ApprovalLine" type="com.uni.spring.approval.model.dto.ApprovalLine"/>
-		<typeAlias alias="FormAtt" type="com.uni.spring.approval.model.dto.FormAtt"/>
-		<typeAlias alias="DayoffForm" type="com.uni.spring.approval.model.dto.DayoffForm"/>
-		<typeAlias alias="ProposalForm" type="com.uni.spring.approval.model.dto.ProposalForm"/>
-		<typeAlias alias="PaymentForm" type="com.uni.spring.approval.model.dto.PaymentForm"/>
-		<typeAlias alias="Job" type="com.uni.spring.job.model.dto.Job"/>
-		<typeAlias alias="Dept" type="com.uni.spring.dept.model.dto.Dept"/>
-		<typeAlias alias="Photo" type="com.uni.spring.member.model.dto.Photo"/>
-		<typeAlias alias="Meetingroom" type="com.uni.spring.meetingroom.model.dto.Meetingroom"/>
-		<typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
-	</typeAliases>
-	
-	<mappers>
-		<mapper resource="/mappers/company-mapper.xml"/>
-		<mapper resource="/mappers/member-mapper.xml"/>
-		<mapper resource="/mappers/meetingroom-mapper.xml"/>
-    	<mapper resource="/mappers/chat-mapper.xml"/>
-    	<mapper resource="/mappers/notice-mapper.xml"/>
-    	<mapper resource="/mappers/community-mapper.xml"/>
-    	<mapper resource="/mappers/approval-mapper.xml"/>
-    	<mapper resource="/mappers/job-mapper.xml"/>
-    	<mapper resource="/mappers/dept-mapper.xml"/>
-    	<mapper resource="/mappers/attendance-mapper.xml"/>
-	</mappers>
-	
+   <settings>
+      <setting name="jdbcTypeForNull" value="NULL"/>
+      <setting name="mapUnderscoreToCamelCase" value="true"/>
+   </settings>
+   
+   <typeAliases>
+      <typeAlias alias="Company" type="com.uni.spring.company.model.dto.Company"/>
+      <typeAlias alias="Member" type="com.uni.spring.member.model.dto.Member"/>
+      <typeAlias alias="Notice" type="com.uni.spring.notice.model.notice"/>
+      <typeAlias alias="Community" type="com.uni.spring.community.model.Community"/>
+      <typeAlias alias="Reply" type="com.uni.spring.community.model.Reply"/>
+      <typeAlias type="com.uni.spring.chat.model.dto.Chat" alias="Chat"/>
+      <typeAlias alias="Approval" type="com.uni.spring.approval.model.dto.Approval"/>
+      <typeAlias alias="ApprovalLine" type="com.uni.spring.approval.model.dto.ApprovalLine"/>
+      <typeAlias alias="FormAtt" type="com.uni.spring.approval.model.dto.FormAtt"/>
+      <typeAlias alias="DayoffForm" type="com.uni.spring.approval.model.dto.DayoffForm"/>
+      <typeAlias alias="ProposalForm" type="com.uni.spring.approval.model.dto.ProposalForm"/>
+      <typeAlias alias="PaymentForm" type="com.uni.spring.approval.model.dto.PaymentForm"/>
+      <typeAlias alias="Job" type="com.uni.spring.job.model.dto.Job"/>
+      <typeAlias alias="Dept" type="com.uni.spring.dept.model.dto.Dept"/>
+      <typeAlias alias="Photo" type="com.uni.spring.member.model.dto.Photo"/>
+      <typeAlias alias="Meetingroom" type="com.uni.spring.meetingroom.model.dto.Meetingroom"/>
+      <typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
+   </typeAliases>
+   
+   <mappers>
+      <mapper resource="/mappers/company-mapper.xml"/>
+      <mapper resource="/mappers/member-mapper.xml"/>
+      <mapper resource="/mappers/meetingroom-mapper.xml"/>
+       <mapper resource="/mappers/chat-mapper.xml"/>
+       <mapper resource="/mappers/notice-mapper.xml"/>
+       <mapper resource="/mappers/community-mapper.xml"/>
+       <mapper resource="/mappers/approval-mapper.xml"/>
+       <mapper resource="/mappers/job-mapper.xml"/>
+       <mapper resource="/mappers/dept-mapper.xml"/>
+       <mapper resource="/mappers/attendance-mapper.xml"/>
+   </mappers>
+   
 </configuration>
