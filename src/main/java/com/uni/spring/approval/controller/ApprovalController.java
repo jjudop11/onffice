@@ -50,14 +50,14 @@ public class ApprovalController {
 			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
 			@RequestParam(name = "doType") int doType,
 			HttpServletRequest request, // 뷰단에서 컨트롤러로 데이터 전달 
+			@RequestParam(value = "arr") int[] apprArr,
 			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
 		
 		System.out.println("CONTROLLER : " + ap);
 		System.out.println("CONTROLLER : " + apline);
 		System.out.println("CONTROLLER : " + doForm);
 		
-//		System.out.println("CONTROLLER : " + doForm.getDoStartDate());
-//		System.out.println("CONTROLLER : " + doForm.getDoStartDate().getClass().getName());
+		System.out.println("CONTROLLER : " + apprArr);
 		
 		approvalService.insertApproval(ap); // 전자결재문서 
 		approvalService.insertApprovalLine(apline); // 결재선
