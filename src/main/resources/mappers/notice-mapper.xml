@@ -22,6 +22,24 @@
 		where No_Status='Y' and m.M_No = No_write
 		order by DECODE( No_Important,'Y',1), No_Num desc
 	</select>
+
+	<select id="searchList" resultMap="noticeResultSet">
+		select No_Num,No_Title,No_Content, No_Write ,No_Date,No_Important,No_Status,m.M_NAME from notice, member m
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<choose>
+			<when test="title != null">>
+			where No_Status='Y' and m.M_No = No_write and No_Title LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test="content != null">>
+			where No_Status='Y' and m.M_No = No_write and No_Content LIKE '%'||#{keyword}||'%'
+			</when>
+			<otherwise>
+			where No_Status='Y' and m.M_No = No_write and No_Title LIKE '%'||#{keyword}||'%' or and No_Content LIKE '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+		</trim>
+		order by DECODE( No_Important,'Y',1), No_Num desc
+	</select>
 	
 	<select id="selectNotice" resultMap="noticeResultSet" parameterType="Notice">
 		select * from notice

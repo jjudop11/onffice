@@ -61,16 +61,16 @@ public class CommuServiceImpl implements CommuService {
 		return result;
 	}
 
-	/*
 	@Override
-	public void deleteNotice(int No_Num) {
-		int result = noticedao.deleteNotice(sqlsession, No_Num);
+	public void deleteNotice(int comNum) {
+		int result = communityDao.deleteNotice(sqlsession, comNum);
 		
 		if(result < 0) {
 			throw new CommException("게시글 삭제 실패");
 		}
 	}
 
+	/*
 	@Override
 	public void updateNotice(notice n) {
 		int result = noticedao.updateNotice(sqlsession, n);

@@ -21,13 +21,13 @@ input {
   font-size: 14px;
 }
 
-img {
+/*img {
   position : absolute;
   width: 17px;
   top: 14px;
   right: 130px;
   margin: 0;
-}
+}*/
 .selectBox{
 	margin: 10px auto;
 	margin-left: 20px;
@@ -46,13 +46,23 @@ img {
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
             </c:if>
             <div class="search" style="display: flex;">
-			  <input type="text">
-			  <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
-			  <select class="selectBox">
-			  	<option value="title">제목</option>
-			  	<option value="content">내용</option>
-			  	<option value="titleAndContent">제목+내용</option>
-			  </select>
+            	<form method="post" name="search" action="searchNotice.do">
+            		<table class="pull-right">
+            			<tr>
+            				<td>
+            					<select name="condition" id="condition">
+            						<option value="0">선택</option>
+								  	<option value="title">제목</option>
+								  	<option value="content">내용</option>
+								  	<option value="titleAndContent">제목+내용</option>
+								  </select>
+            				</td>
+            				<td><input type="text" name="keyword" placeholder="검색어 입력"></td>
+	            			<td><button type="submit" class="btn btn-success">검색</button></td>			
+					 		<!-- <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"> -->	
+				  </tr>
+				  </table>
+			  </form>
 			</div>
             <table id="boardList" class="table table-hover" align="center">
                 <thead>

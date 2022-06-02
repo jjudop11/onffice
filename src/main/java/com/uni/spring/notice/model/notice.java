@@ -26,5 +26,9 @@ public class notice {
 	private String No_status;
 	
 	private String No_WirterName;
+	
+	private String title;
+	private String content;
+	private String titleAndContent;
 
 }

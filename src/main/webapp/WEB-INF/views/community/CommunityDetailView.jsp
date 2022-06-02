@@ -15,10 +15,16 @@
 				<div class="innerOuter">
 					<h2>커뮤니티</h2>
 					<br>
-					<c:if test="${ sessionScope.loginUser.MNo eq c.comWrite }">
+					
+					<table id="contentArea" align="center" class="table">
+						<tr>
+							<th width="100">제목</th>
+							<td colspan="3">${ c.comTitle }</td>
+							<td>
+							<c:if test="${ sessionScope.loginUser.MNo eq c.comWrite }">
 						<div align="center">
-							<button class="btn btn-primary" onclick="postFormSubmit(1);">수정하기</button>
-							<button class="btn btn-danger" onclick="postFormSubmit(2);">삭제하기</button>
+							<button class="btn" onclick="postFormSubmit(1);">수정</button>
+							<button class="btn" onclick="postFormSubmit(2);">삭제</button>
 						</div>
 
 						<form id="postForm" action="" method="post">
@@ -39,10 +45,7 @@
 							}
 						</script>
 					</c:if>
-					<table id="contentArea" align="center" class="table">
-						<tr>
-							<th width="100">제목</th>
-							<td colspan="3">${ c.comTitle }</td>
+							</td>
 						</tr>
 						<tr>
 							<th>작성일</th>
@@ -113,8 +116,7 @@
 
 						value += "<th>" + obj.ComReWriterName + "</th>" + "<td>"
 								+ obj.ComReContent + "</td>" + "<td>"
-								+ obj.ComReDate + "</td>" + "<td>"
-								+ "<button id='addCommentReply'>답글</button>" + "</td>"
+								+ obj.ComReDate + "</td>" + 
 								"</tr>";
 					});
 					$("#replyArea tbody").html(value);

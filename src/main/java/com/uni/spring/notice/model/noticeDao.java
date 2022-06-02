@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.uni.spring.common.PageInfo;
+import com.uni.spring.common.SearchCondition;
 
 
 @Repository
@@ -36,6 +37,11 @@ public class noticeDao {
 	public notice selectNotice(SqlSessionTemplate sqlsession, int no_Num) {
 		// TODO Auto-generated method stub
 		return sqlsession.selectOne("noticeMapper.selectNotice", no_Num);
+	}
+
+	public ArrayList<notice> searchList(SqlSessionTemplate sqlsession, SearchCondition sc) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlsession.selectList("noticeMapper.searchList",sc);
 	}
 
 	/*public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {

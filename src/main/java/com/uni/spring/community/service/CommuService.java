@@ -19,4 +19,6 @@ public interface CommuService  {
 
 	int insertReply(Reply r);
 
+	void deleteNotice(int comNum);
+
 }
