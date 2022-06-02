@@ -19,4 +19,6 @@ public interface ChatService {
 
 	void deleteCheckedUser(Member m);
 
+	Chat selectRoom(int crNo);
+
 }
