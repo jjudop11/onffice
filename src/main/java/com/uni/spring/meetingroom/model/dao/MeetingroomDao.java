@@ -65,5 +65,4 @@ public class MeetingroomDao {
 		return sqlsession.delete("MeetingroomMapper.deleteRooms", roomNo);
 	}
 
-	
 }

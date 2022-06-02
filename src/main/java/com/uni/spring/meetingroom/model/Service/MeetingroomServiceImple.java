@@ -56,11 +56,11 @@ public class MeetingroomServiceImple implements MeetingroomService {
 		return meetingroomDao.selectList(sqlsession, userCNo);
 	}
 
-	@Override
-	public int deleteMeetingroom(String roomNo) {
-		// TODO Auto-generated method stub
-		return meetingroomDao.deleteMeetingroom(sqlsession, roomNo);
-	}
+	/*
+	 * @Override public int deleteMeetingroom(String roomNo) { // TODO
+	 * Auto-generated method stub return
+	 * meetingroomDao.deleteMeetingroom(sqlsession, roomNo); }
+	 */
 
 	@Override
 	public int roomNoCheck(String roomNo) {
