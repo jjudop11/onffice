@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.uni.spring.common.SearchCondition;
 import com.uni.spring.notice.model.notice;
 import com.uni.spring.notice.service.noticeService;
 
@@ -26,7 +27,6 @@ public class noticeController {
 	public String selectList(Model model) {
 
 		int listCount = noticeService.selectListCount();
-		
 		ArrayList<notice> list = noticeService.selectList();
 		model.addAttribute("list",list);
 		/*for (notice notice : list) {
@@ -34,6 +34,29 @@ public class noticeController {
 		}
 		System.out.println(list.size());*/
 		return "notice/noticeListView";
+	}
+	
+	@RequestMapping("searchNotice.do")
+	public String searchNotice(@RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, Model model) {
+		
+		SearchCondition sc = new SearchCondition();
+		ArrayList<notice> list;
+		
+		if (keyword != null) {
+			if(condition.equals("title")) {//제목 검색
+				sc.setTitle(keyword);
+			}else if(condition.equals("content")) {//내용 검색
+				sc.setContent(keyword);
+			}else if(condition.equals("titleAndContent")) {//제목+내용 검색
+				sc.setTitle(keyword);
+				sc.setContent(keyword);
+			}
+		}
+		
+		list = noticeService.searchList(sc);
+		model.addAttribute("list",list);
+
+		return "redirect:listNotice.do";
 	}
 	
 	@RequestMapping("enrollFormNotice.do")

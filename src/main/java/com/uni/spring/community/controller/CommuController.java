@@ -80,6 +80,14 @@ public class CommuController {
 		int result = commuService.insertReply(r);
 		return String.valueOf(result);
 	}
+	
+	@RequestMapping("deleteCommu.do")
+	public String deleteNotice(int ComNum, HttpServletRequest request) {
+		
+		commuService.deleteNotice(ComNum);
+		
+		return "redirect:listCommunity.do";
+	}
 
 	/*
 	// 전달 받은 파일을 업로드 시킨후 파일명을 리턴하는 역할
@@ -108,17 +116,7 @@ public class CommuController {
 		return changeName;
 	}
 	
-	@RequestMapping("deleteCommu.do")
-	public String deleteNotice(int No_Num, String fileName, HttpServletRequest request) {
-		
-		noticeService.deleteNotice(No_Num);
-		
-		if(!fileName.equals("")) {
-			deleteFile(fileName, request);
-		}
-		
-		return "redirect:listNotice.do";
-	}
+	
 
 	private void deleteFile(String fileName, HttpServletRequest request) {
 		String resources = request.getSession().getServletContext().getRealPath("resources"); 

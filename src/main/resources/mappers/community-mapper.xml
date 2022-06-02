@@ -52,4 +52,11 @@
 		INSERT INTO reply
 		VALUES(SEQ_REPLY.NEXTVAL, #{ComReContent}, #{ComPreNum}, #{ComReWriter}, SYSDATE, DEFAULT)
 	</insert>
+	
+	<update id="deleteCommunity" parameterType="Community">
+		update community
+		set Com_Status='N'
+		where Com_Num=#{ComNum}
+	</update>
+	
 </mapper>

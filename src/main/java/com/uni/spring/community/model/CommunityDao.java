@@ -37,11 +37,11 @@ public class CommunityDao {
 		return (ArrayList)sqlsession.selectList("CommunityMapper.selectReplyList", cn);
 	}
 
-	/*
-	public int deleteNotice(SqlSessionTemplate sqlsession, int No_Num) {
-		return sqlsession.update("CommunityMapper.deleteNotice", No_Num);
+	public int deleteNotice(SqlSessionTemplate sqlsession, int comNum) {
+		return sqlsession.update("CommunityMapper.deleteCommunity", comNum);
 	}
 
+	/*
 	public int updateNotice(SqlSessionTemplate sqlsession, notice n) {
 		return sqlsession.update("CommunityMapper.updateNotice", n);
 	}
