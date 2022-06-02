@@ -102,6 +102,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 		return attendanceDao.selectAttendanceWList(sqlsession, cNo);
 	}
 
+	@Override
+	public ArrayList<Attendance> selectAttendanceMList(PageInfo pi, ArrayList<Member> mList) {
+		// TODO Auto-generated method stub
+		return attendanceDao.selectAttendanceMList(sqlsession, mList);
+	}
+
 
 
 	

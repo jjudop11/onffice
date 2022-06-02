@@ -18,4 +18,5 @@ public class Job {
 	private int jNo;
 	private String jName;
 	private int cNo;
+	private String oriName;
 }

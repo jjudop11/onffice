@@ -88,4 +88,17 @@
 		ORDER BY A.M_NO
 	</select>
 	
+	<select id="selectAttendanceMList" parameterType="ArrayList" resultType="Attendance">
+		SELECT A.M_NO, SUM(DECODE(B.A_STATE, '정상출근', 1, 0)) "wCount", SUM(DECODE(B.A_STATE, '지각', 1, 0)) "lCount"
+		FROM MEMBER A
+		LEFT JOIN ATTENDANCE B on A.M_NO = B.M_NO
+		WHERE substr(B.A_ENT_DATE,0,7) = to_char(SYSDATE,'yyyy-mm')
+		AND B.M_NO IN
+		<foreach collection="list" item="item" open="(" close=")" separator=",">
+		 ${item.mNo}
+		</foreach>
+		GROUP BY A.M_NO
+		ORDER BY 1
+	</select>
+	
 </mapper>

@@ -18,4 +18,11 @@
 		VALUES
 		(SEQ_D_NO.NEXTVAL, #{dName}, #{cNo})
 	</insert>
+
+	<update id="updatejd" parameterType="Dept">
+		UPDATE DEPT
+		SET D_NAME = #{dName}
+		WHERE D_NAME = #{oriName}
+		AND C_NO = #{cNo}
+	</update>
 </mapper>

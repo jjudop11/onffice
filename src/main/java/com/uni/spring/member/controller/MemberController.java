@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,9 +39,7 @@ import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
 import com.uni.spring.member.model.service.MemberService;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 
@@ -167,20 +168,33 @@ public class MemberController {
 	}
 	
 	@GetMapping("/managerpageForm")
-	public String managerpageForm(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, Model model) {	
+	public String managerpageForm() {
+		return "member/managerpageForm"; 
+	}
+
+	@ResponseBody
+	@PostMapping(value ="/selectMemList",produces = "application/json; charset=utf-8")
+	public Map<String, Object> selectMemList(@RequestParam(value="page" , required = false, defaultValue = "1") int page, Model model) {	
+		
+		Map<String, Object> result = new HashMap<String, Object>();
 		
 		Member loginUser = (Member)model.getAttribute("loginUser");
 		
 		int listCount = memberService.selectMemListCount(loginUser.getCNo());
 		
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
+		PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
 		
 		ArrayList<Member> list = memberService.selectMemList(pi, loginUser.getCNo());
 		
-		model.addAttribute("list", list);
-		model.addAttribute("pi", pi);
-		return "member/managerpageForm"; 
+		result.put("list", list);
+		result.put("page",  pi.getCurrentPage());
+		result.put("startpage",  pi.getStartPage());
+		result.put("endpage",  pi.getEndPage());
+		result.put("maxpage",  pi.getMaxPage());
+
+		return result;
 	}
+	
 
 	@GetMapping("detailMember")
 	public String selectMember(String mNo, Model model) {
@@ -409,6 +423,11 @@ public class MemberController {
 	
 	@GetMapping("/jdForm")
 	public String jdForm(Model model) {	
+		return "member/jdForm"; 
+	}
+	/*
+	@GetMapping("/jdForm")
+	public String jdForm(Model model) {	
 		
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
@@ -435,59 +454,100 @@ public class MemberController {
 		return "member/jdForm"; 
 
 	}
-	
-	@GetMapping("/deletejd")
-	public String deletejd(String del, String val, Model model) {	
+	*/
+	@ResponseBody
+	@PostMapping(value ="/deletejd",produces = "application/json; charset=utf-8")
+	public String deletejd(String del, String set, Model model) {	
 
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		
-		if(val.equals("1")) {
+		if(set.equals("1")) {
 			Job job = new Job().builder()
 					.jName(del)
 					.cNo(loginUser.getCNo())
 					.build();
-			ArrayList<Job> jList = jobService.deletejd(job);
-			model.addAttribute("lists", jList);
-			model.addAttribute("set", "1");
-			return "member/jdForm";
+			int result = jobService.deletejd(job);
+			return String.valueOf(result);
 		} else {
 			Dept dept = new Dept().builder()
 					.dName(del)
 					.cNo(loginUser.getCNo())
 					.build();
-			ArrayList<Dept> dList = deptService.deletejd(dept);
-			model.addAttribute("lists", dList);
-			model.addAttribute("set", "2");
-			return "member/jdForm";
+			int result = deptService.deletejd(dept);
+			return String.valueOf(result);
 		}
 
 	}
 	
-	@GetMapping("/insertjd")
-	public String insertjd(String ins, String val, Model model) {	
+	@ResponseBody
+	@PostMapping(value ="/updatejd",produces = "application/json; charset=utf-8")
+	public String updatejd(String upd, String set, String ori, Model model) {	
 
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		
-		if(val.equals("1")) {
+		if(set.equals("1")) {
+			Job job = new Job().builder()
+					.jName(upd)
+					.oriName(ori)
+					.cNo(loginUser.getCNo())
+					.build();
+			int result = jobService.updatejd(job);
+			return String.valueOf(result);
+		} else {
+			Dept dept = new Dept().builder()
+					.dName(upd)
+					.oriName(ori)
+					.cNo(loginUser.getCNo())
+					.build();
+			int result = deptService.updatejd(dept);
+			return String.valueOf(result);
+		}
+
+	}
+	
+	@ResponseBody
+	@PostMapping(value ="/insertjd",produces = "application/json; charset=utf-8")
+	public String insertjd(String ins, String set, Model model) {	
+
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		
+		if(set.equals("1")) {
 			Job job = Job.builder()
 					.jName(ins)
 					.cNo(loginUser.getCNo())
 					.build();
-			ArrayList<Job> jList = jobService.insertjd(job);
-			model.addAttribute("lists", jList);
-			model.addAttribute("set", "1");
-			return "member/jdForm";
+			int result = jobService.insertjd(job);
+			return String.valueOf(result);
 		} else {
 			Dept dept = Dept.builder()
 					.dName(ins)
 					.cNo(loginUser.getCNo())
 					.build();
-			ArrayList<Dept> dList = deptService.insertjd(dept);
-			model.addAttribute("lists", dList);
-			model.addAttribute("set", "2");
-			return "member/jdForm";
+			int result = deptService.insertjd(dept);
+			return String.valueOf(result);
 		}
 
+	}
+	
+	@ResponseBody
+	@PostMapping(value ="/selectJdList",produces = "application/json; charset=utf-8")
+	public Map<String, Object> selectJdList(@RequestParam(value = "set", defaultValue = "1", required = false) int set, Model model) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		if(set == 1) {
+			ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
+			result.put("list",  jList);
+			result.put("set",  1);
+		} else {
+			ArrayList<Dept> dList = deptService.selectDeptList(loginUser.getCNo());
+			result.put("list",  dList);
+			result.put("set",  2);
+		}
+		
+		return result;
+		
 	}
 
 	

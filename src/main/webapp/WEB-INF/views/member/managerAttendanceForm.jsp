@@ -114,6 +114,12 @@
 	td, .card-body1 {
 	  text-align: center;
 	}
+	
+	.pagination {
+	  width: 300px;
+	  margin-left: auto;
+	  margin-right: auto;
+	}
 
   </style>
 </head>
@@ -267,6 +273,27 @@
 				                            <div class="card-group">
 				                                <div class="card">
 				                                    <div class="card-content">
+				                                    	<div class="card-body">
+				                                        	<table id="attendanceList3" class="table table-borderess mb-4">
+				                                        		<thead>
+												                    <tr>
+														                <td><h5>사원번호</h5></td>
+														                <td><h5>사원명</h5></td>
+														                <td><h5>직급명</h5></td>
+														                <td><h5>부서명</h5></td>
+														                <td><h5>정상출근횟수</h5></td>
+														                <td><h5>지각횟수</h5></td>
+												                     </tr>
+												                 </thead>
+												                 <tbody id="here3">
+												                 	
+												                 </tbody>
+				                                        	</table>
+				                                            <div id="pagingArea3">
+												                
+												              
+												            </div>
+				                                        </div>
 				                                        <canvas class="card-body" id="line-chart">
 				                                        
 				                                        </canvas>
@@ -302,14 +329,9 @@
 			selectAttendanceAllM();
 			selectAttendanceCountList();
 			selectAttendanceWList();
-
-			$("#attendanceList tbody tr").click(function(){
-    			let check = $(this).children().eq(0).text();
-    			console.log();
-    		});
-				
+			selectAttendanceMList();
 					
-		})
+		});
 		
 		function selectAttendanceCountList(pageNum){
     		
@@ -414,7 +436,7 @@
 		            let startpage = result.startpage; // 시작페이지
 		            let endpage = result.endpage; // 끝페이지
 		            let maxpage = result.maxpage; // 최대페이지
-		        
+
 		            for(var i in result.mList) {
 		            	
 		            	v += '<tr>'+
@@ -423,29 +445,12 @@
 		                        '<td>'+result.mList[i].jname+'</td>'+
 		                        '<td>'+result.mList[i].dname+'</td>';
 		                        
-		            	if(result.mList[i].aatime == null) {
+		            	if(result.mList[i].allWtime == null) {
 		            		v += '<td>'+'</td>';
 		            	} else {
-		            		v += '<td>'+result.mList[i].aatime+'</td>'
+		            		v += '<td>'+result.mList[i].allWtime+'</td>'
 		            	}
-		            	
-		            	if(result.mList[i].altime == null) {
-		            		v += '<td>'+'</td>';
-		            	} else {
-		            		v += '<td>'+result.mList[i].altime+'</td>'
-		            	}
-		            	
-		            	if(result.mList[i].awtime == null) {
-		            		v += '<td>'+'</td>';
-		            	} else {
-		            		v += '<td>'+result.mList[i].awtime+'</td>'
-		            	}
-		            	
-		            	if(result.mList[i].astate == null) {
-		            		v += '<td>'+'</td>';
-		            	} else {
-		            		v += '<td>'+result.mList[i].astate+'</td>'
-		            	}
+
 		            	v += '</tr>';
 		            }
 					$("#here2").html(v);
@@ -482,6 +487,84 @@
 			});
     		
     	}
+		
+		
+		function selectAttendanceMList(pageNum){
+    		
+    		$.ajax({
+				url:"selectAttendanceMList",
+				type:"post",
+				data:{
+					page: pageNum
+				},
+	
+				success:function(result){
+					
+					let v= '';
+					let b = '';
+		            let page = result.page; // 현재페이지
+		            let startpage = result.startpage; // 시작페이지
+		            let endpage = result.endpage; // 끝페이지
+		            let maxpage = result.maxpage; // 최대페이지
+					console.log(result.mList)
+		            for(var i in result.mList) {
+		            	
+		            	v += '<tr>'+
+		                        '<td>'+result.mList[i].mno+'</td>'+
+		                        '<td>'+result.mList[i].mname+'</td>'+
+		                        '<td>'+result.mList[i].jname+'</td>'+
+		                        '<td>'+result.mList[i].dname+'</td>';
+		                        
+		            	if(result.mList[i].wcount == null) {
+		            		v += '<td>'+'</td>';
+		            	} else {
+		            		v += '<td>'+result.mList[i].wcount+'</td>'
+		            	}
+		            	
+		            	if(result.mList[i].lcount == null) {
+		            		v += '<td>'+'</td>';
+		            	} else {
+		            		v += '<td>'+result.mList[i].lcount+'</td>'
+		            	}
+
+		            	v += '</tr>';
+		            }
+					$("#here3").html(v);
+					
+					b += '<ul class="pagination">';
+					if(page != 1) {
+						b += '<li class="page-item"><a class="page-link" onclick="selectAttendanceMList('+ parseInt(page-1) + ');" class="page-btn">Previous</a></li>'
+					} else {
+						b += '<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>'
+					}
+                	
+                	for(var num = startpage; num <= endpage; num++) {
+                		if(num != page) {
+                			b += '<li class="page-item"><a class="page-link" onclick="selectAttendanceMList('+ num + ');" class="page-btn">'+num+'</a></li>'
+                		} else {
+                			b += '<li class="page-item disabled"><a class="page-link" href="">'+num+'</a></li>'
+                		}
+                	}
+                    
+                	if(page != maxpage) {
+						b += '<li class="page-item"><a class="page-link" onclick="selectAttendanceMList('+ parseInt(page+1) + ');" class="page-btn">Next</a></li>'
+					} else {
+						b += '<li class="page-item disabled"><a class="page-link" href="">Next</a></li>'
+					}
+                    
+                	b += '</ul>';
+                	
+					$("#pagingArea3").html(b);
+
+				},
+				error:function(){
+					console.log("월간 출퇴근 횟수 ajax 통신 실패");
+				}
+			});
+    		
+    	}
+		
+		
 
 		function selectAttendanceCount(){ // 출퇴근 사원 count
 			$.ajax({
@@ -517,15 +600,14 @@
 					}
 					console.log(mList)
 					console.log(vList)
-					
-					
+									
 					new Chart(document.getElementById("line-chart"), {
 						type: 'line',
 						data: {
 		    		    	labels: mList, 
 		    		    	datasets: [{ 
 		    		    	    data: vList, 
-		    		    	    label: "전체 직원 월별 총 근무시간",
+		    		    	    label: "전 직원의 월별 근무시간",
 		    		    	    borderColor: "#3cba9f",
 		    		    	    fill: false
 		    		    	  }

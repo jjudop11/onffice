@@ -25,4 +25,9 @@ public class JobDao {
 		return sqlsession.insert("JobMapper.insertjd", job);
 	}
 
+	public int updatejd(SqlSessionTemplate sqlsession, Job job) {
+		// TODO Auto-generated method stub
+		return sqlsession.update("JobMapper.updatejd", job);
+	}
+
 }

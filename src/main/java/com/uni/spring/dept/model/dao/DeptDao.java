@@ -25,4 +25,9 @@ public class DeptDao {
 		return sqlsession.insert("DeptMapper.insertjd", dept);
 	}
 
+	public int updatejd(SqlSessionTemplate sqlsession, Dept dept) {
+		// TODO Auto-generated method stub
+		return sqlsession.update("DeptMapper.updatejd", dept);
+	}
+
 }
