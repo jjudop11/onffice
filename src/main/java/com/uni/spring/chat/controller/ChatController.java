@@ -1,31 +1,31 @@
 package com.uni.spring.chat.controller;
 
+import java.io.IOException;
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import com.google.gson.GsonBuilder;
 import com.uni.spring.chat.model.dto.Chat;
 import com.uni.spring.chat.model.service.ChatService;
 import com.uni.spring.member.model.dto.Member;
-import com.uni.spring.member.model.service.MemberService;
 
 @SessionAttributes({"loginUser", "msg"})
 @Controller
@@ -183,4 +183,35 @@ public class ChatController {
 		return 1;
 	}
 	
+	/*
+	@MessageMapping("/chat/chatTest")
+    @SendTo("/chat/greetings")
+    public Greeting greeting(Member m) throws Exception{
+		
+		Thread.sleep(100); // delay
+		return new Greeting("Hello, " + HtmlUtils.htmlEscape(m.getMName()) + "!");
+	}
+	*/
+	@RequestMapping("chat")
+	public String EnterChatRoom(Model model, Chat chat) {
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		Member m = new Member();	
+		
+		m.setCNo(loginUser.getCNo());
+		m.setMNo(loginUser.getMNo());	
+		
+		return "/chat/chat";
+	}
+	
+	/*
+	@GetMapping("WebSocketEx")
+	public String WebSocketEx() {
+
+		return "/chat/WebSocketEx";
+	}
+	*/
+	
+		
 }
