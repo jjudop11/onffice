@@ -156,64 +156,17 @@
                                                     <th>부서</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                            	<c:forEach items="${ list }" var="m">
-	                                            	<c:if test="${ m.MWork eq 'Y'}">
-	                                                <tr>
-	                                                    <td>${ m.MNo }</td>
-	                                                    <td>${ m.MName }</td>
-	                                                    <td>${ m.JName }</td>
-	                                                    <td>${ m.DName }</td>
-	                                                </tr>
-	                                                </c:if>
-	                                                <c:if test="${ m.MWork eq 'N'}">
-	                                                <tr>
-	                                                    <td style="background-color:gray; color:white;">${ m.MNo }</td>
-	                                                    <td style="background-color:gray; color:white;">${ m.MName }</td>
-	                                                    <td style="background-color:gray; color:white;">${ m.JName }</td>
-	                                                    <td style="background-color:gray; color:white;">${ m.DName }</td>
-	                                                </tr>
-	                                                </c:if>
-                                                </c:forEach>
+                                            <tbody id="here">
+                                            
                                             </tbody>
                                         </table><!--  -->
                                         <br>
                                         <div id="pagingArea">
-							                <ul class="pagination">
-							                	<c:choose>
-							                		<c:when test="${ pi.currentPage ne 1 }">
-							                			<li class="page-item"><a class="page-link" href="managerpageForm?currentPage=${ pi.currentPage-1 }">Previous</a></li>
-							                		</c:when>
-							                		<c:otherwise>
-							                			<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
-							                		</c:otherwise>
-							                	</c:choose>
-							                	
-							                    <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-							                    	<c:choose>
-								                		<c:when test="${ pi.currentPage ne p }">
-							                    			<li class="page-item"><a class="page-link" href="managerpageForm?currentPage=${ p }">${ p }</a></li>
-								                		</c:when>
-								                		<c:otherwise>
-								                			<li class="page-item disabled"><a class="page-link" href="">${ p }</a></li>
-								                		</c:otherwise>
-								                	</c:choose>
-							                    </c:forEach>
-							                    
-							                    
-							                    <c:choose>
-							                		<c:when test="${ pi.currentPage ne pi.maxPage }">
-							                			<li class="page-item"><a class="page-link" href="managerpageForm?currentPage=${ pi.currentPage+1 }">Next</a></li>
-							                		</c:when>
-							                		<c:otherwise>
-							                			<li class="page-item disabled"><a class="page-link" href="managerpageForm?currentPage=${ pi.currentPage+1 }">Next</a></li>
-							                		</c:otherwise>
-							                	</c:choose>
-							                </ul>
+							                
 							            </div>
                                         <div class="mt-3 mb-3 float-right" id="final">
                                         
-										<button type="button" class="btn btn-outline-primary" onclick="location.href='insertMemberForm'">사원추가</button>
+										<button type="button" class="btn btn-primary" onclick="location.href='insertMemberForm'">사원추가</button>
 										&nbsp;  &nbsp; &nbsp;  &nbsp;
 
 										</div>
@@ -239,10 +192,85 @@
     
     <script>
     	$(function(){
-    		$("#memberList tbody tr").click(function(){
-    			location.href="detailMember?mNo=" + $(this).children().eq(0).text();
-    		});
+    		
+    		selectMemList();
+    		
     	});
+    	
+    	function selectMemList(pageNum){
+    		
+    		$.ajax({
+				url:"selectMemList",
+				type:"post",
+				data:{
+					page: pageNum
+				},
+	
+				success:function(result){
+					console.log(result)
+					let v= '';
+					let b = '';
+		            let page = result.page; // 현재페이지
+		            let startpage = result.startpage; // 시작페이지
+		            let endpage = result.endpage; // 끝페이지
+		            let maxpage = result.maxpage; // 최대페이지
+
+		            for(var i in result.list) {
+		            	
+		            	if(result.list[i].mwork == 'Y') {
+		            		v+= '<tr>'+
+			                        '<td>'+result.list[i].mno+'</td>'+
+			                        '<td>'+result.list[i].mname+'</td>'+
+			                        '<td>'+result.list[i].jname+'</td>'+
+			                        '<td>'+result.list[i].dname+'</td>'+
+			                    '</tr>';
+		            	} else {
+		            		v+='<tr>'+
+			                       '<td style="background-color:gray; color:white;">'+result.list[i].mno+'</td>'+
+			                       '<td style="background-color:gray; color:white;">'+result.list[i].mname+'</td>'+
+			                       '<td style="background-color:gray; color:white;">'+result.list[i].jname+'</td>'+
+			                       '<td style="background-color:gray; color:white;">'+result.list[i].dname+'</td>'+
+			                   '</tr>';
+		            	}
+
+		            }
+					$("#here").html(v);
+					
+					b += '<ul class="pagination">';
+					if(page != 1) {
+						b += '<li class="page-item"><a class="page-link" onclick="selectMemList('+ parseInt(page-1) + ');" class="page-btn">Previous</a></li>'
+					} else {
+						b += '<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>'
+					}
+                	
+                	for(var num = startpage; num <= endpage; num++) {
+                		if(num != page) {
+                			b += '<li class="page-item"><a class="page-link" onclick="selectMemList('+ num + ');" class="page-btn">'+num+'</a></li>'
+                		} else {
+                			b += '<li class="page-item disabled"><a class="page-link" href="">'+num+'</a></li>'
+                		}
+                	}
+                    
+                	if(page != maxpage) {
+						b += '<li class="page-item"><a class="page-link" onclick="selectMemList('+ parseInt(page+1) + ');" class="page-btn">Next</a></li>'
+					} else {
+						b += '<li class="page-item disabled"><a class="page-link" href="">Next</a></li>'
+					}
+                    
+                	b += '</ul>';
+                	
+					$("#pagingArea").html(b);
+					
+					$("#memberList tbody tr").click(function(){
+		    			location.href="detailMember?mNo=" + $(this).children().eq(0).text();
+		    		});
+				},
+				error:function(){
+					console.log("전체사원리스트 조회 ajax 통신 실패");
+				}
+			});
+    		
+    	}
     </script>
     
 </body>

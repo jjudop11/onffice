@@ -8,8 +8,10 @@ public interface JobService {
 
 	ArrayList<Job> selectJobList(int cNo);
 
-	ArrayList<Job> deletejd(Job job);
+	int deletejd(Job job);
 
-	ArrayList<Job> insertjd(Job job);
+	int insertjd(Job job);
+
+	int updatejd(Job job);
 
 }

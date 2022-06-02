@@ -70,5 +70,10 @@ public class AttendanceDao {
 		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceWList", cNo);
 	}
 
+	public ArrayList<Attendance> selectAttendanceMList(SqlSessionTemplate sqlSession, ArrayList<Member> mList) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceMList", mList);
+	}
+
 
 }

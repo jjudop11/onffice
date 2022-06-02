@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.uni.spring.attendance.model.dto.Attendance;
 import com.uni.spring.common.PageInfo;
+import com.uni.spring.member.model.dto.Member;
 
 public interface AttendanceService {
 
@@ -28,5 +29,7 @@ public interface AttendanceService {
 	ArrayList<Attendance> selectAttendanceAllM(int cNO);
 
 	ArrayList<Attendance> selectAttendanceWList(PageInfo pi, int cNo);
+
+	ArrayList<Attendance> selectAttendanceMList(PageInfo pi, ArrayList<Member> mList);
 
 }

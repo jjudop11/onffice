@@ -26,27 +26,22 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
-	public ArrayList<Job> deletejd(Job job) {
+	public int deletejd(Job job) {
 		
-		int result = jobDao.deletejd(sqlsession, job);
-		
-		if(result > 0) {
-			return jobDao.selectJobList(sqlsession, job.getCNo());
-		} else {
-			throw new CommException("직급 삭제 실패했습니다");
-		}
+		return jobDao.deletejd(sqlsession, job);
 	}
 
 	@Override
-	public ArrayList<Job> insertjd(Job job) {
+	public int insertjd(Job job) {
 		
-		int result = jobDao.insertjd(sqlsession, job);
-		
-		if(result > 0) {
-			return jobDao.selectJobList(sqlsession, job.getCNo());
-		} else {
-			throw new CommException("직급 추가 실패했습니다");
-		}
+		return jobDao.insertjd(sqlsession, job);
+
+	}
+
+	@Override
+	public int updatejd(Job job) {
+		// TODO Auto-generated method stub
+		return jobDao.updatejd(sqlsession, job);
 	}
 
 }

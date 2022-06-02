@@ -141,55 +141,26 @@
                     <div class="row" id="table-hover-row">
                         <div class="col-12">
                             <div class="card">
-
                                 <div class="card-content mt-5">
                                     <!-- table hover -->
                                     <div class="table-responsive">
                                     	<div class="form-group mt-3">
 				                       	    <select class="choices form-select" id="jd" name="jd" style="width:100px;">
-				                       	       <c:if test ="${ set eq '1'}">
-				                               <option value="1" selected>직급</option>
-				                               <option value="2">부서</option>
-				                               </c:if>
-				                               <c:if test ="${ set eq '2'}">
 				                               <option value="1">직급</option>
-				                               <option value="2" selected>부서</option>
-				                               </c:if>
+				                               <option value="2">부서</option>
 				                           	</select>
 				                         </div>
                                         <table id="jdList" class="table table-borderless mb-0" style="width:90%;"> <!--  -->
                                             <tbody id="here">	
-                                            	<c:if test ="${ set eq '1'}">
-	                                            	<c:forEach items="${ lists }" var="j" varStatus="index">
-	                                                <tr>
-		                                                <td style="width:15%;">${ index.count }</td>
-		                                                <td style="width:65%;">${ j.JName }</td>
-		                                                <td><button type="button" class="btn btn-danger" name="minus">삭제</button></td>
-	                                            	</tr>
-	                                            	</c:forEach>
-	                                            	<tr>
-	                                            	<td></td>
-	                                            	<td><input type="text" class="form-control" placeholder="추가 직급명" id="job" name="job"></td>
-	                                            	<td><button type="button" class="btn btn-primary" id="plus">추가</button></td>
-	                                            	</tr>
-                                            	</c:if>
-                                            	
-                                            	<c:if test ="${ set eq '2'}">
-	                                            	<c:forEach items="${ lists }" var="d" varStatus="index">
-	                                                <tr>
-		                                                <td style="width:15%;">${ index.count }</td>
-		                                                <td style="width:65%;">${ d.DName }</td>
-		                                                <td><button type="button" class="btn btn-danger" name="minus">삭제</button></td>
-	                                            	</tr>
-	                                            	</c:forEach>
-	                                            	<tr>
-	                                            	<td></td>
-	                                            	<td><input type="text" class="form-control" placeholder="추가 부서명" id="job" name="job"></td>
-	                                            	<td><button type="button" class="btn btn-primary" id="plus">추가</button></td>
-	                                            	</tr>
-                                            	</c:if>
-                                            	
+
                                             </tbody>
+                                            <tfoot>
+                                            	<tr>
+								                	<td></td>
+								                	<td><input type="text" class="form-control" placeholder="추가 명칭" id="ip" name="ip"></td>
+								                	<td><button type="button" class="btn btn-primary" id="plus">추가</button></td>
+								            	</tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -212,31 +183,160 @@
 	</c:if>
     
     <script>
-    	let val = "";
+
+    	$(function(){   	
+    		
+    		selectJdList();
+    		
+       	});
+    	
+    	
+    	function selectJdList(set){
+
+			$.ajax({
+				url:"selectJdList",
+				type:"post",
+				data:{
+					set:set
+				},
+				success:function(result){
+
+					$('#jd').val(result.set).prop("selected",true);
+					
+					let v = "";
+					let index = 1;
+					for(var i in result.list) {
+						
+						if(result.set == 1) {
+							v+= '<tr>'+
+			                        '<td style="width:10%;">'+parseInt(index)+'</td>'+
+			                        '<td style="width:50%;"><input type="text" class="form-control" value ='+result.list[i].jname+' id="na" name="na"></td>'+
+			                        '<td style="width:15%;"><button type="button" class="btn btn-danger" name="minus">삭제</button>&nbsp;<button type="button" class="btn btn-secondary" name="update">변경</button></td>'+
+			                        '<td style="width:5%;"><input type="hidden" class="form-control" value ='+result.list[i].jname+' id="ori" name="ori"></td>'+
+		                		'</tr>';
+				                index++;
+						} else {
+							v+= '<tr>'+
+			                        '<td style="width:10%;">'+parseInt(index)+'</td>'+
+			                        '<td style="width:50%;"><input type="text" class="form-control" value ='+result.list[i].dname+' id="na" name="na"></td>'+
+			                        '<td style="width:15%;"><button type="button" class="btn btn-danger" name="minus">삭제</button>&nbsp;<button type="button" class="btn btn-secondary" name="update">변경</button></td>'+
+			                        '<td style="width:5%;"><input type="hidden" class="form-control" value ='+result.list[i].dname+' id="ori" name="ori"></td>'+
+		                		'</tr>';
+				                index++;
+						}
+						
+					}
+					$("#here").html(v);
+					
+					$('[name="minus"]').on('click', function() { 
+		
+		    			let tr = $(this).closest('tr'); // 부모요소 중 tr 
+		    			let del = tr.find('td:eq(1)').find('input').val();  // tr의 2번째 자식 input
+		    			value = $("#jd").val();
+		    		   	console.log(del)
+		    			$.ajax({
+		    				url:"deletejd",
+		    				type:"post",
+		    				data:{
+		    					set:value,
+		    					del:del
+		    				},
+		    				success:function(result){
+		    					
+		    					if(result == 1) {
+		    						selectJdList(value);
+		    						alert("명칭 삭제 성공");
+		    					} else {
+		    						alert("직급/부서 삭제 실패");
+		    					}
+		    					
+		    				},
+		    				error:function(){
+		    					console.log("직급리스트 조회 ajax 통신 실패");
+		    				}
+		    			});
+
+		    		})
+		    		
+		    		$('[name="update"]').on('click', function() { 
+
+		    			let tr = $(this).closest('tr'); // 부모요소 중 tr 
+		    			let ori = tr.find('td:eq(3)').find('input').val(); // tr의 2번째 자식 원래이름
+		    			let ins = tr.find('td:eq(1)').find('input').val(); // tr의 3번째 자식 바꿀이름
+		    			value = $("#jd").val();
+		    		   	
+		    			$.ajax({
+		    				url:"updatejd",
+		    				type:"post",
+		    				data:{
+		    					set:value,
+		    					ori:ori,
+		    					upd:ins
+		    				},
+		    				success:function(result){
+		    					
+		    					if(result == 1) {
+		    						selectJdList(value);
+		    						alert("명칭 변경 성공");
+		    					} else {
+		    						alert("직급/부서 변경 실패");
+		    					}
+		    					
+		    				},
+		    				error:function(){
+		    					console.log("직급리스트 조회 ajax 통신 실패");
+		    				}
+		    			});
+		    				
+		    		 	
+		    		})
+					
+					
+					
+				},
+				error:function(){
+					console.log("직급리스트 조회 ajax 통신 실패");
+				}
+			});
+				
+		}
+    	
+    	let value = "";
     	$("#jd").change(function(){
-    		val = $(this).val();
-    		location.href="updatejdList?val="+val; 
+    		value = $(this).val();
+    		selectJdList(value);
     	})
     	
-    	
-	    $('[name="minus"]').on('click', function() { 
-	    	
-			let tr = $(this).closest('tr'); // 부모요소 중 tr 
-			let del = tr.find('td:eq(1)').text(); // tr의 2번째 자식 text
-			val = $("#jd").val();
-		   	
-			location.href="deletejd?val="+val+"&&del="+del;
-		 	
-		})
-		
-		 $("#plus").on('click', function() { 
-			
-			let tr = $(this).closest('tr'); // 부모요소 중 tr 
-			let ins = tr.find('td:eq(1)').find('input').val(); // tr의 2번째 input val
-			val = $("#jd").val();
-			
-			location.href="insertjd?val="+val+"&&ins="+ins;
-		})
+    	$("#plus").on('click', function() { 
+    		
+   			let tr = $(this).closest('tr'); // 부모요소 중 tr 
+   			let ins = tr.find('td:eq(1)').find('input').val(); // tr의 2번째 input val
+   			val = $("#jd").val();
+   			
+   			$.ajax({
+   				url:"insertjd",
+   				type:"post",
+   				data:{
+   					set:val,
+   					ins:ins
+   				},
+   				success:function(result){
+   				
+   					if(result == 1) {
+   						selectJdList(val);
+   						alert("명칭 추가 성공");
+   					} else {
+   						alert("직급/부서 추가 실패");
+   					}
+   					$("#ip").val("");
+
+   				},
+   				error:function(){
+   					console.log("직급/부서 추가 ajax 통신 실패");
+   				}
+			});
+   		})
+
     </script>
     
 </body>

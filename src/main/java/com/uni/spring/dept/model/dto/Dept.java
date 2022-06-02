@@ -18,4 +18,5 @@ public class Dept {
 	private int dNo;
 	private String dName;
 	private int cNo;
+	private String oriName;
 }

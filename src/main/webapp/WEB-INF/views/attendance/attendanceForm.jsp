@@ -169,7 +169,7 @@
                                 </div>
                                 <div class="card-footer d-flex justify-content-between">
                                     <button class="btn btn-primary btn" id="plus">출근하기</button>
-                                    <button class="btn btn-danger btn" id="minus" disabled>퇴근하기</button>
+                                    <button class="btn btn-danger btn" id="minus">퇴근하기</button>
                                 </div>
                             </div>   
                         </div>
@@ -330,7 +330,6 @@
 							selectAttendance();
 							selectAttendanceW();
 							selectAttendanceM();
-							$("#minus").attr("disabled", false);
 						}
 
 					},error:function(){
@@ -433,7 +432,7 @@
 						if(parseInt(40-h) < 0) {
 							$("#minusW").text("00:00:00");
 						} else {
-							$("#minusW").text(String(parseInt(40-h)).padStart(2,"0") +":"+ String(parseInt(60-m)).padStart(2,"0")+":" + String(parseInt(60-s)).padStart(2,"0"));
+							$("#minusW").text(String(parseInt(40-h-1)).padStart(2,"0") +":"+ String(parseInt(60-m-1)).padStart(2,"0")+":" + String(parseInt(60-s)).padStart(2,"0"));
 						}
 						
 						if(list[i].aLtime == null) {

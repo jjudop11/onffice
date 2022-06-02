@@ -44,6 +44,8 @@ public class Member {
 	private String aWtime; // 근무시간 or 월평균근무시간
 	private String aState; // 근무상태
 	private String allWtime; // 이번주근무시간
-
+	
+	private int wCount; // 정상출근수
+ 	private int lCount; // 지각수
 }
 

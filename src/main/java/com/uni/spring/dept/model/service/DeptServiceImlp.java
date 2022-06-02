@@ -25,27 +25,23 @@ public class DeptServiceImlp implements DeptService {
 	}
 
 	@Override
-	public ArrayList<Dept> deletejd(Dept dept) {
+	public int deletejd(Dept dept) {
 		
-		int result = deptDao.deletejd(sqlsession, dept);
-		
-		if(result > 0) {
-			return deptDao.selectDeptList(sqlsession, dept.getCNo());
-		} else {
-			throw new CommException("부서 삭제 실패했습니다");
-		}
+		return deptDao.deletejd(sqlsession, dept);
+
 	}
 
 	@Override
-	public ArrayList<Dept> insertjd(Dept dept) {
+	public int insertjd(Dept dept) {
 		
-		int result = deptDao.insertjd(sqlsession, dept);
-		
-		if(result > 0) {
-			return deptDao.selectDeptList(sqlsession, dept.getCNo());
-		} else {
-			throw new CommException("부서 추가 실패했습니다");
-		}	
+		return deptDao.insertjd(sqlsession, dept);
+
+	}
+
+	@Override
+	public int updatejd(Dept dept) {
+		// TODO Auto-generated method stub
+		return deptDao.updatejd(sqlsession, dept);
 	}
 
 }

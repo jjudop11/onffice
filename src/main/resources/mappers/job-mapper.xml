@@ -18,4 +18,11 @@
 		VALUES
 		(SEQ_JOB.NEXTVAL, #{jName}, #{cNo})
 	</insert>
+	
+	<insert id="updatejd" parameterType="Job">
+		UPDATE JOB
+		SET J_NAME = #{jName}
+		WHERE J_NAME = #{oriName}
+		AND C_NO = #{cNo}
+	</insert>
 </mapper>
