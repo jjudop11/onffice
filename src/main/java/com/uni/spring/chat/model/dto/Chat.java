@@ -57,7 +57,9 @@ public class Chat {
 		
 		TextMessage textMessage = new TextMessage(objMapper.
 												writeValueAsString(chat.getChatContent()));
-		
+		for(WebSocketSession sess : sessions) {
+			sess.sendMessage(textMessage);
+		}
 	}
 	
 }
