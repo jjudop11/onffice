@@ -9,6 +9,7 @@ import com.uni.spring.approval.model.dto.DayoffForm;
 import com.uni.spring.approval.model.dto.FormAtt;
 import com.uni.spring.approval.model.dto.PaymentForm;
 import com.uni.spring.approval.model.dto.ProposalForm;
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.member.model.dto.Member;
 
 public interface ApprovalService {
@@ -26,5 +27,9 @@ public interface ApprovalService {
 	void insertPaymentForm(PaymentForm payForm); // 지출결의서 
 
 	ArrayList<Member> selectMemberList(Map<String, Object> memberMap); // 결재선 사원 검색
+
+	int selectListCount(Member m);
+
+	ArrayList<Approval> selectList(PageInfo pi);
 	
 }

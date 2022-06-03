@@ -158,13 +158,13 @@
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
-                                    <a href="enrollFormApproval.do">기안작성</a>
+                                    <a href="approvalEnrollForm.do">기안작성</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="layout-vertical-1-column.html">1 Column</a>
+                                    <a href="approvalOngoingListView.do">결재진행</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="layout-vertical-navbar.html">Vertical with Navbar</a>
+                                    <a href="approvalCompleteListView.do">결재완료</a>
                                 </li>
                                 <li class="submenu-item ">
                                     <a href="layout-horizontal.html">Horizontal Menu</a>

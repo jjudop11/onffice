@@ -1,6 +1,6 @@
 package com.uni.spring.approval.model.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,13 +23,8 @@ public class ProposalForm {
 	private String prTitle; // 프로젝트명 
 	private String prGoal; // 시행목적 
 	private String prPlan; // 운영계획 
-	
-	@DateTimeFormat(pattern = "yyMM/dd")
-	private Date prStartDate; // 시작일 
-	
-	@DateTimeFormat(pattern = "yy/MM/dd")
-	private Date prEndDate; // 종료일 
-	
+	private String prStartDate; // 시작일 	
+	private String prEndDate; // 종료일 
 	private String prPerson; // 참여인원 
 	private String prAmount; // 소요예산 
 	private int apNo; // 전자결재번호 

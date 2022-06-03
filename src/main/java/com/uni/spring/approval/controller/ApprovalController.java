@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.GsonBuilder;
@@ -33,14 +34,15 @@ import com.uni.spring.common.exception.CommException;
 import com.uni.spring.member.model.dto.Member;
 
 @Controller
+@SessionAttributes({"loginUser", "msg"})
 public class ApprovalController {
 	
 	@Autowired
 	public ApprovalService approvalService; // 서비스 연결
 	
 	// 기안작성 폼으로 이동
-	@RequestMapping("enrollFormApproval.do")
-	public String enrollForm() {
+	@RequestMapping("approvalEnrollForm.do")
+	public String EnrollForm() {
 		return "approval/approvalEnrollForm";
 	}
 	
@@ -48,16 +50,12 @@ public class ApprovalController {
 	@RequestMapping(value = "insertApproval.do", method = RequestMethod.POST)
 	public String insertApproval(Approval ap, ApprovalLine apline, FormAtt att,
 			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
-			@RequestParam(name = "doType") int doType,
 			HttpServletRequest request, // 뷰단에서 컨트롤러로 데이터 전달 
-			@RequestParam(value = "arr") int[] apprArr,
 			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
 		
 		System.out.println("CONTROLLER : " + ap);
 		System.out.println("CONTROLLER : " + apline);
 		System.out.println("CONTROLLER : " + doForm);
-		
-		System.out.println("CONTROLLER : " + apprArr);
 		
 		approvalService.insertApproval(ap); // 전자결재문서 
 		approvalService.insertApprovalLine(apline); // 결재선
@@ -138,6 +136,29 @@ public class ApprovalController {
 		
 		return new GsonBuilder().create().toJson(list);
 		
+	}
+	
+	// 결재진행 리스트 페이지로 이동
+	@RequestMapping("approvalOngoingListView.do")
+	public String approvalOngoingListView(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model) {
+	
+		Member m = (Member) model.getAttribute("loginUser");
+		System.out.println("CONTROLLER : " + m.getMNo());
+		System.out.println("CONTROLLER : " + m.getCNo());
+		
+		int listCount = approvalService.selectListCount(m);
+		System.out.println("listCount : " + listCount);
+		
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+//		ArrayList<Approval> list = approvalService.selectList(pi);
+//		
+//		System.out.println("LIST : " + list);
+//		
+//		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		
+		return "approval/approvalOngoingListView";
+	
 	}
 
 }
