@@ -54,4 +54,14 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", memberMap);
 	}
 
+	public int selectListCount(SqlSession sqlSession, Member m) {
+		return sqlSession.selectOne("ApprovalMapper.selectListCount", m);
+	}
+
+	public ArrayList<Approval> selectList(SqlSession sqlSession, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectList", null, rowBounds);
+	}
+
 }

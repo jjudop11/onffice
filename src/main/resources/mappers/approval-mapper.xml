@@ -8,6 +8,11 @@
 		<result property="cNo" column="C_NO"/>
 	</resultMap>
 	
+	<resultMap type="Approval" id="approvalResultSet">
+		<id property="apNo" column="AP_NO"/>
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
 	<!-- 전자결재문서 -->
 	<insert id="insertApproval" parameterType="Approval">
 		INSERT INTO APPROVAL
@@ -60,6 +65,30 @@
 			AND A.C_NO = #{cNo}
 			AND A.M_NAME = #{searchName}
 		ORDER BY A.M_NO DESC
+	</select>
+	
+	<!-- 내가 작성한 진행중인 결재 갯수 -->
+	<select id="selectListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APPROVAL
+		WHERE STATUS = 'Y'
+			AND M_NO = #{mNo}
+			AND C_NO = #{cNo}	
+			AND AP_STATUS IS NULL
+	</select>
+	
+	<!-- 내가 작성한 진행중인 결재 목록 조회 -->
+	<!-- SELECT *
+		FROM APPROVAL
+		WHERE STATUS = 'Y'
+		ORDER BY AP_NO DESC -->
+	<!-- SELECT FO_NO, TITLE, DATE 
+		FROM VIEW_AP -->
+	<select id="selectList" parameterType="Approval">
+		SELECT *
+		FROM APPROVAL
+		WHERE STATUS = 'Y'
+		ORDER BY AP_NO DESC
 	</select>
 	
 </mapper>

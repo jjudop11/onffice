@@ -88,7 +88,6 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group">
-									<label for="apprLine">사원번호</label>
 									
 									<!-- 결재선 추가 버튼 -->
 									<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#inlineForm">
@@ -245,7 +244,7 @@
 					</div>
 				</div> 
 				
-				<!-- 사업기획서 서식입력폼 
+				<!-- 사업기획서 서식입력폼 -->
 				<div class="card" id="proposalForm">
 					<div class="card-header">
 						<h4 class="card-title">사업기획서</h4>
@@ -311,9 +310,9 @@
 							</div>
 						</div>
 					</div>
-				</div> -->
+				</div> 
 				
-				<!-- 지출결의서 서식입력폼 
+				<!-- 지출결의서 서식입력폼 -->
 				<div class="card" id="paymentForm">
 					<div class="card-header">
 						<h4 class="card-title">지출결의서</h4>
@@ -362,7 +361,7 @@
 							</div>
 						</div>
 					</div>
-				</div> -->
+				</div> 
 				
 				<div class="buttons" align="center">
                 	<button id="insertAppr" type="submit" class="btn btn-primary">결재요청</button>
@@ -401,7 +400,7 @@
 	        });
 	    });
 		
-		let apprArr = new Array(); // 결재선 번호 담을 배열  
+		/* let apprArr = new Array(); // 결재선 번호 담을 배열   */
 		/* let j = 0; */
 		
 		// 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌
@@ -479,10 +478,12 @@
 								jName5.innerText = JSON.stringify(jName).replace(/\"/gi, "");
 							} 
 							
-							apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
-							console.log(apprArr)
+							/* apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
+							console.log(apprArr) */
 							/* $("input[name='aplineNo[]']").eq(j).val(mNo)
 							j++; */
+							
+							$("input[name='aplineNo']").val(mNo);
 							
 							$('.modal').modal('hide'); // 모달 닫기 
 							$('#mList').empty(); // html 요소 초기화

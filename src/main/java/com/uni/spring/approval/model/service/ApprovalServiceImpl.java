@@ -104,5 +104,15 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ArrayList<Member> selectMemberList(Map<String, Object> memberMap) {
 		return approvalDao.selectMemberList(sqlSession, memberMap);
 	}
+
+	@Override
+	public int selectListCount(Member m) {
+		return approvalDao.selectListCount(sqlSession, m);
+	}
+
+	@Override
+	public ArrayList<Approval> selectList(PageInfo pi) {
+		return approvalDao.selectList(sqlSession, pi);
+	}
 	
 }
