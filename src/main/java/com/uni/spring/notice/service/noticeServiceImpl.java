@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uni.spring.notice.model.notice;
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.SearchCondition;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.notice.model.noticeDao;
@@ -27,8 +28,8 @@ public class noticeServiceImpl implements noticeService {
 	}
 	
 	@Override
-	public ArrayList<notice> selectList() {
-		return noticedao.selectList(sqlsession);
+	public ArrayList<notice> selectList(PageInfo pi) {
+		return noticedao.selectList(sqlsession, pi);
 	}
 
 	@Override
@@ -64,8 +65,13 @@ public class noticeServiceImpl implements noticeService {
 	}
 
 	@Override
-	public ArrayList<notice> searchList(SearchCondition sc) {
-		return noticedao.searchList(sqlsession,sc);
+	public ArrayList<notice> searchList(SearchCondition sc, PageInfo pi) {
+		return noticedao.searchList(sqlsession, sc, pi);
+	}
+
+	@Override
+	public int searchListCount(SearchCondition sc) {
+		return noticedao.getsearchList(sqlsession, sc);
 	}
 
 }

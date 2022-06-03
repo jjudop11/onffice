@@ -15,7 +15,7 @@
 
 				<div class="innerOuter">
 					<h2>공지사항</h2>
-
+					<br>
 					<table id="contentArea" align="center" class="table">
 						<tr>
 							<td colspan="3">${ n.no_Title }</td>

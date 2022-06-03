@@ -59,4 +59,10 @@
 		where Com_Num=#{ComNum}
 	</update>
 	
+	<update id="updateCommunity" parameterType="Community">
+		update community
+		set Com_Title=#{ComTitle}, Com_Content=#{ComContent}
+		where Com_Num=#{ComNum}
+	</update>
+	
 </mapper>

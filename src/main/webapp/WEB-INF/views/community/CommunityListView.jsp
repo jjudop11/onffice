@@ -116,13 +116,7 @@ img {
                 	</c:choose>
                 </ul>
             </div>
-           
-            <br clear="both"><br>
-            
-			
-            <br><br>
         </div>
-        <br><br>
     </div>
     </div>
     </div>
