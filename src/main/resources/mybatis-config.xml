@@ -27,6 +27,7 @@
       <typeAlias alias="Photo" type="com.uni.spring.member.model.dto.Photo"/>
       <typeAlias alias="Meetingroom" type="com.uni.spring.meetingroom.model.dto.Meetingroom"/>
       <typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
+      <typeAlias alias="Timetable" type="com.uni.spring.timetable.model.dto.Timetable"/>
    </typeAliases>
    
    <mappers>
@@ -40,6 +41,7 @@
        <mapper resource="/mappers/job-mapper.xml"/>
        <mapper resource="/mappers/dept-mapper.xml"/>
        <mapper resource="/mappers/attendance-mapper.xml"/>
+       <mapper resource="/mappers/timetable-mapper.xml"/>
    </mappers>
    
 </configuration>
