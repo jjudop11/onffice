@@ -21,11 +21,11 @@
         <div class="innerOuter">
             <br>
             <form id="updateForm" method="post" action="updateCommunity.do" enctype="multipart/form-data">
-            	<input type="hidden" name="ComNum" value="${ c.ComNum }">
+            	<input type="hidden" name="ComNum" value="${ c.comNum }">
                 <table align="center">
                     <tr>
                         <th><label for="title">제목</label></th>
-                        <td><input type="text" id="title" class="form-control" name="ComTitle" value="${ c.ComTitle }" required></td>
+                        <td><input type="text" id="title" class="form-control" name="ComTitle" value="${ c.comTitle }" required></td>
                     </tr>
                     <!-- <tr>
                         <th><label for="upfile">첨부파일</label></th>
@@ -39,10 +39,10 @@
                         </td>
                     </tr> -->
                     <tr>
-                        <th colspan="2"><label for="No_content">내용</label></th>
+                        <th colspan="2"><label for="Com_content">내용</label></th>
                     </tr>
                     <tr>
-                        <th colspan="2"><textarea class="form-control" required name="ComContent" id="content" rows="10" style="resize:none;">${ c.ComContent }</textarea></th>
+                        <th colspan="2"><textarea class="form-control" required name="ComContent" id="content" rows="10" style="resize:none;">${ c.comContent }</textarea></th>
                     </tr>
                 </table>
                 <br>

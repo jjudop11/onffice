@@ -1,7 +1,5 @@
 package com.uni.spring.common;
 
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +11,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SearchCondition {
+public class SearchCondition extends PageInfo {
 
-	private String writer;
+	private String keyword;
+	private String condition;
+	
 	private String title;
 	private String content;
-	private String keyword;
+	private String titleAndContent;
 	
 }

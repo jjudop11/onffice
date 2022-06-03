@@ -41,27 +41,36 @@ input {
 	<div id="main">
     <div class="content">
         <div class="innerOuter" style="padding:5% 10%;">
+        <c:choose>
+			<c:when test="${not empty keyword }">
+				<p>
+					<strong>${keyword} </strong>키워드로 검색된
+					<strong>${totalRow }</strong>개의 글이 있습니다.
+				</p>
+			</c:when>
+		</c:choose>
             <h2>공지사항</h2>
             <c:if test="${ session.loginUser.mManager == 'Y' }">
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
             </c:if>
             <div class="search" style="display: flex;">
-            	<form method="post" name="search" action="searchNotice.do">
+            	<form method="GET" name="search" action="searchNotice.do">
             		<table class="pull-right">
             			<tr>
             				<td>
             					<select name="condition" id="condition">
-            						<option value="0">선택</option>
 								  	<option value="title">제목</option>
 								  	<option value="content">내용</option>
 								  	<option value="titleAndContent">제목+내용</option>
 								  </select>
             				</td>
-            				<td><input type="text" name="keyword" placeholder="검색어 입력"></td>
-	            			<td><button type="submit" class="btn btn-success">검색</button></td>			
+            				<td><input type="text" name="keyword" id="keyword" placeholder="검색어 입력"</td>
+	            			<td><button type="submit" class="btn btn-success" name="btnSearch" id="btnSearch" onclick="getSearchList()">검색</button></td>			
 					 		<!-- <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"> -->	
 				  </tr>
 				  </table>
+				  <input type="hidden" name="pageNum" value="1">
+				  <input type="hidden" name="amount" value="10">
 			  </form>
 			</div>
             <table id="boardList" class="table table-hover" align="center">
@@ -121,13 +130,7 @@ input {
                 	</c:choose>
                 </ul>
             </div>
-           
-            <br clear="both"><br>
-            
-			
-            <br><br>
         </div>
-        <br><br>
     </div>
     </div>
     </div>

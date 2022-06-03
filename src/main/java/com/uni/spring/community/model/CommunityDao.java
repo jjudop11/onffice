@@ -17,8 +17,10 @@ public class CommunityDao {
 		return sqlsession.selectOne("CommunityMapper.selectListCount");
 	}
 	
-	public ArrayList<Community> selectList(SqlSessionTemplate sqlsession) {
-		return (ArrayList)sqlsession.selectList("CommunityMapper.selectList");
+	public ArrayList<Community> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlsession.selectList("CommunityMapper.selectList", null, rowBounds);
 	}
 
 	public int insertCommu(SqlSessionTemplate sqlsession, Community c) {
@@ -37,15 +39,15 @@ public class CommunityDao {
 		return (ArrayList)sqlsession.selectList("CommunityMapper.selectReplyList", cn);
 	}
 
-	public int deleteNotice(SqlSessionTemplate sqlsession, int comNum) {
+	public int deleteCommu(SqlSessionTemplate sqlsession, int comNum) {
 		return sqlsession.update("CommunityMapper.deleteCommunity", comNum);
 	}
 
-	/*
-	public int updateNotice(SqlSessionTemplate sqlsession, notice n) {
-		return sqlsession.update("CommunityMapper.updateNotice", n);
+	public int updateCommu(SqlSessionTemplate sqlsession, Community c) {
+		return sqlsession.update("CommunityMapper.updateCommunity", c);
 	}
 
+	/*
 	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());

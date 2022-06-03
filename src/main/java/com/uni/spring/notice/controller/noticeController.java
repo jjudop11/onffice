@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.uni.spring.common.PageInfo;
+import com.uni.spring.common.Pagination;
 import com.uni.spring.common.SearchCondition;
 import com.uni.spring.notice.model.notice;
 import com.uni.spring.notice.service.noticeService;
@@ -24,39 +26,47 @@ public class noticeController {
 	public noticeService noticeService;
 	
 	@RequestMapping("listNotice.do")
-	public String selectList(Model model) {
+	public String selectList(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, Model model) {
 
 		int listCount = noticeService.selectListCount();
-		ArrayList<notice> list = noticeService.selectList();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
+		
+		ArrayList<notice> list = noticeService.selectList(pi);
+		
 		model.addAttribute("list",list);
-		/*for (notice notice : list) {
-		System.out.println(notice);
-		}
-		System.out.println(list.size());*/
+		model.addAttribute("pi", pi);
+		
 		return "notice/noticeListView";
 	}
 	
 	@RequestMapping("searchNotice.do")
-	public String searchNotice(@RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, Model model) {
-		
+	public String searchNotice(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, @RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, Model model) {
+
 		SearchCondition sc = new SearchCondition();
-		ArrayList<notice> list;
 		
-		if (keyword != null) {
-			if(condition.equals("title")) {//제목 검색
-				sc.setTitle(keyword);
-			}else if(condition.equals("content")) {//내용 검색
-				sc.setContent(keyword);
-			}else if(condition.equals("titleAndContent")) {//제목+내용 검색
-				sc.setTitle(keyword);
-				sc.setContent(keyword);
-			}
+		switch (condition) {
+		case "titleAndContent":
+			sc.setTitleAndContent(keyword);
+			break;
+		case "title":
+			sc.setTitle(keyword);
+			break;
+		case "content":
+			sc.setContent(keyword);
+			break;
 		}
 		
-		list = noticeService.searchList(sc);
-		model.addAttribute("list",list);
-
-		return "redirect:listNotice.do";
+		int listCount = noticeService.searchListCount(sc);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
+		ArrayList<notice> list; 
+		list= noticeService.searchList(sc, pi);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("condition", condition);
+		
+		return "notice/noticeListView";
 	}
 	
 	@RequestMapping("enrollFormNotice.do")
@@ -74,17 +84,9 @@ public class noticeController {
 	}
 
 	@RequestMapping("insertNotice.do")
-	public String insertBoard(notice n, HttpServletRequest request, @RequestParam(name="No_Important", required = false) String imp, @RequestParam(name="uploadFile", required = false) MultipartFile file) {
+	public String insertBoard(notice n, HttpServletRequest request, @RequestParam(name="No_Important", required = false) String imp) {
 
-		/*if(!file.getOriginalFilename().equals("")) { 
-			String changeName = saveFile(file, request);
-			if(changeName != null) {
-				n.setOriginName(file.getOriginalFilename());
-				n.setChangeName(changeName);
-			}
-		}*/
-
-		if( imp == null ) { n.setNo_Important("N"); }
+		if( imp == null || imp == "N" ) { n.setNo_Important("N"); }
 		if( imp == "Y") { n.setNo_Important("Y"); }
 		
 		noticeService.insertNotice(n);
@@ -92,77 +94,32 @@ public class noticeController {
 		return "redirect:listNotice.do";
 	}
 
-	// 전달 받은 파일을 업로드 시킨후 파일명을 리턴하는 역할
-	/*private String saveFile(MultipartFile file, HttpServletRequest request) {
-		String resources = request.getSession().getServletContext().getRealPath("resources"); // 웹 컨텐트에서의 resources 폴더까지의 경로 지정
-		String savePath = resources+"\\upload_files\\";
-		
-		System.out.println(resources);
-		System.out.println(savePath);
-		
-		String originName = file.getOriginalFilename();
-		String currentTime = new SimpleDateFormat("yyyyMMddHmmss").format(new Date());
-		
-		String ext = originName.substring(originName.lastIndexOf("."));
-		
-		String changeName = currentTime + ext;
-		
-		try {
-			file.transferTo(new File(savePath+changeName));
-		} catch (IllegalStateException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new CommException("file upload error");
-		}
-		
-		return changeName;
-	}*/
 	
 	@RequestMapping("deleteNotice.do")
 	public String deleteNotice(int No_Num, String fileName, HttpServletRequest request) {
 		
 		noticeService.deleteNotice(No_Num);
 		
-		/*if(!fileName.equals("")) {
-			deleteFile(fileName, request);
-		}*/
 		
 		return "redirect:listNotice.do";
 	}
 
-	private void deleteFile(String fileName, HttpServletRequest request) {
-		String resources = request.getSession().getServletContext().getRealPath("resources"); 
-		String savePath = resources+"\\upload_files\\";
-		
-		File deleteFile = new File(savePath+fileName);
-		deleteFile.delete();
-	}
-	
 	@RequestMapping("updateFormNotice.do")
-	public ModelAndView updateForm(@RequestParam(value= "No_Num") int bno, ModelAndView mv) {
-		mv.addObject("n", noticeService.selectNotice(bno)).setViewName("notice/noticeUpdateForm");
+	public ModelAndView updateForm(@RequestParam(value="No_Num") int no_Num, ModelAndView mv) {
+		mv.addObject("n", noticeService.selectNotice(no_Num)).setViewName("notice/noticeUpdateForm");
 		
 		return mv;
 	}
 	
 	@RequestMapping("updateNotice.do")
-	public ModelAndView updateBoard(notice n, ModelAndView mv, HttpServletRequest request, @RequestParam(name="reUploadFile", required = false) MultipartFile file) {
+	public ModelAndView updateBoard(notice n, ModelAndView mv, @RequestParam(name="No_Important", required = false) String imp, HttpServletRequest request) {
 
-		/*String orgChangeName = n.getChangeName(); 
-		
-		if(!file.getOriginalFilename().equals("")) { // 새로 넘어온 파일이 있는 경우 / !file.isEmpty()도 가능
-			String changeName = saveFile(file, request);
-			n.setOriginName(file.getOriginalFilename());
-			n.setChangeName(changeName);
-		}*/
+		if( imp == null || imp == "N" ) { n.setNo_Important("N"); }
+		if( imp == "Y") { n.setNo_Important("Y"); }
 		
 		noticeService.updateNotice(n);
-		
-		/*if(orgChangeName != null) { // 새로 넘어온 파일이 있는데 기존 파일이 있는 경우
-			deleteFile(orgChangeName, request);
-		}*/
-		
-		mv.addObject("No_Num", n.getNo_Num()).setViewName("redirect:detailNotice.do");
+
+		mv.addObject("no_Num", n.getNo_Num()).setViewName("redirect:detailNotice.do");
 		
 		return mv;
 	}

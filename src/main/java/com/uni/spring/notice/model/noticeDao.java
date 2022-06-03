@@ -18,8 +18,10 @@ public class noticeDao {
 		return sqlsession.selectOne("noticeMapper.selectListCount");
 	}
 	
-	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession) {
-		return (ArrayList)sqlsession.selectList("noticeMapper.selectList");
+	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlsession.selectList("noticeMapper.selectList", null, rowBounds);
 	}
 
 	public int insertNotice(SqlSessionTemplate sqlsession, notice n) {
@@ -39,17 +41,15 @@ public class noticeDao {
 		return sqlsession.selectOne("noticeMapper.selectNotice", no_Num);
 	}
 
-	public ArrayList<notice> searchList(SqlSessionTemplate sqlsession, SearchCondition sc) {
-		// TODO Auto-generated method stub
-		return (ArrayList)sqlsession.selectList("noticeMapper.searchList",sc);
-	}
-
-	/*public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+	public ArrayList<notice> searchList(SqlSessionTemplate sqlsession, SearchCondition sc, PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlsession.selectList("noticeMapper.selectList", null, rowBounds);
-	}*/
+		return (ArrayList)sqlsession.selectList("noticeMapper.searchList", sc, rowBounds);
+	}
 
+	public int getsearchList(SqlSessionTemplate sqlsession, SearchCondition sc) {
+		return sqlsession.selectOne("noticeMapper.getListCount", sc);
+	}
 
 
 }

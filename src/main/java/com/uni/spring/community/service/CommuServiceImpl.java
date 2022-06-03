@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.community.model.Community;
 import com.uni.spring.community.model.CommunityDao;
@@ -27,9 +28,9 @@ public class CommuServiceImpl implements CommuService {
 	}
 
 	@Override
-	public ArrayList<Community> selectList() {
+	public ArrayList<Community> selectList(PageInfo pi) {
 		// TODO Auto-generated method stub
-		return communityDao.selectList(sqlsession);
+		return communityDao.selectList(sqlsession, pi);
 	}
 
 	@Override
@@ -62,22 +63,21 @@ public class CommuServiceImpl implements CommuService {
 	}
 
 	@Override
-	public void deleteNotice(int comNum) {
-		int result = communityDao.deleteNotice(sqlsession, comNum);
+	public void deleteCommu(int comNum) {
+		int result = communityDao.deleteCommu(sqlsession, comNum);
 		
 		if(result < 0) {
 			throw new CommException("게시글 삭제 실패");
 		}
 	}
 
-	/*
 	@Override
-	public void updateNotice(notice n) {
-		int result = noticedao.updateNotice(sqlsession, n);
+	public void updateCommu(Community c) {
+		int result = communityDao.updateCommu(sqlsession, c);
 		
 		if(result < 0) {
 			throw new CommException("게시글 수정 실패");
 		}
-	}*/
+	}
 
 }

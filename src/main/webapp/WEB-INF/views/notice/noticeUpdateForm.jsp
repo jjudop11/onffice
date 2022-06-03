@@ -10,6 +10,16 @@
 	#updateForm>table{width:100%;}
     #updateForm>table *{ margin:5px;}
 </style>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+$(document).ready(function(){
+	var check = ${ n.no_Important };
+	if(check == "Y"){
+		$('input:checkbox[id="important_notice"]').attr("checked", true);
+	}
+	console.log(check);
+});
+</script>
 </head>
 <body>
 
@@ -25,7 +35,7 @@
                 <table align="center">
                     <tr>
                         <th><label for="title">제목</label></th>
-                        <td><input type="checkbox" id="important_notice" name="No_Important" value="${ n.no_Important }">중요 !<input type="text" id="title" class="form-control" name="No_Title" value="${ n.no_Title }" required></td>
+                        <td><input type="checkbox" id="important_notice" name="No_Important" value="Y">중요 !<input type="text" id="title" class="form-control" name="No_Title" value="${ n.no_Title }" required></td>
                     </tr>
                     <!-- <tr>
                         <th><label for="upfile">첨부파일</label></th>

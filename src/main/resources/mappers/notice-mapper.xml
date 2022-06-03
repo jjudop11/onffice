@@ -26,19 +26,34 @@
 	<select id="searchList" resultMap="noticeResultSet">
 		select No_Num,No_Title,No_Content, No_Write ,No_Date,No_Important,No_Status,m.M_NAME from notice, member m
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-		<choose>
-			<when test="title != null">>
-			where No_Status='Y' and m.M_No = No_write and No_Title LIKE '%'||#{keyword}||'%'
-			</when>
-			<when test="content != null">>
-			where No_Status='Y' and m.M_No = No_write and No_Content LIKE '%'||#{keyword}||'%'
-			</when>
-			<otherwise>
-			where No_Status='Y' and m.M_No = No_write and No_Title LIKE '%'||#{keyword}||'%' or and No_Content LIKE '%'||#{keyword}||'%'
-			</otherwise>
+			<choose>
+				<when test="title != null">
+				where No_Status='Y' and m.M_No = No_write and No_Title LIKE '%'||#{title}||'%'
+				</when>
+				<when test="content != null">
+				where No_Status='Y' and m.M_No = No_write and No_Content LIKE '%'||#{content}||'%'
+				</when>
+				<when test="titleAndContent != null">
+				where No_Status='Y' and m.M_No = No_write and (No_Title LIKE '%'||#{titleAndContent}||'%' or No_Content LIKE '%'||#{titleAndContent}||'%')
+				</when>
 		</choose>
 		</trim>
 		order by DECODE( No_Important,'Y',1), No_Num desc
+	</select>
+	
+	<select id="getListCount"  parameterType="com.uni.spring.common.SearchCondition" resultType="_int">
+		SELECT COUNT(*)
+		FROM notice
+		WHERE No_Status='Y'
+		<if test="title != null">
+		AND No_Title LIKE '%'||#{title}||'%'
+		</if>
+		<if test="content != null">
+		AND No_Content LIKE '%'||#{content}||'%'
+		</if>
+		<if test="titleAndContent != null">
+		AND (No_Title LIKE '%'||#{titleAndContent}||'%' or No_Content LIKE '%'||#{titleAndContent}||'%')
+		</if>
 	</select>
 	
 	<select id="selectNotice" resultMap="noticeResultSet" parameterType="Notice">
@@ -60,7 +75,7 @@
 	<update id="updateNotice" parameterType="Notice">
 		update notice
 		set No_Title=#{No_Title}, No_Content=#{No_Content}, No_Important=#{No_Important}
-		where No_Num=#{no_Num}
+		where No_Num=#{No_Num}
 	</update>
 	
 </mapper>

@@ -2,6 +2,7 @@ package com.uni.spring.notice.service;
 
 import java.util.ArrayList;
 
+import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.SearchCondition;
 import com.uni.spring.notice.model.notice;
 
@@ -9,7 +10,7 @@ public interface noticeService  {
 
 	int selectListCount();
 
-	ArrayList<notice> selectList();
+	ArrayList<notice> selectList(PageInfo pi);
 
 	void insertNotice(notice n);
 
@@ -19,6 +20,9 @@ public interface noticeService  {
 
 	notice selectNotice(int no_Num);
 
-	ArrayList<notice> searchList(SearchCondition sc);
+	ArrayList<notice> searchList(SearchCondition sc, PageInfo pi);
+
+	int searchListCount(SearchCondition sc);
+
 
 }
