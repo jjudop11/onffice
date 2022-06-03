@@ -86,19 +86,7 @@ public class ChatController {
 		return mv;
 	}
 	
-	// 채팅방 생성
-	@ResponseBody
-	@RequestMapping("chatRoom")
-	public ModelAndView createChatRoom(ModelAndView mv, 
-			@RequestParam(value="crNo", required = false, defaultValue = "1") int crNo){
-		
-		
-		
-		
-		mv.setViewName("chat/chatRoom");
-		
-		return mv;
-	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value="crSelectUserList", produces="application/json; charset=utf-8")
@@ -119,33 +107,46 @@ public class ChatController {
 	
 	@ResponseBody
 	@RequestMapping(value="insertSelectUserList")
-	public int insertSelectUserList(@RequestBody Member[] eList, Model model) {
+	//public int insertSelectUserList(@RequestBody Member[] eList, Model model) {
+	  public int insertSelectUserList(@RequestParam(value="eList[]") ArrayList<String> eList, Model model) {
+		
+		//System.out.println(eList);
+		
+		if(eList.size() > 0) {
+			Member loginUser = (Member)model.getAttribute("loginUser");
+			Member m = new Member();
+			m.setCMNo(loginUser.getMNo());
+			m.setCNo(loginUser.getCNo());
+			for(int i = 0; i < eList.size(); i++){
+			   
+				m.setMNo(eList.get(i));
+				System.out.println("eList.get(i) ================ " + eList.get(i));
+				chatService.insertSelectUserList(m);
+				
+			  }
+			
+			return 1;
+			}
 
+		
+		/*
 	
 		if(eList.length > 0) {
 		Member loginUser = (Member)model.getAttribute("loginUser");
-		
 		Member m = new Member();
 		m.setCMNo(loginUser.getMNo());
 		m.setCNo(loginUser.getCNo());
 		for(Member r: eList){
 		   
 			m.setMNo(r.getMNo());
+			System.out.println("r.getMNo ================ " + r.getMNo());
 			chatService.insertSelectUserList(m);
-			System.out.println("m ================ " + m);
+			
 		  }
-		
-		//Member nm = new Member();
-		
-		//nm.setCNo(loginUser.getCNo());
-		//nm.setMNo(loginUser.getMNo());
-		
-		//ArrayList<Member> mList = chatService.checkedUserList(nm);
-		//System.out.println("mList ================ " + mList);
-	//	return new GsonBuilder().create().toJson(mList);
 		
 		return 1;
 		}
+		*/
 		return 0;
 	}
 	
@@ -183,35 +184,42 @@ public class ChatController {
 		return 1;
 	}
 	
-	/*
-	@MessageMapping("/chat/chatTest")
-    @SendTo("/chat/greetings")
-    public Greeting greeting(Member m) throws Exception{
-		
-		Thread.sleep(100); // delay
-		return new Greeting("Hello, " + HtmlUtils.htmlEscape(m.getMName()) + "!");
-	}
-	*/
+	
 	@RequestMapping("chat")
 	public String EnterChatRoom(Model model, Chat chat) {
 		
-		Member loginUser = (Member)model.getAttribute("loginUser");
+		//Member loginUser = (Member)model.getAttribute("loginUser");
 		
-		Member m = new Member();	
+		//Member m = new Member();	
 		
-		m.setCNo(loginUser.getCNo());
-		m.setMNo(loginUser.getMNo());	
+		//m.setCNo(loginUser.getCNo());
+		//m.setMNo(loginUser.getMNo());	
 		
 		return "/chat/chat";
 	}
 	
-	/*
-	@GetMapping("WebSocketEx")
-	public String WebSocketEx() {
-
-		return "/chat/WebSocketEx";
-	}
-	*/
+	// 채팅방 생성
+		@ResponseBody
+		@RequestMapping("chatRoom/{crNo}")
+		public ModelAndView createChatRoom(ModelAndView mv, Chat chat, Model model){
+			
+			Member loginUser = (Member)model.getAttribute("loginUser");
+			
+			Member m = new Member();	
+			
+			m.setCNo(loginUser.getCNo());
+			m.setMNo(loginUser.getMNo());
+			m.setMName(loginUser.getMName());
+			
+			mv.addObject("m", m);
+			mv.addObject("chat", chat);
+			//System.out.println(m);
+			//System.out.println(chat);
+			mv.setViewName("chat/chat");
+			
+			return mv;
+			
+		}
 	
 		
 }

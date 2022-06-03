@@ -141,15 +141,16 @@
 
 	<div class="cast">
 		<div class="title" style="display:flex; margin:0 0 20px 0">
-			<div class="title1"><h2>채팅방 </h2></div><button class="button" id="createRoom">채팅방 오픈!</button>
+			<div class="title1"><h2>채팅방 </h2></div>
 			<div class="title2"><a data-toggle="modal" data-target="#createCRModal" class="createCR">채팅방 생성</a></div>
 		</div>
 		<hr class="divLine">
   		<table id="boardList">
            
                 <tbody>
-                	<c:forEach items="${ list }" var="b">
+                	<c:forEach items="${ list }" var="b" varStatus="i">
 	                    <tr>
+	                    	
 	                        <td style="padding:10px 0 0 0;"><h5>${ b.crTitle }(${ b.crCount })</h5></td>
 	                        <td>
 								<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-heart" viewBox="0 0 16 16">
@@ -163,9 +164,16 @@
 								</svg>
 	                        </c:if>
 	                   		<td>
-							
+	                   		<td>
+	                   		<form action="<c:url value='chatRoom/${b.crNo}'/>" id="EnrollChatForm${i.index}">
+	                   		<input class="btn btn-primary" id="createRoom" type="submit" value="입장"/>
+							<input type="hidden"  value="${b.crNo}" name="crNo">
+							<input type="hidden"  value="${b.crTitle}" name="crTitle">
+							</form>
+							</td>
+						
 	                    </tr>
-	                    <tr><td colspan=3><hr class="divLine1" ></td></tr>
+	                    <tr><td colspan=5><hr class="divLine1" ></td></tr>
                     </c:forEach>
                 </tbody>
             </table>
@@ -203,7 +211,7 @@
                 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">로그인</button>
+                    <button type="submit" class="btn btn-primary">채팅방 생성</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
                 </div>
             </form>
@@ -242,21 +250,8 @@
     <br clear="both">
     
     <script>
-	
-		// 전화번호 업데이트하는 이벤트
-		$("#createRoom").click(function() {
-			window.name = "parent";
-			// 팝업 url
-			let url = "chatRoom";
-			// 팝업 이름
-			let name = "createChatRoomPopup";
-			// 팝업 속성
-			let option = "width = 450, height = 700, top = 50%, left = 50%, location = no";
-			
-			open(url, name, option);
-						
-		})
-		
+    
+
 		
 			$("#pwCheck").change(checkedchange)
 			function checkedchange(){
@@ -370,7 +365,7 @@
 			 			mNo: mNo		
 			 		}
 					
-			 		eList.push(arr);
+			 		eList.push(mNo);
 				} 
 				
 			}
@@ -386,9 +381,10 @@
 					
 					url : "insertSelectUserList",
 					type : "post",
-					contentType:'application/json; charset=UTF-8',
-					dataType:'json' ,
-					data:JSON.stringify(eList),
+					//contentType:'application/json; charset=UTF-8',
+					//dataType:'json' ,
+					//data:JSON.stringify(eList),
+					data:{eList:eList},
 					
 					
 					success : function (data) {
@@ -398,8 +394,19 @@
 						
 						console.log("json전달 성공")
 						
+						}else{
+							
+							console.log(eList)
 						}
-					}
+					},error:function(request, error){
+			   	   		
+						console.log(JSON.stringify(eList))
+			   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
+			   	   		
+				   		console.log("ajax통신실패");
+				   		//console.log(mList)
+		   		
+						 }
 				})
 			}
 			
