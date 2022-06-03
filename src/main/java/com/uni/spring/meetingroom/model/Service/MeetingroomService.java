@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.meetingroom.model.dto.Meetingroom;
+import com.uni.spring.meetingroom.model.dto.Reserveroom;
 
 public interface MeetingroomService {
 
@@ -27,5 +28,9 @@ public interface MeetingroomService {
 
 	// 회의실 삭제
 	int deleteRooms(String roomNo);
+
+	String selectRoomNo(String selectRoom);
+
+	int reserveRoom(Reserveroom room);
 
 }

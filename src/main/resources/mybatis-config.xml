@@ -26,6 +26,7 @@
       <typeAlias alias="Dept" type="com.uni.spring.dept.model.dto.Dept"/>
       <typeAlias alias="Photo" type="com.uni.spring.member.model.dto.Photo"/>
       <typeAlias alias="Meetingroom" type="com.uni.spring.meetingroom.model.dto.Meetingroom"/>
+      <typeAlias alias="Reserveroom" type="com.uni.spring.meetingroom.model.dto.Reserveroom"/>
       <typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
    </typeAliases>
    

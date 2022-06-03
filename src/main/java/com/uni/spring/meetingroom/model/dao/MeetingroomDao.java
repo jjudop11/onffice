@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.meetingroom.model.dto.Meetingroom;
+import com.uni.spring.meetingroom.model.dto.Reserveroom;
 
 @Repository
 public class MeetingroomDao {
@@ -63,6 +64,16 @@ public class MeetingroomDao {
 	public int deleteRooms(SqlSessionTemplate sqlsession, String roomNo) {
 		// TODO Auto-generated method stub
 		return sqlsession.delete("MeetingroomMapper.deleteRooms", roomNo);
+	}
+
+	public String selectRoomNo(SqlSessionTemplate sqlsession, String selectRoom) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MeetingroomMapper.selectRoomNo", selectRoom);
+	}
+
+	public int reserveRoom(SqlSessionTemplate sqlsession, Reserveroom room) {
+		// TODO Auto-generated method stub
+		return sqlsession.insert("MeetingroomMapper.reserveRoom", room);
 	}
 
 }

@@ -53,4 +53,18 @@
 		WHERE ROOM_NO = #{roomNo}
 	</delete>
 	
+	<!-- 회의실 예약시 회의실번호 찾기 -->
+	<select id="selectRoomNo" parameterType="string" resultType="string">
+		SELECT ROOM_NO
+		FROM MEETINGROOM
+		WHERE ROOM_NAME = #{selectRoom}
+	</select>
+	
+	<insert id="reserveRoom" parameterType="Reserveroom">
+		INSERT INTO RESERVE_ROOM
+		VALUES
+		(SEQ_RESERVE_NO.NEXTVAL, #{roomNo}, #{reserveDate}, #{startTime}, #{endTime}, #{mNo}, #{cNo})	
+	</insert>
+	
+	
 </mapper>

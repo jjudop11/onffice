@@ -40,16 +40,19 @@ for (int i = 0; i < roomList.size(); i++) {
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"
 	integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ=="
 	crossorigin="anonymous" referrerpolicy="no-referrer"></script>  -->
-	
+
 <!-- timepicker -->
-<link rel="stylesheet" type="text/css" href="resources/timepicker-build/jquery.datetimepicker.css">
-<script src="resources/timepicker-build/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+
 
 <!-- fullcalendar -->
 
 <!-- jQuery library -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <!-- Popper JS -->
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -127,14 +130,14 @@ tr, th {
 	width: 58px;
 }
 
-.time{
+.time {
 	height: 38px;
 }
 </style>
 
-
 </head>
-
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <body style="background-color: #F0FFF0">
 
 	<jsp:include page="../common/menubar.jsp" />
@@ -198,40 +201,44 @@ tr, th {
 
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약일</label><br>
-																			<input type="date" id="modal-datePicker" class="datepicker-form">
+																			<input type="date" id="modal-datePicker"
+																				class="datepicker-form">
 																		</div>
 																		<br>
-																		
+
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약시간</label>
-																			<br>
-																			<input type="time" min="07:00" max="21:00" step="1800" class="time" id="startTime" required> 
-																			~ <input type="time" min="07:00" max="21:00" step="1800" class="time" id="endTime">
+																			<br> <input type="time" min="07:00" max="21:00"
+																				step="1800" class="time" id="startTime" required>
+																			~ <input type="time" min="07:00" max="21:00"
+																				step="1800" class="time" id="endTime">
 																		</div>
 																		<br>
-																		
+
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">회의실명</label>
-																			
-													                        <select class="form-select" id="selectRoom" name="selectRoom">
-													                           <c:forEach items="${ roomList }" var="r">
-													                              <option value="${ r.roomName }">${ r.roomName }</option>
-													                           </c:forEach>
-													                        </select>								                     
+
+																			<select class="form-select" id="selectRoom"
+																				name="selectRoom">
+																				<c:forEach items="${ roomList }" var="r">
+																					<option value="${ r.roomName }">${ r.roomName }</option>
+																				</c:forEach>
+																			</select>
 																		</div>
 																		<br>
-																		
+
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약자</label>
-																			<br>
-																			<input type="text" id="reserveUser" value="${ userName } ${ userJob }" readonly>
+																			<br> <input type="text" id="reserveUser"
+																				value="${ userName } ${ userJob }" readonly>
 																		</div>
 																	</form>
 																</div>
 
 																<div class="modal-footer">
 																	<button type="button" class="btn btn-primary"
-																		id="reserveRoom" data-dismiss="modal" onclick="reserveRoom()">확인</button>
+																		id="reserveRoom" data-dismiss="modal"
+																		onclick="reserveRoom()">확인</button>
 																</div>
 															</div>
 														</div>
@@ -298,52 +305,52 @@ tr, th {
 													</table>
 												</div>
 												<button id="btn">칸 확인용</button>
-
-												<input id="datetimepicker" type="text" >
-
-												<br> <br>
-
+												<input type="time" class="timepicker" min="07:00" max="21:00" step=1800>
 
 											</div>
 
-											<!-- 하단 회의실 현황 -->
-											<div id="meetingroomList">
-												<h3 id="roomSetting">회의실 현황</h3>
-												<button class="btn btn-primary" id="roomSetting-button"
-													onclick="location.href='reserve-roomSetting.do'">설정</button>
-												<br> <br>
-												<div class="table-responsive">
-													<table class="table table-bordered mb-0"
-														id="meetingroomView">
-														<thead id="meetingroomView-head">
-															<tr>
-																<th>No</th>
-																<th>MettingRoom</th>
-																<th>Capacity</th>
-																<th>Note</th>
-															</tr>
-														</thead>
-														<tbody>
-															<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
-															<c:forEach items="${ roomList }" var="r">
-																<tr>
-																	<th>${ r.roomNo }</th>
-																	<th>${ r.roomName }</th>
-																	<th>${ r.roomCapa }</th>
-																	<th>${ r.roomNote }</th>
-																</tr>
-															</c:forEach>
-														</tbody>
-													</table>
-													<!-- 페이징 -->
-												</div>
 
+
+										</div>
+
+										<!-- 하단 회의실 현황 -->
+										<div id="meetingroomList">
+											<h3 id="roomSetting">회의실 현황</h3>
+											<button class="btn btn-primary" id="roomSetting-button"
+												onclick="location.href='reserve-roomSetting.do'">설정</button>
+											<br> <br>
+											<div class="table-responsive">
+												<table class="table table-bordered mb-0"
+													id="meetingroomView">
+													<thead id="meetingroomView-head">
+														<tr>
+															<th>No</th>
+															<th>MettingRoom</th>
+															<th>Capacity</th>
+															<th>Note</th>
+														</tr>
+													</thead>
+													<tbody>
+														<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
+														<c:forEach items="${ roomList }" var="r">
+															<tr>
+																<th>${ r.roomNo }</th>
+																<th>${ r.roomName }</th>
+																<th>${ r.roomCapa }</th>
+																<th>${ r.roomNote }</th>
+															</tr>
+														</c:forEach>
+													</tbody>
+												</table>
+												<!-- 페이징 -->
 											</div>
 
 										</div>
+
 									</div>
 								</div>
 							</div>
+						</div>
 					</section>
 				</div>
 			</div>
@@ -359,9 +366,8 @@ tr, th {
 				console.log(datepicker.val(), typeof (datepicker.val()));
 			})
 		})
-		
+
 		//타임피커	
-		
 
 		//회의실 예약 관련...
 		let time_0700 = $("tbody th").eq(1);
@@ -399,27 +405,50 @@ tr, th {
 				console.log(bbb)
 			})
 		})
-		
-		
-		
-		
+
 		//모달 데이터 확인용
-		function reserveRoom(){
+		function reserveRoom() {
 			let date = $("#modal-datePicker").val();
-			console.log(date, typeof(date))
-			
+			console.log(date, typeof (date))
+
 			let startTime = $("#startTime").val();
 			let endTime = $("#endTime").val();
-			console.log(startTime, typeof(startTime), endTime, typeof(endTime));
-			
+			console.log(startTime, typeof (startTime), endTime,
+					typeof (endTime));
+
 			let room = $("#selectRoom").val();
-			console.log(room, typeof(room));
-			
+			console.log(room, typeof (room));
+
 			let user = $("#reserveUser").val();
-			console.log(user, typeof(user));
+			console.log(user, typeof (user));
 		}
-		
-		$("#datetimepicker").datetimepicker();
+
+		$(function() {
+			$("#reserveRoom").click(function() {
+				let date = $("#modal-datePicker").val();
+				let startTime = $("#startTime").val();
+				let endTime = $("#endTime").val();
+				let selectRoom = $("#selectRoom").val();
+
+				$.ajax({
+					url : "reserveRoom.do",
+					data : {
+						date : date,
+						startTime : startTime,
+						endTime : endTime,
+						selectRoom : selectRoom
+					},
+					type : "post",
+					success : function(obj) {
+						alert("예약을 완료하였습니다.");
+						//location.reload();
+					},
+					error : function(error) {
+						alert("예약에 실패하였습니다.");
+					}
+				})
+			})
+		})
 	</script>
 
 	<c:if test="${ !empty msg }">

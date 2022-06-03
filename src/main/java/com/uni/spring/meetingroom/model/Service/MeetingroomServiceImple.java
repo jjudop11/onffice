@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.meetingroom.model.dao.MeetingroomDao;
 import com.uni.spring.meetingroom.model.dto.Meetingroom;
+import com.uni.spring.meetingroom.model.dto.Reserveroom;
 
 @Service
 public class MeetingroomServiceImple implements MeetingroomService {
@@ -72,6 +73,19 @@ public class MeetingroomServiceImple implements MeetingroomService {
 	public int deleteRooms(String roomNo) {
 		// TODO Auto-generated method stub
 		return meetingroomDao.deleteRooms(sqlsession, roomNo);
+	}
+
+	@Override
+	public String selectRoomNo(String selectRoom) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.selectRoomNo(sqlsession, selectRoom);
+	}
+
+	//회의실 예약
+	@Override
+	public int reserveRoom(Reserveroom room) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.reserveRoom(sqlsession, room);
 	}
 
 }
