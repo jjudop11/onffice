@@ -19,10 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.GsonBuilder;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
+import com.uni.spring.common.SearchCondition;
 import com.uni.spring.community.model.Community;
 import com.uni.spring.community.model.Reply;
 import com.uni.spring.community.service.CommuService;
 import com.uni.spring.member.model.dto.Member;
+import com.uni.spring.notice.model.notice;
 
 @Controller
 public class CommuController {
@@ -43,6 +45,38 @@ public class CommuController {
 		model.addAttribute("pi", pi);
 
 		return "community/CommunityListView";
+	}
+	
+	@RequestMapping("searchCommunity.do")
+	public String searchNotice(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, @RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, Model model) {
+
+		SearchCondition sc = new SearchCondition();
+		
+		switch (condition) {
+		case "titleAndContent":
+			sc.setTitleAndContent(keyword);
+			break;
+		case "title":
+			sc.setTitle(keyword);
+			break;
+		case "content":
+			sc.setContent(keyword);
+			break;
+		}
+		
+		int listCount = commuService.searchListCount(sc);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
+		ArrayList<notice> list = commuService.searchList(sc, pi);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("condition", condition);
+		model.addAttribute("listCount",listCount);
+		
+		System.out.println(condition);
+		
+		return "community/CommunitySearchView";
 	}
 	
 	@RequestMapping("enrollFormCommunity.do")

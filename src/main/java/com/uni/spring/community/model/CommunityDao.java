@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.uni.spring.common.PageInfo;
+import com.uni.spring.common.SearchCondition;
+import com.uni.spring.notice.model.notice;
 
 
 @Repository
@@ -47,13 +49,15 @@ public class CommunityDao {
 		return sqlsession.update("CommunityMapper.updateCommunity", c);
 	}
 
-	/*
-	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+	public int getsearchCount(SqlSessionTemplate sqlsession, SearchCondition sc) {
+		return sqlsession.selectOne("CommunityMapper.getsearchCount", sc);
+	}
+
+	public ArrayList<notice> searchList(SqlSessionTemplate sqlsession, SearchCondition sc, PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlsession.selectList("noticeMapper.selectList", null, rowBounds);
-	}*/
-
+		return (ArrayList)sqlsession.selectList("CommunityMapper.searchList", sc, rowBounds);
+	}
 
 
 }

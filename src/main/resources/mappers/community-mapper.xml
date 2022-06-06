@@ -25,6 +25,36 @@
 		where Com_Status='Y'
 	</select>
 	
+	<select id="searchList" resultMap="CommunityResultSet">
+		select * from community
+		where Com_Status='Y'
+		<if test="title != null">
+		AND Com_Title LIKE '%'||#{title}||'%'
+		</if>
+		<if test="content != null">
+		AND Com_Content LIKE '%'||#{content}||'%'
+		</if>
+		<if test="titleAndContent != null">
+		AND (Com_Title LIKE '%'||#{titleAndContent}||'%' or Com_Content LIKE '%'||#{titleAndContent}||'%')
+		</if>
+		order by Com_Num desc
+	</select>
+	
+	<select id="getsearchCount"  parameterType="com.uni.spring.common.SearchCondition" resultType="_int">
+		SELECT COUNT(*)
+		FROM community
+		WHERE Com_Status='Y'
+		<if test="title != null">
+		AND Com_Title LIKE '%'||#{title}||'%'
+		</if>
+		<if test="content != null">
+		AND Com_Content LIKE '%'||#{content}||'%'
+		</if>
+		<if test="titleAndContent != null">
+		AND (Com_Title LIKE '%'||#{titleAndContent}||'%' or Com_Content LIKE '%'||#{titleAndContent}||'%')
+		</if>
+	</select>
+	
 	<select id="selectList" resultType="Community">
 		select * from community
 		where Com_Status='Y'

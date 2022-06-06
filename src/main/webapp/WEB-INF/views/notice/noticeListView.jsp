@@ -33,6 +33,17 @@ input {
 	margin-left: 20px;
 }
 </style>
+ <script>
+  $("#btnSearch").on("click", function(e){
+        e.preventDefault();
+
+        if(!search.find("#keyword").val()){
+            alert("키워드를 입력하세요");
+            return;
+        }
+        search.submit();
+    });
+ </script>
 </head>
 <body>
 
@@ -41,14 +52,6 @@ input {
 	<div id="main">
     <div class="content">
         <div class="innerOuter" style="padding:5% 10%;">
-        <c:choose>
-			<c:when test="${not empty keyword }">
-				<p>
-					<strong>${keyword} </strong>키워드로 검색된
-					<strong>${totalRow }</strong>개의 글이 있습니다.
-				</p>
-			</c:when>
-		</c:choose>
             <h2>공지사항</h2>
             <c:if test="${ session.loginUser.mManager == 'Y' }">
             	<a class="btn btn-secondary" style="float:right" href="enrollFormNotice.do">글쓰기</a>
@@ -65,7 +68,7 @@ input {
 								  </select>
             				</td>
             				<td><input type="text" name="keyword" id="keyword" placeholder="검색어 입력"</td>
-	            			<td><button type="submit" class="btn btn-success" name="btnSearch" id="btnSearch" onclick="getSearchList()">검색</button></td>			
+	            			<td><button type="submit" class="btn btn-success" name="btnSearch" id="btnSearch">검색</button></td>			
 					 		<!-- <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"> -->	
 				  </tr>
 				  </table>

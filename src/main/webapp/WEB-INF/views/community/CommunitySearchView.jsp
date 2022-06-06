@@ -34,7 +34,14 @@ input {
 	<div id="main">
     <div class="content">
         <div class="innerOuter" style="padding:5% 10%;">
-        
+        	<c:choose>
+				<c:when test="${not empty keyword }">
+					<p>
+						<strong>${keyword} </strong>키워드로 검색된
+						<strong>${listCount}</strong>개의 글이 있습니다.
+					</p>
+				</c:when>
+			</c:choose>
             <h2>커뮤니티</h2>
             <a class="btn btn-secondary" style="float:right" href="enrollFormCommunity.do">글쓰기</a>
             <div class="search" style="display: flex;">
