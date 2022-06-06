@@ -3,6 +3,7 @@ package com.uni.spring.approval.model.service;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.uni.spring.approval.model.dto.ApList;
 import com.uni.spring.approval.model.dto.Approval;
 import com.uni.spring.approval.model.dto.ApprovalLine;
 import com.uni.spring.approval.model.dto.DayoffForm;
@@ -28,8 +29,16 @@ public interface ApprovalService {
 
 	ArrayList<Member> selectMemberList(Map<String, Object> memberMap); // 결재선 사원 검색
 
-	int selectListCount(Member m);
+	int selectListCount();
 
-	ArrayList<Approval> selectList(PageInfo pi);
+	ArrayList<ApList> selectList(PageInfo pi, Map<String, Object> listMap);
+
+	DayoffForm selectApprovalOngoingDo(int apNo);
+	
+	ProposalForm selectApprovalOngoingPr(int apNo);
+	
+	PaymentForm selectApprovalOngoingPay(int apNo);
+
+	void deleteApproval(int apNo);
 	
 }

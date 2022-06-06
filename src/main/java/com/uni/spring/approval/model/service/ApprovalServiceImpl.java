@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uni.spring.approval.model.dao.ApprovalDao;
+import com.uni.spring.approval.model.dto.ApList;
 import com.uni.spring.approval.model.dto.Approval;
 import com.uni.spring.approval.model.dto.ApprovalLine;
 import com.uni.spring.approval.model.dto.DayoffForm;
@@ -106,13 +107,39 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int selectListCount(Member m) {
-		return approvalDao.selectListCount(sqlSession, m);
+	public int selectListCount() {
+		return approvalDao.selectListCount(sqlSession);
 	}
 
 	@Override
-	public ArrayList<Approval> selectList(PageInfo pi) {
-		return approvalDao.selectList(sqlSession, pi);
+	public ArrayList<ApList> selectList(PageInfo pi, Map<String, Object> listMap) {
+		return approvalDao.selectList(sqlSession, pi, listMap);
+	}
+
+	@Override
+	public DayoffForm selectApprovalOngoingDo(int apNo) {
+		return approvalDao.selectApprovalOngoingDo(sqlSession, apNo);
+	}
+
+	@Override
+	public ProposalForm selectApprovalOngoingPr(int apNo) {
+		return approvalDao.selectApprovalOngoingPr(sqlSession, apNo);
+	}
+
+	@Override
+	public PaymentForm selectApprovalOngoingPay(int apNo) {
+		return approvalDao.selectApprovalOngoingPay(sqlSession, apNo);
+	}
+
+	@Override
+	public void deleteApproval(int apNo) {
+		
+		int result = approvalDao.deleteApproval(sqlSession, apNo);
+		
+		if(result < 0) {
+			throw new CommException("전자결재문서 삭제 실패");
+		}
+		
 	}
 	
 }

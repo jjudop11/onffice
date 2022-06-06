@@ -1,9 +1,5 @@
 package com.uni.spring.approval.model.dto;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +15,7 @@ import lombok.ToString;
 public class DayoffForm {
 	
 	private int doNo; // 휴가신청번호 
-	private Date doDate; // 작성일 
+	private String doDate; // 작성일 
 	private String doTitle; // 제목 
 	private String doStartDate; // 시작일
 	private String doEndDate; // 종료일 

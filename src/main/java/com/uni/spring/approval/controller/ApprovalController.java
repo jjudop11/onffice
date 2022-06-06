@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.GsonBuilder;
+import com.uni.spring.approval.model.dto.ApList;
 import com.uni.spring.approval.model.dto.Approval;
 import com.uni.spring.approval.model.dto.ApprovalLine;
 import com.uni.spring.approval.model.dto.DayoffForm;
@@ -143,22 +145,65 @@ public class ApprovalController {
 	public String approvalOngoingListView(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model) {
 	
 		Member m = (Member) model.getAttribute("loginUser");
-		System.out.println("CONTROLLER : " + m.getMNo());
-		System.out.println("CONTROLLER : " + m.getCNo());
 		
-		int listCount = approvalService.selectListCount(m);
-		System.out.println("listCount : " + listCount);
-		
+		// 검색한 쿼리, 로그인 유저의 회사번호 Map 에 담기 
+		Map<String, Object> listMap = new HashMap<>();
+		listMap.put("mNo", m.getMNo());
+		listMap.put("cNo", m.getCNo());
+	
+		int listCount = approvalService.selectListCount();
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
-//		ArrayList<Approval> list = approvalService.selectList(pi);
-//		
-//		System.out.println("LIST : " + list);
-//		
-//		model.addAttribute("list", list);
+
+		ArrayList<ApList> list = approvalService.selectList(pi, listMap);
+		
+		System.out.println("LIST : " + list);
+		
+		model.addAttribute("list", list);
 		model.addAttribute("pi", pi);
 		
 		return "approval/approvalOngoingListView";
 	
 	}
-
+	
+	// 결재진행 디테일뷰 이동 
+	@RequestMapping("approvalOngoingDetailView")
+	public ModelAndView approvalOngoingDetailView(int apNo, int foNo, ModelAndView mv) {
+		System.out.println("CONTROLLER : " + apNo);
+		System.out.println("CONTROLLER : " + foNo);
+		
+		if(foNo == 10) {
+			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
+			mv.addObject("dayoffForm", dayoffForm);
+		} else if(foNo == 20) {
+			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
+			mv.addObject("prForm", prForm);
+		} else if(foNo == 30) {
+			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
+			mv.addObject("payForm", payForm);
+		}
+		
+//		FormAtt formAtt = approvalService.selectApprovalOngoingFile(apNo);
+//		mv.addObject("formAtt", formAtt);
+		
+		mv.setViewName("approval/approvalOngoingDetailView");
+		
+		return mv;
+		
+	}
+	
+	// 결재 수정 
+	
+	// 결재 삭제 
+	@RequestMapping("deleteApprovalOngoing.do")
+	public String approvalOngoingDetailView(int apNo, HttpServletRequest request) {
+		
+		approvalService.deleteApproval(apNo);
+		
+//		if(!fileName.equals("")) { // 파일이 빈 문자열이 아니라면 
+//			deleteFile(fileName, request); // 업데이트할때 같이 쓸 딜리트파일 생성 
+//		}
+		
+		return "redirect:approvalOngoingListView.do";
+	}
+	
 }

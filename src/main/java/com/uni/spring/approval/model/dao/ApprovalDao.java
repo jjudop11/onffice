@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.uni.spring.approval.model.dto.ApList;
 import com.uni.spring.approval.model.dto.Approval;
 import com.uni.spring.approval.model.dto.ApprovalLine;
 import com.uni.spring.approval.model.dto.DayoffForm;
@@ -54,14 +55,32 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectMemberList", memberMap);
 	}
 
-	public int selectListCount(SqlSession sqlSession, Member m) {
-		return sqlSession.selectOne("ApprovalMapper.selectListCount", m);
+	public int selectListCount(SqlSession sqlSession) {
+		return sqlSession.selectOne("ApprovalMapper.selectListCount");
 	}
 
-	public ArrayList<Approval> selectList(SqlSession sqlSession, PageInfo pi) {
-		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+	public ArrayList<ApList> selectList(SqlSession sqlSession, PageInfo pi, Map<String, Object> listMap) {
+		
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit(); 
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectList", null, rowBounds);
+		
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectList", listMap, rowBounds);
 	}
 
+	public DayoffForm selectApprovalOngoingDo(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingDo", apNo);
+	}
+
+	public ProposalForm selectApprovalOngoingPr(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingPr", apNo);
+	}
+
+	public PaymentForm selectApprovalOngoingPay(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingPay", apNo);
+	}
+
+	public int deleteApproval(SqlSession sqlSession, int apNo) {
+		return sqlSession.update("ApprovalMapper.deleteApproval");
+	}
+	
 }
