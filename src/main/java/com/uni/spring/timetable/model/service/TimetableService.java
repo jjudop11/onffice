@@ -6,6 +6,12 @@ import com.uni.spring.timetable.model.dto.Timetable;
 
 public interface TimetableService {
 
-	ArrayList<Timetable> selectTimetableList(String mNo);
+	int insertTimetable(Timetable t);
+
+	int deleteTimetable(String tNo);
+
+	int updateTimetable(Timetable t);
+
+	ArrayList<Timetable> selectTimetableListFilter(ArrayList<Timetable> tList);
 
 }

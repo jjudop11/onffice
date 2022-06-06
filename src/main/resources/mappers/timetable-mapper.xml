@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="TimetableMapper">
-
-	<select id="selectTimetableList" parameterType="string" resultType="Timetable">
+	
+	<select id="selectTimetableListFilter" parameterType="ArrayList" resultType="Timetable">
 		SELECT * 
 		FROM TIMETABLE
-		WHERE M_NO = #{mNo}
+		WHERE M_NO = #{list[0].mNo}
+		AND T_START BETWEEN #{list[0].tStart} AND #{list[0].tEnd}
+       	<if test="list[0].tCategory != null">
+	    AND T_CATEGORY IN
+	       	<foreach collection="list" item="item" open="(" close=")" separator=",">
+			#{item.tCategory}
+			</foreach>	
+       	</if>
 	</select>
+	
+	<select id="insertTimetable" parameterType="Timetable">
+		INSERT INTO TIMETABLE 
+		VALUES
+		(SEQ_TIMETABLE.NEXTVAL, #{tTitle}, #{tStart}, #{tEnd}, #{tContent}, #{tCategory}, #{tColor}, #{tAllday}, #{mNo})
+	</select>
+	
+	<select id="deleteTimetable" parameterType="_int">
+		DELETE TIMETABLE
+		WHERE T_NO = ${tNo}
+	</select>
+	
+	<update id="updateTimetable" parameterType="Timetable">
+		UPDATE TIMETABLE
+		SET T_TITLE = #{tTitle}, T_START = #{tStart}, T_END = #{tEnd}, T_CONTENT = #{tContent}, T_CATEGORY = #{tCategory}, T_COLOR = #{tColor}, T_ALLDAY = #{tAllday}
+		WHERE T_NO = ${tNo}
+	</update>
 </mapper>

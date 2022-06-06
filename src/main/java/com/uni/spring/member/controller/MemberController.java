@@ -26,6 +26,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 
@@ -286,7 +288,6 @@ public class MemberController {
 			@RequestParam("address1") String address1, @RequestParam("address2") String address2, 
 			HttpServletRequest request, @RequestParam(name = "file", required = false) MultipartFile file, Model model) {
 		
-		//Member loginUser = (Member)model.getAttribute("loginUser");
 		if(m.getMEntDate().equals(2022-05-24)) {
 			m.setMEntDate(null);
 		}
@@ -549,6 +550,31 @@ public class MemberController {
 		return result;
 		
 	}
-
 	
+	@ResponseBody
+	@PostMapping(value ="/selectSerach",produces = "application/json; charset=utf-8")
+	public String selectSerach(String condition, Model model) {	
+
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		
+		if(condition.equals("job")) {
+			ArrayList<Job> list = jobService.selectJobList(loginUser.getCNo());
+			return new GsonBuilder().create().toJson(list);
+		} else {
+			ArrayList<Dept> list = deptService.selectDeptList(loginUser.getCNo());
+			return new GsonBuilder().create().toJson(list);
+		}
+	}
+	
+	@GetMapping("/searchMemListForm")
+	public String searchMemListForm(String condition, String search, Model model) {	
+		System.out.println(condition);
+		System.out.println(search);
+		model.addAttribute("page", "1");
+		model.addAttribute("condition", condition);
+		model.addAttribute("search", search);
+		
+		return "member/searchMemListForm";
+	}
+
 }
