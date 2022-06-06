@@ -15,4 +15,24 @@ public class TimetableDao {
 		return (ArrayList)sqlsession.selectList("TimetableMapper.selectTimetableList", mNo);
 	}
 
+	public int insertTimetable(SqlSessionTemplate sqlsession, Timetable t) {
+		// TODO Auto-generated method stub
+		return sqlsession.insert("TimetableMapper.insertTimetable", t);
+	}
+
+	public int deleteTimetable(SqlSessionTemplate sqlsession, String tNo) {
+		// TODO Auto-generated method stub
+		return sqlsession.delete("TimetableMapper.deleteTimetable", tNo);
+	}
+
+	public int updateTimetable(SqlSessionTemplate sqlsession, Timetable t) {
+		// TODO Auto-generated method stub
+		return sqlsession.update("TimetableMapper.updateTimetable", t);
+	}
+
+	public ArrayList<Timetable> selectTimetableListFilter(SqlSessionTemplate sqlsession, ArrayList<Timetable> tList) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlsession.selectList("TimetableMapper.selectTimetableListFilter", tList);
+	}
+
 }

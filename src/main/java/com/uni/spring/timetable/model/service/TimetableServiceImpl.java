@@ -19,9 +19,27 @@ public class TimetableServiceImpl implements TimetableService {
 	private TimetableDao timetabelDao;
 
 	@Override
-	public ArrayList<Timetable> selectTimetableList(String mNo) {
+	public int insertTimetable(Timetable t) {
 		// TODO Auto-generated method stub
-		return timetabelDao.selectTimetableList(sqlsession, mNo);
+		return timetabelDao.insertTimetable(sqlsession, t);
+	}
+
+	@Override
+	public int deleteTimetable(String tNo) {
+		// TODO Auto-generated method stub
+		return timetabelDao.deleteTimetable(sqlsession, tNo);
+	}
+
+	@Override
+	public int updateTimetable(Timetable t) {
+		// TODO Auto-generated method stub
+		return timetabelDao.updateTimetable(sqlsession, t);
+	}
+
+	@Override
+	public ArrayList<Timetable> selectTimetableListFilter(ArrayList<Timetable> tList) {
+		// TODO Auto-generated method stub
+		return timetabelDao.selectTimetableListFilter(sqlsession, tList);
 	}
 
 }

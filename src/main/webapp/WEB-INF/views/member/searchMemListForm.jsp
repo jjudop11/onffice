@@ -142,7 +142,7 @@
                         <div class="col-12">
                             <div class="card">
                                 
-                                <h4 class="card-title mt-5">전사원조회</h4>    
+                                <h4 class="card-title mt-5">검색내역조회</h4>    
                                
                                 <div class="card-content mt-5">
                                     <!-- table hover -->
@@ -200,12 +200,21 @@
 		</script>
 		<c:remove var="msg" scope="session"/>
 	</c:if>
+	<!-- 
+	<c:if test="${ !empty page} && ${ !empty condition} && ${ !empty search}">
+		<script>
+			let pageNumm = "${page}";
+	   		let con = "${condition}";
+			let sear = "${search}";
+		</script>
+   	</c:if> -->
     
     <script>
+
     	$(function(){
-    		
-    		selectMemList();
+    		searchMemList(pageNumm, con, sear);
     		contionChange();
+    		
     	});
     	
     	let fil = "";
@@ -303,13 +312,18 @@
 			});
     	}
     	
-    	function selectMemList(pageNum){
-    		
+
+    	function searchMemList(pageNum, con, sear){
+    		console.log(pageNum) // 1
+    		console.log(con)
+    		console.log(sear)
     		$.ajax({
-				url:"selectMemList",
+				url:"searchMemList",
 				type:"post",
 				data:{
-					page: pageNum
+					page: pageNum,
+					condition: condition,
+					search: search
 				},
 	
 				success:function(result){

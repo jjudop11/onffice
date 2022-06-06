@@ -18,9 +18,7 @@
     <link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="resources/assets/css/app.css">
     <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </head>
 
 <body style="background-color:#F0FFF0">
@@ -30,20 +28,7 @@
           <nav class="navbar navbar-expand navbar-light ">
               <div class="container-fluid">
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                      		  
-                          <li class="nav-item dropdown me-1">
-                              <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                                  aria-expanded="false">
-                                  <i class='bi bi-envelope bi-sub fs-4 text-gray-600'></i>
-                              </a>
-                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                  <li>
-                                      <h6 class="dropdown-header">Mail</h6>
-                                  </li>
-                                  <li><a class="dropdown-item" href="#">No new mail</a></li>
-                              </ul>
-                          </li>
+                      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">		 
                           <li class="nav-item dropdown me-1" ><!-- 채팅 아이콘 -->
                               <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
                                   aria-expanded="false">
@@ -129,24 +114,17 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
-                        
-						<li class="sidebar-item  ">
-                            <a href="table.html" class='sidebar-link'>
-                                <i class="bi bi-grid-1x2-fill"></i>
-                                <span>아이콘은 vendors -> bootstrap-icons</span>
-                            </a>
-                        </li>
-						
+
                         <li class="sidebar-item  ">
                             <a href="timetableForm" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                                <i class="bi bi-calendar3"></i>
                                 <span>일정관리</span>
                             </a>
                         </li>
 						
 						<li class="sidebar-item  ">
                             <a href="attendanceForm" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                                <i class="bi bi-person-check"></i>
                                 <span>근태관리</span>
                             </a>
                         </li>
@@ -188,13 +166,6 @@
                                     <a href="roomSetting.do">회의실 관리</a>
                                 </li>
                             </ul>
-                        </li>
-
-                        <li class="sidebar-item  ">
-                            <a href="form-layout.html" class='sidebar-link'>
-                                <i class="bi bi-file-earmark-medical-fill"></i>
-                                <span>Form Layout</span>
-                            </a>
                         </li>
 
                         <li class="sidebar-item  has-sub">
@@ -273,103 +244,19 @@
                                 </li>
                             </ul>
                         </li>
-
-                        <li class="sidebar-item  ">
-                            <a href="ui-file-uploader.html" class='sidebar-link'>
-                                <i class="bi bi-cloud-arrow-up-fill"></i>
-                                <span>File Uploader</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-map-fill"></i>
-                                <span>Maps</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="ui-map-google-map.html">Google Map</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="ui-map-jsvectormap.html">JS Vector Map</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="sidebar-title">관리자접속시</li>
-
-                        <li class="sidebar-item  ">
-                            <a href="application-email.html" class='sidebar-link'>
-                                <i class="bi bi-envelope-fill"></i>
-                                <span>Email Application</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  ">
-                            <a href="application-chat.html" class='sidebar-link'>
-                                <i class="bi bi-chat-dots-fill"></i>
-                                <span>Chat Application</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  ">
-                            <a href="application-gallery.html" class='sidebar-link'>
-                                <i class="bi bi-image-fill"></i>
-                                <span>Photo Gallery</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  ">
-                            <a href="application-checkout.html" class='sidebar-link'>
-                                <i class="bi bi-basket-fill"></i>
-                                <span>Checkout Page</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-person-badge-fill"></i>
-                                <span>Authentication</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="auth-login.html">Login</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="auth-register.html">Register</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="auth-forgot-password.html">Forgot Password</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-x-octagon-fill"></i>
-                                <span>Errors</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="error-403.html">403</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="error-404.html">404</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="error-500.html">500</a>
-                                </li>
-                            </ul>
-                        </li>
                     </ul>
                 </div>
                
             </div>
         </div>
   
+  	    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="resources/assets/js/bootstrap.bundle.min.js"></script>
     <script src="resources/assets/js/pages/dashboard.js"></script>
+    <script src="resources/assets/vendors/choices.js/choices.min.js"></script>
     <script src="resources/assets/js/main.js"></script>
 </body>
 </html>
