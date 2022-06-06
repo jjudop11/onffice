@@ -21,4 +21,8 @@ public interface ChatService {
 
 	Chat selectRoom(int crNo);
 
+	int createChatRoom(Chat chat);
+
+	void insertChatUser(Chat chat, ArrayList<Member> mList, Member m);
+
 }

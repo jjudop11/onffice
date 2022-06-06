@@ -1,6 +1,7 @@
 package com.uni.spring.chat.model.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,37 @@ public class ChatServiceImpl implements ChatService{
 	public void deleteCheckedUser(Member m) {
 		// TODO Auto-generated method stub
 		chatDao.deleteCheckedUser(sqlSession, m);
+		
+	}
+
+	@Override
+	public Chat selectRoom(int crNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int createChatRoom(Chat chat) {
+		int result = chatDao.createChatRoom(sqlSession, chat);
+		return result;
+		
+	}
+	
+
+	@Override
+	public void insertChatUser(Chat chat, ArrayList<Member> mList, Member m) {
+		// TODO Auto-generated method stub
+		
+		
+		for(int i = 0; i < mList.size(); i++){
+			   
+			chat.setMNo(mList.get(i).getMNo());
+			chatDao.insertChatUser(sqlSession, chat);
+		
+		  }
+		
+		chat.setMNo(m.getMNo());
+		chatDao.insertChatUser(sqlSession, chat);
 		
 	}
 
