@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,11 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +34,9 @@ import com.uni.spring.member.model.dto.Member;
 @Controller
 public class ChatController {
 
+	private SimpMessagingTemplate simpMessagingTemplate;
+
+	
 	@Autowired
 	public ChatService chatService;
 	
@@ -50,44 +56,54 @@ public class ChatController {
 		return mv;
 	}
 	
-	
-	@RequestMapping("selectChatRoomList")
-	public ModelAndView selectChatRoomList(ModelAndView mv, Model model) {
-		
+	@RequestMapping("chatRoomListForm")
+	public ModelAndView chatRoomListForm(ModelAndView mv, Model model) {
+
 		Member loginUser = (Member)model.getAttribute("loginUser");
 		
 		if(loginUser == null) {
 			mv.setViewName("member/login");
+		}else{
+			mv.setViewName("chat/chatList");
+		}
+		
+		
+	
+		return mv;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="selectChatRoomList", produces="application/json; charset=utf-8")
+	public String selectChatRoomList(Model model) {
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			return "member/login";
 	
 		}else {
 		
 		// 채팅방 당 참가자 수 구하기
 		ArrayList<Chat> count = chatService.selectCount();
-		
+		System.out.println("count === " + count);
 		ArrayList<Chat> list = chatService.selectChatRoomList();
-		
+		System.out.println("list ========= " + list);
 		for(int i = 0; i < list.size(); i++) {
 			
-			for(int j = 0; j < count.size(); j++) {
-				if(count.get(j).getCrNo() == list.get(i).getCrNo()) {
-					list.get(i).setCrCount(count.get(j).getCrCount());
-				}
+		
+				if(count.get(i).getCrNo() == list.get(i).getCrNo()) {
+					list.get(i).setCrCount(count.get(i).getCrCount());
+	
 				
 			}
 			
+		
 		}
-		
-		mv.addObject("list", list);
-		//System.out.println("list =====  " + list);
-		
-		
-		mv.setViewName("chat/chatList");
-		}
-		return mv;
+		return new GsonBuilder().create().toJson(list);
 	}
 	
-	
-	
+	}
 	@ResponseBody
 	@RequestMapping(value="crSelectUserList", produces="application/json; charset=utf-8")
 	public String selectUserList(Model model){
@@ -184,7 +200,48 @@ public class ChatController {
 		return 1;
 	}
 	
+	@RequestMapping("createChatRoom")
+	//public ModelAndView createChatRoom(ModelAndView mv, Chat chat, @RequestParam(value="eList[]") ArrayList<String> eList, Model model) {
+	public String createChatRoom(ModelAndView mv, Chat chat, Model model) {
 	
+			
+			Member loginUser = (Member)model.getAttribute("loginUser");
+			
+			if(loginUser == null) {
+				
+				return "member/login";
+			}else{
+			
+				long chatNo = new Date().getTime();
+				String orderN = String.valueOf(chatNo).substring(5);
+				chatNo = Long.parseLong(orderN);
+				
+				chat.setCrNo(chatNo);
+				chat.setCrFounderNo(loginUser.getMNo());
+				chat.setCNo(loginUser.getCNo());
+				chatService.createChatRoom(chat);
+				
+				Member m = new Member();	
+				
+				m.setCNo(loginUser.getCNo());
+				m.setMNo(loginUser.getMNo());	
+				ArrayList<Member> mList = chatService.checkedUserList(m);
+				System.out.println("mList.size === " + mList );
+				if(mList.size() > 0) {
+				
+					chatService.insertChatUser(chat, mList,m);
+					return "1";
+				}else {
+					return "0";
+				}
+			
+	
+
+			
+			}
+	}
+	
+	/*
 	@RequestMapping("chat")
 	public String EnterChatRoom(Model model, Chat chat) {
 		
@@ -197,11 +254,13 @@ public class ChatController {
 		
 		return "/chat/chat";
 	}
+	*/
+	
 	
 	// 채팅방 생성
 		@ResponseBody
 		@RequestMapping("chatRoom/{crNo}")
-		public ModelAndView createChatRoom(ModelAndView mv, Chat chat, Model model){
+		public ModelAndView createChatRoom(Chat chat, ModelAndView mv, Model model){
 			
 			Member loginUser = (Member)model.getAttribute("loginUser");
 			
@@ -220,6 +279,14 @@ public class ChatController {
 			return mv;
 			
 		}
-	
+		
+		/*
+		@MessageMapping("/chat/send")
+	    public void sendMsg(Chat message) throws Exception {
+	        String receiver = message.getReceiver();
+	        chatService.saveMessage(message);
+	        simpMessagingTemplate.convertAndSend("/topic/" + receiver,message);
+	    }
+	*/
 		
 }

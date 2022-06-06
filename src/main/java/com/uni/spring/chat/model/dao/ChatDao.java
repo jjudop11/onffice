@@ -42,4 +42,14 @@ public class ChatDao {
 		sqlSession.delete("chatMapper.deleteCheckedUser" , m);
 	}
 
+	public int createChatRoom(SqlSessionTemplate sqlSession, Chat chat) {
+		// TODO Auto-generated method stub
+		return sqlSession.insert("chatMapper.createChatRoom" , chat);
+	}
+
+	public void insertChatUser(SqlSessionTemplate sqlSession, Chat chat) {
+		// TODO Auto-generated method stub
+		sqlSession.insert("chatMapper.insertChatUser" , chat);
+	}
+
 }

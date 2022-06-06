@@ -146,40 +146,14 @@
 		</div>
 		<hr class="divLine">
   		<table id="boardList">
-           
-                <tbody>
-                	<c:forEach items="${ list }" var="b" varStatus="i">
-	                    <tr>
-	                    	
-	                        <td style="padding:10px 0 0 0;"><h5>${ b.crTitle }(${ b.crCount })</h5></td>
-	                        <td>
-								<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-heart" viewBox="0 0 16 16">
-								  <path fill-rule="evenodd" d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
-								</svg>
-							</td>
-	                        <td >
-	                        <c:if test="${ !empty b.crPw }">	                 
-	                        	<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
-								  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-								</svg>
-	                        </c:if>
-	                   		<td>
-	                   		<td>
-	                   		<form action="<c:url value='chatRoom/${b.crNo}'/>" id="EnrollChatForm${i.index}">
-	                   		<input class="btn btn-primary" id="createRoom" type="submit" value="입장"/>
-							<input type="hidden"  value="${b.crNo}" name="crNo">
-							<input type="hidden"  value="${b.crTitle}" name="crTitle">
-							</form>
-							</td>
-						
-	                    </tr>
-	                    <tr><td colspan=5><hr class="divLine1" ></td></tr>
-                    </c:forEach>
+           		<!-- 채팅방 리스트 -->
+                <tbody id="chatList">
+                	
                 </tbody>
             </table>
 	
 
-	 <!-- 로그인 클릭 시 뜨는 모달  -->
+	 <!-- 채팅방 생성 클릭 시 뜨는 모달  -->
     <div class="modal fade" id="createCRModal">
         <div class="modal-dialog modal-fullsize">
             <div class="modal-content modal-fullsize">
@@ -189,29 +163,26 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button> 
             </div>
 
-            <form action="modal1" method="post">
+            <form action="createChatRoom" method="post" id="createChatRoom">
                 <!-- Modal Body -->
                 <div class="modal-body">
                     <label for="crTitle" class="mr-sm-2">그룹명 :</label>
-                    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="그룹명을 입력하세요." id="crTitle" name="crTitle"> <br>
+                    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="그룹명을 입력하세요." id="crTitle" name="crTitle"> 
+                    <div id="crTitleCheck" style="display:none; font-size:0.8em"></div> <br>
                     <label for="userPwd" class="mr-sm-2">초대할 대상 :</label>
                     <a data-toggle="modal" href="#myModal2" class="btn btn-primary" id="inviteUser">추가하기</a>
+                    
                     <!-- 선택된 사원 정보 -->
-                    <div class="form-control mb-2 mr-sm-2">
-                    	<table id="inviteList" class="form-CR_mList" style="width:100%">
-                    		<tr id="inviteList">
-                    			
-                    		</tr>
-                    	</table>
-                    </div><br>
-                    	
+                    <div class="form-control mb-2 mr-sm-2" id="inviteUserList" style="display:flex;"></div>
+                   
+                    <div id="inviteUserCheck" style="display:none; font-size:0.8em"></div> <br>
                     <label for="userPwd" class="mr-sm-2">비밀번호 설정 <input class="" type="checkbox" id="pwCheck"></label>
                     <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="crPw" name="crPw" readOnly>
                 </div>
                 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">채팅방 생성</button>
+                    <button type="button" id="encodeRoom" class="btn btn-primary">채팅방 생성</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
                 </div>
             </form>
@@ -250,9 +221,187 @@
     <br clear="both">
     
     <script>
-    
-
+    	
+    	$(function(){
+    		
+    		console.log("onload 함수 작동")
+    		$.ajax({
+    			
+    			url:"selectChatRoomList",
+    			
+    			success(List){
+    				
+					var value="";
+					
+					$.each(List, function(i, c){
+				
+						value += 
+    				
+						"<tr>" +
+                        "<td style='padding:10px 0 0 0;'><h5>" + c.crTitle+"(" +  c.crCount  +")</h5></td>" +
+                        
+                        "<td><svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chat-heart' viewBox='0 0 16 16'>" +
+							  "<path fill-rule='evenodd' d='M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z'/>" +
+							"</svg></td>" +
+						
+                        "<td id='lockIcon+"+i+"'>" +
+                        "<c:if test='"+c.crPw+" != null'>" +	                 
+                        	<svg style="width:40px; height:40px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+							  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+							</svg>
+                        </c:if>
+							</td>" +
+                   		"<td>" +
+                   		"<form action='<c:url value='chatRoom/"+ c.crNo +"'/>' id='EnrollChatForm"+i+"' method='post'>" +
+                   		"<input class='btn btn-primary' id='createRoom' type='submit' value='입장'/>" +
+						"<input type='hidden'  value='"+c.crNo +"' name='crNo'>" +
+						"<input type='hidden'  value='"+c.crTitle+"' name='crTitle'>" +
+						"</form>" +
+						"</td>" +
+						"</tr>" +
+                    	"<tr><td colspan=5><hr class='divLine1' ></td></tr>"
+                    
+    				
+                    
+                    if(c.crPw != null){
+                    	
+                    	var icon = "<svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-lock-fill' viewBox='0 0 16 16'>" +
+							  	   "<path d='M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z'/>" +
+								   "</svg>";
+									
+						$("#lockIcon"+i).html(icon);			
+						console.log($('#lockIcon'+i).html());
+									
+                    }
+                    	
+					})
+					
+					$('#chatList').html(value);
+					
+					
+					
+				},error:function(request, error){
+		   	   		
 		
+		   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
+		   	   		
+			   		console.log("ajax통신실패");
+			   		//console.log(mList)
+	   		
+					 }
+    				
+    		})
+    		
+    	})
+    		
+    </script>
+
+    <script>
+    		
+    		$("#encodeRoom").click(function(){
+
+    			
+    			var crTitle = $("#createChatRoom input[name=crTitle]").val();
+    			//console.log(crTitle);
+    			var inviteUser = $("#inviteUserList").html();
+    			
+    			if(crTitle == ""){
+    				
+    				CheckCrTitle(1);
+    			}else{
+    				CheckCrTitle(0);
+    			}
+    			
+    			if(inviteUser == ""){
+    				CheckInvUser(1);
+    			}else{
+    				CheckInvUser(0);
+    			}
+    			if(crTitle != "" && inviteUser != ""){
+    				
+    				CreateChatRoom();
+        			
+    			}
+    		})
+    			
+    		function CheckCrTitle(num){
+    			
+    			if(num == 1){
+    				
+    				$('#crTitleCheck').css("color" , "red").text("그룹명을 지정해 주세요.");
+    				$("#crTitleCheck").show();
+    				$("#crTitle").focus();
+    				
+    			}else if(num == 0){
+    				
+    				$("#crTitleCheck").hide();
+    			}
+    			
+    		}
+    			
+    		
+    		function CheckInvUser(num){
+    		
+    			
+    			if(num == 1){
+    				$('#inviteUserCheck').css("color" , "red").text("초대할 대상을 선택해 주세요.");
+    				$("#inviteUserCheck").show();
+    				
+    			}
+    			
+    			else if(num == 0){
+    				$("#inviteUserCheck").hide();
+    			}
+    			
+    		}
+    	
+    		 function CreateChatRoom(){
+    			
+    			if(confirm('채팅방을 생성하시겠습니까?')){
+    				
+    				var crTitle = $('#crTitle').val();
+    				var crPw = $('#crPw').val();
+    				
+    				$.ajax({
+    					
+    					url:"createChatRoom",
+    					type:"post",
+    					data:{
+    						crTitle:crTitle,
+    						crPw:crPw
+    					},
+    					
+    					success(result){
+    						console.log("result ====" + result )
+    						if(result == 1){
+    							
+    							deleteCheckedUser();
+    							
+    						}else if(result == 0){
+    							
+    							alert("채팅방 생성에 실패하였습니다.");
+    							deleteCheckedUser();
+    						}
+    						
+    					},error:function(request, error){
+    			   	   		
+    						
+    			   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
+    			   	   		
+    				   		console.log("채팅방 생성 실패");
+    				   		//console.log(mList)
+    		   		
+    						 }
+    					
+    					
+    				})
+    				
+    			}
+    			
+    		 }	 
+    		
+    
+			// 비밀번호 체크박스 선택 시 바뀌는 이벤트
 			$("#pwCheck").change(checkedchange)
 			function checkedchange(){
 				if($(this).prop("checked")){
@@ -262,34 +411,36 @@
 				}			
 	        }
 			
-	
-			$('.modal').on('hidden.bs.modal', function (e) {
+			// 모달창 종료시 안에 입력된 값들 초기화 시키는 메소드
+			$('.modal').on('hidden.bs.modal', function exitModal(e) {
 				  $(this).find('form')[0].reset()
 				  $('#pwCheck').attr("checked" , false);
 				  $("#crPw").attr("readOnly", true);
-				  
-				  $.ajax({
-					
-					  url:"deleteCheckedUser",
-					  type:"get",
-					  
-					  success : function(data) {
-						  
-						  if(data == 1){
-						  checkedUserList();
-						  }
-						}
-					  
-				  })
-				  
-				  
+				  deleteCheckedUser()
 				});
 			
+			function deleteCheckedUser(crNo){
+				
+				$.ajax({
+				
+				  url:"deleteCheckedUser",
+				  type:"get",
+				  
+				  success : function(data) {
+					  
+					  if(data == 1){
+					  checkedUserList();
+					  }
+					}
+				  
+			  })
+			}
 	</script>
 	 
 	<script>
 	
-	$(function(){
+
+		// 채팅방 생성시 초대할 유저 목록 함수
 		$("#inviteUser").click(function(){
 			//console.log("함수동작확인");
 			$.ajax({
@@ -344,8 +495,8 @@
 				})
 
 		})
-	})
-	
+
+		// 초대할 유저를 목록에 담을 함수
 		$('#selectEnrollUser').click(function(){
 			
 			var mList = $('#listCount').val();
@@ -375,6 +526,7 @@
 			if(eList.length > 0){
 			insertCKUserList(eList);
 			}
+			// 초대할 유저 목록을 controller단에 보내주는 함수
 			function insertCKUserList(eList){
 				
 				$.ajax({
@@ -393,7 +545,7 @@
 						checkedUserList();
 						
 						console.log("json전달 성공")
-						
+						$("#inviteUserCheck").hide();
 						}else{
 							
 							console.log(eList)
@@ -412,6 +564,7 @@
 			
 		})
 		
+		// 선택된 유저를 뿌려주는 함수
 		function checkedUserList(){ 
 		$.ajax({
 					
@@ -427,11 +580,12 @@
 				$.each(mList, function(i, m){
 					
 					value += 
-						"<td><button class='button "+i+"'><span>"+ m.mName +"&nbsp;X</span></button>"
+						"<button id='userList"+i+"'  type='button' class='button' value='"+m.mName+"'></button>" +
+						"<label for='userList"+i+"'>&nbsp;X</label>"
 
 				})
 				
-				$('#inviteList').html(value);
+				$('#inviteUserList').html(value);
 	            //alert("데이터 받기 성공")
 			},error:function(request, error){
 	   	   		
@@ -441,6 +595,8 @@
 		   		console.log("너냐?ajax통신실패");
 
 				 }
+				
+			
 				
 			})
 		}
