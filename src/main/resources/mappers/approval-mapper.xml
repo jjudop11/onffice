@@ -13,6 +13,57 @@
 		<result property="status" column="STATUS"/>
 	</resultMap>
 	
+	<resultMap type="DayoffForm" id="doFormResultSet">
+		<id property="doNo" column="DO_NO"/>
+		<result property="doDate" column="DO_DATE"/>
+		<result property="doTitle" column="DO_TITLE"/>
+		<result property="doStartDate" column="DO_START_DATE"/>
+		<result property="doEndDate" column="DO_END_DATE"/>
+		<result property="doContent" column="DO_CONTENT"/>
+		<result property="apNo" column="AP_NO"/>
+		<result property="foNo" column="FO_NO"/>
+		<result property="mNo" column="M_NO"/>
+		<result property="doType" column="DO_TYPE"/>
+	</resultMap>
+	
+	<resultMap type="ProposalForm" id="prFormResultSet">
+		<id property="prNo" column="PR_NO"/>
+		<result property="prDate" column="PR_DATE"/>
+		<result property="prTitle" column="PR_TITLE"/>
+		<result property="prGoal" column="PR_GOAL"/>
+		<result property="prPlan" column="PR_PLAN"/>
+		<result property="prStartDate" column="PR_START_DATE"/>
+		<result property="prEndDate" column="PR_END_DATE"/>
+		<result property="prPerson" column="PR_PERSON"/>
+		<result property="prAmount" column="PR_AMOUNT"/>
+		<result property="apNo" column="AP_NO"/>
+		<result property="foNo" column="FO_NO"/>
+		<result property="mNo" column="M_NO"/>
+	</resultMap>
+	
+	<resultMap type="PaymentForm" id="payFormResultSet">
+		<id property="payNo" column="PAY_NO"/>
+		<result property="payDate" column="PAY_DATE"/>
+		<result property="payTitle" column="PAY_TITLE"/>
+		<result property="payDay" column="PAY_DAY"/>
+		<result property="payList" column="PAY_LIST"/>
+		<result property="payAmount" column="PAY_AMOUNT"/>
+		<result property="apNo" column="AP_NO"/>
+		<result property="foNo" column="FO_NO"/>
+		<result property="mNo" column="M_NO"/>
+	</resultMap>
+	
+	<resultMap type="ApList" id="apListResultSet">
+		<id property="apNo" column="AP_NO"/>
+		<result property="foNo" column="FO_NO"/>
+		<result property="doTitle" column="DO_TITLE"/>
+		<result property="doDate" column="DO_DATE"/>
+		<result property="mNo" column="M_NO"/>
+		<result property="cNo" column="C_NO"/>
+		<result property="apStatus" column="AP_STATUS"/>
+	</resultMap>
+
+	
 	<!-- 전자결재문서 -->
 	<insert id="insertApproval" parameterType="Approval">
 		INSERT INTO APPROVAL
@@ -38,21 +89,21 @@
 	<insert id="insertDayoffForm" parameterType="DayoffForm">
 		INSERT INTO DAYOFF_FORM
 		VALUES
-		(SEQ_DAYOFF_FORM.NEXTVAL, SYSDATE, #{doTitle}, #{doStartDate}, #{doEndDate}, #{doContent}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo}, #{doType})
+		(SEQ_DAYOFF_FORM.NEXTVAL, TO_CHAR(SYSDATE,'yyyy-MM-dd'), #{doTitle}, #{doStartDate}, #{doEndDate}, #{doContent}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo}, #{doType})
 	</insert>
 	
 	<!-- 사업기획서 -->
 	<insert id="insertProposalForm" parameterType="ProposalForm">
 		INSERT INTO PROPOSAL_FORM
 		VALUES
-		(SEQ_PROPOSAL_FORM.NEXTVAL, SYSDATE, #{prTitle}, #{prGoal}, #{prPlan}, #{prStartDate}, #{prEndDate}, #{prPerson}, #{prAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
+		(SEQ_PROPOSAL_FORM.NEXTVAL, TO_CHAR(SYSDATE,'yyyy-MM-dd'), #{prTitle}, #{prGoal}, #{prPlan}, #{prStartDate}, #{prEndDate}, #{prPerson}, #{prAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
 	</insert> 
 	
 	<!-- 지출결의서 -->
 	<insert id="insertPaymentForm" parameterType="PaymentForm">
 		INSERT INTO PAYMENT_FORM
 		VALUES
-		(SEQ_PAYMENT_FORM.NEXTVAL, SYSDATE, #{payTitle}, #{payDay}, #{payList}, #{payAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
+		(SEQ_PAYMENT_FORM.NEXTVAL, TO_CHAR(SYSDATE,'yyyy-MM-dd'), #{payTitle}, #{payDay}, #{payList}, #{payAmount}, SEQ_APPROVAL.CURRVAL, #{foNo}, #{mNo})
 	</insert> 
 	
 	<!-- 검색한 사원명에 해당하는 정보 -->
@@ -67,28 +118,83 @@
 		ORDER BY A.M_NO DESC
 	</select>
 	
-	<!-- 내가 작성한 진행중인 결재 갯수 -->
+	<!-- 진행 중인 결재 -->
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM APPROVAL
-		WHERE STATUS = 'Y'
-			AND M_NO = #{mNo}
-			AND C_NO = #{cNo}	
-			AND AP_STATUS IS NULL
+		WHERE AP_STATUS IS NULL
 	</select>
 	
-	<!-- 내가 작성한 진행중인 결재 목록 조회 -->
-	<!-- SELECT *
-		FROM APPROVAL
-		WHERE STATUS = 'Y'
-		ORDER BY AP_NO DESC -->
-	<!-- SELECT FO_NO, TITLE, DATE 
-		FROM VIEW_AP -->
-	<select id="selectList" parameterType="Approval">
-		SELECT *
-		FROM APPROVAL
-		WHERE STATUS = 'Y'
-		ORDER BY AP_NO DESC
+	<select id="selectList" parameterType="ApList" resultMap="apListResultSet">
+		SELECT 
+		    B.AP_NO,
+		    B.FO_NO,
+		    B.DO_TITLE,
+		    B.DO_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN DAYOFF_FORM B ON A.AP_NO= B.AP_NO
+		WHERE A.AP_NO = B.AP_NO
+		AND A.AP_STATUS IS NULL
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    C.AP_NO,
+		    C.FO_NO,
+		    C.PR_TITLE,
+		    C.PR_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PROPOSAL_FORM C ON A.AP_NO = C.AP_NO
+		WHERE A.AP_NO = C.AP_NO
+		AND A.AP_STATUS IS NULL
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    D.AP_NO,
+		    D.FO_NO,
+		    D.PAY_TITLE,
+		    D.PAY_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PAYMENT_FORM D ON A.AP_NO = D.AP_NO
+		WHERE A.AP_NO = D.AP_NO
+		AND A.AP_STATUS IS NULL
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+	</select>
+
+	<select id="selectApprovalOngoingDo" parameterType="DayoffForm" resultMap="doFormResultSet">
+		SELECT * 
+		FROM DAYOFF_FORM
+		WHERE AP_NO = #{apNo}
+	</select>
+	
+	<select id="selectApprovalOngoingPr" parameterType="ProposalForm" resultMap="prFormResultSet">
+		SELECT * 
+		FROM PROPOSAL_FORM
+		WHERE AP_NO = #{apNo}
+	</select>
+	
+	<select id="selectApprovalOngoingPay" parameterType="PaymentForm" resultMap="payFormResultSet">
+		SELECT * 
+		FROM PAYMENT_FORM
+		WHERE AP_NO = #{apNo}
+	</select>
+	
+	<!-- 삭제 -->
+	<select id="deleteApproval">
+		UPDATE APPROVAL 
+		SET STATUS = 'N'
+		WHERE AP_NO = #{apNo}
 	</select>
 	
 </mapper>

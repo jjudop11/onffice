@@ -1,9 +1,5 @@
 package com.uni.spring.approval.model.dto;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +15,7 @@ import lombok.ToString;
 public class ProposalForm {
 	
 	private int prNo; // 사업기획번호
-	private Date prDate; // 작성일 
+	private String prDate; // 작성일 
 	private String prTitle; // 프로젝트명 
 	private String prGoal; // 시행목적 
 	private String prPlan; // 운영계획 
