@@ -29,8 +29,19 @@ public interface MeetingroomService {
 	// 회의실 삭제
 	int deleteRooms(String roomNo);
 
+	double selectStartKey(String startTime);
+
+	double selectEndKey(String endTime);
+
+	// 회의실 예약
+	int reserveRoom(Reserveroom room);
+
+	// 회의실 예약시 roomNo 얻기
 	String selectRoomNo(String selectRoom);
 
-	int reserveRoom(Reserveroom room);
+	// 회의실 예약시 이미 예약된 목록 얻기
+	ArrayList<Reserveroom> checkReservedRooms(String roomNo, String date);
+
+	ArrayList<Reserveroom> selectReservedRooms(int cNo, String date);
 
 }

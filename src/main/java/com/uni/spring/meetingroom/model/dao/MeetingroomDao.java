@@ -76,4 +76,35 @@ public class MeetingroomDao {
 		return sqlsession.insert("MeetingroomMapper.reserveRoom", room);
 	}
 
+	public double selectStartKey(SqlSessionTemplate sqlsession, String startTime) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MeetingroomMapper.selectStartKey", startTime);
+	}
+
+	public double selectEndKey(SqlSessionTemplate sqlsession, String endTime) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MeetingroomMapper.selectEndKey", endTime);
+	}
+
+	public ArrayList<Reserveroom> selectReservedRooms(SqlSessionTemplate sqlsession, int cNo, String date) {
+		
+		Reserveroom room = new Reserveroom();
+		room.setCNo(cNo);
+		room.setReserveDate(date);
+	
+		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectReservedRooms", room);
+	}
+
+	public ArrayList<Reserveroom> checkReservedRooms(SqlSessionTemplate sqlsession, String roomNo, String date) {
+		
+		//selectList시 파라미터 두개는 안 넘어감 //체크
+		Reserveroom room = new Reserveroom();
+		room.setRoomNo(roomNo);
+		room.setReserveDate(date);
+		
+		return (ArrayList) sqlsession.selectList("MeetingroomMapper.checkReservedRooms", room);
+	}
+
+	
+
 }

@@ -6,14 +6,18 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 import com.uni.spring.meetingroom.model.Service.MeetingroomService;
@@ -26,7 +30,7 @@ public class MeetingroomController {
 
 	@Autowired
 	MeetingroomService meetingroomService;
-	
+
 	// 회의실 예약 진입
 	@RequestMapping("roomReservation.do")
 	public String roomReservation(HttpSession session, Model model,
@@ -57,11 +61,75 @@ public class MeetingroomController {
 
 	}
 
+	// 회의실 예약시 예약시간 검사 //roomNo, date, cNo, startTime, endTime
+	private boolean isValidTime(String roomNo, String date, int cNo, String startTime, String endTime) {
+		// TODO: connect with database
+
+		// 테스트용 코드 : 10시와 12시에 예약되었다고 가정하고 테스트
+		// 실사용시 예약목록 select 해오면 됨
+		/*
+		 * Reserveroom testRoom = new Reserveroom(); testRoom.setStartTime("10:00");
+		 * testRoom.setEndTime("12:00");
+		 * 
+		 * ArrayList<Reserveroom> reservedRooms = new ArrayList<Reserveroom>();
+		 * reservedRooms.add(testRoom);
+		 */
+		//
+
+		// 해당 날짜의 해당 회의실에 예약된 내역이 없어야 예약 가능
+		// cNo 필요 없는 것 같으므로 체크
+		System.out.println("check ReservedRoom company No : " + cNo);
+		ArrayList<Reserveroom> reservedRooms = meetingroomService.checkReservedRooms(roomNo, date);
+		System.out.println("reservedRooms : " + reservedRooms);
+
+		// 예약 모달에서 입력한 시작시간, 종료시간(String)을 int형으로 변환 //하단 getTime 메소드
+		int startTimeCal = getTime(startTime);
+		int endTimeCal = getTime(endTime);
+
+		// 위에서 룸넘버랑 날짜로 구해온 예약 목록 foreach로 검사, int형 변환
+		for (Reserveroom r : reservedRooms) {
+			int rStartTime = getTime(r.getStartTime());
+			int rEndTime = getTime(r.getEndTime());
+
+			System.out.println("startTimeCal:" + startTimeCal + ", endTimeCal:" + endTimeCal + 
+							   ", rStartCal:" + rStartTime + ", rEndCal:" + rEndTime);
+
+			// 예약된 시작시간 <= 예약할 시작시간 && 예약된 종료시간 > 예약할 시작시간 이거나
+			// 예약된 시작시간 < 예약할 종료시간 && 예약된 종료시간 >= 예약할 종료시간이면
+			if (rStartTime <= startTimeCal && rEndTime > startTimeCal || 
+				rStartTime < endTimeCal && rEndTime >= endTimeCal) {
+				
+				return false;
+			}
+			//return true;
+		}
+        return true;
+	}
+
+	// 시간 변환
+	private static int getTime(String timeString) {
+		
+		//String 타입으로 받은 시간 : 문자 기준으로 잘라서 배열 times에 넣기
+		String[] times = timeString.split(":"); 
+
+		int t1 = Integer.parseInt(times[0]);
+		int t2 = Integer.parseInt(times[1]);
+
+		return t1 * 60 + t2;
+	}
+
+	private static int getCellTime(String timeString) {
+		
+		// 7시가 첫 칸. 7시 * 60분 = 420. 420분 / 30분 = 14
+		return getTime(timeString) / 30 - 14;
+	}
+
 	// 회의실 예약
 	@RequestMapping("reserveRoom.do")
 	@ResponseBody
-	public String reserveRoom(@ModelAttribute Reserveroom room, @RequestParam("date") String date, @RequestParam("startTime") String startTime,
-			@RequestParam("endTime") String endTime, @RequestParam("selectRoom") String selectRoom, HttpSession session, Model model) {
+	public int reserveRoom(@ModelAttribute Reserveroom room, @RequestParam("date") String date,
+			@RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime,
+			@RequestParam("selectRoom") String selectRoom, HttpSession session, Model model) {
 
 		// 예약번호(시퀀스), 회의실번호, 예약일, 시작시간, 종료시간, 예약자사원번호, 회사번호
 
@@ -72,18 +140,120 @@ public class MeetingroomController {
 		String mNo = loginUser.getMNo();
 		// 현재 로그인 유저의 회사번호를 가져와야 함
 		int cNo = loginUser.getCNo();
-		
-		room.setRoomNo(roomNo);
-		room.setReserveDate(date);
-		room.setStartTime(startTime);
-		room.setEndTime(endTime);
-		room.setmNo(mNo);
-		room.setCNo(cNo);
-		
-		int result = meetingroomService.reserveRoom(room);
 
-		//현재 화면에 뿌려줘야 함
-		return new GsonBuilder().create().toJson(room);
+		// 예약시에 회의실번호, 날짜, 회사번호(예약된목록 불러오기용), 시작시간, 종료시간 넘겨서 검사해야함
+		if (!isValidTime(roomNo, date, cNo, startTime, endTime)) {
+
+			//throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 예약된 시간입니다.");
+			//model.addAttribute("msg", "이미 예약된 시간입니다.");
+			//return "meetingroom/roomReservation";
+			return -1;
+			
+		} else {
+			room.setRoomNo(roomNo);
+			room.setReserveDate(date);
+			room.setStartTime(startTime);
+			room.setEndTime(endTime);
+			room.setmNo(mNo);
+			room.setCNo(cNo);
+			
+			//날짜, 시간 체크 후 위배사항 없으면 예약 실행
+			int result = meetingroomService.reserveRoom(room);
+	
+			return result;
+		}
+	
+		// if (startTime endTime ....)
+		// {
+		// return;
+		// }
+		// meetingroomService.reserveRoom(room);
+
+		// 현재 화면에 뿌려줘야 함
+		// return new GsonBuilder().create().toJson(room);
+	}
+
+	// 예약일정 화면에 뿌리기
+	@RequestMapping("reservedRoomList.do")
+	@ResponseBody
+	public String reserveRoomList(@RequestParam("date") String date, HttpSession session) {
+		
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int cNo = loginUser.getCNo();
+
+		//회사번호, 날짜로 예약목록 뽑기
+		ArrayList<Reserveroom> rooms = meetingroomService.selectReservedRooms(cNo, date);
+
+		JsonObject obj = new JsonObject();
+		JsonArray jsonRooms = new JsonArray();
+		
+		ArrayList<Meetingroom> roomList = meetingroomService.selectList(cNo);
+
+		// java 10부터 var 도입
+		// 변수 선언시 타입 생략할 수 있으며, 컴파일러가 타입을 추론함. 지역변수에만 사용 가능.
+		for (var room : roomList) {
+			
+			JsonObject roomObj = new JsonObject();
+			var reservedRoomArray = new JsonArray();
+
+			//회의실 목록 foreach 돌리면서 roomObj에 name값 담고
+			roomObj.addProperty("name", room.getRoomName());
+
+			//예약목록 돌리기
+			for (var reservedRoom : rooms) {
+				// 예약된 회의실명이랑 등록되어있는 회의실명이랑 같으면 
+				if (reservedRoom.getRoomNo().equals(room.getRoomNo())) {
+					System.out.println(reservedRoom.getRoomNo() + " : " + room.getRoomNo());
+
+					var innerArr = new JsonArray();
+
+					//getCellTime으로 시간값 가져와서		
+					int startTime = getCellTime(reservedRoom.getStartTime());
+					int endTime = getCellTime(reservedRoom.getEndTime());
+
+					//배열에 담고
+					innerArr.add(startTime);
+					innerArr.add(endTime);
+
+					//시간 담긴 배열을 또 배열에 담아
+					reservedRoomArray.add(innerArr);
+					System.out.println(reservedRoomArray.toString());
+				}
+			}
+
+			//
+			roomObj.add("times", reservedRoomArray);
+
+			jsonRooms.add(roomObj);
+		}
+
+		obj.add("rooms", jsonRooms);
+
+		var str = obj.toString();
+
+		System.out.println(str);
+		return str;
+	}
+
+	// 회의실 예약 시간 선택기 //이것도 getTime 메소드로 바꿔보기
+	@RequestMapping("timeCheck.do")
+	@ResponseBody
+	public double timeCheck(@RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime) {
+
+		System.out.println("시작시간 : " + startTime);
+		System.out.println("종료시간 : " + endTime);
+
+		// 받아온 시간으로 KEY값 구해와서 계산
+		double startKey = meetingroomService.selectStartKey(startTime);
+		double endKey = meetingroomService.selectEndKey(endTime);
+
+		System.out.println("시작키 : " + startKey);
+		System.out.println("종료키 : " + endKey);
+
+		double result = endKey - startKey;
+
+		return result;
+
 	}
 
 	// 회의실 관리 진입
