@@ -88,4 +88,30 @@ public class MeetingroomServiceImple implements MeetingroomService {
 		return meetingroomDao.reserveRoom(sqlsession, room);
 	}
 
+	@Override
+	public double selectStartKey(String startTime) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.selectStartKey(sqlsession, startTime);
+	}
+
+	@Override
+	public double selectEndKey(String endTime) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.selectEndKey(sqlsession, endTime);
+	}
+
+	@Override
+	public ArrayList<Reserveroom> selectReservedRooms(int cNo, String date){
+		return meetingroomDao.selectReservedRooms(sqlsession, cNo, date);
+	}
+
+	@Override
+	public ArrayList<Reserveroom> checkReservedRooms(String roomNo, String date) {
+		// TODO Auto-generated method stub
+		return meetingroomDao.checkReservedRooms(sqlsession, roomNo, date);
+	}
+
+
+
+
 }

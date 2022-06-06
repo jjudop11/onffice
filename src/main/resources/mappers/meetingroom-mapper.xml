@@ -66,5 +66,31 @@
 		(SEQ_RESERVE_NO.NEXTVAL, #{roomNo}, #{reserveDate}, #{startTime}, #{endTime}, #{mNo}, #{cNo})	
 	</insert>
 	
+	<select id="selectStartKey" parameterType="string" resultType="_double">
+		SELECT TIME_KEY
+		FROM TIME
+		WHERE TIME = #{startTime}
+	</select>
+	
+	<select id="selectEndKey" parameterType="string" resultType="_double">
+		SELECT TIME_KEY
+		FROM TIME
+		WHERE TIME = #{endTime}
+	</select>
+	
+	<select id="selectReservedRooms" parameterType="Reserveroom" resultType="Reserveroom">
+		SELECT ROOM_NO, START_TIME, END_TIME
+		FROM RESERVE_ROOM
+		WHERE C_NO = #{cNo}
+		AND RESERVE_DATE = #{reserveDate}
+	</select>
+	
+	<!-- isValidTime -->
+	<select id="checkReservedRooms" parameterType="Reserveroom" resultType="Reserveroom">
+		SELECT ROOM_NO, START_TIME, END_TIME
+		FROM RESERVE_ROOM
+		WHERE ROOM_NO = #{roomNo}
+		AND RESERVE_DATE = #{reserveDate}
+	</select>
 	
 </mapper>

@@ -178,7 +178,7 @@ tr, th {
 
 												<div>
 													<button type="button" class="btn btn-primary"
-														id="searchDateBtn">조회하기</button>
+														id="searchDateBtn">조회</button>
 												</div>
 
 												<div class="buttons" id="reserve-btn-div">
@@ -213,6 +213,9 @@ tr, th {
 																			~ <input type="time" min="07:00" max="21:00"
 																				step="1800" class="time" id="endTime">
 																		</div>
+																		<div>
+																			<a id="timeCheck"></a>
+																		</div>
 																		<br>
 
 																		<div class="form-reserveRoom">
@@ -238,7 +241,7 @@ tr, th {
 																<div class="modal-footer">
 																	<button type="button" class="btn btn-primary"
 																		id="reserveRoom" data-dismiss="modal"
-																		onclick="reserveRoom()">확인</button>
+																		onclick="reserveRoom()" disabled>확인</button>
 																</div>
 															</div>
 														</div>
@@ -303,49 +306,49 @@ tr, th {
 															</c:forEach>
 														</tbody>
 													</table>
-												</div>
-												<button id="btn">칸 확인용</button>
-												<input type="time" class="timepicker" min="07:00" max="21:00" step=1800>
-
+												</div>							
 											</div>
-
-
-
-										</div>
-
-										<!-- 하단 회의실 현황 -->
-										<div id="meetingroomList">
-											<h3 id="roomSetting">회의실 현황</h3>
-											<button class="btn btn-primary" id="roomSetting-button"
-												onclick="location.href='reserve-roomSetting.do'">설정</button>
-											<br> <br>
-											<div class="table-responsive">
-												<table class="table table-bordered mb-0"
-													id="meetingroomView">
-													<thead id="meetingroomView-head">
-														<tr>
-															<th>No</th>
-															<th>MettingRoom</th>
-															<th>Capacity</th>
-															<th>Note</th>
-														</tr>
-													</thead>
-													<tbody>
-														<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
-														<c:forEach items="${ roomList }" var="r">
+											<br><br>
+											
+											<!-- 하단 회의실 현황 -->
+											<div id="meetingroomList">
+												<h3 id="roomSetting">회의실 현황</h3>
+												<button class="btn btn-primary" id="roomSetting-button"
+													onclick="location.href='reserve-roomSetting.do'">설정</button>
+												<br> <br>
+												<div class="table-responsive">
+													<table class="table table-bordered mb-0"
+														id="meetingroomView">
+														<thead id="meetingroomView-head">
 															<tr>
-																<th>${ r.roomNo }</th>
-																<th>${ r.roomName }</th>
-																<th>${ r.roomCapa }</th>
-																<th>${ r.roomNote }</th>
+																<th>No</th>
+																<th>MettingRoom</th>
+																<th>Capacity</th>
+																<th>Note</th>
 															</tr>
-														</c:forEach>
-													</tbody>
-												</table>
-												<!-- 페이징 -->
+														</thead>
+														<tbody>
+															<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
+															<c:forEach items="${ roomList }" var="r">
+																<tr>
+																	<th>${ r.roomNo }</th>
+																	<th>${ r.roomName }</th>
+																	<th>${ r.roomCapa }</th>
+																	<th>${ r.roomNote }</th>
+																</tr>
+															</c:forEach>
+														</tbody>
+													</table>
+													<!-- 페이징 -->
+												</div>
+
 											</div>
 
+
+
 										</div>
+
+
 
 									</div>
 								</div>
@@ -369,8 +372,8 @@ tr, th {
 
 		//타임피커	
 
-		//회의실 예약 관련...
-		let time_0700 = $("tbody th").eq(1);
+		//회의실 예약 관련
+		/* let time_0700 = $("tbody th").eq(1);
 		let time_0730 = $("tbody th").eq(2);
 		let time_0800 = $("tbody th").eq(3);
 		let time_0830 = $("tbody th").eq(4);
@@ -398,38 +401,58 @@ tr, th {
 		let time_1930 = $("tbody th").eq(26);
 		let time_2000 = $("tbody th").eq(27);
 		let time_2030 = $("tbody th").eq(28);
+		let time_2030_1 = $("tbody th").eq(30); */
 
 		$(function() {
-			$("#btn").click(function() {
-				time_2030.css("background", "plum");
-				console.log(bbb)
+			$("#searchDateBtn").click(function() {
+	
+				let date = $("#datePicker").val();
+
+				$.ajax({
+					url : "reservedRoomList.do",
+					data : {
+						date : date
+					},
+					type : "post",
+					
+					//한글 깨짐 해결하기
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					success : function(data, statusText, jqXHR) {
+						const obj = JSON.parse(data);
+						let offset = 0;
+
+						$("tbody th").css("background", "");
+						
+						for (const room of obj.rooms){
+							
+							for (const time of room.times){
+								for (let i = time[0]; i < time[1]; i++){
+									$("tbody th").eq(i + offset + 1).css("background", "#2146b5");
+								}
+							}
+							
+							offset += 29;
+						}
+
+						//location.reload();
+					},
+					error : function(error) {
+						alert("조회에 실패하였습니다.");
+					}
+				})
+					
 			})
 		})
 
-		//모달 데이터 확인용
-		function reserveRoom() {
-			let date = $("#modal-datePicker").val();
-			console.log(date, typeof (date))
-
-			let startTime = $("#startTime").val();
-			let endTime = $("#endTime").val();
-			console.log(startTime, typeof (startTime), endTime,
-					typeof (endTime));
-
-			let room = $("#selectRoom").val();
-			console.log(room, typeof (room));
-
-			let user = $("#reserveUser").val();
-			console.log(user, typeof (user));
-		}
-
+		//예약하기
+		//날짜 등 데이터 null로 넘어갔으면 입력해달라고 alert 띄우기 
 		$(function() {
 			$("#reserveRoom").click(function() {
 				let date = $("#modal-datePicker").val();
 				let startTime = $("#startTime").val();
 				let endTime = $("#endTime").val();
 				let selectRoom = $("#selectRoom").val();
-
+				
 				$.ajax({
 					url : "reserveRoom.do",
 					data : {
@@ -439,16 +462,72 @@ tr, th {
 						selectRoom : selectRoom
 					},
 					type : "post",
-					success : function(obj) {
-						alert("예약을 완료하였습니다.");
+					
+					//예약 완료시에 datepicker에 현재날짜 고정된채로 화면 reload 필요
+					success: function(result){
+						if(result > 0){
+							alert("예약이 완료되었습니다.");
+						}else if(result == -1){
+							alert("이미 예약된 시간입니다.")
+						}		
+					},
+					error: function(error){
+						alert("예약에 실패하였습니다.")
+					}
+			 	 /* success : function(obj, statusText, jqXHR) {
+						console.log("예약을 완료하였습니다.");
 						//location.reload();
 					},
 					error : function(error) {
-						alert("예약에 실패하였습니다.");
-					}
+						console.log("예약에 실패하였습니다.");
+					} */
 				})
 			})
 		})
+		
+		//종료시간 체크용
+		$(function(){
+			$("#endTime").on("change", function(){
+				console.log($("#endTime").val())
+			})
+		})
+				
+		//예약시작시간보다 종료시간이 작을 수 없음
+		$(function(){
+	
+			let endTimeCheck = $("#endTime"); //종료시간이 선택 될 때 이벤트 발생시키기
+			
+			endTimeCheck.on("change", function(){			
+				let startTime = $("#startTime").val();
+				let endTime = $("#endTime").val();
+				
+				$.ajax({
+					url: "timeCheck.do",
+					data: {
+						startTime: startTime,
+						endTime: endTime						
+					},
+					type: "post",
+					success:function(result){
+						if(result > 0){
+							console.log("OK")
+							$("#reserveRoom").attr("disabled", false)
+						}else if(result == 0){
+							alert("시작시간과 종료시간은 같을 수 없습니다.")
+							$("#reserveRoom").attr("disabled", false)
+						}else{
+							alert("종료시간은 시작시간보다 빠를 수 없습니다.")
+							$("#reserveRoom").attr("disabled", true)
+						}
+					},
+					error: function(){
+						console.log("ajax 통신 실패")
+					}
+				})
+			})
+			
+		}) 
+			
 	</script>
 
 	<c:if test="${ !empty msg }">
