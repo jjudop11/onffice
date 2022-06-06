@@ -58,15 +58,17 @@ public class noticeController {
 		
 		int listCount = noticeService.searchListCount(sc);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
-		ArrayList<notice> list; 
-		list= noticeService.searchList(sc, pi);
+		ArrayList<notice> list = noticeService.searchList(sc, pi);
 		
 		model.addAttribute("list", list);
 		model.addAttribute("pi", pi);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("condition", condition);
+		model.addAttribute("listCount",listCount);
 		
-		return "notice/noticeListView";
+		System.out.println(condition);
+		
+		return "notice/noticeSearchView";
 	}
 	
 	@RequestMapping("enrollFormNotice.do")

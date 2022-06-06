@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uni.spring.common.PageInfo;
+import com.uni.spring.common.SearchCondition;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.community.model.Community;
 import com.uni.spring.community.model.CommunityDao;
 import com.uni.spring.community.model.Reply;
+import com.uni.spring.notice.model.notice;
 
 @Service
 public class CommuServiceImpl implements CommuService {
@@ -78,6 +80,16 @@ public class CommuServiceImpl implements CommuService {
 		if(result < 0) {
 			throw new CommException("게시글 수정 실패");
 		}
+	}
+
+	@Override
+	public int searchListCount(SearchCondition sc) {
+		return communityDao.getsearchCount(sqlsession, sc);
+	}
+
+	@Override
+	public ArrayList<notice> searchList(SearchCondition sc, PageInfo pi) {
+		return communityDao.searchList(sqlsession, sc, pi);
 	}
 
 }
