@@ -195,4 +195,16 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Override
+	public int searchMemListCount(Member m) {
+		// TODO Auto-generated method stub
+		return memberDao.searchMemListCount(sqlsession, m);
+	}
+
+	@Override
+	public ArrayList<Member> searchMemList(PageInfo pi, Member m) {
+		// TODO Auto-generated method stub
+		return memberDao.searchMemList(sqlsession, pi, m);
+	}
+
 }

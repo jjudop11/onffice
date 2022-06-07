@@ -187,6 +187,15 @@
 				                                        </div>
 				                                    </div>
 				                                </div>
+				                                <div class="card">
+				                                    <div class="card-content">
+				                                        <div class="card-body1">
+				                                            <h4 class="card-title mt-4">결근사원</h4>
+				                                             <br>
+				                                            <h1 class="card-text" id="rCount">0</h1>
+				                                        </div>
+				                                    </div>
+				                                </div>
 				                            </div>
 				                        </div>
 				                        <div class="row match-height">
@@ -575,6 +584,7 @@
 					$("#aCount").text(result.aCount)
 					$("#wCount").text(result.wCount);
 					$("#lCount").text(result.lCount);
+					$("#rCount").text(parseInt(result.aCount - result.wCount - result.lCount));
 					
 				},
 				error:function(){

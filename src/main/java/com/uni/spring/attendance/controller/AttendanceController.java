@@ -177,50 +177,6 @@ public class AttendanceController {
 	public String managerAttendance(Model model) {
 		return "member/managerAttendanceForm";
 	}
-	/*
-	@GetMapping("/managerAttendance")
-	public String managerAttendance(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, Model model) {	
-		
-		Member m = (Member) model.getAttribute("loginUser");
-		
-		int aListCount = attendanceService.selectAttendanceACount(m.getCNo());	
-		int mListCount = memberService.selectMemListCount(m.getCNo());
-		
-		PageInfo pi = Pagination.getPageInfo(mListCount, currentPage, 10, 10);
-		ArrayList<Attendance> list = attendanceService.selectAttendanceCountList(pi,m.getCNo());
-		PageInfo pi2 = Pagination.getPageInfo(mListCount, currentPage, 10, 10);
-		ArrayList<Member> mList = memberService.selectMemList(pi2, m.getCNo());
-		
-		for(Member mem : mList) {
-			for (Attendance a : list) {
-				if(mem.getMNo().equals(a.getMNo())) {
-					mem.setAAtime(a.getAAtime().substring(10));
-					mem.setALtime(a.getALtime().substring(10));
-					
-					if(a.getAWtime() != null) {
-						if(Integer.parseInt(a.getAWtime()) > 32400) {
-							a.setAWtime(String.valueOf(Integer.parseInt(a.getAWtime()) - 3600)); 
-						}
-						int hour = Integer.parseInt(a.getAWtime())/(60*60);
-				        int minute = Integer.parseInt(a.getAWtime())/60-(hour*60);
-				        int second = Integer.parseInt(a.getAWtime())%60;
-				        mem.setAWtime(String.format("%02d",hour)+":"+String.format("%02d",minute)+":"+String.format("%02d",second)); 
-					}
-					
-					mem.setAState(a.getAState());
-				}
-				System.out.println(a);
-			}
-			System.out.println(mem);
-		}
-		
-		System.out.println(pi2);
-		model.addAttribute("mList", mList);
-		model.addAttribute("pi", pi2);
-		return "member/managerAttendanceForm";
-
-	}
-	*/
 	
 	@ResponseBody
 	@PostMapping(value ="/selectAttendanceCount",produces = "application/json; charset=utf-8")
@@ -376,6 +332,52 @@ public class AttendanceController {
 		result.put("endpage",  pi.getEndPage());
 		result.put("maxpage",  pi.getMaxPage());
 		return result;
+		
+	}
+	
+	@ResponseBody
+	@PostMapping(value ="/searchAttendanceList",produces = "application/json; charset=utf-8")
+	public Map<String, Object> searchAttendanceList(@RequestParam(value = "page", defaultValue = "1", required = false) int page, String start, String end, Model model) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member m = (Member) model.getAttribute("loginUser");
+		Attendance a = Attendance.builder()
+				.aAtime(start) // 시작일
+				.aLtime(end) // 종료일
+				.mNo(m.getMNo())
+				.build();
+		
+		int mListCount = attendanceService.searchAttendanceListCount(a);
+		PageInfo pi = Pagination.getPageInfo(mListCount, page, 10, 5);
+		ArrayList<Attendance> list = attendanceService.searchAttendanceList(pi, a);
+		
+		for (Attendance at : list) {
+			if(at.getAWtime() != null) {
+				int hour = Integer.parseInt(at.getAWtime())/(60*60);
+		        int minute = Integer.parseInt(at.getAWtime())/60-(hour*60);
+		        int second = Integer.parseInt(at.getAWtime())%60;
+		        at.setAWtime(String.format("%02d",hour)+":"+String.format("%02d",minute)+":"+String.format("%02d",second));
+			}
+		}
+		result.put("list", list);
+		result.put("page",  pi.getCurrentPage());
+		result.put("startpage",  pi.getStartPage());
+		result.put("endpage",  pi.getEndPage());
+		result.put("maxpage",  pi.getMaxPage());
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping(value ="/monthCount",produces = "application/json; charset=utf-8")
+	public String monthCount(Model model) {
+		
+		Member m = (Member) model.getAttribute("loginUser");
+		
+		Attendance a = attendanceService.MonthCount(m.getMNo());
+		System.out.println("==============================="+a);
+		return new GsonBuilder().create().toJson(a);
 		
 	}
 

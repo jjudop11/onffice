@@ -344,8 +344,7 @@
                                    </div>
                                </div>
                                <div class="col-12">
-
-                                   <div class="form-group has-icon-left">
+									<div class="form-group has-icon-left">
                                        <label class="col-xs-4" for="edit-start">시작일</label>
                                        <div class="position-relative">
                                            <input type="text" class="form-control" type="text" name="edit-start" id="edit-start">

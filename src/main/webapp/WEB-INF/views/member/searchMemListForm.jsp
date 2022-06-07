@@ -167,12 +167,12 @@
 							            <form class="searchArea" align="center" action="searchMemListForm" method="get" >
 							            	<div id="searchcondition">
 												<select id="condition" name="condition" style="height:38px">
-										        	<option value="no">사번</option>
-										       		<option value="name">이름</option>
-										       		<option value="dept">부서</option>
-										       		<option value="job">직급</option>
+										        	<option value="no" ${ (condition eq 'no') ? "selected" : "" }>사번</option>
+										       		<option value="name" ${ (condition eq 'name') ? "selected" : "" }>이름</option>
+										       		<option value="dept" ${ (condition eq 'dept') ? "selected" : "" }>부서</option>
+										       		<option value="job" ${ (condition eq 'job') ? "selected" : "" }>직급</option>
 										        </select>
-										        <input type="search" id="search" name="search" value="" placeholder=" 🔎 검색어 입력" style="height:38px"/>
+										        <input type="search" id="search" name="search" value="${search}" placeholder=" 🔎 검색어 입력" style="height:38px"/>
 										        <button class="btn btn-secondary" type="submit">검색</button>
 									        </div>
 								  		</form>
@@ -200,22 +200,24 @@
 		</script>
 		<c:remove var="msg" scope="session"/>
 	</c:if>
-	<!-- 
-	<c:if test="${ !empty page} && ${ !empty condition} && ${ !empty search}">
-		<script>
-			let pageNumm = "${page}";
-	   		let con = "${condition}";
-			let sear = "${search}";
-		</script>
-   	</c:if> -->
-    
-    <script>
 
+    <script>
+    
+		var pageNum = "";
+		var con = "${condition}";
+		var no = "${condition}";
+		var name = "${condition}";
+		var dept = "${condition}";
+		var job = "${condition}";
+		var sear = "${search}";
+		
     	$(function(){
-    		searchMemList(pageNumm, con, sear);
+    	
+    		searchMemList(pageNum, con, sear);
     		contionChange();
     		
     	});
+
     	
     	let fil = "";
     	function contionChange() {
@@ -314,26 +316,26 @@
     	
 
     	function searchMemList(pageNum, con, sear){
-    		console.log(pageNum) // 1
-    		console.log(con)
-    		console.log(sear)
+			console.log(no)
     		$.ajax({
 				url:"searchMemList",
-				type:"post",
+				type:"get",
 				data:{
 					page: pageNum,
-					condition: condition,
-					search: search
+					condition: con,
+					search: sear
 				},
 	
 				success:function(result){
-					console.log(result)
+
 					let v= '';
 					let b = '';
 		            let page = result.page; // 현재페이지
 		            let startpage = result.startpage; // 시작페이지
 		            let endpage = result.endpage; // 끝페이지
 		            let maxpage = result.maxpage; // 최대페이지
+		            let c = result.c;
+		           	let s = result.s;
 
 		            for(var i in result.list) {
 		            	
@@ -358,21 +360,21 @@
 					
 					b += '<ul class="pagination">';
 					if(page != 1) {
-						b += '<li class="page-item"><a class="page-link" onclick="selectMemList('+ parseInt(page-1) + ');" class="page-btn">Previous</a></li>'
+						b += '<li class="page-item"><a class="page-link" onclick="searchMemList('+ parseInt(page-1) +','+c+','+s+');" class="page-btn">Previous</a></li>'
 					} else {
 						b += '<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>'
 					}
                 	
                 	for(var num = startpage; num <= endpage; num++) {
                 		if(num != page) {
-                			b += '<li class="page-item"><a class="page-link" onclick="selectMemList('+ num + ');" class="page-btn">'+num+'</a></li>'
+                			b += '<li class="page-item"><a class="page-link" onclick="searchMemList('+ num + ','+c+','+s+');" class="page-btn">'+num+'</a></li>'
                 		} else {
                 			b += '<li class="page-item disabled"><a class="page-link" href="">'+num+'</a></li>'
                 		}
                 	}
                     
                 	if(page != maxpage) {
-						b += '<li class="page-item"><a class="page-link" onclick="selectMemList('+ parseInt(page+1) + ');" class="page-btn">Next</a></li>'
+						b += '<li class="page-item"><a class="page-link" onclick="searchMemList('+ parseInt(page+1) + ','+c+','+s+');" class="page-btn">Next</a></li>'
 					} else {
 						b += '<li class="page-item disabled"><a class="page-link" href="">Next</a></li>'
 					}
@@ -386,7 +388,7 @@
 		    		});
 				},
 				error:function(){
-					console.log("전체사원리스트 조회 ajax 통신 실패");
+					console.log("검색리스트 조회 ajax 통신 실패");
 				}
 			});
     		

@@ -179,6 +179,7 @@
                               </div>
                           </div>
 		                </div>
+		                <div id="idResult"></div>
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">이름</label>
                           <div class="position-relative">
@@ -235,7 +236,7 @@
 						  <input type="text" name="address2" class="form-control postcodify_extra_info"  size="30" required>
 		               </div>
 		                <div class="mt-3 mb-3 float-right" id="final">
-						<button type="submit" class="btn btn-outline-primary">등록</button>
+						<button type="submit" class="btn btn-outline-primary" id="save" disabled>등록</button>
 						</div>
 		              </div>
 		            </form>   
@@ -265,12 +266,48 @@
 	</c:if>
     <script>
     	$(function(){
-    		
+    		// 사진첨부 화면출력
 			$('#imgreset').click(function(){			
 				$("#imgThum").html(""); 
 				$("#space").attr("src","resources/assets/images/faces/1.jpg"); 
 				$("#space").show();
     		})
+    		// 사진첨부 유효성체크
+			$("#save").click(function(){
+				if($("#file").val() == ""){
+			        alert("사진 파일을 첨부해 주세요");
+			    }
+			})
+		    // ID 중복 체크
+    		let idCheck = $("#insertForm input[name=mId]");
+			
+			idCheck.keyup(function(){
+				
+				if(idCheck.val().length >= 5){ // 5글자 이상 중복체크
+					
+					$.ajax({
+						url:"idCheck",
+						data:{id:idCheck.val()},
+						type:"post",
+						success:function(result) {
+							if(result > 0){ //   count > 0 중복된 아이디 존재
+								$("#idResult").text("중복된 아이디가 존재합니다").css("color", "red");
+								$("#save").attr("disabled", true);
+							}else{
+								$("#idResult").text("사용가능한 아이디 입니다").css("color", "green");
+								$("#save").attr("disabled", false);
+							}
+						},
+						error:function() {
+							console.log("아이디 중복체크용 ajax 통신 실패");
+						}
+					});
+					
+				} else {
+					$("#idResult").text("5글자 이상 작성하세요").css("color", "red");
+					$("#save").attr("disabled", true);
+				}
+			})
     		
     	})
     	

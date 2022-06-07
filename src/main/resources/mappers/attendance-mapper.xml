@@ -101,4 +101,28 @@
 		ORDER BY 1
 	</select>
 	
+	<select id="searchAttendanceListCount" parameterType="Attendance" resultType="_int">
+		SELECT count(M_NO)
+		FROM ATTENDANCE
+		WHERE A_ENT_DATE BETWEEN #{aAtime} AND #{aLtime}
+		AND M_NO = #{mNo}
+	</select>
+	
+	<select id="searchAttendanceList" parameterType="Attendance" resultType="Attendance">
+		SELECT M_NO, A_ENT_DATE, A_ATIME, A_LTIME, A_WTIME, A_STATE
+		FROM ATTENDANCE
+		WHERE A_ENT_DATE BETWEEN #{aAtime} AND #{aLtime}
+		AND M_NO = #{mNo}
+		ORDER BY A_ENT_DATE
+	</select>
+	
+	<select id="MonthCount" parameterType="Attendance" resultType="Attendance">
+		SELECT A.M_NO, COUNT(B.A_STATE) "aCount", SUM(DECODE(B.A_STATE, '정상출근', 1, 0)) "wCount", SUM(DECODE(B.A_STATE, '지각', 1, 0)) "lCount"
+		FROM MEMBER A
+		LEFT JOIN ATTENDANCE B on A.M_NO = B.M_NO
+		WHERE substr(B.A_ENT_DATE,0,7) = to_char(SYSDATE,'yyyy-mm')
+        AND A.M_NO = #{mNo}
+        GROUP BY A.M_NO
+	</select>
+	
 </mapper>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.uni.spring.attendance.model.dto.Attendance;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.dept.model.dto.Dept;
@@ -41,5 +42,9 @@ public interface MemberService {
 	void updatePhoto(Photo p);
 
 	Member findPwd(Member m);
+
+	int searchMemListCount(Member m);
+
+	ArrayList<Member> searchMemList(PageInfo pi, Member m);
 
 }
