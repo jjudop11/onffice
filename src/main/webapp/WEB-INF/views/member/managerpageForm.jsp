@@ -304,7 +304,7 @@
     	}
     	
     	function selectMemList(pageNum){
-    		
+
     		$.ajax({
 				url:"selectMemList",
 				type:"post",

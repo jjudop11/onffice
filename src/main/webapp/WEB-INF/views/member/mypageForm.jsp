@@ -200,7 +200,7 @@
 						  <input type="text" name="address2" class="form-control postcodify_extra_info"  value="${ address2 }">
 		               </div>
 		                <div class="mt-3 mb-3 float-right" id="final">
-						<button type="submit" class="btn btn-outline-primary">수정</button>
+						<button type="submit" class="btn btn-primary">수정</button>
 						</div>
 		              </div>
 		            </form>

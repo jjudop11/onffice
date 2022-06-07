@@ -85,12 +85,6 @@ public class AttendanceServiceImpl implements AttendanceService {
 	}
 
 	@Override
-	public ArrayList<Attendance> selectAttendanceCountList(int cNo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public ArrayList<Attendance> selectAttendanceAllM(int cNo) {
 		// TODO Auto-generated method stub
 		return attendanceDao.selectAttendanceAllM(sqlsession, cNo);
@@ -108,7 +102,22 @@ public class AttendanceServiceImpl implements AttendanceService {
 		return attendanceDao.selectAttendanceMList(sqlsession, mList);
 	}
 
+	@Override
+	public ArrayList<Attendance> searchAttendanceList(PageInfo pi, Attendance a) {
+		// TODO Auto-generated method stub
+		return attendanceDao.searchAttendanceList(sqlsession, pi, a);
+	}
 
+	@Override
+	public int searchAttendanceListCount(Attendance a) {
+		// TODO Auto-generated method stub
+		return attendanceDao.searchAttendanceListCount(sqlsession, a);
+	}
 
+	@Override
+	public Attendance MonthCount(String mNo) {
+		// TODO Auto-generated method stub
+		return attendanceDao.MonthCount(sqlsession, mNo);
+	}
 	
 }

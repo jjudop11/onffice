@@ -95,4 +95,16 @@ public class MemberDao {
 		return sqlsession.selectOne("MemberMapper.findPwd", m);
 	}
 
+	public int searchMemListCount(SqlSessionTemplate sqlsession, Member m) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MemberMapper.searchMemListCount", m);
+	}
+
+	public ArrayList<Member> searchMemList(SqlSessionTemplate sqlsession, PageInfo pi, Member m) {
+		// TODO Auto-generated method stub
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlsession.selectList("MemberMapper.searchMemList", m, rowBounds);
+	}
+
 }

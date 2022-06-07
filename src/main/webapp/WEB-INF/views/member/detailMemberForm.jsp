@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="resources/full/css/timepicker.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
     <style>
 	body{
 	    background: #f5f5f5;
@@ -314,6 +316,17 @@
 	
     <script>
     	$(function(){
+        	
+        	$("#mEntDate, #mHireDate").datepicker({
+    		    dateFormat:'yy-mm-dd',
+    		    monthNamesShort:[ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월' ],
+    			dayNamesMin:[ '일', '월', '화', '수', '목', '금', '토' ],
+    			changeMonth:true,
+    			changeYear:true,
+    			showMonthAfterYear:true,
+    			autoclose: true,
+    			todayHighlight: true
+    		 });
     		
     		$('#delete').click(function(){
     			
@@ -357,6 +370,9 @@
             reader.readAsDataURL(event.target.files[0]); // 바이너리 파일을 Base64 Encode 문자열로 반환
         }
     </script>
+   	<script src="resources/full/js/moment.min.js"></script>
+ 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="resources/full/js/timepicker.js"></script>
 </body>
 
 </html>

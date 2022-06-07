@@ -155,7 +155,7 @@
 		                <div id="newPwd2Result"></div>
 		                
 		                <div class="mt-3 mb-3 float-right" id="final">
-						<button type="submit" class="btn btn-outline-primary" disabled id="save">수정</button>
+						<button type="submit" class="btn btn-primary" disabled id="save">수정</button>
 						</div>
 		              </div>
 		            </form>

@@ -20,8 +20,6 @@ public interface AttendanceService {
 
 	Attendance selectAttendanceCount(int cNo);
 
-	ArrayList<Attendance> selectAttendanceCountList(int cNo);
-
 	int selectAttendanceACount(int cNo);
 
 	ArrayList<Attendance> selectAttendanceCountList(PageInfo pi, int cNo);
@@ -31,5 +29,11 @@ public interface AttendanceService {
 	ArrayList<Attendance> selectAttendanceWList(PageInfo pi, int cNo);
 
 	ArrayList<Attendance> selectAttendanceMList(PageInfo pi, ArrayList<Member> mList);
+
+	ArrayList<Attendance> searchAttendanceList(PageInfo pi, Attendance a);
+
+	int searchAttendanceListCount(Attendance a);
+
+	Attendance MonthCount(String mNo);
 
 }

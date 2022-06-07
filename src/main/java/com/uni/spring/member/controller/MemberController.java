@@ -567,14 +567,64 @@ public class MemberController {
 	}
 	
 	@GetMapping("/searchMemListForm")
-	public String searchMemListForm(String condition, String search, Model model) {	
+	public String searchMemListForm(@RequestParam(value="page" , required = false, defaultValue = "1") int page, String condition, String search, Model model) {	
 		System.out.println(condition);
 		System.out.println(search);
-		model.addAttribute("page", "1");
+
 		model.addAttribute("condition", condition);
 		model.addAttribute("search", search);
 		
 		return "member/searchMemListForm";
+	}
+	
+	@ResponseBody
+	@GetMapping(value ="/searchMemList",produces = "application/json; charset=utf-8")
+	public Map<String, Object> searchMemList(@RequestParam(value="page" , required = false, defaultValue = "1") int page, String condition, String search, Model model) {	
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		Member m = null;
+		int listCount = 0;
+		if(condition.equals("no")) {
+			m = Member.builder()
+					.mNo(search)
+					.cNo(loginUser.getCNo())
+					.build();
+			listCount = memberService.searchMemListCount(m);
+		} else if (condition.equals("name")) {
+			m = Member.builder()
+					.mName(search)
+					.cNo(loginUser.getCNo())
+					.build();
+			listCount = memberService.searchMemListCount(m);
+		} else if (condition.equals("job")) {
+			m = Member.builder()
+					.jName(search)
+					.cNo(loginUser.getCNo())
+					.build();
+			listCount = memberService.searchMemListCount(m);
+		} else {
+			m = Member.builder()
+					.dName(search)
+					.cNo(loginUser.getCNo())
+					.build();
+			listCount = memberService.searchMemListCount(m);
+		}
+ 		
+		PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
+		
+		ArrayList<Member> list = memberService.searchMemList(pi, m);
+		
+		result.put("list", list);
+		result.put("c", condition);
+		result.put("s", search);
+		result.put("page",  pi.getCurrentPage());
+		result.put("startpage",  pi.getStartPage());
+		result.put("endpage",  pi.getEndPage());
+		result.put("maxpage",  pi.getMaxPage());
+
+		return result;
 	}
 
 }

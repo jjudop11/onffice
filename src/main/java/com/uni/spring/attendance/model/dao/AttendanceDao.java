@@ -75,5 +75,22 @@ public class AttendanceDao {
 		return (ArrayList)sqlSession.selectList("AttendanceMapper.selectAttendanceMList", mList);
 	}
 
+	public ArrayList<Attendance> searchAttendanceList(SqlSessionTemplate sqlSession, PageInfo pi, Attendance a) {
+		// TODO Auto-generated method stub
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)sqlSession.selectList("AttendanceMapper.searchAttendanceList", a, rowBounds);
+	}
+
+	public int searchAttendanceListCount(SqlSessionTemplate sqlSession, Attendance a) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("AttendanceMapper.searchAttendanceListCount", a);
+	}
+
+	public Attendance MonthCount(SqlSessionTemplate sqlSession, String mNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("AttendanceMapper.MonthCount", mNo);
+	}
+
 
 }

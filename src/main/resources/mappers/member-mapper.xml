@@ -99,4 +99,41 @@
 		FROM VIEW_LOGINUSER
 		WHERE M_ID=#{mId} AND M_EMAIL=#{mEmail}
 	</select>
+	
+	<select id="searchMemListCount"  parameterType="Member" resultType="_int">
+		SELECT COUNT(*)
+		FROM VIEW_LOGINUSER 
+		WHERE C_NO = #{cNo}
+		<if test="mNo != null">
+		AND M_NO LIKE '%'||#{mNo}||'%'
+		</if>
+		<if test="mName != null">
+		AND M_NAME LIKE '%'||#{mName}||'%'
+		</if>
+		<if test="jName != null">
+		AND J_NAME LIKE '%'||#{jName}||'%'
+		</if>
+		<if test="dName != null">
+		AND D_NAME LIKE '%'||#{dName}||'%'
+		</if>
+	</select>
+
+	<select id="searchMemList"  parameterType="Member" resultType="Member">
+		SELECT *
+		FROM VIEW_LOGINUSER 
+		WHERE C_NO = #{cNo}
+		<if test="mNo != null">
+		AND M_NO LIKE '%'||#{mNo}||'%'
+		</if>
+		<if test="mName != null">
+		AND M_NAME LIKE '%'||#{mName}||'%'
+		</if>
+		<if test="jName != null">
+		AND J_NAME LIKE '%'||#{jName}||'%'
+		</if>
+		<if test="dName != null">
+		AND D_NAME LIKE '%'||#{dName}||'%'
+		</if>
+		ORDER BY M_WORK DESC, M_NO
+	</select>
 </mapper>

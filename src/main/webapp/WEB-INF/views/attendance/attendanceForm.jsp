@@ -123,6 +123,12 @@
 	td, .card-body1 {
 	  text-align: center;
 	}
+	
+	.pagination {
+	  width: 300px;
+	  margin-left: auto;
+	  margin-right: auto;
+	}
   </style>
 </head>
 
@@ -179,9 +185,9 @@
                                 <div class="card">
                                     <div class="card-content">
                                         <div class="card-body1 mt-4">
-                                            <h4 class="card-title">총연차</h4>
+                                            <h4 class="card-title">이번달 출근일</h4>
                                              <br>
-                                            <h1 class="card-text">0</h1>
+                                            <h1 class="card-text" id="aCount">0</h1>
                                         </div>
                                     </div>
                                     <br>
@@ -189,18 +195,18 @@
                                 <div class="card">
                                     <div class="card-content">    
                                         <div class="card-body1 mt-4">
-                                            <h4 class="card-title">사용연차</h4>
+                                            <h4 class="card-title">이번달 정상출근</h4>
                                              <br>
-                                            <h1 class="card-text">0</h1>
+                                            <h1 class="card-text" id="nCount">0</h1>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card">
                                     <div class="card-content">
                                         <div class="card-body1">
-                                            <h4 class="card-title mt-4">잔여연차</h4>
+                                            <h4 class="card-title mt-4">이번달 지각</h4>
                                              <br>
-                                            <h1 class="card-text">0</h1>
+                                            <h1 class="card-text" id="lCount">0</h1>
                                         </div>
                                     </div>
                                 </div>
@@ -264,12 +270,12 @@
 										                <td><h4>출근시간</h4></td>
 										                <td><h4>퇴근시간</h4></td>
 										                <td><h4>근무시간</h4></td>
+										                <td><h4>상태</h4></td>
 								                     </tr>
 								                 </thead>
 								                 <tbody id="here">
 								                 </tbody>
                                         	</table>
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -295,6 +301,51 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="row match-height">
+                        <div class="col-12 mt-5 mb-1">
+                            <h4 class="section-title text-uppercase">나의근태현황검색</h4>
+                        </div>
+                    </div>
+                    <div class="row match-height">
+                        <div class="col-12">
+                        	<div class="col-6" > 
+								<div id="datePicker-div" class="mt-3 mb-3">
+								<form id="searchAList" action="searchAList" method="get" >
+										<label class="col-xs-4" for="start">시작일</label> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; <label class="col-xs-4" for="edit-start">종료일</label><br>
+										<input type="date" id="start" class="start">  &nbsp; ~ &nbsp;
+										<input type="date" id="end" class="end"> &nbsp;
+										<button type="button" class="btn btn-primary" id="search">조회</button>
+								</form>
+								</div>
+                             </div>
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-content">    
+                                       <div class="card-body">
+                                        	<table id="searchAttendanceList" class="table table-borderess mb-0">
+                                        		<thead>
+								                    <tr>
+										               <td style="width:20%"><h4>기준일</h4></td>
+										                <td><h4>출근시간</h4></td>
+										                <td><h4>퇴근시간</h4></td>
+										                <td><h4>근무시간</h4></td>
+										                <td><h4>상태</h4></td>
+								                     </tr>
+								                 </thead>
+								                 <tbody id="here2">
+								                 </tbody>
+                                        	</table>
+                                        	<div id="pagingArea2" class="mt-3">
+												                
+												              
+								            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
@@ -312,10 +363,13 @@
 			
 			getClock();
 			setInterval(getClock, 1000);
+			monthCount();
 			selectAttendance();
 			selectAttendanceW();
 			selectAttendanceM();
-					
+			searchAttendanceList();
+			
+			
 			$("#plus").on('click', function() { 
 				
 				let val = $("#clock").text();
@@ -364,11 +418,111 @@
 				});
 			
 			})
-			
-			
-			
-					
+
 		})
+		
+		function searchAttendanceList(pageNum){ 
+				
+			$("#search").on('click', function() {
+				
+				let start = $("#start").val();
+				let end = $("#end").val();
+				
+				const d = new Date();
+				let year = d.getFullYear();
+			 	let month = d.getMonth()+1;
+			    let date = d.getDate();
+				let today =  moment(year +"-"+ month +"-"+ date).format('YYYY-MM-DD');
+				
+				if (start > end) {
+		            alert('종료일이 시작일 보다 앞설 수 없습니다.');
+		        }
+
+				if (start > today || end > today) {
+		            alert('검색기간이 오늘보다 뒤일 수 없습니다.');
+		        }
+				console.log(start)
+				console.log(end)
+				console.log(today)
+				console.log("==="+pageNum)
+				$.ajax({
+					url:"searchAttendanceList",
+					type:"post",
+					data:{
+						page: pageNum,
+						start: start,
+						end: end
+					},
+					success:function(result){
+						
+						let v= '';
+						let b = '';
+			            let page = result.page; // 현재페이지
+			            let startpage = result.startpage; // 시작페이지
+			            let endpage = result.endpage; // 끝페이지
+			            let maxpage = result.maxpage; // 최대페이지
+			            
+						for(let i in result.list) {
+
+							if(result.list[i].altime == null) {
+								v += 
+									'<tr>'+
+										'<td><h6>'+result.list[i].aentDate+'</h6></td>'+
+						                '<td><h6>'+result.list[i].aatime.substr(11,8)+'</h6></td>'+
+						                '<td><h6></h6></td>'+
+						                '<td><h6></h6></td>'+
+						                '<td><h6></h6></td>'+
+			                      	'</tr>';
+							} else {
+								v += 
+									'<tr>'+
+										'<td><h6>'+result.list[i].aentDate+'</h6></td>'+
+						                '<td><h6>'+result.list[i].aatime.substr(11,8)+'</h6></td>'+
+						                '<td><h6>'+result.list[i].altime.substr(11,8)+'</h6></td>'+
+						                '<td><h6>'+result.list[i].awtime+'</h6></td>'+
+						                '<td><h6>'+result.list[i].astate+'</h6></td>'+
+			                      	'</tr>';
+							}
+							
+						}
+						$("#here2").html(v);
+						
+						b += '<ul class="pagination">';
+						if(page != 1) {
+							b += '<li class="page-item"><a class="page-link" onclick="searchAttendanceList('+ parseInt(page-1) + ');" class="page-btn">Previous</a></li>'
+						} else {
+							b += '<li class="page-item disabled"><a class="page-link" href="">Previous</a></li>'
+						}
+	                	
+	                	for(var num = startpage; num <= endpage; num++) {
+	                		if(num != page) {
+	                			b += '<li class="page-item"><a class="page-link" onclick="searchAttendanceList('+ num + ');" class="page-btn">'+num+'</a></li>'
+	                		} else {
+	                			b += '<li class="page-item disabled"><a class="page-link" href="">'+num+'</a></li>'
+	                		}
+	                	}
+	                    
+	                	if(page != maxpage) {
+							b += '<li class="page-item"><a class="page-link" onclick="searchAttendanceList('+ parseInt(page+1) + ');" class="page-btn">Next</a></li>'
+						} else {
+							b += '<li class="page-item disabled"><a class="page-link" href="">Next</a></li>'
+						}
+	                    
+	                	b += '</ul>';
+	                	
+						$("#pagingArea2").html(b);
+						// 페이징 클릭하면 조회버튼 자동 클릭
+						$(".page-link").on('click', function() {
+							$("#search").click();
+						})
+						
+					},error:function(){
+						console.log("검색한 근무기록 조회 ajax 통신 실패");
+					}
+					
+				});
+			})
+		}
 
 		function getClock(){
 		  const d = new Date();
@@ -383,6 +537,25 @@
 		  $("#clock").text(h+":"+m+":"+s);
 		  $("#ymd").text(year+"년 "+month+"월 "+date +"일 ("+week[d.getDay()]+")");
 
+		}
+		
+		function monthCount(){
+			$.ajax({
+				url:"monthCount",
+				type:"post",
+				success:function(result){
+					console.log("==="+result)
+					if(result != null) {
+						$("#aCount").text(result.aCount) // 총출근횟수
+						$("#nCount").text(result.wCount) // 정상출근횟수
+						$("#lCount").text(result.lCount) // 지각횟수
+					} 
+				},
+				error:function(){
+					console.log("이번달 출근 횟수 ajax 통신 실패");
+				}
+			});
+				
 		}
 		
 		function selectAttendance(){
@@ -417,6 +590,7 @@
 					
 					let v = "";
 					for(let i in list) {
+						console.log(list[i])
 						$("#attendanceW").text(list[0].allWtime);
 	
 						let h = list[i].allWtime.substr(0,2);
@@ -442,6 +616,7 @@
 					                '<td><h6>'+list[i].aAtime.substr(11,8)+'</h6></td>'+
 					                '<td><h6></h6></td>'+
 					                '<td><h6></h6></td>'+
+					                '<td><h6></h6></td>'+
 		                      	'</tr>';
 						} else {
 							v += 
@@ -450,6 +625,7 @@
 					                '<td><h6>'+list[i].aAtime.substr(11,8)+'</h6></td>'+
 					                '<td><h6>'+list[i].aLtime.substr(11,8)+'</h6></td>'+
 					                '<td><h6>'+list[i].aWtime+'</h6></td>'+
+					                '<td><h6>'+list[i].aState+'</h6></td>'+
 		                      	'</tr>';
 						}
 						
@@ -544,7 +720,7 @@
 			}
 
 	</script>
-
+	<script src="resources/full/js/moment.min.js"></script>
 </body>
 
 </html>
