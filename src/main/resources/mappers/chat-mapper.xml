@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT CR_NO, COUNT(M_NO) AS CRCOUNT
 		FROM CR_USER
 		GROUP BY CR_NO
+		ORDER BY CR_NO
 	</select>
 
 	<!-- 채팅방 전체 목록 -->
@@ -16,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT DISTINCT A.CR_NO, CR_TITLE, CR_PW
 		FROM CHATROOM A
 		JOIN CR_USER B ON A.CR_NO = B.CR_NO
+		ORDER BY CR_NO
 	</select>
 	
 	<!-- 채팅방 생성 맴버 목록 -->
@@ -62,5 +64,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM CR_I_LIST WHERE C_NO = #{cNo} AND M_NO = #{mNo}
 	</delete>
 	
+	<!-- 채팅방 등록 -->
+	<insert id="createChatRoom" parameterType="Chat">
+		INSERT INTO CHATROOM VALUES(#{crNo}, #{crTitle} , #{crPw} , #{cNo})
+	</insert>
+	
+	<!-- 채팅방 맴버 등록 -->
+	<insert id="insertChatUser" parameterType="Chat">
+		INSERT INTO CR_USER VALUES(#{crNo}, #{mNo}, #{crFounderNo})
+	</insert>
 	
 </mapper>
