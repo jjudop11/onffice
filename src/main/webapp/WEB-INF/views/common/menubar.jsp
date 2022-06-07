@@ -168,19 +168,11 @@
                             </ul>
                         </li>
 
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item">
+                            <a href="deptView.do" class='sidebar-link'>
                                 <i class="bi bi-pen-fill"></i>
                                 <span>부서보관함</span>
                             </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="form-editor-quill.html">내 보관함</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="form-editor-ckeditor.html">부서 보관함</a>
-                                </li>
-                            </ul>
                         </li>
                         
 						 <li class="sidebar-item  has-sub">
