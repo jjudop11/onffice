@@ -130,6 +130,17 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public PaymentForm selectApprovalOngoingPay(int apNo) {
 		return approvalDao.selectApprovalOngoingPay(sqlSession, apNo);
 	}
+	
+	@Override
+	public FormAtt selectApprovalOngoingAtt(int apNo) {
+		return approvalDao.selectApprovalOngoingAtt(sqlSession, apNo);
+	}
+	
+	@Override
+	public ArrayList<Member> selectApprovalOngoingApLine(int apNo) {
+		return approvalDao.selectApprovalOngoingApLine(sqlSession, apNo);
+		
+	}
 
 	@Override
 	public void deleteApproval(int apNo) {
@@ -140,6 +151,46 @@ public class ApprovalServiceImpl implements ApprovalService {
 			throw new CommException("전자결재문서 삭제 실패");
 		}
 		
+	}
+
+	@Override
+	public void updateDayoffForm(DayoffForm doForm) {
+		
+		int result = approvalDao.updateDayoffForm(sqlSession, doForm);
+		
+		if(result < 0) {
+			throw new CommException("휴가신청서 수정 실패");
+		}
+	}
+
+	@Override
+	public void updateProposalForm(ProposalForm prForm) {
+		
+		int result = approvalDao.updateProposalForm(sqlSession, prForm);
+		
+		if(result < 0) {
+			throw new CommException("프로젝트기획서 수정 실패");
+		}
+	}
+
+	@Override
+	public void updatePaymentForm(PaymentForm payForm) {
+		
+		int result = approvalDao.updatePaymentForm(sqlSession, payForm);
+		
+		if(result < 0) {
+			throw new CommException("지출결의서 수정 실패");
+		}
+	}
+
+	@Override
+	public void updateFormAtt(FormAtt att) {
+		
+		int result = approvalDao.updateFormAtt(sqlSession, att);
+		
+		if(result < 0) {
+			throw new CommException("첨부파일 수정 실패");
+		}
 	}
 	
 }

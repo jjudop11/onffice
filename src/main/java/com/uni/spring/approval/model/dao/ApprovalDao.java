@@ -78,9 +78,33 @@ public class ApprovalDao {
 	public PaymentForm selectApprovalOngoingPay(SqlSession sqlSession, int apNo) {
 		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingPay", apNo);
 	}
+	
+	public FormAtt selectApprovalOngoingAtt(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingAtt", apNo);
+	}
 
+	public ArrayList<Member> selectApprovalOngoingApLine(SqlSession sqlSession, int apNo) {
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectApprovalOngoingApLine", apNo);
+	}
+	
 	public int deleteApproval(SqlSession sqlSession, int apNo) {
-		return sqlSession.update("ApprovalMapper.deleteApproval");
+		return sqlSession.update("ApprovalMapper.deleteApproval", apNo);
+	}
+
+	public int updateDayoffForm(SqlSession sqlSession, DayoffForm doForm) {
+		return sqlSession.update("ApprovalMapper.updateDayoffForm", doForm);
+	}
+
+	public int updateProposalForm(SqlSession sqlSession, ProposalForm prForm) {
+		return sqlSession.update("ApprovalMapper.updateProposalForm", prForm);
+	}
+
+	public int updatePaymentForm(SqlSession sqlSession, PaymentForm payForm) {
+		return sqlSession.update("ApprovalMapper.updatePaymentForm", payForm);
+	}
+
+	public int updateFormAtt(SqlSession sqlSession, FormAtt att) {
+		return sqlSession.update("ApprovalMapper.updateFormAtt", att);
 	}
 	
 }

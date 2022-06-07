@@ -131,10 +131,11 @@ public class ApprovalController {
 		Map<String, Object> memberMap = new HashMap<>();
 		memberMap.put("searchName", searchName);
 		memberMap.put("cNo", cNo);
+		System.out.println("CONTROLLER memberMap : " + memberMap);
 		
 		// Map에 담은 정보와 일치하는 사원 리스트로 받기  
 		ArrayList<Member> list = approvalService.selectMemberList(memberMap);
-		System.out.println("CONTROLLER : " + list);
+		System.out.println("CONTROLLER list : " + list);
 		
 		return new GsonBuilder().create().toJson(list);
 		
@@ -171,19 +172,35 @@ public class ApprovalController {
 		System.out.println("CONTROLLER : " + apNo);
 		System.out.println("CONTROLLER : " + foNo);
 		
+		// 서식번호에 따라 다른 데이터 전달
 		if(foNo == 10) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
+			mv.addObject("foNo", foNo);
+			mv.addObject("apNo", apNo);
 		} else if(foNo == 20) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
+			mv.addObject("foNo", foNo);
+			mv.addObject("apNo", apNo);
 		} else if(foNo == 30) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
+			mv.addObject("foNo", foNo);
+			mv.addObject("apNo", apNo);
 		}
 		
-//		FormAtt formAtt = approvalService.selectApprovalOngoingFile(apNo);
-//		mv.addObject("formAtt", formAtt);
+		// 첨부파일 
+		FormAtt formAtt = approvalService.selectApprovalOngoingAtt(apNo);
+		mv.addObject("formAtt", formAtt);
+		
+		// 결재선 
+//		ApprovalLine apLine = approvalService.selectApprovalOngoingApLine(apNo);
+//		System.out.println("CONTROLLER : " + apLine);
+		
+		ArrayList<Member> apList = approvalService.selectApprovalOngoingApLine(apNo);
+		mv.addObject("apList", apList);
+		System.out.println("CONTROLLER APLIST : " + apList);
 		
 		mv.setViewName("approval/approvalOngoingDetailView");
 		
@@ -191,19 +208,98 @@ public class ApprovalController {
 		
 	}
 	
+	// 결재 수정 폼으로 이동 
+	@RequestMapping("updateApprovalForm.do")
+	public ModelAndView updateApprovalOngoing(int apNo, int foNo, String fileName, ModelAndView mv) {
+		
+		if(foNo == 10) {
+			mv.addObject("dayoffForm", approvalService.selectApprovalOngoingDo(apNo));
+			mv.addObject("foNo", foNo);
+		} else if(foNo == 20) {
+			mv.addObject("prForm", approvalService.selectApprovalOngoingPr(apNo));
+			mv.addObject("foNo", foNo);
+		} else if(foNo == 30) {
+			mv.addObject("payForm", approvalService.selectApprovalOngoingPay(apNo));
+			mv.addObject("foNo", foNo);
+		}
+		
+		mv.setViewName("approval/approvalUpdateForm");
+		
+		return mv;
+		
+	}
+	
 	// 결재 수정 
+	@RequestMapping(value = "updateApproval.do", method = RequestMethod.POST)
+	public ModelAndView updateApproval(Approval ap, ApprovalLine apline, FormAtt att,
+			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
+			ModelAndView mv, HttpServletRequest request,
+			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
+		
+		System.out.println("CONTROLLER : " + ap);
+		System.out.println("CONTROLLER : " + apline);
+		System.out.println("CONTROLLER : " + doForm);
+		
+//		approvalService.updateApproval(ap); // 전자결재문서 
+//		approvalService.updateApprovalLine(apline); // 결재선
+		
+		// 서식폼 선택 
+		if(ap.getFoNo() == 10) {
+			approvalService.updateDayoffForm(doForm); // 휴가신청서 
+		} else if(ap.getFoNo() == 20) {
+			approvalService.updateProposalForm(prForm); // 사업기획서 
+		} else if(ap.getFoNo() == 30) {
+			approvalService.updatePaymentForm(payForm); // 지출결의서 
+		}
+		
+		// 업로드된 파일이 있을 때 
+		String orgChangeName = att.getChangeName();
+		
+		if(!file.getOriginalFilename().equals("")) {
+			String changeName = saveFile(file, request); // 글 등록, 수정할 때 파일 공통적으로 처리할 saveFile 메소드 생성 
+			
+			att.setOriginName(file.getOriginalFilename());
+			att.setChangeName(changeName);
+		}
+		
+		approvalService.updateFormAtt(att);
+		
+		if(orgChangeName != null) { // 새로 넘어온 파일이 있는데 기존의 파일이 있는 경우 --> 서버에 업로드 된 기존 파일 삭제 
+			deleteFile(orgChangeName, request);
+		}
+		
+//		mv.addObject("", ).setViewName("redirect:detailBoard.do");
+		
+		return mv; 
+		
+	}
 	
 	// 결재 삭제 
-	@RequestMapping("deleteApprovalOngoing.do")
-	public String approvalOngoingDetailView(int apNo, HttpServletRequest request) {
+	@RequestMapping("deleteApproval.do")
+	public String deleteApproval(int apNo, String fileName, HttpServletRequest request) {
+		
+		System.out.println("CONTROLLER : " + apNo);
 		
 		approvalService.deleteApproval(apNo);
 		
-//		if(!fileName.equals("")) { // 파일이 빈 문자열이 아니라면 
-//			deleteFile(fileName, request); // 업데이트할때 같이 쓸 딜리트파일 생성 
-//		}
+		if(!fileName.equals("")) { // 파일이 빈 문자열이 아니라면 
+			deleteFile(fileName, request); // 업데이트할때 같이 쓸 딜리트파일 생성 
+		}
 		
 		return "redirect:approvalOngoingListView.do";
+		
+	}
+	
+	// 파일 삭제 
+	private void deleteFile(String fileName, HttpServletRequest request) {
+		
+		String resources = request.getSession().getServletContext().getRealPath("resources"); // 웹컨테이너에서 resource 폴더까지의 경로 (C:\FWORK\spring\SpringP\src\main\webapp\resources)
+		
+		String savePath = resources + "\\upload_files\\";
+		
+		File deleteFile = new File(savePath + fileName);
+		deleteFile.delete();
+		
 	}
 	
 }
