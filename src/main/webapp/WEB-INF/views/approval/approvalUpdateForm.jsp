@@ -33,8 +33,7 @@
 	
 	<div id="app">
 		<div id="main">
-			<!-- <form id="enrollForm" method="post" action="updateApproval.do" enctype="multipart/form-data"> -->
-			<div>
+			<form form id="enrollForm" method="post" action="updateApproval.do" enctype="multipart/form-data">
 				<!-- hidden 으로 넘길 정보 
 				<input type="hidden" id="cNo" name="cNo" value="${ loginUser.CNo }">
 				<input type="hidden" id="dNo" name="dNo" value="${ loginUser.DNo }">
@@ -51,13 +50,13 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="dept">부서</label>
-									<input type="text" id="dept" class="form-control round" value="${ loginUser.DName }" name="writer" readonly>
+									<input type="text" id="dept" class="form-control round" value="${ loginUser.DName }" name="writer" readonly/>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="writer">작성자</label>
-									<input type="text" id="writer" class="form-control round" value="${ loginUser.MName }" name="writer" readonly>
+									<input type="text" id="writer" class="form-control round" value="${ loginUser.MName }" name="writer" readonly/>
 								</div>
 							</div>
 						</div>
@@ -124,16 +123,16 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="title"></label>
-									<input type="text" id="doTitle" name="doTitle" class="form-control round" value="${ dayoffForm.doTitle }" readonly/>
+									<input type="text" id="doTitle" name="doTitle" class="form-control round" value="${ dayoffForm.doTitle }">
 								</div>
 							</div> 
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="date">기간</label>
 									<div class="col-sm-3">
-										<input type="date" id="datePicker" name="doStartDate" class="form-control" value="${ dayoffForm.doStartDate }" readonly/>
+										<input type="date" id="datePicker" name="doStartDate" class="form-control" value="${ dayoffForm.doStartDate }">
 										~
-										<input type="date" id="datePicker" name="doEndDate" class="form-control" value="${ dayoffForm.doEndDate }" readonly/>
+										<input type="date" id="datePicker" name="doEndDate" class="form-control" value="${ dayoffForm.doEndDate }">
 									</div>
 								</div>
 							</div>
@@ -167,7 +166,7 @@
 								<div class="form-group">
 									<label for="content">사유</label>
 									<textarea class="form-control" id="exampleFormControlTextarea1" name="doContent"
-                                            rows="3" readonly>${ dayoffForm.doContent}</textarea>
+                                            rows="3">${ dayoffForm.doContent}</textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
@@ -200,30 +199,30 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="title">프로젝트명</label>
-									<input type="text" id="prTitle" name="prTitle" class="form-control round" value="${ prForm.prTitle }" readonly/>
+									<input type="text" id="prTitle" name="prTitle" class="form-control round" value="${ prForm.prTitle }">
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="content">시행목적</label>
 									<textarea class="form-control" id="exampleFormControlTextarea1" name="prGoal"
-                                            rows="3" readonly>${ prForm.prGoal }</textarea>
+                                            rows="3">${ prForm.prGoal }</textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="content">운영계획</label>
 									<textarea class="form-control" id="exampleFormControlTextarea1" name="prPlan"
-                                            rows="3" readonly>${ prForm.prPlan }</textarea>
+                                            rows="3">${ prForm.prPlan }</textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="date">기간</label>
 									<div class="col-sm-3">
-										<input type="date" id="datePicker" name="prStartDate" class="form-control" value="${ prForm.prStartDate }" readonly/>
+										<input type="date" id="datePicker" name="prStartDate" class="form-control" value="${ prForm.prStartDate }"/>
 										~
-										<input type="date" id="datePicker" name="prEndDate" class="form-control" value="${ prForm.prEndDate }" readonly/>
+										<input type="date" id="datePicker" name="prEndDate" class="form-control" value="${ prForm.prEndDate }"/>
 									</div>
 								</div>
 							</div>
@@ -231,14 +230,14 @@
 								<div class="form-group">
 									<label for="content">참여인원</label>
 									<textarea class="form-control" id="exampleFormControlTextarea1" name="prPerson"
-                                            rows="3" readonly>${ prForm.prPerson }</textarea>
+                                            rows="3">${ prForm.prPerson }</textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="content">소요예산</label>
 									<textarea class="form-control" id="exampleFormControlTextarea1" name="prAmount"
-                                            rows="3" readonly>${ prForm.prAmount }</textarea>
+                                            rows="3">${ prForm.prAmount }</textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
@@ -271,14 +270,14 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="title">제목</label>
-									<input type="text" id="payTitle" name="payTitle" class="form-control round" value="${ payForm.payTitle }" readonly/>
+									<input type="text" id="payTitle" name="payTitle" class="form-control round" value="${ payForm.payTitle }"/>
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="date">결제일자</label>
 									<div class="col-sm-3">
-										<input type="date" name="payDay" class="form-control" value="${ payForm.payDay }" readonly/>
+										<input type="date" name="payDay" class="form-control" value="${ payForm.payDay }"/>
 									</div>
 								</div>
 							</div>
@@ -286,13 +285,13 @@
 								<div class="form-group">
 									<label for="content">결제내역</label>
 									<textarea class="form-control" id="exampleFormControlTextarea1" name="payList"
-                                            rows="3" readonly>${ payForm.payList }</textarea>
+                                            rows="3">${ payForm.payList }</textarea>
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="title">총지출금액</label>
-									<input type="text" id="payAmount" name="payAmount" class="form-control round" value="${ payForm.payAmount }" readonly>
+									<input type="text" id="payAmount" name="payAmount" class="form-control round" value="${ payForm.payAmount }">
 								</div>
 							</div>
 							<div class="col-sm-12">
@@ -315,32 +314,12 @@
 				</div> 
 				
 				<div class="buttons" align="center">
-	                <button class="btn btn-primary" onclick="postFormSubmit(1);">결재수정</button>
-	                <button class="btn btn-danger" onclick="postFormSubmit(2);">결재취소</button>
-	            </div>
-	            
-	            <form id="postForm" action="" method="post">
-					<input type="hidden" name="apNo" value="${ apNo }">
-					<input type="hidden" name="foNo" value="${ foNo }">
-					<input type="hidden" name="fileName" value="${ formAtt.changeName }">
-				</form>
-				
-				<script>
-					function postFormSubmit(num){
-						
-						var postForm = $("#postForm");
-						
-						if(num == 1){
-							postForm.attr("action", "updateApprovalForm.do");
-						} else {
-							postForm.attr("action", "deleteApproval.do");
-						}
-						postForm.submit();
-					}
-				</script>
-			</div>
+                	<button id="updateAppr" type="submit" class="btn btn-primary">결재수정</button>
+                </div>
+			</form> 
 		</div>
-	</div> 
+	</div>
+	
 	
 	<script type="text/javascript">
 		// 폼 서식에 따라 폼화면 변경 

@@ -39,6 +39,18 @@ public interface ApprovalService {
 	
 	PaymentForm selectApprovalOngoingPay(int apNo);
 
+	FormAtt selectApprovalOngoingAtt(int apNo);
+	
+	ArrayList<Member> selectApprovalOngoingApLine(int apNo);
+	
 	void deleteApproval(int apNo);
+
+	void updateDayoffForm(DayoffForm doForm);
+
+	void updateProposalForm(ProposalForm prForm);
+
+	void updatePaymentForm(PaymentForm payForm);
+
+	void updateFormAtt(FormAtt att);
 	
 }
