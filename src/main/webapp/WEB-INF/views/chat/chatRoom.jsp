@@ -121,11 +121,7 @@
 
 	
 	<script>
-	const Hyphen = (target) => {
-		 target.value = target.value
-		   .replace(/[^0-9]/g, '') //전체에서  0~9사이에 아무 숫자 '하나'  찾음 
-		  .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
-		}
+	
 	
 	$('#submit').click(function(){
 		
