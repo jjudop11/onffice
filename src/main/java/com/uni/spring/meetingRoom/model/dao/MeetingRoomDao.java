@@ -1,4 +1,4 @@
-package com.uni.spring.meetingroom.model.dao;
+package com.uni.spring.meetingRoom.model.dao;
 
 import java.util.ArrayList;
 
@@ -7,26 +7,26 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.uni.spring.common.PageInfo;
-import com.uni.spring.meetingroom.model.dto.Meetingroom;
-import com.uni.spring.meetingroom.model.dto.Reserveroom;
+import com.uni.spring.meetingRoom.model.dto.MeetingRoom;
+import com.uni.spring.meetingRoom.model.dto.ReserveRoom;
 
 @Repository
-public class MeetingroomDao {
+public class MeetingRoomDao {
 
-	public int selectRoomsetUser(SqlSessionTemplate sqlsession, String roomsetUserId) {
+	public int selectRoomSetUser(SqlSessionTemplate sqlsession, String roomsetUserId) {
 
-		return sqlsession.selectOne("MeetingroomMapper.selecRoomsettUser", roomsetUserId);
+		return sqlsession.selectOne("MeetingroomMapper.selecRoomSetUser", roomsetUserId);
 	}
 
-	public ArrayList<Meetingroom> seletcList(SqlSessionTemplate sqlsession, int userCNo) {
+	public ArrayList<MeetingRoom> seletcList(SqlSessionTemplate sqlsession, int userCNo) {
 
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectList", userCNo);
 	}
 
 	// 회의실 추가
-	public int insertMeetingroom(SqlSessionTemplate sqlsession, Meetingroom m) {
+	public int insertMeetingRoom(SqlSessionTemplate sqlsession, MeetingRoom m) {
 
-		return sqlsession.insert("MeetingroomMapper.insertMeetingroom", m);
+		return sqlsession.insert("MeetingroomMapper.insertMeetingRoom", m);
 	}
 
 	// 회의실번호 중복체크
@@ -36,9 +36,9 @@ public class MeetingroomDao {
 	}
 
 	// 회의실 삭제
-	public int deleteMeetingroom(SqlSessionTemplate sqlsession, String roomNo) {
+	public int deleteMeetingRoom(SqlSessionTemplate sqlsession, String roomNo) {
 
-		return sqlsession.delete("MeetingroomMapper.deleteMeetingroom", roomNo);
+		return sqlsession.delete("MeetingroomMapper.deleteMeetingRoom", roomNo);
 	}
 
 	// 페이징 처리용
@@ -48,7 +48,7 @@ public class MeetingroomDao {
 	}
 
 	// 페이징 처리용
-	public ArrayList<Meetingroom> selectRoomList(SqlSessionTemplate sqlsession, PageInfo pi, int userCNo) {
+	public ArrayList<MeetingRoom> selectRoomList(SqlSessionTemplate sqlsession, PageInfo pi, int userCNo) {
 
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
@@ -56,7 +56,7 @@ public class MeetingroomDao {
 	}
 
 	// 로그인유저 소속 회사의 총 회의실 목록
-	public ArrayList<Meetingroom> selectList(SqlSessionTemplate sqlsession, int userCNo) {
+	public ArrayList<MeetingRoom> selectList(SqlSessionTemplate sqlsession, int userCNo) {
 
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectRoomList", userCNo);
 	}
@@ -71,7 +71,7 @@ public class MeetingroomDao {
 		return sqlsession.selectOne("MeetingroomMapper.selectRoomNo", selectRoom);
 	}
 
-	public int reserveRoom(SqlSessionTemplate sqlsession, Reserveroom room) {
+	public int reserveRoom(SqlSessionTemplate sqlsession, ReserveRoom room) {
 		// TODO Auto-generated method stub
 		return sqlsession.insert("MeetingroomMapper.reserveRoom", room);
 	}
@@ -86,19 +86,19 @@ public class MeetingroomDao {
 		return sqlsession.selectOne("MeetingroomMapper.selectEndKey", endTime);
 	}
 
-	public ArrayList<Reserveroom> selectReservedRooms(SqlSessionTemplate sqlsession, int cNo, String date) {
+	public ArrayList<ReserveRoom> selectReservedRooms(SqlSessionTemplate sqlsession, int cNo, String date) {
 		
-		Reserveroom room = new Reserveroom();
+		ReserveRoom room = new ReserveRoom();
 		room.setCNo(cNo);
 		room.setReserveDate(date);
 	
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectReservedRooms", room);
 	}
 
-	public ArrayList<Reserveroom> checkReservedRooms(SqlSessionTemplate sqlsession, String roomNo, String date) {
+	public ArrayList<ReserveRoom> checkReservedRooms(SqlSessionTemplate sqlsession, String roomNo, String date) {
 		
 		//selectList시 파라미터 두개는 안 넘어감 //체크
-		Reserveroom room = new Reserveroom();
+		ReserveRoom room = new ReserveRoom();
 		room.setRoomNo(roomNo);
 		room.setReserveDate(date);
 		
