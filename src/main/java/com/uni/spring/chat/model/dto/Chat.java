@@ -34,34 +34,5 @@ public class Chat {
 	private String crImageRoot; // 채팅방 이미지 파일 경로
 	private String crFounderNo; // 개설자 사번
 	private int crCount; // 참가자 총 명수
-	private MessageType type;
-	private Set<WebSocketSession> sessions = new HashSet<>();
-	
-	
-	public enum MessageType{
-		ENTER, CHAT, LEAVE
-	}
-	
-	public void handlerMessage(WebSocketSession session, Chat chat, ObjectMapper objMapper) throws IOException{
-		
-		if(chat.getType() == MessageType.ENTER) {
-			sessions.add(session);
-		}else if(chat.getType() == MessageType.LEAVE) {
-			sessions.remove(session);
-		}else {
-			chat.setChatContent(chat.getMNo() + " : " + chat.getChatContent()); 
-		}
-		
-		send(chat, objMapper);
-	}
-	
-	private void send(Chat chat, ObjectMapper objMapper) throws IOException{
-		
-		TextMessage textMessage = new TextMessage(objMapper.
-												writeValueAsString(chat.getChatContent()));
-		for(WebSocketSession sess : sessions) {
-			sess.sendMessage(textMessage);
-		}
-	}
 	
 }

@@ -91,4 +91,16 @@ public class ChatServiceImpl implements ChatService{
 		
 	}
 
+	@Override
+	public Chat findRoomUser(Chat chat) {
+		Chat user = chatDao.findRoomUser(sqlSession, chat);
+		return user;
+	}
+
+	@Override
+	public void insertChatUser(Chat chat) {
+		// TODO Auto-generated method stub
+		chatDao.insertChatUser(sqlSession, chat);
+	}
+
 }

@@ -74,4 +74,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO CR_USER VALUES(#{crNo}, #{mNo}, #{crFounderNo})
 	</insert>
 	
+	<!-- 채팅방 맴버 조회 -->
+	<select id="findRoomUser" parameterType="Chat" resultType="Chat">
+		SELECT M_NO , CR_FOUNDERNO FROM CR_USER WHERE CR_NO = ${crNo} AND M_NO = ${mNo}
+	</select>
+	
 </mapper>

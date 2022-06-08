@@ -34,7 +34,7 @@ import com.uni.spring.member.model.dto.Member;
 @Controller
 public class ChatController {
 
-	private SimpMessagingTemplate simpMessagingTemplate;
+	private SimpMessagingTemplate template;
 
 	
 	@Autowired
@@ -200,6 +200,7 @@ public class ChatController {
 		return 1;
 	}
 	
+	// 채팅방 생성
 	@RequestMapping("createChatRoom")
 	//public ModelAndView createChatRoom(ModelAndView mv, Chat chat, @RequestParam(value="eList[]") ArrayList<String> eList, Model model) {
 	public String createChatRoom(ModelAndView mv, Chat chat, Model model) {
@@ -230,13 +231,9 @@ public class ChatController {
 				if(mList.size() > 0) {
 				
 					chatService.insertChatUser(chat, mList,m);
-					return "1";
-				}else {
-					return "0";
+				
 				}
-			
-	
-
+				return "chatRoom/" + chat.getCrNo();
 			
 			}
 	}
@@ -255,38 +252,60 @@ public class ChatController {
 		return "/chat/chat";
 	}
 	*/
+	 
 	
 	
-	// 채팅방 생성
-		@ResponseBody
+		// 채팅방 입장
+
 		@RequestMapping("chatRoom/{crNo}")
-		public ModelAndView createChatRoom(Chat chat, ModelAndView mv, Model model){
+		public ModelAndView EnterChatRoom(Chat chat, ModelAndView mv, Model model){
 			
 			Member loginUser = (Member)model.getAttribute("loginUser");
 			
-			Member m = new Member();	
+			if(loginUser == null) {
+				
+				mv.setViewName("redirect:/");
+				return mv;
+			}else{
+				
+				chat.setMNo(loginUser.getMNo());
+		
+				Chat user = chatService.findRoomUser(chat);
+				
+				
+				if(user.getMNo() == null) {
+					chat.setCrFounderNo(user.getCrFounderNo());
+					chatService.insertChatUser(chat);
+					
+					mv.addObject("m", loginUser);
+					mv.addObject("chat", chat);
 			
-			m.setCNo(loginUser.getCNo());
-			m.setMNo(loginUser.getMNo());
-			m.setMName(loginUser.getMName());
-			
-			mv.addObject("m", m);
-			mv.addObject("chat", chat);
-			//System.out.println(m);
-			//System.out.println(chat);
-			mv.setViewName("chat/chat");
-			
-			return mv;
-			
+					mv.setViewName("chat/chat");
+					
+					return mv;
+					
+				}else {
+
+					mv.addObject("m", loginUser);
+					mv.addObject("chat", chat);
+					mv.setViewName("chat/chat");
+					
+					return mv;
+					}
+			}
 		}
 		
-		/*
+		
+		
 		@MessageMapping("/chat/send")
-	    public void sendMsg(Chat message) throws Exception {
-	        String receiver = message.getReceiver();
-	        chatService.saveMessage(message);
-	        simpMessagingTemplate.convertAndSend("/topic/" + receiver,message);
+	    public void sendMsg(Chat message){
+			
+			long crNo = message.getCrNo();
+			System.out.println("message  ==== " + message);
+	        //chatService.saveMessage(message);
+	        template.convertAndSend("/topic/" + crNo,message);
+	        
 	    }
-	*/
+	
 		
 }
