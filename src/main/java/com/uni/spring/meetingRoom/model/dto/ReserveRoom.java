@@ -1,6 +1,6 @@
-package com.uni.spring.meetingroom.model.dto;
+package com.uni.spring.meetingRoom.model.dto;
 
-public class Reserveroom {
+public class ReserveRoom {
 	
 	private String reserveNo;
 	private String roomNo;
@@ -10,7 +10,7 @@ public class Reserveroom {
 	private String mNo;
 	private int cNo;
 	
-	public Reserveroom() {
+	public ReserveRoom() {
 		// TODO Auto-generated constructor stub
 	}
 
