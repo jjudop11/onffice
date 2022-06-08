@@ -125,7 +125,7 @@
 	}
 	
 	.pagination {
-	  width: 300px;
+	  width: 100px;
 	  margin-left: auto;
 	  margin-right: auto;
 	}
@@ -438,13 +438,10 @@
 		            alert('종료일이 시작일 보다 앞설 수 없습니다.');
 		        }
 
-				if (start > today || end > today) {
+				if (start > today) {
 		            alert('검색기간이 오늘보다 뒤일 수 없습니다.');
 		        }
-				console.log(start)
-				console.log(end)
-				console.log(today)
-				console.log("==="+pageNum)
+				
 				$.ajax({
 					url:"searchAttendanceList",
 					type:"post",
@@ -486,6 +483,7 @@
 							
 						}
 						$("#here2").html(v);
+					
 						
 						b += '<ul class="pagination">';
 						if(page != 1) {
@@ -515,7 +513,7 @@
 						$(".page-link").on('click', function() {
 							$("#search").click();
 						})
-						
+
 					},error:function(){
 						console.log("검색한 근무기록 조회 ajax 통신 실패");
 					}
@@ -668,7 +666,6 @@
 						}
 						console.log(mList)
 						console.log(vList)
-						
 						
 						$.ajax({
 				

@@ -144,7 +144,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView loginUser(Member m, Model model, ModelAndView mv) { 
+	public ModelAndView loginUser(Member m, @RequestParam(value = "remember", required = false) String remember, Model model, ModelAndView mv) { 
 
 		Member loginUser;
 
@@ -159,7 +159,7 @@ public class MemberController {
 		} else {
 			mv.addObject("loginUser", loginUser).setViewName("main");
 		}
-			
+
 		return mv;
 
 	}
