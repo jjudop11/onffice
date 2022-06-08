@@ -1,12 +1,16 @@
-package com.uni.spring.meetingroom.model.dto;
+package com.uni.spring.meetingRoom.model.dto;
 
-public class Meetingroom {
+public class MeetingRoom {
 	
 	private String roomNo;     //회의실번호
 	private String roomName;   //회의실이름
 	private int roomCapa;      //수용인원
 	private String roomNote;   //비고
 	private int cNo;           //회사번호
+	
+	public MeetingRoom() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public String getRoomNo() {
 		return roomNo;
