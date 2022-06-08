@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.spi.LocaleServiceProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,12 @@ import com.uni.spring.attendance.model.dto.Attendance;
 import com.uni.spring.attendance.model.service.AttendanceService;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
+import com.uni.spring.dept.model.dto.Dept;
+import com.uni.spring.dept.model.service.DeptService;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.service.MemberService;
+
+import oracle.net.aso.g;
 
 @Controller
 @SessionAttributes({"loginUser", "msg"})
@@ -34,6 +39,9 @@ public class AttendanceController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private DeptService deptService;
 	
 	@GetMapping("/attendanceForm")
 	public String attendanceForm() {
@@ -201,7 +209,7 @@ public class AttendanceController {
 		ArrayList<Attendance> list = attendanceService.selectAttendanceAllM(m.getCNo());
 
 		for (Attendance a : list) {
-			
+	
 			a.setAWtime(String.valueOf(Integer.parseInt(a.getAWtime()) / a.getACount()));
 		
 			int hour = Integer.parseInt(a.getAWtime())/(60*60);
@@ -233,9 +241,12 @@ public class AttendanceController {
 		for(Member mem : mList) {
 			for (Attendance a : list) {
 				if(mem.getMNo().equals(a.getMNo())) {
-					mem.setAAtime(a.getAAtime().substring(10));
-					mem.setALtime(a.getALtime().substring(10));
-					
+					if(a.getAAtime() != null) {
+						mem.setAAtime(a.getAAtime().substring(10));
+					}
+					if(a.getALtime() != null) {
+						mem.setALtime(a.getALtime().substring(10));
+					}
 					if(a.getAWtime() != null) {
 
 						int hour = Integer.parseInt(a.getAWtime())/(60*60);
@@ -243,12 +254,9 @@ public class AttendanceController {
 				        int second = Integer.parseInt(a.getAWtime())%60;
 				        mem.setAWtime(String.format("%02d",hour)+":"+String.format("%02d",minute)+":"+String.format("%02d",second)); 
 					}
-					
 					mem.setAState(a.getAState());
 				}
-				
 			}
-			System.out.println(mem);
 		}
 		
 		result.put("mList", mList);
@@ -370,13 +378,13 @@ public class AttendanceController {
 	}
 	
 	@ResponseBody
-	@PostMapping(value ="/monthCount",produces = "application/json; charset=utf-8")
+	@PostMapping(value ="monthCount",produces = "application/json; charset=utf-8")
 	public String monthCount(Model model) {
 		
 		Member m = (Member) model.getAttribute("loginUser");
 		
 		Attendance a = attendanceService.MonthCount(m.getMNo());
-		System.out.println("==============================="+a);
+	
 		return new GsonBuilder().create().toJson(a);
 		
 	}

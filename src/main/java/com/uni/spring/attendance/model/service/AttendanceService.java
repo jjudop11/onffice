@@ -24,7 +24,7 @@ public interface AttendanceService {
 
 	ArrayList<Attendance> selectAttendanceCountList(PageInfo pi, int cNo);
 
-	ArrayList<Attendance> selectAttendanceAllM(int cNO);
+	ArrayList<Attendance> selectAttendanceAllM(int cNo);
 
 	ArrayList<Attendance> selectAttendanceWList(PageInfo pi, int cNo);
 
