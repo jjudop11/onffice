@@ -1,4 +1,4 @@
-package com.uni.spring.meetingroom.controller;
+package com.uni.spring.meetingRoom.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,30 +6,28 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
-import com.uni.spring.meetingroom.model.Service.MeetingroomService;
-import com.uni.spring.meetingroom.model.dto.Meetingroom;
-import com.uni.spring.meetingroom.model.dto.Reserveroom;
+import com.uni.spring.meetingRoom.model.dto.MeetingRoom;
+import com.uni.spring.meetingRoom.model.dto.ReserveRoom;
+import com.uni.spring.meetingRoom.model.service.MeetingRoomService;
 import com.uni.spring.member.model.dto.Member;
 
 @Controller
-public class MeetingroomController {
+public class MeetingRoomController {
 
 	@Autowired
-	MeetingroomService meetingroomService;
+	MeetingRoomService meetingRoomService;
 
 	// 회의실 예약 진입
 	@RequestMapping("roomReservation.do")
@@ -49,11 +47,11 @@ public class MeetingroomController {
 		model.addAttribute("userJob", userJob);
 
 		// 하단 회의실 리스트
-		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectList(userCNo);
 		model.addAttribute("roomList", roomList);
 
 		// 페이징 : 추후 수정
-		int listCount = meetingroomService.selectRoomListCount(userCNo);
+		int listCount = meetingRoomService.selectRoomListCount(userCNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
 		model.addAttribute("pi", pi);
 
@@ -62,9 +60,7 @@ public class MeetingroomController {
 	}
 
 	// 회의실 예약시 예약시간 검사 //roomNo, date, cNo, startTime, endTime
-	private boolean isValidTime(String roomNo, String date, int cNo, String startTime, String endTime) {
-		// TODO: connect with database
-
+	private boolean isValidTime(String roomNo, String date, String startTime, String endTime) {
 		// 테스트용 코드 : 10시와 12시에 예약되었다고 가정하고 테스트
 		// 실사용시 예약목록 select 해오면 됨
 		/*
@@ -77,31 +73,35 @@ public class MeetingroomController {
 		//
 
 		// 해당 날짜의 해당 회의실에 예약된 내역이 없어야 예약 가능
-		// cNo 필요 없는 것 같으므로 체크
-		System.out.println("check ReservedRoom company No : " + cNo);
-		ArrayList<Reserveroom> reservedRooms = meetingroomService.checkReservedRooms(roomNo, date);
+		ArrayList<ReserveRoom> reservedRooms = meetingRoomService.checkReservedRooms(roomNo, date);
 		System.out.println("reservedRooms : " + reservedRooms);
 
 		// 예약 모달에서 입력한 시작시간, 종료시간(String)을 int형으로 변환 //하단 getTime 메소드
 		int startTimeCal = getTime(startTime);
 		int endTimeCal = getTime(endTime);
 
-		// 위에서 룸넘버랑 날짜로 구해온 예약 목록 foreach로 검사, int형 변환
-		for (Reserveroom r : reservedRooms) {
+		// 위에서 룸넘버랑 날짜로 구해온 예약 목록 foreach로 돌리면서 예약된 시간이랑 예약할 시간이랑 비교
+		for (ReserveRoom r : reservedRooms) {
+			
 			int rStartTime = getTime(r.getStartTime());
 			int rEndTime = getTime(r.getEndTime());
 
 			System.out.println("startTimeCal:" + startTimeCal + ", endTimeCal:" + endTimeCal + 
 							   ", rStartCal:" + rStartTime + ", rEndCal:" + rEndTime);
 
-			// 예약된 시작시간 <= 예약할 시작시간 && 예약된 종료시간 > 예약할 시작시간 이거나
+			// 예약된 시작시간 <= 예약할 시작시간 && 예약된 종료시간 > 예약할 시작시간 ||
 			// 예약된 시작시간 < 예약할 종료시간 && 예약된 종료시간 >= 예약할 종료시간이면
-			if (rStartTime <= startTimeCal && rEndTime > startTimeCal || 
-				rStartTime < endTimeCal && rEndTime >= endTimeCal) {
+			
+			// 새로 예약할 시간의 사이에 이미 예약된 시간이 포함되어 있어도 안 됨 
+			 if (rStartTime <= startTimeCal && rEndTime > startTimeCal || 
+				rStartTime < endTimeCal && rEndTime >= endTimeCal ||
+				startTimeCal < rStartTime && startTimeCal < rEndTime &&
+				endTimeCal > rStartTime && endTimeCal > rEndTime) {
 				
 				return false;
-			}
-			//return true;
+			} 
+		
+						
 		}
         return true;
 	}
@@ -109,7 +109,6 @@ public class MeetingroomController {
 	// 시간 변환
 	private static int getTime(String timeString) {
 		
-		//String 타입으로 받은 시간 : 문자 기준으로 잘라서 배열 times에 넣기
 		String[] times = timeString.split(":"); 
 
 		int t1 = Integer.parseInt(times[0]);
@@ -120,21 +119,21 @@ public class MeetingroomController {
 
 	private static int getCellTime(String timeString) {
 		
-		// 7시가 첫 칸. 7시 * 60분 = 420. 420분 / 30분 = 14
+		
 		return getTime(timeString) / 30 - 14;
 	}
 
 	// 회의실 예약
 	@RequestMapping("reserveRoom.do")
 	@ResponseBody
-	public int reserveRoom(@ModelAttribute Reserveroom room, @RequestParam("date") String date,
+	public int reserveRoom(@ModelAttribute ReserveRoom room, @RequestParam("date") String date,
 			@RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime,
-			@RequestParam("selectRoom") String selectRoom, HttpSession session, Model model) {
+			@RequestParam("selectRoom") String selectRoom, HttpSession session) {
 
 		// 예약번호(시퀀스), 회의실번호, 예약일, 시작시간, 종료시간, 예약자사원번호, 회사번호
 
 		// 회의실명을 넘기고 있으므로 해당값으로 회의실 번호를 찾아와야 함
-		String roomNo = meetingroomService.selectRoomNo(selectRoom);
+		String roomNo = meetingRoomService.selectRoomNo(selectRoom);
 		// 예약자명을 넘기고 있으므로 해당값으로 사원번호를 찾아와야 함 (예약자명은 현재 로그인한 유저로 고정됨)
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		String mNo = loginUser.getMNo();
@@ -142,10 +141,9 @@ public class MeetingroomController {
 		int cNo = loginUser.getCNo();
 
 		// 예약시에 회의실번호, 날짜, 회사번호(예약된목록 불러오기용), 시작시간, 종료시간 넘겨서 검사해야함
-		if (!isValidTime(roomNo, date, cNo, startTime, endTime)) {
+		if (!isValidTime(roomNo, date, startTime, endTime)) {
 
 			//throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 예약된 시간입니다.");
-			//model.addAttribute("msg", "이미 예약된 시간입니다.");
 			//return "meetingroom/roomReservation";
 			return -1;
 			
@@ -158,7 +156,7 @@ public class MeetingroomController {
 			room.setCNo(cNo);
 			
 			//날짜, 시간 체크 후 위배사항 없으면 예약 실행
-			int result = meetingroomService.reserveRoom(room);
+			int result = meetingRoomService.reserveRoom(room);
 	
 			return result;
 		}
@@ -182,24 +180,25 @@ public class MeetingroomController {
 		int cNo = loginUser.getCNo();
 
 		//회사번호, 날짜로 예약목록 뽑기
-		ArrayList<Reserveroom> rooms = meetingroomService.selectReservedRooms(cNo, date);
+		ArrayList<ReserveRoom> rooms = meetingRoomService.selectReservedRooms(cNo, date);
+		
 
 		JsonObject obj = new JsonObject();
 		JsonArray jsonRooms = new JsonArray();
 		
-		ArrayList<Meetingroom> roomList = meetingroomService.selectList(cNo);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectList(cNo);
 
 		// java 10부터 var 도입
-		// 변수 선언시 타입 생략할 수 있으며, 컴파일러가 타입을 추론함. 지역변수에만 사용 가능.
+		// 변수 선언시 타입 생략가능, 컴파일러가 타입 추론. 지역변수에만 사용.
 		for (var room : roomList) {
 			
-			JsonObject roomObj = new JsonObject();
+			JsonObject roomObj = new JsonObject();			
 			var reservedRoomArray = new JsonArray();
 
 			//회의실 목록 foreach 돌리면서 roomObj에 name값 담고
 			roomObj.addProperty("name", room.getRoomName());
 
-			//예약목록 돌리기
+			//예약목록 돌리면서
 			for (var reservedRoom : rooms) {
 				// 예약된 회의실명이랑 등록되어있는 회의실명이랑 같으면 
 				if (reservedRoom.getRoomNo().equals(room.getRoomNo())) {
@@ -207,7 +206,7 @@ public class MeetingroomController {
 
 					var innerArr = new JsonArray();
 
-					//getCellTime으로 시간값 가져와서		
+					//getCellTime으로 시간값 얻고		
 					int startTime = getCellTime(reservedRoom.getStartTime());
 					int endTime = getCellTime(reservedRoom.getEndTime());
 
@@ -221,7 +220,7 @@ public class MeetingroomController {
 				}
 			}
 
-			//
+			//roomObj에 회의실명이랑 해당 회의실에 예약된 시간들이 담김
 			roomObj.add("times", reservedRoomArray);
 
 			jsonRooms.add(roomObj);
@@ -229,9 +228,11 @@ public class MeetingroomController {
 
 		obj.add("rooms", jsonRooms);
 
-		var str = obj.toString();
+		//var str
+		String str = obj.toString();
 
 		System.out.println(str);
+		
 		return str;
 	}
 
@@ -244,8 +245,8 @@ public class MeetingroomController {
 		System.out.println("종료시간 : " + endTime);
 
 		// 받아온 시간으로 KEY값 구해와서 계산
-		double startKey = meetingroomService.selectStartKey(startTime);
-		double endKey = meetingroomService.selectEndKey(endTime);
+		double startKey = meetingRoomService.selectStartKey(startTime);
+		double endKey = meetingRoomService.selectEndKey(endTime);
 
 		System.out.println("시작키 : " + startKey);
 		System.out.println("종료키 : " + endKey);
@@ -254,6 +255,13 @@ public class MeetingroomController {
 
 		return result;
 
+	}
+	
+	// 예약 상세 진입
+	@RequestMapping("reservationDetails.do")
+	public String reservationDetails() {
+		
+		return "meetingRoom/reservationDetails";
 	}
 
 	// 회의실 관리 진입
@@ -264,20 +272,18 @@ public class MeetingroomController {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		System.out.println("로그인유저 : " + loginUser);
 
-		String roomsetUserId = loginUser.getMId(); // 로그인유저의 사번
-		int userCNo = loginUser.getCNo(); // 로그인유저의 회사번호
+		String roomsetUserId = loginUser.getMId(); 
+		int userCNo = loginUser.getCNo(); 
 		System.out.println("유저의 회사번호 : " + userCNo);
 
-		int result = meetingroomService.selectRoomsetUser(roomsetUserId);
-
-		// model.addAttribute("loginUser", loginUser); // 로그인 회원정보 전달용
+		int result = meetingRoomService.selectRoomSetUser(roomsetUserId);
 
 		// 페이징 처리
-		int listCount = meetingroomService.selectRoomListCount(userCNo);
+		int listCount = meetingRoomService.selectRoomListCount(userCNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
 		model.addAttribute("pi", pi);
 
-		ArrayList<Meetingroom> roomList = meetingroomService.selectRoomList(pi, userCNo);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectRoomList(pi, userCNo);
 		System.out.println("회의실 목록 : " + roomList);
 		model.addAttribute("roomList", roomList); // 회의실 목록 출력용
 
@@ -309,26 +315,20 @@ public class MeetingroomController {
 		int userCNo = loginUser.getCNo(); // 로그인유저의 회사번호
 		System.out.println("유저의 회사번호 : " + userCNo);
 
-		int result = meetingroomService.selectRoomsetUser(roomsetUserId);
+		int result = meetingRoomService.selectRoomSetUser(roomsetUserId);
 
 		// model.addAttribute("loginUser", loginUser); // 로그인 회원정보 전달용
 
 		// 페이징 처리 : 추후 수정
-		int listCount = meetingroomService.selectRoomListCount(userCNo);
+		int listCount = meetingRoomService.selectRoomListCount(userCNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
 		model.addAttribute("pi", pi);
 
-		ArrayList<Meetingroom> roomList = meetingroomService.selectRoomList(pi, userCNo);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectRoomList(pi, userCNo);
 		System.out.println("회의실 목록 : " + roomList);
 		model.addAttribute("roomList", roomList); // 회의실 목록 출력용
 
 		if (result > 0) {
-
-			// 현재 로그인한 유저의 회사에 등록된 회의실 가져와서 뿌려줘야함
-			// ArrayList<Meetingroom> list = meetingroomService.selectList(userCNo);
-			// model.addAttribute("list", list);
-
-			// model.addAttribute("roomList", roomList);
 			return "meetingRoom/roomSetting";
 
 		} else {
@@ -343,15 +343,15 @@ public class MeetingroomController {
 	@ResponseBody
 	public String roomNoCheck(@RequestParam("roomNo") String roomNo) {
 
-		int count = meetingroomService.roomNoCheck(roomNo);
+		int count = meetingRoomService.roomNoCheck(roomNo);
 		return String.valueOf(count);
 
 	}
 
 	// 회의실 추가
 	@RequestMapping("insertRoom.do")
-	@ResponseBody // json 사용 용도
-	public String insertMeetingroom(@ModelAttribute Meetingroom m, @RequestParam("roomNo") String roomNo,
+	@ResponseBody 
+	public String insertMeetingroom(@ModelAttribute MeetingRoom m, @RequestParam("roomNo") String roomNo,
 			@RequestParam("roomName") String roomName, @RequestParam("roomCapa") int roomCapa,
 			@RequestParam(value = "roomNote", required = false) String roomNote, Model model, HttpSession session) {
 
@@ -369,7 +369,7 @@ public class MeetingroomController {
 
 		System.out.println("추가할 회의실 : " + m);
 
-		int result = meetingroomService.insertMeetingroom(m);
+		int result = meetingRoomService.insertMeetingRoom(m);
 
 		System.out.println("회의실 추가 완료 : " + result);
 
@@ -411,13 +411,13 @@ public class MeetingroomController {
 
 			String roomNo = checkedArr.get(i);
 
-			int result = meetingroomService.deleteRooms(roomNo);
+			int result = meetingRoomService.deleteRooms(roomNo);
 			System.out.println("삭제된 행 : " + result);
 		}
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		int userCNo = loginUser.getCNo();
-		ArrayList<Meetingroom> roomList = meetingroomService.selectList(userCNo);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectList(userCNo);
 
 		return new GsonBuilder().create().toJson(roomList);
 
