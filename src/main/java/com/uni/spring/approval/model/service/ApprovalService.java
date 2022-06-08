@@ -52,5 +52,9 @@ public interface ApprovalService {
 	void updatePaymentForm(PaymentForm payForm);
 
 	void updateFormAtt(FormAtt att);
+
+	int selectRequestListCount(String mNo);
+	
+	ArrayList<ApList> selectRequestList(PageInfo pi, Map<String, Object> listMap); // 결재요청 리스트
 	
 }
