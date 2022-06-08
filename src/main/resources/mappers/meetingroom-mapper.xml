@@ -3,7 +3,7 @@
 <mapper namespace="MeetingroomMapper">
  	
  	<!-- 회의실 관리권한 유저 -->
-	<select id="selecRoomsettUser" parameterType="string" resultType="_int">
+	<select id="selecRoomSetUser" parameterType="string" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEMBER
 		WHERE M_ID = #{settingUserId}
@@ -11,7 +11,7 @@
 	</select>
 	
 	<!-- 회의실 추가 -->
-	<insert id="insertMeetingroom" parameterType="Meetingroom">
+	<insert id="insertMeetingRoom" parameterType="MeetingRoom">
 		INSERT INTO MEETINGROOM
 		VALUES
 		(#{roomNo}, #{roomName}, #{roomCapa}, #{roomNote}, #{cNo})	
@@ -32,7 +32,7 @@
 	</select>
 	
 	<!-- 총 회의실 목록 -->
-	<select id="selectRoomList" parameterType="_int" resultType="Meetingroom">
+	<select id="selectRoomList" parameterType="_int" resultType="MeetingRoom">
 		SELECT *
 		FROM MEETINGROOM
 		WHERE C_NO = #{userCNo}
@@ -40,7 +40,7 @@
 	</select>
 	
 	<!-- 회의실 삭제 -->
-	<delete id="deleteMeetingroom" parameterType="string">
+	<delete id="deleteMeetingRoom" parameterType="string">
 		DELETE
 		FROM MEETINGROOM
 		WHERE ROOM_NO = #{roomNo}
@@ -60,7 +60,7 @@
 		WHERE ROOM_NAME = #{selectRoom}
 	</select>
 	
-	<insert id="reserveRoom" parameterType="Reserveroom">
+	<insert id="reserveRoom" parameterType="ReserveRoom">
 		INSERT INTO RESERVE_ROOM
 		VALUES
 		(SEQ_RESERVE_NO.NEXTVAL, #{roomNo}, #{reserveDate}, #{startTime}, #{endTime}, #{mNo}, #{cNo})	
@@ -78,7 +78,7 @@
 		WHERE TIME = #{endTime}
 	</select>
 	
-	<select id="selectReservedRooms" parameterType="Reserveroom" resultType="Reserveroom">
+	<select id="selectReservedRooms" parameterType="ReserveRoom" resultType="ReserveRoom">
 		SELECT ROOM_NO, START_TIME, END_TIME
 		FROM RESERVE_ROOM
 		WHERE C_NO = #{cNo}
@@ -86,7 +86,7 @@
 	</select>
 	
 	<!-- isValidTime -->
-	<select id="checkReservedRooms" parameterType="Reserveroom" resultType="Reserveroom">
+	<select id="checkReservedRooms" parameterType="ReserveRoom" resultType="ReserveRoom">
 		SELECT ROOM_NO, START_TIME, END_TIME
 		FROM RESERVE_ROOM
 		WHERE ROOM_NO = #{roomNo}

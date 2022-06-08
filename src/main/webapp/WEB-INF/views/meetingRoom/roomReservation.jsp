@@ -1,64 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="com.uni.spring.meetingroom.model.dto.Meetingroom"%>
-<%
-//로그인유저 세션에서 받아와서 그 사람 회사번호 뿌리고, 그거 회사번호 텍스트 태그에 반영하기 -> ?
 
-//
-ArrayList<Meetingroom> roomList = (ArrayList<Meetingroom>) request.getAttribute("roomList");
-
-int num = 0;
-
-for (int i = 0; i < roomList.size(); i++) {
-
-	num++;
-}
-%>
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link
-	href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
-	rel="stylesheet">
+<!-- <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="resources/assets/css/bootstrap.css">
 <link rel="stylesheet" href="resources/assets/vendors/iconly/bold.css">
-<link rel="stylesheet"
-	href="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-<link rel="stylesheet"
-	href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+<link rel="stylesheet" href="resources/assets/vendors/bootstrap-icons/bootstrap-icons.css">
 <link rel="stylesheet" href="resources/assets/css/app.css">
-<link rel="shortcut icon" href="resources/assets/images/favicon.svg"
-	type="image/x-icon">
-
-<!-- datepicker -->
-<!-- <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ko.min.js"
-	integrity="sha512-L4qpL1ZotXZLLe8Oo0ZyHrj/SweV7CieswUODAAPN/tnqN3PA1P+4qPu5vIryNor6HQ5o22NujIcAZIfyVXwbQ=="
-	crossorigin="anonymous" referrerpolicy="no-referrer"></script>  -->
+<link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">  -->
 
 <!-- timepicker -->
-<link rel="stylesheet"
-	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-
-
 
 <!-- fullcalendar -->
 
 <!-- jQuery library -->
 
 <!-- Popper JS -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+
 <!-- Latest compiled JavaScript -->
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 
 <style>
 tr, th {
@@ -208,11 +176,10 @@ tr, th {
 
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약시간</label>
-																			<br> <input type="time" min="07:00" max="21:00"
-																				step="1800" class="time" id="startTime" required>
-																			~ <input type="time" min="07:00" max="21:00"
-																				step="1800" class="time" id="endTime">
+																			<br> <input type="time" class="timepicker" id="startTime">
+																			~ <input type="time" class="timepicker" id="endTime">
 																		</div>
+
 																		<div>
 																			<a id="timeCheck"></a>
 																		</div>
@@ -274,42 +241,105 @@ tr, th {
 															<c:forEach items="${ roomList }" var="r">
 																<tr>
 																	<th colspan="2">${ r.roomName }</th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
-																	<th></th>
+																	<th id="07:00"></th>
+																	<th id="07:30"></th>
+																	<th id="08:00"></th>
+																	<th id="08:30"></th>
+																	<th id="09:00"></th>
+																	<th id="09:30"></th>
+																	<th id="10:00"></th>
+																	<th id="10:30"></th>
+																	<th id="11:00"></th>
+																	<th id="11:30"></th>
+																	<th id="12:00"></th>
+																	<th id="12:30"></th>
+																	<th id="13:00"></th>
+																	<th id="13:30"></th>
+																	<th id="14:00"></th>
+																	<th id="14:30"></th>
+																	<th id="15:00"></th>
+																	<th id="15:30"></th>
+																	<th id="16:00"></th>
+																	<th id="16:30"></th>
+																	<th id="17:00"></th>
+																	<th id="17:30"></th>
+																	<th id="18:00"></th>
+																	<th id="18:30"></th>
+																	<th id="19:00"></th>
+																	<th id="19:30"></th>
+																	<th id="20:00"></th>
+																	<th id="20:30"></th>
 																</tr>
 															</c:forEach>
 														</tbody>
 													</table>
-												</div>							
+												</div>
 											</div>
-											<br><br>
-											
+
+											<div class="buttons" id="reserve-btn-div">
+												<button type="button" class="btn btn-primary"
+													id="reserveRoomBtn" data-toggle="modal"
+													data-target="#myModal">예약확인</button>
+												<div class="modal" id="myModal_reserveDetail">
+													<div class="modal-dialog">
+														<div class="modal-content">
+
+															<div class="modal-header">
+																<h4 class="modal-title">예약 상세</h4>
+																<button type="button" class="close" data-dismiss="modal"></button>
+															</div>
+
+															<div class="modal-body" id="modal-body">
+																<form name="insertRoom" method="post" action="#">
+
+																	<div class="form-reserveRoom">
+																		<label for="label-reserveRoom" class="control-label">예약일</label><br>
+																		<input type="date" id="modal-datePicker"
+																			class="datepicker-form">
+																	</div>
+																	<br>
+
+																	<div class="form-reserveRoom">
+																		<label for="label-reserveRoom" class="control-label">예약시간(내가
+																			예약한 시간 띄우기)</label> <br> <input type="time" min="07:00"
+																			max="21:00" step="1800" class="time" id="startTime"
+																			required> ~ <input type="time" min="07:00"
+																			max="21:00" step="1800" class="time" id="endTime">
+																	</div>
+
+																	<div>
+																		<a id="timeCheck"></a>
+																	</div>
+																	<br>
+
+																	<div class="form-reserveRoom">
+																		<label for="label-reserveRoom" class="control-label">회의실명</label>
+																		<input type="text" value="내가 예약한 회의실 띄우기">
+																	</div>
+																	<br>
+
+																	<div class="form-reserveRoom">
+																		<label for="label-reserveRoom" class="control-label">예약자</label>
+																		<br> <input type="text" id="reserveUser"
+																			value="${ userName } ${ userJob }" readonly>
+																	</div>
+																</form>
+															</div>
+
+															<div class="modal-footer">
+																<button type="button" class="btn btn-primary"
+																	id="reserveRoom" data-dismiss="modal"
+																	onclick="reserveRoom()" disabled>확인</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<button id="trBtn">tr 확인용</button>
+											<br>
+											<br>
+
 											<!-- 하단 회의실 현황 -->
 											<div id="meetingroomList">
 												<h3 id="roomSetting">회의실 현황</h3>
@@ -361,6 +391,16 @@ tr, th {
 	</div>
 
 	<script>
+	
+		$(function(){
+			$("#trBtn").click(function(){
+				
+				let th = $("#07:00").parent();
+				let tr = th.children().eq(0);
+				console.log(tr)
+			})
+		})
+	
 		//데이트피커
 		$(function() {
 			$("#testBtn").click(function() {
@@ -370,8 +410,9 @@ tr, th {
 			})
 		})
 
-		//타임피커	
-
+		//타임피커
+		
+		
 		//회의실 예약 관련
 		/* let time_0700 = $("tbody th").eq(1);
 		let time_0730 = $("tbody th").eq(2);
@@ -403,6 +444,7 @@ tr, th {
 		let time_2030 = $("tbody th").eq(28);
 		let time_2030_1 = $("tbody th").eq(30); */
 
+		//예약된 일정 화면에 뿌리기
 		$(function() {
 			$("#searchDateBtn").click(function() {
 	
@@ -419,19 +461,22 @@ tr, th {
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 					success : function(data, statusText, jqXHR) {
 						const obj = JSON.parse(data);
+						
+						console.log(data)
+						console.log(obj)
+						
 						let offset = 0;
 
 						$("tbody th").css("background", "");
 						
-						for (const room of obj.rooms){
-							
+						for (const room of obj.rooms){					
 							for (const time of room.times){
 								for (let i = time[0]; i < time[1]; i++){
-									$("tbody th").eq(i + offset + 1).css("background", "#2146b5");
+									$("tbody th").eq(i + offset + 1).css("background", "#2146b5"); //i + offset + 1 -> +1은 eq(0)이 회의실명 적힌 칸이라서
 								}
 							}
 							
-							offset += 29;
+							offset += 29; //한 행에 29칸임, +29 해서 한칸씩 내려갈 것
 						}
 
 						//location.reload();
@@ -527,7 +572,15 @@ tr, th {
 			})
 			
 		}) 
-			
+		
+		
+		$(function(){
+			$("#roomReserveTable tbody th").click(function(){
+				location.href="reservationDetails.do";
+			})
+		})
+		
+
 	</script>
 
 	<c:if test="${ !empty msg }">
