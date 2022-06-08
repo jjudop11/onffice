@@ -127,7 +127,10 @@
 						$("#enrollForm input[name=cPwd]").focus();
 						$("#pwdResult").text("영문자를 포함한 8자리이상 15자리이하로 작성하세요").css("color", "red");
 						$("#save").attr("disabled", true);
-					} 
+					} else {
+						$("#pwdResult").text("옳바른 비밀번호 양식입니다").css("color", "green");
+						$("#save").attr("disabled", false);
+					}
 						
 					let emailCheck = $("#enrollForm input[name=cEmail]");
 					
@@ -158,33 +161,69 @@
 			let num;
 			let rNum;
 			if(val.length >= 10) {
-				num = val.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3'); // 사업자등록번호 정규식
-				$("#cRNumber").val(num);
-				rNum = $("#cRNumber").val();
-				
+	
+				var data = {
+				    "b_no": [val] // 사업자번호 조회
+				   }; 
+
 				$.ajax({
-					url:"rNumCheck",
-					data:{rNum:rNum},
-					type:"post",
-					success:function(result) {
-						if(result > 0){ 
-							$("#rNumResult").text("해당 사업자등록번호로 가입한 계정이 있습니다").css("color", "red");
-							$("#save").attr("disabled", true);
-						} else {
-							$("#rNumResult").text("가입 가능한 사업자등록번호 입니다").css("color", "green");
-							$("#save").attr("disabled", false);
-						}
-					},
-					error:function() {
-						console.log("사업자번호 중복체크용 ajax 통신 실패");
-					}
+					
+					  url: "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=Lfr0PEL3zTN/Kpf9FORMkPyFg6o0eGOegU0L/36MunhajPVxE34blq0mNYlv1mE4sHiszx86H20fiiEaqziZSw==",  // serviceKey 값입력
+					  type: "POST",
+					  data: JSON.stringify(data), // json 을 string으로 변환하여 전송
+					  dataType: "JSON",
+					  contentType: "application/json",
+					  accept: "application/json",
+					  success: function(result) {
+						  $("#rNumResult").text("");
+						  
+					      if(result.data[0].tax_type == "국세청에 등록되지 않은 사업자등록번호입니다.") {
+					    	  $("#save").attr("disabled", true);
+					    	  alert(result.data[0].tax_type)
+					    	  
+					      } else {
+					    	  
+					    	  num = val.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3'); // 사업자등록번호 정규식
+							  $("#cRNumber").val(num);
+							  rNum = $("#cRNumber").val();
+					    	  
+							  $.ajax({
+									url:"rNumCheck",
+									data:{rNum:rNum},
+									type:"post",
+									success:function(result) {
+										if(result > 0){ 
+											$("#rNumResult").text("해당 사업자등록번호로 가입한 계정이 있습니다").css("color", "red");
+											$("#save").attr("disabled", true);
+										} else {
+											$("#rNumResult").text("가입 가능한 사업자등록번호 입니다").css("color", "green");
+											$("#save").attr("disabled", false);
+										}
+									},
+									error:function() {
+										console.log("사업자번호 중복체크용 ajax 통신 실패");
+									}
+							});
+					    }
+
+					  },
+					  error: function(result) {
+					      console.log(result.responseText); //responseText의 에러메세지 확인
+					      $("#save").attr("disabled", true);
+					  }
+					  
 				});
+				
 			} else {
-				$("#rNumResult").text("사업자등로번호만 10자리를 입력하세요").css("color", "red");
+				$("#rNumResult").text("사업자등로번호 10자리를 입력하세요").css("color", "red");
 				$("#save").attr("disabled", true);
 			}
-		}
-	
+				
+		}	
+				
+
+		
+
 		
     </script>
 </body>

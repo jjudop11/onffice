@@ -603,12 +603,12 @@
 				url:"selectAttendanceAllM",
 				type:"post",
 				success:function(list){
-
+					console.log(list)
 					for(let i in list) {
 						mList.push(list[i].aEntDate);
 						vList.push(list[i].aWtime.substr(0, 3));
 					}
-					console.log(mList)
+					console.log("=="+mList)
 					console.log(vList)
 									
 					new Chart(document.getElementById("line-chart"), {
