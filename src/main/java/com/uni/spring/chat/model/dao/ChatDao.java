@@ -52,4 +52,9 @@ public class ChatDao {
 		sqlSession.insert("chatMapper.insertChatUser" , chat);
 	}
 
+	public Chat findRoomUser(SqlSessionTemplate sqlSession, Chat chat) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("chatMapper.findRoomUser" , chat);
+	}
+
 }

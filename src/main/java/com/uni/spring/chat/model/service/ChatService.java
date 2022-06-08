@@ -25,4 +25,8 @@ public interface ChatService {
 
 	void insertChatUser(Chat chat, ArrayList<Member> mList, Member m);
 
+	Chat findRoomUser(Chat chat);
+
+	void insertChatUser(Chat chat);
+
 }
