@@ -139,7 +139,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public ArrayList<Member> selectApprovalOngoingApLine(int apNo) {
 		return approvalDao.selectApprovalOngoingApLine(sqlSession, apNo);
-		
 	}
 
 	@Override
@@ -191,6 +190,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 		if(result < 0) {
 			throw new CommException("첨부파일 수정 실패");
 		}
+	}
+	
+	@Override
+	public int selectRequestListCount(String mNo) {
+		return approvalDao.selectRequestListCount(sqlSession, mNo);
+	}
+
+	@Override
+	public ArrayList<ApList> selectRequestList(PageInfo pi, Map<String, Object> listMap) {
+		return approvalDao.selectRequestList(sqlSession, pi, listMap);
 	}
 	
 }

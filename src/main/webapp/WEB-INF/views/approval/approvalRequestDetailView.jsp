@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>결재진행</title>
+	<title>결재요청</title>
 	
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -313,11 +313,6 @@
 						</div>
 					</div>
 				</div> 
-				
-				<div class="buttons" align="center">
-	                <button class="btn btn-primary" onclick="postFormSubmit(1);">결재수정</button>
-	                <button class="btn btn-danger" onclick="postFormSubmit(2);">결재취소</button>
-	            </div>
 	            
 	            <form id="postForm" action="" method="post">
 					<input type="hidden" name="apNo" value="${ apNo }">

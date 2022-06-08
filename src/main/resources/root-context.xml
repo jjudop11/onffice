@@ -93,14 +93,14 @@
         </props>
        </property>
    </bean>
-   
-   <websocket:handlers><!-- 빈에 등록된 핸들러 WebSocket에 매핑 -->
+   <!-- 
+   <websocket:handlers>빈에 등록된 핸들러 WebSocket에 매핑 
         <websocket:mapping path="/chat/chat" handler="myHandler"/>
         <websocket:handshake-interceptors>
         	<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
 	 <bean id="myHandler" class="com.uni.spring.chat.MyHandler"/>
-   
+   -->
 	
 </beans>

@@ -92,6 +92,7 @@ public class ApprovalDao {
 	}
 
 	public int updateDayoffForm(SqlSession sqlSession, DayoffForm doForm) {
+		System.out.println("DAO : " + doForm);
 		return sqlSession.update("ApprovalMapper.updateDayoffForm", doForm);
 	}
 
@@ -105,6 +106,18 @@ public class ApprovalDao {
 
 	public int updateFormAtt(SqlSession sqlSession, FormAtt att) {
 		return sqlSession.update("ApprovalMapper.updateFormAtt", att);
+	}
+
+	public int selectRequestListCount(SqlSession sqlSession, String mNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectRequestListCount", mNo);
+	}
+
+	public ArrayList<ApList> selectRequestList(SqlSession sqlSession, PageInfo pi, Map<String, Object> listMap) {
+		
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit(); 
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectRequestList", listMap, rowBounds);
 	}
 	
 }

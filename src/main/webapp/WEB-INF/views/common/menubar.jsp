@@ -145,7 +145,7 @@
                                     <a href="approvalCompleteListView.do">결재완료</a>
                                 </li>
                                 <li class="submenu-item ">
-                                    <a href="layout-horizontal.html">Horizontal Menu</a>
+                                    <a href="approvalRequestListView.do">결재요청</a>
                                 </li>
                             </ul>
                         </li>

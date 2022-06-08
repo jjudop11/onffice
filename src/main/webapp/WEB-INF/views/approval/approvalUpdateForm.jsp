@@ -34,10 +34,9 @@
 	<div id="app">
 		<div id="main">
 			<form form id="enrollForm" method="post" action="updateApproval.do" enctype="multipart/form-data">
-				<!-- hidden 으로 넘길 정보 
-				<input type="hidden" id="cNo" name="cNo" value="${ loginUser.CNo }">
-				<input type="hidden" id="dNo" name="dNo" value="${ loginUser.DNo }">
-				<input type="hidden" id="mNo" name="mNo" value="${ loginUser.MNo }"> -->
+				<!-- hidden 으로 넘길 정보 -->
+				<input type="hidden" id="apNo" name="apNo" value="${ apNo }">
+				<input type="hidden" id="foNo" name="foNo" value="${ foNo }">
 				
 				<!-- 기본설정 -->
 				<div class="card">
@@ -174,12 +173,12 @@
 									<label for="upfile">첨부파일</label>
 									<div class="input-group mb-3">
 	                                    <div class="input-group mb-3">
-                                            <c:if test="${ !empty formAtt.originName }">
-                                            	<a href="${ pageContext.servletContext.contextPath }/resources/upload_files/${formAtt.changeName}" download="${ formAtt.originName }">${ formAtt.originName }</a>
-	                                        </c:if>
-	                                        <c:if test="${ empty formAtt.originName }">
-	                                        	첨부파일이 없습니다.
-	                                        </c:if>
+                                            <input type="file" id="upfile" class="form-control-file border" name="reUploadFile">
+				                            <c:if test="${ !empty formAtt.originName }">
+					                                                               현재 업로드된 파일 : ${ formAtt.originName } <br>
+					                            <input type="hidden" name="changeName" value="${ formAtt.changeName }">
+					                            <input type="hidden" name="originName" value="${ formAtt.originName }">
+				                            </c:if>
                                         </div>
 	                                </div>
 								</div>
@@ -245,12 +244,12 @@
 									<label for="upfile">첨부파일</label>
 									<div class="input-group mb-3">
 	                                    <div class="input-group mb-3">
-	                                        <c:if test="${ !empty formAtt.originName }">
-                                            	<a href="${ pageContext.servletContext.contextPath }/resources/upload_files/${formAtt.changeName}" download="${ formAtt.originName }">${ formAtt.originName }</a>
-	                                        </c:if>
-	                                        <c:if test="${ empty formAtt.originName }">
-	                                        	첨부파일이 없습니다.
-	                                        </c:if>
+	                                        <input type="file" id="upfile" class="form-control-file border" name="reUploadFile">
+				                            <c:if test="${ !empty formAtt.originName }">
+					                                                               현재 업로드된 파일 : ${ formAtt.originName } <br>
+					                            <input type="hidden" name="changeName" value="${ formAtt.changeName }">
+					                            <input type="hidden" name="originName" value="${ formAtt.originName }">
+				                            </c:if>
 	                                    </div>
 	                                </div>
 								</div>
@@ -299,12 +298,21 @@
 									<label for="upfile">첨부파일</label>
 									<div class="input-group mb-3">
 	                                    <div class="input-group mb-3">
-	                                        <c:if test="${ !empty formAtt.originName }">
+	                                    	<input type="file" id="upfile" class="form-control-file border" name="reUploadFile">
+				                            <c:if test="${ !empty formAtt.originName }">
+					                                                               현재 업로드된 파일 : ${ formAtt.originName } <br>
+					                            <input type="hidden" name="changeName" value="${ formAtt.changeName }">
+					                            <input type="hidden" name="originName" value="${ formAtt.originName }">
+				                            </c:if>
+	                                        <%-- <c:if test="${ !empty formAtt.originName }">
                                             	<a href="${ pageContext.servletContext.contextPath }/resources/upload_files/${formAtt.changeName}" download="${ formAtt.originName }">${ formAtt.originName }</a>
 	                                        </c:if>
 	                                        <c:if test="${ empty formAtt.originName }">
+	                                        	<label class="input-group-text" for="inputGroupFile01"><i
+	                                                class="bi bi-upload"></i></label>
+	                                        	<input type="file" class="form-control" id="inputGroupFile01 upfile" name="upfile">
 	                                        	첨부파일이 없습니다.
-	                                        </c:if>
+	                                        </c:if> --%>
 	                                    </div>
 	                                </div>
 								</div>
@@ -325,6 +333,7 @@
 		// 폼 서식에 따라 폼화면 변경 
 		$(document).ready(function(){
 			console.log("foNo : " + ${ foNo })
+			console.log("apNo : " + ${ apNo })
 			
 			if(${ foNo } == 10) {
 				$('#dayoffForm').css({'display':'block'})
