@@ -30,6 +30,7 @@
       <typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
       <typeAlias alias="Timetable" type="com.uni.spring.timetable.model.dto.Timetable"/>
       <typeAlias alias="ApList" type="com.uni.spring.approval.model.dto.ApList"/>
+      <typeAlias type="com.uni.spring.chat.model.dto.Message" alias="Message"/>
    </typeAliases>
    
    <mappers>

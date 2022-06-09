@@ -5,18 +5,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="chatMapper">
 
 	<!-- 채팅방 인원수 -->
-	<select id="selectCount" resultType="Chat">
+	<select id="selectCount" resultType="Chat" parameterType="_int">
 		SELECT CR_NO, COUNT(M_NO) AS CRCOUNT
-		FROM CR_USER
+		FROM CR_USER A
+        JOIN CHATROOM B USING(CR_NO)
+		WHERE C_NO = ${cNo}
 		GROUP BY CR_NO
 		ORDER BY CR_NO
 	</select>
 
 	<!-- 채팅방 전체 목록 -->
-	<select id="selectChatRoomList" resultType="Chat">
+	<select id="selectChatRoomList" resultType="Chat" parameterType="_int">
 		SELECT DISTINCT A.CR_NO, CR_TITLE, CR_PW
 		FROM CHATROOM A
 		JOIN CR_USER B ON A.CR_NO = B.CR_NO
+		WHERE C_NO = ${cNo}
 		ORDER BY CR_NO
 	</select>
 	
@@ -36,11 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY J_NO DESC        
 	
 	</select>
-	
-	
-	
-	
-	
+
 	<!-- 선택된 맴버 목록 -->
 	<select id="checkedUserList" parameterType="Member" resultType="Member">
 		SELECT   A.M_NO, M_NAME, J_NAME, D_NAME, P_NO
@@ -76,7 +75,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 채팅방 맴버 조회 -->
 	<select id="findRoomUser" parameterType="Chat" resultType="Chat">
-		SELECT M_NO , CR_FOUNDERNO FROM CR_USER WHERE CR_NO = ${crNo} AND M_NO = ${mNo}
+		SELECT A.M_NO , A.CR_FOUNDERNO FROM CR_USER A JOIN CHATROOM B ON A.CR_NO = B.CR_NO WHERE A.CR_NO = ${crNo} AND A.M_NO = ${mNo} AND B.C_NO = ${cNo}
+	</select>
+	
+	<!-- 채팅방 삭제 -->
+	<delete id="deleteRoom" parameterType="Chat">
+		DELETE FROM CHATROOM WHERE C_NO = #{cNo} AND CR_NO = #{crNo}
+	</delete>
+	
+	<!-- 채팅방 맴버 전체 조회 -->
+	<select id ="findRoomUserList" parameterType="Chat" resultType="Chat">
+		SELECT A.M_NO, A.CR_FOUNDERNO FROM CR_USER A JOIN CHATROOM B ON A.CR_NO = B.CR_NO WHERE B.C_NO = #{cNo} AND A.CR_NO = #{crNo}
+	</select>
+	
+	<!-- 채팅출입 맴버 조회 -->
+	<select id="findCAUser" parameterType="Chat" resultType="Chat">
+		SELECT A.M_NO FROM CR_ACCESS A JOIN CHATROOM B ON A.CR_NO = B.CR_NO WHERE A.CR_NO = #{crNo} AND A.M_NO = #{mNo} AND B.C_NO = #{cNo}
+	</select>
+	
+	<!-- 채팅방 출입 맴버 등록 -->
+	<insert id="insertCAUser" parameterType="Chat">
+		INSERT INTO CR_ACCESS VALUES(#{crNo}, #{mNo}, #{chatEnter} , NULL , #{cNo})
+	</insert>
+	
+	<!-- 채팅방 출입 맴버 수정 -->
+	<update id="updateCAUser" parameterType="Chat">
+		UPDATE CR_ACCESS SET CHAT_ENTER = #{chatEnter} WHERE CR_NO = #{crNo} AND M_NO = #{mNo} AND C_NO = #{cNo}
+	</update>
+	
+	<!-- 채팅내역 시퀀스 조회 -->
+	<select id="findCHSeq" parameterType="Chat" resultType="Chat">
+		SELECT * FROM (SELECT CHAT_SEQ FROM CR_HISTORY WHERE CR_NO = #{crNo} ORDER BY CHAT_SEQ DESC) WHERE ROWNUM = 1
+	</select>
+	
+	<!-- 채팅내역 등록 -->
+	<insert id="saveChat" parameterType="Chat">
+		INSERT INTO CR_HISTORY VALUES(#{crNo}, #{mNo}, #{chatSeq} , #{chatContent} , #{chatTime}, #{crImage}, #{crImageRoot} ,#{pName})
+	</insert>
+	
+	<select id="loginUser" parameterType="Member" resultType="Member">
+		<![CDATA[
+		SELECT * 
+		FROM VIEW_LOGINUSER
+		WHERE M_NO = #{mNo}
+		AND C_NO = #{cNo}
+		AND M_WORK='Y'
+		]]>
+	</select>
+	
+	<select id="selectCHList" parameterType="Message" resultType="Message">
+		SELECT * FROM CR_HISTORY WHERE CR_NO = #{cNo} ORDER BY CHAT_SEQ
 	</select>
 	
 </mapper>

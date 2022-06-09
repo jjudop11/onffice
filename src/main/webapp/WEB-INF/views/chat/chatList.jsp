@@ -256,18 +256,19 @@
                         "<td id='lockIcon+"+i+"' style='width:20%;'>" +	                 
                         "<svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-lock-fill' viewBox='0 0 16 16'>" +
 					  	   "<path d='M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z'/>" +
-						   "</svg>" +
+						   "</svg> "+c.crPw+"" +
 							"</td>" +
                    		"<td >" +
-                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post' onsubmit='return check("+i+","+ c.crPw+")'>" +
+                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post' onsubmit='return check( "+i+" );'>" +
                    		"<input class='btn btn-primary' name='createRoom' type='submit' value='입장'/ style='width:60px; float:right;'>" +
 						"<input type='hidden'  value='"+c.crNo +"' name='crNo'>" +
 						"<input type='hidden'  value='"+c.crTitle+"' name='crTitle'>" +
+						"<input type='hidden'  value='"+c.crPw+"' name='crPw' id='pw"+i+"'>" +
 						"</form>" +
 						"</td>" +
 						"</tr>" +
                     	"<tr><td colspan=5><hr class='divLine1' ></td></tr>"
-                    	
+                    	console.log("pw === " + typeof(c.crPw))
 							
     					}
 				
@@ -284,7 +285,7 @@
 	                        "<td id='lockIcon+"+i+"' style='width:20%;'>" +	                 
 								"</td>" +
 	                   		"<td >" +
-	                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post' onsubmit='return check("+i+","+ c.crPw+")'>" +
+	                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post'>" +
 	                   		"<input class='btn btn-primary' name='createRoom' type='submit' value='입장'/ style='width:60px; float:right'>" +
 							"<input type='hidden'  value='"+c.crNo +"' name='crNo'>" +
 							"<input type='hidden'  value='"+c.crTitle+"' name='crTitle'>" +
@@ -292,13 +293,11 @@
 							"</td>" +
 							"</tr>" +
 	                    	"<tr><td colspan=5><hr class='divLine1' ></td></tr>"
-	                    	
+						
+							
 							
 	    					}
-						
-						
-						
-						
+	
 						
 					})
 					
@@ -422,8 +421,6 @@
     				   		//console.log(mList)
     		   		
     						 }
-    					
-    					
     				})
     				
     			}
@@ -624,33 +621,28 @@
 		   		console.log("너냐?ajax통신실패");
 
 				 }
-				
-			
-				
 			})
 		}
 		
 		// 채팅방 입장시 비밀버호 체크해서 들어가는 함수
-		function check(i, pw){
+		function check(i){
+			
+			var pw = $('#pw'+i).val();
 
-			if(pw != null){
-				
-				var checkPw = prompt("비밀번호를 입력하세요");
-				
-				if(checkPw == pw){
-
-					return true;
-					
-				}else{
-					alert('비밀번호가 일치하지 않습니다.');
-					return false;
-					
-				}
-			}else if(pw == null){
+			var checkPw = prompt("비밀번호를 입력하세요");
+			
+			if(checkPw == pw){
+				console.log(typeof(pw))
 				return true;
+				
+			}else{
+				alert('비밀번호가 일치하지 않습니다.');
+				return false;
+				
 			}
-
+				
 		}
+		
 	</script>
 	
 	

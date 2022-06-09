@@ -1,39 +1,34 @@
 package com.uni.spring.chat.controller;
 
-import java.io.IOException;
-import java.security.Principal;
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.HtmlUtils;
 
 import com.google.gson.GsonBuilder;
 import com.uni.spring.chat.model.dto.Chat;
+import com.uni.spring.chat.model.dto.Message;
 import com.uni.spring.chat.model.service.ChatService;
 import com.uni.spring.member.model.dto.Member;
 
 @SessionAttributes({"loginUser", "msg"})
 @Controller
+//@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
 public class ChatController {
 
+	@Autowired
 	private SimpMessagingTemplate template;
 
 	
@@ -65,6 +60,7 @@ public class ChatController {
 			mv.setViewName("member/login");
 		}else{
 			mv.setViewName("chat/chatList");
+			//System.out.println("loginUser ==== " + loginUser);
 		}
 		
 		
@@ -85,9 +81,10 @@ public class ChatController {
 		}else {
 		
 		// 채팅방 당 참가자 수 구하기
-		ArrayList<Chat> count = chatService.selectCount();
+		int cNo = loginUser.getCNo();
+		ArrayList<Chat> count = chatService.selectCount(cNo);
 		System.out.println("count === " + count);
-		ArrayList<Chat> list = chatService.selectChatRoomList();
+		ArrayList<Chat> list = chatService.selectChatRoomList(cNo);
 		System.out.println("list ========= " + list);
 		for(int i = 0; i < list.size(); i++) {
 			
@@ -102,8 +99,9 @@ public class ChatController {
 		}
 		return new GsonBuilder().create().toJson(list);
 	}
-	
 	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value="crSelectUserList", produces="application/json; charset=utf-8")
 	public String selectUserList(Model model){
@@ -123,10 +121,7 @@ public class ChatController {
 	
 	@ResponseBody
 	@RequestMapping(value="insertSelectUserList")
-	//public int insertSelectUserList(@RequestBody Member[] eList, Model model) {
 	  public int insertSelectUserList(@RequestParam(value="eList[]") ArrayList<String> eList, Model model) {
-		
-		//System.out.println(eList);
 		
 		if(eList.size() > 0) {
 			Member loginUser = (Member)model.getAttribute("loginUser");
@@ -144,25 +139,6 @@ public class ChatController {
 			return 1;
 			}
 
-		
-		/*
-	
-		if(eList.length > 0) {
-		Member loginUser = (Member)model.getAttribute("loginUser");
-		Member m = new Member();
-		m.setCMNo(loginUser.getMNo());
-		m.setCNo(loginUser.getCNo());
-		for(Member r: eList){
-		   
-			m.setMNo(r.getMNo());
-			System.out.println("r.getMNo ================ " + r.getMNo());
-			chatService.insertSelectUserList(m);
-			
-		  }
-		
-		return 1;
-		}
-		*/
 		return 0;
 	}
 	
@@ -208,10 +184,6 @@ public class ChatController {
 			
 			Member loginUser = (Member)model.getAttribute("loginUser");
 			
-			if(loginUser == null) {
-				
-				return "member/login";
-			}else{
 			
 				long chatNo = new Date().getTime();
 				String orderN = String.valueOf(chatNo).substring(5);
@@ -222,90 +194,158 @@ public class ChatController {
 				chat.setCNo(loginUser.getCNo());
 				chatService.createChatRoom(chat);
 				
+				/*
 				Member m = new Member();	
 				
 				m.setCNo(loginUser.getCNo());
 				m.setMNo(loginUser.getMNo());	
-				ArrayList<Member> mList = chatService.checkedUserList(m);
+				*/
+				ArrayList<Member> mList = chatService.checkedUserList(loginUser);
 				System.out.println("mList.size === " + mList );
 				if(mList.size() > 0) {
 				
-					chatService.insertChatUser(chat, mList,m);
+					chatService.insertChatUser(chat, mList,loginUser);
 				
 				}
-				return "chatRoom/" + chat.getCrNo();
+				return "chat/chatList";
 			
-			}
+			
 	}
 	
-	/*
-	@RequestMapping("chat")
-	public String EnterChatRoom(Model model, Chat chat) {
+
+	@GetMapping(value="/chatRoom/exitRoom")
+	public String exitRoom(Model model, String crNo, String mNo, String cNo) {
 		
-		//Member loginUser = (Member)model.getAttribute("loginUser");
+		Chat chat = new Chat();
+		chat.setCrNo(Integer.parseInt(crNo));
+		chat.setMNo(mNo);
+		chat.setCNo(Integer.parseInt(cNo));
 		
-		//Member m = new Member();	
 		
-		//m.setCNo(loginUser.getCNo());
-		//m.setMNo(loginUser.getMNo());	
 		
-		return "/chat/chat";
+		System.out.println("exit 실행 ==================");
+		Chat chatRoom = chatService.findRoomUser(chat);
+		System.out.println("chatRoom === " + chatRoom );
+		if(chatRoom.getMNo().equals(chatRoom.getCrFounderNo())) {
+			
+			System.out.println("삭제 됐나");
+			chatService.deleteRoom(chat);
+			
+		}
+
+		return "redirect:/chatRoomListForm";
 	}
-	*/
-	 
 	
 	
 		// 채팅방 입장
-
-		@RequestMapping("chatRoom/{crNo}")
-		public ModelAndView EnterChatRoom(Chat chat, ModelAndView mv, Model model){
+		@PostMapping(value="chatRoom/{crNo}")
+		public String EnterChatRoom(Model model, Chat chat){
 			
 			Member loginUser = (Member)model.getAttribute("loginUser");
 			
+			//비로그인이면 메인으로
 			if(loginUser == null) {
 				
-				mv.setViewName("redirect:/");
-				return mv;
+				return "redirect:/";
 			}else{
 				
+				// 채팅방 채팅내역 정보
+				ArrayList<Message> message = chatService.selectCHList(chat);	
+				
+				// 채팅방 입장 시간 입력
+				Date chatNo = new Date();
+				SimpleDateFormat sd = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+				String chatEnter = sd.format(chatNo);
+				
+				chat.setChatEnter(chatEnter);
+				chat.setCNo(loginUser.getCNo());
 				chat.setMNo(loginUser.getMNo());
-		
-				Chat user = chatService.findRoomUser(chat);
+				//System.out.println("chatNo ===  " + chatEnter);
 				
+				// 채팅방 출입 목록에 있는지 확인 = 한 번이라도 그 방에 들어간 적이 있는지 확인
+				Chat caUser = chatService.findCAUser(chat);
 				
-				if(user.getMNo() == null) {
-					chat.setCrFounderNo(user.getCrFounderNo());
-					chatService.insertChatUser(chat);
-					
-					mv.addObject("m", loginUser);
-					mv.addObject("chat", chat);
-			
-					mv.setViewName("chat/chat");
-					
-					return mv;
-					
-				}else {
+				// 들어가려는 채팅방의 맴버 정보 출력
+				ArrayList<Chat> user = chatService.findRoomUserList(chat);
+				
+				for(Chat c : user) {
+					// 들어가려는 채팅방 목록에 맴버 정보가 있으면
+					if(c.getMNo().contains(chat.getMNo())) {
 
-					mv.addObject("m", loginUser);
-					mv.addObject("chat", chat);
-					mv.setViewName("chat/chat");
-					
-					return mv;
+						// 출입 여부를 확인해서 입장 시간을 입력 or 수정 해줌 
+						if(caUser == null) {
+							chatService.insertCAUser(chat);
+						}else {
+							chatService.updateCAUser(chat);
+						}
+						
+						model.addAttribute("message", message);
+						model.addAttribute("m", loginUser);
+						model.addAttribute("chat", chat);
+						
+						return "chat/chat";
+						
 					}
+	
+				}
+				
+				
+				chatService.insertCAUser(chat);
+				chat.setCrFounderNo(user.get(0).getCrFounderNo());
+				chatService.insertChatUser(chat);
+				
+				model.addAttribute("message", message);
+				model.addAttribute("m", loginUser);
+				model.addAttribute("chat", chat);
+				
+				return "chat/chat";
 			}
 		}
-		
-		
+
 		
 		@MessageMapping("/chat/send")
-	    public void sendMsg(Chat message){
+	    public void sendMsg(Message message){
+
+			// message에 cNo넣어주기
+			Chat chat = new Chat();
+			System.out.println("message.getCNo === " + message.getCNo());
+			chat.setCNo(message.getCNo());
+			chat.setCrNo(message.getCrNo());
+			chat.setMNo(message.getMNo());
+			chat.setChatContent(message.getChatContent());
 			
-			long crNo = message.getCrNo();
-			System.out.println("message  ==== " + message);
-	        //chatService.saveMessage(message);
-	        template.convertAndSend("/topic/" + crNo,message);
-	        
-	    }
+			Date chatNo = new Date();
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			chat.setChatTime(sd.format(chatNo));
+			
+			SimpleDateFormat sd1 = new SimpleDateFormat("MM.dd a HH:mm");
+			message.setChatTime(sd1.format(chatNo));
+			
+			System.out.println(chat);
+			Member m = chatService.loginUser(chat);
+			System.out.println("loginUser m ====== " + m);
+			message.setPName(m.getPName());
+			
+			chat.setPName(m.getPName());
 	
+			
+			template.convertAndSend("/topic/" + message.getCrNo(), message);
+			
+			Chat chatSeq = new Chat(); 
+			chatSeq = chatService.findCHSeq(chat);
+			int seq = 1;
+			if(chatSeq.getChatSeq() == 0) {
+				
+				chat.setChatSeq(seq);
+				
+			}else {
+				int seq1 = chatSeq.getChatSeq()+1;
+				chat.setChatSeq(seq1);
+			}
+		
+			System.out.println("message ==== " + message);
+			chatService.saveChat(chat);
+
+	    }
 		
 }
