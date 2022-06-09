@@ -596,7 +596,7 @@
 						let s = list[i].allWtime.substr(6,2);
 						
 						if(parseInt(40-h) < 0) {
-							$("#overW").text(String(parseInt(52-h)).padStart(2,"0") +":"+ m +":" + s);
+							$("#overW").text(String(parseInt(h-40)).padStart(2,"0") +":"+ m +":" + s);
 						} else {
 							$("#overW").text("00:00:00");
 						}
@@ -662,7 +662,12 @@
 						
 						for(let i in list) {
 							mList.push(list[i].aEntDate);
-							vList.push(list[i].aWtime.substr(0, 3));
+							if(list[i].aWtime.length >= 9) {
+								vList.push(list[i].aWtime.substr(0, 3));
+							} else {
+								vList.push(list[i].aWtime.substr(0, 2));
+							}
+							
 						}
 						console.log(mList)
 						console.log(vList)
@@ -675,7 +680,12 @@
 			
 								for(let i in list) {
 									mList2.push(list[i].aEntDate);
-									vList2.push(list[i].aWtime.substr(0, 3));
+									if(list[i].aWtime.length >= 9) { 
+										vList2.push(list[i].aWtime.substr(0, 3));
+									} else {
+										vList2.push(list[i].aWtime.substr(0, 2));
+									}
+									
 								}
 								console.log(mList2)
 								console.log(vList2)
