@@ -148,7 +148,7 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public ModelAndView loginUser(Member m, String username, @RequestParam(value = "remember", required = false) String remember, Model model, ModelAndView mv) { 
-		m.setMId(username);
+		
 		Member loginUser;
 		
 		loginUser = memberService.loginUser(bCryptPasswordEncoder, m);
