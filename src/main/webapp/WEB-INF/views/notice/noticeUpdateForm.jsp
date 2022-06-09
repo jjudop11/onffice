@@ -9,15 +9,21 @@
 <style>
 	#updateForm>table{width:100%;}
     #updateForm>table *{ margin:5px;}
+    
+     th {
+		width: 150px;
+	}
 </style>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
 $(document).ready(function(){
-	var check = ${ n.no_Important };
+	var check = "${ n.no_Important }";
+	console.log("check : " + check);
+	
 	if(check == "Y"){
-		$('input:checkbox[id="important_notice"]').attr("checked", true);
+		$("input:checkbox[id='important_notice']").attr("checked", true);
 	}
-	console.log(check);
+	
 });
 </script>
 </head>
@@ -27,15 +33,17 @@ $(document).ready(function(){
 	<div id="app">
 	<div id="main">
     <div class="content">
-        <br><br>
         <div class="innerOuter">
-            <br>
             <form id="updateForm" method="post" action="updateNotice.do" enctype="multipart/form-data">
             	<input type="hidden" name="No_Num" value="${ n.no_Num }">
                 <table align="center">
                     <tr>
                         <th><label for="title">제목</label></th>
-                        <td><input type="checkbox" id="important_notice" name="No_Important" value="Y">중요 !<input type="text" id="title" class="form-control" name="No_Title" value="${ n.no_Title }" required></td>
+                        <td><input type="checkbox" id="important_notice" name="No_Important" value="Y">중요<a style="color: red;">!</a><input type="text" id="title" class="form-control" name="No_Title" value="${ n.no_Title }" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="writerName">작성자</label></th>
+                        <td><input type="text" id="writeName" class="form-control" value="${ n.no_WriteName}" name="No_WriteName" readonly></td>
                     </tr>
                     <!-- <tr>
                         <th><label for="upfile">첨부파일</label></th>

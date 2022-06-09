@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,13 +34,16 @@ public class CommuController {
 	public CommuService commuService;
 	
 	@RequestMapping("listCommunity.do")
-	public String selectList(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, Model model) {
-
-		int listCount = commuService.selectListCount();
+	public String selectList(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, HttpSession session, Model model) {
+		
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int companyNo = loginUser.getCNo();
+		
+		int listCount = commuService.selectListCount(companyNo);
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 		
-		ArrayList<Community> list = commuService.selectList(pi);
+		ArrayList<Community> list = commuService.selectList(pi, companyNo);
 		
 		model.addAttribute("list",list);
 		model.addAttribute("pi", pi);
@@ -48,10 +52,13 @@ public class CommuController {
 	}
 	
 	@RequestMapping("searchCommunity.do")
-	public String searchNotice(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, @RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, Model model) {
+	public String searchNotice(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, @RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, HttpSession session, Model model) {
 
-		SearchCondition sc = new SearchCondition();
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int companyNo = loginUser.getCNo();
 		
+		SearchCondition sc = new SearchCondition();
+		sc.setCNo(companyNo);
 		switch (condition) {
 		case "titleAndContent":
 			sc.setTitleAndContent(keyword);
@@ -114,6 +121,13 @@ public class CommuController {
 	public String insertReply(Reply r) {
 		int result = commuService.insertReply(r);
 		return String.valueOf(result);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "deleteReply.do")
+	public String deleteReply(int cn) {
+		commuService.deleteReply(cn);
+		return "community/CommunityDetailView"; 
 	}
 	
 	@RequestMapping("deleteCommu.do")

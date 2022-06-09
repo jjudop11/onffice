@@ -1,21 +1,21 @@
 package com.uni.spring.notice.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 import com.uni.spring.common.SearchCondition;
+import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.notice.model.notice;
 import com.uni.spring.notice.service.noticeService;
 
@@ -25,13 +25,15 @@ public class noticeController {
 	@Autowired
 	public noticeService noticeService;
 	
+	
 	@RequestMapping("listNotice.do")
-	public String selectList(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, Model model) {
-
-		int listCount = noticeService.selectListCount();
+	public String selectList(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, HttpSession session, Model model) {
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int companyNo = loginUser.getCNo();
+		int listCount = noticeService.selectListCount(companyNo);
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 		
-		ArrayList<notice> list = noticeService.selectList(pi);
+		ArrayList<notice> list = noticeService.selectList(pi,companyNo);
 		
 		model.addAttribute("list",list);
 		model.addAttribute("pi", pi);
@@ -40,10 +42,13 @@ public class noticeController {
 	}
 	
 	@RequestMapping("searchNotice.do")
-	public String searchNotice(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, @RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, Model model) {
+	public String searchNotice(@RequestParam(value="currentPage" , required = false, defaultValue = "1") int currentPage, @RequestParam(value= "keyword") String keyword, @RequestParam(value= "condition") String condition, HttpSession session, Model model) {
 
-		SearchCondition sc = new SearchCondition();
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		int companyNo = loginUser.getCNo();
 		
+		SearchCondition sc = new SearchCondition();
+		sc.setCNo(companyNo);
 		switch (condition) {
 		case "titleAndContent":
 			sc.setTitleAndContent(keyword);
@@ -65,8 +70,6 @@ public class noticeController {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("condition", condition);
 		model.addAttribute("listCount",listCount);
-		
-		System.out.println(condition);
 		
 		return "notice/noticeSearchView";
 	}

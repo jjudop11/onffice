@@ -13,15 +13,15 @@ import com.uni.spring.common.SearchCondition;
 @Repository
 public class noticeDao {
 
-	public int selectListCount(SqlSessionTemplate sqlsession) {
+	public int selectListCount(SqlSessionTemplate sqlsession, int companyNo) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne("noticeMapper.selectListCount");
+		return sqlsession.selectOne("noticeMapper.selectListCount", companyNo);
 	}
 	
-	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+	public ArrayList<notice> selectList(SqlSessionTemplate sqlsession, PageInfo pi, int companyNo) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlsession.selectList("noticeMapper.selectList", null, rowBounds);
+		return (ArrayList)sqlsession.selectList("noticeMapper.selectList", companyNo, rowBounds);
 	}
 
 	public int insertNotice(SqlSessionTemplate sqlsession, notice n) {
@@ -48,6 +48,7 @@ public class noticeDao {
 	}
 
 	public int getsearchList(SqlSessionTemplate sqlsession, SearchCondition sc) {
+		// TODO Auto-generated method stub
 		return sqlsession.selectOne("noticeMapper.getListCount", sc);
 	}
 

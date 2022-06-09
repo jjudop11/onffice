@@ -10,9 +10,9 @@ import com.uni.spring.notice.model.notice;
 
 public interface CommuService  {
 
-	int selectListCount();
+	int selectListCount(int companyNo);
 
-	ArrayList<Community> selectList(PageInfo pi);
+	ArrayList<Community> selectList(PageInfo pi, int companyNo);
 
 	void insertCommu(Community c);
 
@@ -29,5 +29,7 @@ public interface CommuService  {
 	int searchListCount(SearchCondition sc);
 
 	ArrayList<notice> searchList(SearchCondition sc, PageInfo pi);
+
+	void deleteReply(int cn);
 
 }

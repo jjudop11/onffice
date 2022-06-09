@@ -22,14 +22,14 @@ public class noticeServiceImpl implements noticeService {
 	private noticeDao noticedao;
 	
 	@Override
-	public int selectListCount() {
+	public int selectListCount(int companyNo) {
 		// TODO Auto-generated method stub
-		return noticedao.selectListCount(sqlsession);
+		return noticedao.selectListCount(sqlsession, companyNo);
 	}
 	
 	@Override
-	public ArrayList<notice> selectList(PageInfo pi) {
-		return noticedao.selectList(sqlsession, pi);
+	public ArrayList<notice> selectList(PageInfo pi, int companyNo) {
+		return noticedao.selectList(sqlsession, pi, companyNo);
 	}
 
 	@Override

@@ -24,15 +24,15 @@ public class CommuServiceImpl implements CommuService {
 	private CommunityDao communityDao;
 	
 	@Override
-	public int selectListCount() {
+	public int selectListCount(int companyNo) {
 		// TODO Auto-generated method stub
-		return communityDao.selectListCount(sqlsession);
+		return communityDao.selectListCount(sqlsession, companyNo);
 	}
 
 	@Override
-	public ArrayList<Community> selectList(PageInfo pi) {
+	public ArrayList<Community> selectList(PageInfo pi, int companyNo) {
 		// TODO Auto-generated method stub
-		return communityDao.selectList(sqlsession, pi);
+		return communityDao.selectList(sqlsession, pi, companyNo);
 	}
 
 	@Override
@@ -90,6 +90,16 @@ public class CommuServiceImpl implements CommuService {
 	@Override
 	public ArrayList<notice> searchList(SearchCondition sc, PageInfo pi) {
 		return communityDao.searchList(sqlsession, sc, pi);
+	}
+
+	@Override
+	public void deleteReply(int cn) {
+		int result = communityDao.deleteReply(sqlsession, cn);
+		
+		if(result < 0) {
+			throw new CommException("댓글 삭제 실패");
+		}
+		
 	}
 
 }

@@ -18,6 +18,7 @@ import lombok.ToString;
 public class Community {
 	
 	private int ComNum;
+	private int CNo;
 	private String ComTitle;
 	private String ComContent;
 	private String ComWrite;

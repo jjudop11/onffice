@@ -3,6 +3,7 @@
 <mapper namespace="CommunityMapper">
 	<resultMap type="Community" id="CommunityResultSet">
 		<id column="COM_NUM" property="ComNum"/>
+		<id column="C_NO" property="CNo"/>
 		<id column="COM_Title" property="ComTitle"/>
 		<id column="COM_Content" property="ComContent"/>
 		<id column="COM_Write" property="ComWrite"/>
@@ -22,12 +23,12 @@
 
 	<select id="selectListCount" resultType="_int">
 		select count(*) from community
-		where Com_Status='Y'
+		where Com_Status='Y' and C_No=#{companyNo}
 	</select>
 	
 	<select id="searchList" resultMap="CommunityResultSet">
 		select * from community
-		where Com_Status='Y'
+		where Com_Status='Y' and C_No=#{CNo}
 		<if test="title != null">
 		AND Com_Title LIKE '%'||#{title}||'%'
 		</if>
@@ -43,7 +44,7 @@
 	<select id="getsearchCount"  parameterType="com.uni.spring.common.SearchCondition" resultType="_int">
 		SELECT COUNT(*)
 		FROM community
-		WHERE Com_Status='Y'
+		WHERE Com_Status='Y' and C_No=#{cNo}
 		<if test="title != null">
 		AND Com_Title LIKE '%'||#{title}||'%'
 		</if>
@@ -57,13 +58,13 @@
 	
 	<select id="selectList" resultType="Community">
 		select * from community
-		where Com_Status='Y'
+		where Com_Status='Y' and C_No=#{companyNo}
 		order by Com_Num desc
 	</select>
 	
 	<insert id="insertCommunity" parameterType="Community">
 		INSERT INTO community
-		VALUES(SEQ_COMMUNITY.NEXTVAL, #{ComTitle}, #{ComContent}, #{ComWrite}, DEFAULT, SYSDATE, DEFAULT)
+		VALUES(SEQ_COMMUNITY.NEXTVAL, #{CNo}, #{ComTitle}, #{ComContent}, #{ComWrite}, DEFAULT, SYSDATE, DEFAULT)
 	</insert>
 	
 	<select id="selectCommunity" resultMap="CommunityResultSet" parameterType="Community">
@@ -87,6 +88,12 @@
 		update community
 		set Com_Status='N'
 		where Com_Num=#{ComNum}
+	</update>
+	
+	<update id="deleteReply" parameterType="Reply">
+		update reply
+		set COMRE_STATUS='N'
+		where Com_Num=#{cn}
 	</update>
 	
 	<update id="updateCommunity" parameterType="Community">

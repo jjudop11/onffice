@@ -18,6 +18,7 @@ import lombok.ToString;
 public class notice {
 	
 	private int No_Num;
+	private int C_No;
 	private String No_Title;
 	private String No_Content;
 	private String No_Write;
@@ -25,5 +26,5 @@ public class notice {
 	private String No_Important;
 	private String No_status;
 	
-	private String No_WirterName;
+	private String No_WriteName;
 }

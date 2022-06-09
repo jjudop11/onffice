@@ -20,4 +20,6 @@ public class SearchCondition extends PageInfo {
 	private String content;
 	private String titleAndContent;
 	
+	private int cNo;
+	
 }
