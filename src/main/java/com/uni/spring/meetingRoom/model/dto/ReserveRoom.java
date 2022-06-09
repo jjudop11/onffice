@@ -1,15 +1,16 @@
 package com.uni.spring.meetingRoom.model.dto;
 
 public class ReserveRoom {
-	
+
 	private String reserveNo;
 	private String roomNo;
 	private String reserveDate;
 	private String startTime;
 	private String endTime;
+	private String reserveTitle;
 	private String mNo;
 	private int cNo;
-	
+
 	public ReserveRoom() {
 		// TODO Auto-generated constructor stub
 	}
@@ -54,6 +55,14 @@ public class ReserveRoom {
 		this.endTime = endTime;
 	}
 
+	public String getReserveTitle() {
+		return reserveTitle;
+	}
+
+	public void setReserveTitle(String reserveTitle) {
+		this.reserveTitle = reserveTitle;
+	}
+
 	public String getmNo() {
 		return mNo;
 	}
@@ -62,15 +71,13 @@ public class ReserveRoom {
 		this.mNo = mNo;
 	}
 
-	public int getCNo() {
+	public int getcNo() {
 		return cNo;
 	}
 
-	public void setCNo(int cNo) {
+	public void setcNo(int cNo) {
 		this.cNo = cNo;
 	}
-	
-	
 	
 	
 

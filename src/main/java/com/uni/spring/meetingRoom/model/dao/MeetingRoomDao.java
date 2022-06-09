@@ -89,7 +89,7 @@ public class MeetingRoomDao {
 	public ArrayList<ReserveRoom> selectReservedRooms(SqlSessionTemplate sqlsession, int cNo, String date) {
 		
 		ReserveRoom room = new ReserveRoom();
-		room.setCNo(cNo);
+		room.setcNo(cNo);
 		room.setReserveDate(date);
 	
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.selectReservedRooms", room);

@@ -128,7 +128,7 @@ public class MeetingRoomController {
 	@ResponseBody
 	public int reserveRoom(@ModelAttribute ReserveRoom room, @RequestParam("date") String date,
 			@RequestParam("startTime") String startTime, @RequestParam("endTime") String endTime,
-			@RequestParam("selectRoom") String selectRoom, HttpSession session) {
+			@RequestParam("selectRoom") String selectRoom, @RequestParam("title") String title, HttpSession session) {
 
 		// 예약번호(시퀀스), 회의실번호, 예약일, 시작시간, 종료시간, 예약자사원번호, 회사번호
 
@@ -152,9 +152,10 @@ public class MeetingRoomController {
 			room.setReserveDate(date);
 			room.setStartTime(startTime);
 			room.setEndTime(endTime);
+			room.setReserveTitle(title);
 			room.setmNo(mNo);
-			room.setCNo(cNo);
-			
+			room.setcNo(cNo);
+				
 			//날짜, 시간 체크 후 위배사항 없으면 예약 실행
 			int result = meetingRoomService.reserveRoom(room);
 	
