@@ -34,5 +34,9 @@ public class Chat {
 	private String crImageRoot; // 채팅방 이미지 파일 경로
 	private String crFounderNo; // 개설자 사번
 	private int crCount; // 참가자 총 명수
+	private String sender; // 채팅 보낸 사람
+	private String pName; // 프로필사진 이름
+	
+	
 	
 }

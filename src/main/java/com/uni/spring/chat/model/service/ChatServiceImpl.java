@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.uni.spring.chat.model.dao.ChatDao;
 import com.uni.spring.chat.model.dto.Chat;
+import com.uni.spring.chat.model.dto.Message;
 import com.uni.spring.member.model.dto.Member;
 
 
@@ -23,15 +24,15 @@ public class ChatServiceImpl implements ChatService{
 	private ChatDao chatDao;
 	
 	@Override
-	public ArrayList<Chat> selectChatRoomList() {
+	public ArrayList<Chat> selectChatRoomList(int cNo) {
 		// TODO Auto-generated method stub
-		return chatDao.selectChatRoomList(sqlSession);
+		return chatDao.selectChatRoomList(sqlSession, cNo);
 	}
 
 	@Override
-	public ArrayList<Chat> selectCount() {
+	public ArrayList<Chat> selectCount(int cNo) {
 		// TODO Auto-generated method stub
-		return chatDao.selectCount(sqlSession);
+		return chatDao.selectCount(sqlSession, cNo);
 	}
 
 	@Override
@@ -101,6 +102,61 @@ public class ChatServiceImpl implements ChatService{
 	public void insertChatUser(Chat chat) {
 		// TODO Auto-generated method stub
 		chatDao.insertChatUser(sqlSession, chat);
+	}
+
+	@Override
+	public void deleteRoom(Chat chat) {
+		// TODO Auto-generated method stub
+		chatDao.deleteRoom(sqlSession, chat);
+	}
+
+	@Override
+	public ArrayList<Chat> findRoomUserList(Chat chat) {
+		// TODO Auto-generated method stub
+		
+		return chatDao.findRoomUserList(sqlSession, chat);
+	}
+
+	@Override
+	public Chat findCAUser(Chat chat) {
+		// TODO Auto-generated method stub
+		return chatDao.findCAUser(sqlSession, chat);
+	}
+
+	@Override
+	public void insertCAUser(Chat chat) {
+		// TODO Auto-generated method stub
+		chatDao.insertCAUser(sqlSession, chat);
+	}
+
+	@Override
+	public void updateCAUser(Chat chat) {
+		// TODO Auto-generated method stub
+		chatDao.updateCAUser(sqlSession, chat);
+	}
+
+	@Override
+	public Chat findCHSeq(Chat chat) {
+		// TODO Auto-generated method stub
+		return chatDao.findCHSeq(sqlSession, chat);
+	}
+
+	@Override
+	public void saveChat(Chat chat) {
+		// TODO Auto-generated method stub
+		chatDao.saveChat(sqlSession, chat);
+	}
+
+	@Override
+	public Member loginUser(Chat chat) {
+		// TODO Auto-generated method stub
+		return chatDao.loginUser(sqlSession, chat);
+	}
+
+	@Override
+	public ArrayList<Message> selectCHList(Chat chat) {
+		// TODO Auto-generated method stub
+		return chatDao.selectCHList(sqlSession, chat);
 	}
 
 }
