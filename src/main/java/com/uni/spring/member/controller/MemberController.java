@@ -26,8 +26,10 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 
@@ -46,6 +48,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 
 import lombok.Builder;
+import oracle.net.aso.k;
 
 @SessionAttributes({"loginUser", "msg", "mNo"})
 @Controller
@@ -144,10 +147,10 @@ public class MemberController {
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView loginUser(Member m, @RequestParam(value = "remember", required = false) String remember, Model model, ModelAndView mv) { 
-
+	public ModelAndView loginUser(Member m, String username, @RequestParam(value = "remember", required = false) String remember, Model model, ModelAndView mv) { 
+		m.setMId(username);
 		Member loginUser;
-
+		
 		loginUser = memberService.loginUser(bCryptPasswordEncoder, m);
 		
 		System.out.println("DB정보: "+loginUser);
@@ -626,5 +629,6 @@ public class MemberController {
 
 		return result;
 	}
+
 
 }

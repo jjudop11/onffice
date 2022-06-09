@@ -165,15 +165,15 @@
 		                </div>
 		                <div class="form-group">
 		                  <label class="form-label">이름</label>
-		                  <input type="text" class="form-control mb-1" name="mName" value="${ sessionScope.loginUser.MName }">
+		                  <input type="text" class="form-control mb-1" name="mName" value="${ sessionScope.loginUser.MName }" required autofocus>
 		                </div>
 		                <div class="form-group">
 		                  <label class="form-label">이메일</label>
-		                  <input type="text" class="form-control mb-1" name="mEmail" value="${ sessionScope.loginUser.MEmail }">
+		                  <input type="text" class="form-control mb-1" name="mEmail" value="${ sessionScope.loginUser.MEmail }" required autofocus>
 		                </div>
 		                <div class="form-group">
 		                  <label class="form-label">전화번호</label>
-		                  <input type="text" class="form-control" name="mPhone" value="${ sessionScope.loginUser.MPhone }">
+		                  <input type="text" class="form-control" name="mPhone" value="${ sessionScope.loginUser.MPhone }" required autofocus>
 		                </div>
 		                <c:forTokens var="addr" items="${ sessionScope.loginUser.MAddress }" delims="/" varStatus="status">
 							<c:if test="${ status.index eq 0 && addr >= '0' && addr <= '99999' }">
@@ -193,9 +193,9 @@
 		             	<div class="form-group has-icon-left"> 
                           <label>우편번호 :</label>
                           <button type="button" class="btn btn-primary" id="postcodify_search_button" >검색</button>
-						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" value="${ post }">
+						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" value="${ post }" required autofocus>
                           <label>도로명주소 : </label>
-						  <input type="text" name="address1" class="form-control postcodify_address" value="${ address1 }">
+						  <input type="text" name="address1" class="form-control postcodify_address" value="${ address1 }" required autofocus>
                        	  <label>상세주소 : </label>
 						  <input type="text" name="address2" class="form-control postcodify_extra_info"  value="${ address2 }">
 		               </div>

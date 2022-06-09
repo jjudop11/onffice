@@ -398,7 +398,7 @@
                                </div>
                                <div class="col-12">
                                     <div class="form-group mb-3">
-                                        <label class="col-xs-4" for="edit-desc">설명</label>
+                                        <label class="col-xs-4" for="edit-desc">내용</label>
                                         <textarea class="form-control" name="edit-desc" id="edit-desc"></textarea>
                                	  </div>
                                </div>

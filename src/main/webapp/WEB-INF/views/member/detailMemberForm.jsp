@@ -204,7 +204,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">Email</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail" value="${ m.MEmail }">
+                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail" value="${ m.MEmail }" required autofocus>
                               <div class="form-control-icon">
                                   <i class="bi bi-envelope"></i>
                               </div>
@@ -213,7 +213,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">전화번호</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="전화번호" id="mPhone" name="mPhone" value="${ m.MPhone }">
+                              <input type="text" class="form-control" placeholder="전화번호" id="mPhone" name="mPhone" value="${ m.MPhone }" required autofocus>
                               <div class="form-control-icon">
                                   <i class="bi bi-phone"></i>
                               </div>
@@ -237,16 +237,16 @@
 		             	<div class="form-group has-icon-left"> 
                           <label>우편번호 :</label>
                           <button type="button" class="btn btn-primary" id="postcodify_search_button" >검색</button>
-						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" value="${ post }">
+						  <input type="text" name="post" class="form-control mr-2 postcodify_postcode5" value="${ post }" required autofocus>
                           <label>도로명주소 : </label>
-						  <input type="text" name="address1" class="form-control postcodify_address" value="${ address1 }">
+						  <input type="text" name="address1" class="form-control postcodify_address" value="${ address1 }" required autofocus>
                        	  <label>상세주소 : </label>
 						  <input type="text" name="address2" class="form-control postcodify_extra_info"  value="${ address2 }">
 		               </div>
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">입사일</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="입사일" id="mEntDate" name="mEntDate" value="${ m.MEntDate}">
+                              <input type="text" class="form-control" placeholder="입사일" id="mEntDate" name="mEntDate" value="${ m.MEntDate}" required autofocus>
                               <div class="form-control-icon">
                                   <i class="bi bi-house"></i>
                               </div>
