@@ -198,7 +198,7 @@
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="table-datatable.html" class='sidebar-link'>
+                            <a href="listCommunity.do" class='sidebar-link'>
                                 <i class="bi bi-file-earmark-spreadsheet-fill"></i>
                                 <span>커뮤니티</span>
                             </a>
