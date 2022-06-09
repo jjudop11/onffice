@@ -12,7 +12,7 @@
 	
 	<!-- 회의실 추가 -->
 	<insert id="insertMeetingRoom" parameterType="MeetingRoom">
-		INSERT INTO MEETINGROOM
+		INSERT INTO MEETING_ROOM
 		VALUES
 		(#{roomNo}, #{roomName}, #{roomCapa}, #{roomNote}, #{cNo})	
 	</insert>
@@ -20,21 +20,21 @@
 	<!-- 회의실번호 중복체크 -->
 	<select id="roomNoCheck" parameterType="string" resultType="_int">
 		SELECT COUNT(*)
-		FROM MEETINGROOM
+		FROM MEETING_ROOM
 		WHERE ROOM_NO=#{roomNo}
 	</select>
 	
 	<!-- 페이징 처리용 -->
 	<select id="selectRoomListCount" resultType="_int">
 		SELECT COUNT(*)
-		FROM MEETINGROOM
+		FROM MEETING_ROOM
 		WHERE C_NO = #{userCNo}
 	</select>
 	
 	<!-- 총 회의실 목록 -->
 	<select id="selectRoomList" parameterType="_int" resultType="MeetingRoom">
 		SELECT *
-		FROM MEETINGROOM
+		FROM MEETING_ROOM
 		WHERE C_NO = #{userCNo}
 		ORDER BY ROOM_NO
 	</select>
@@ -42,28 +42,28 @@
 	<!-- 회의실 삭제 -->
 	<delete id="deleteMeetingRoom" parameterType="string">
 		DELETE
-		FROM MEETINGROOM
+		FROM MEETING_ROOM
 		WHERE ROOM_NO = #{roomNo}
 	</delete>
 	
 	<!-- 회의실 여러개 삭제 -->
 	<delete id="deleteRooms" parameterType="string">
 		DELETE
-		FROM MEETINGROOM
+		FROM MEETING_ROOM
 		WHERE ROOM_NO = #{roomNo}
 	</delete>
 	
 	<!-- 회의실 예약시 회의실번호 찾기 -->
 	<select id="selectRoomNo" parameterType="string" resultType="string">
 		SELECT ROOM_NO
-		FROM MEETINGROOM
+		FROM MEETING_ROOM
 		WHERE ROOM_NAME = #{selectRoom}
 	</select>
 	
 	<insert id="reserveRoom" parameterType="ReserveRoom">
 		INSERT INTO RESERVE_ROOM
 		VALUES
-		(SEQ_RESERVE_NO.NEXTVAL, #{roomNo}, #{reserveDate}, #{startTime}, #{endTime}, #{mNo}, #{cNo})	
+		(SEQ_RESERVE_NO.NEXTVAL, #{roomNo}, #{reserveDate}, #{startTime}, #{endTime}, #{reserveTitle}, #{mNo}, #{cNo})	
 	</insert>
 	
 	<select id="selectStartKey" parameterType="string" resultType="_double">

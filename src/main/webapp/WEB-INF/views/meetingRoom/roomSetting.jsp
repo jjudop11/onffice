@@ -461,6 +461,12 @@ tr, th {
 			}
 		}
 	
+		//모달 닫을 시 내용 초기화
+		$(".modal").on("hidden.bs.modal", function(e){
+			$(this).find("form")[0].reset();
+			$("#room_no_check").empty();
+		})
+		
 	</script>
 
 	<c:if test="${ !empty msg }">
