@@ -14,15 +14,15 @@ import com.uni.spring.notice.model.notice;
 @Repository
 public class CommunityDao {
 
-	public int selectListCount(SqlSessionTemplate sqlsession) {
+	public int selectListCount(SqlSessionTemplate sqlsession, int companyNo) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne("CommunityMapper.selectListCount");
+		return sqlsession.selectOne("CommunityMapper.selectListCount", companyNo);
 	}
 	
-	public ArrayList<Community> selectList(SqlSessionTemplate sqlsession, PageInfo pi) {
+	public ArrayList<Community> selectList(SqlSessionTemplate sqlsession, PageInfo pi, int companyNo) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlsession.selectList("CommunityMapper.selectList", null, rowBounds);
+		return (ArrayList)sqlsession.selectList("CommunityMapper.selectList", companyNo, rowBounds);
 	}
 
 	public int insertCommu(SqlSessionTemplate sqlsession, Community c) {
@@ -57,6 +57,11 @@ public class CommunityDao {
 		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return (ArrayList)sqlsession.selectList("CommunityMapper.searchList", sc, rowBounds);
+	}
+
+	public int deleteReply(SqlSessionTemplate sqlsession, int cn) {
+		return sqlsession.update("CommunityMapper.deleteReply", cn);
+		
 	}
 
 

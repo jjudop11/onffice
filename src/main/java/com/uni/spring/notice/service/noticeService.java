@@ -8,9 +8,9 @@ import com.uni.spring.notice.model.notice;
 
 public interface noticeService  {
 
-	int selectListCount();
+	int selectListCount(int companyNo);
 
-	ArrayList<notice> selectList(PageInfo pi);
+	ArrayList<notice> selectList(PageInfo pi, int companyNo);
 
 	void insertNotice(notice n);
 

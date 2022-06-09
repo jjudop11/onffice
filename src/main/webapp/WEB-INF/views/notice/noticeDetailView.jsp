@@ -6,48 +6,50 @@
 <head>
 <meta charset="UTF-8">
 <title>공지사항</title>
+<style>
+
+#contentArea {
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 10px 20px -10px DarkSeaGreen; 
+}
+td {
+	padding: 15px 30px !important;
+}
+</style>
 </head>
 <body>
 	<jsp:include page="../common/menubar.jsp" />
 	<div id="app">
 		<div id="main">
 			<div class="content">
-
-				<div class="innerOuter">
+				<div class="innerOuter" style="padding:0% 10%;">
 					<h2>공지사항</h2>
 					<br>
 					<table id="contentArea" align="center" class="table">
 						<tr>
-							<td colspan="3">${ n.no_Title }</td>
+							<td style="font-size: x-large; font-weight: bold; width: 75%;">${ n.no_Title }</td>
+							<td>
+							<c:if test="${ sessionScope.loginUser.MNo eq n.no_Write }">
+								<div align="center">
+									<button class="btn" onclick="postFormSubmit(1);">수정</button> |
+									<button class="btn" onclick="postFormSubmit(2);">삭제</button>
+								</div>
+		
+								<form id="postForm" action="" method="post">
+									<input type="hidden" name="No_Num" value="${ n.no_Num }">
+								</form>
+							</c:if>
+							</td>
 						</tr>
 						<tr>
-							<td>작성자 ${ n.no_WirterName } (${ n.no_Date })</td>
+							<td><a style="font-size: small;">작성자</a> ${ n.no_WriteName } <a style="font-size: small;">(${ n.no_Date })</a></td>
 						</tr>
-						<!--  <tr>
-                    <th>첨부파일</th>
-                    <td colspan="3">
-                    	<c:if test="${ !empty b.originName }">
-                        	<a href="${ pageContext.servletContext.contextPath }/resources/upload_files/${b.changeName}" download="${ b.originName }">${ b.originName }</a>
-                        </c:if>
-                        <c:if test="${ empty b.originName }">
-                        	첨부파일이 없습니다.
-                        </c:if>
-                    </td>
-                </tr>-->
 						<tr>
-							<td colspan="4"><p style="height: 150px">${ n.no_Content }</p></td>
+							<td><p style="height: 150px">${ n.no_Content }</p></td>
 						</tr>
 					</table>
-					<c:if test="${ sessionScope.loginUser.MNo eq n.no_Write }">
-						<div align="center">
-							<button class="btn btn-primary" onclick="postFormSubmit(1);">수정하기</button>
-							<button class="btn btn-danger" onclick="postFormSubmit(2);">삭제하기</button>
-						</div>
-
-						<form id="postForm" action="" method="post">
-							<input type="hidden" name="No_Num" value="${ n.no_Num }">
-							<!-- <input type="hidden" name="fileName" value="${ b.changeName }">  -->
-						</form>
+					<br>
 						<script>
 							function postFormSubmit(num) {
 								var postForm = $("#postForm");
@@ -61,7 +63,6 @@
 								postForm.submit();
 							}
 						</script>
-					</c:if>
 				</div>
 			</div>
 		</div>

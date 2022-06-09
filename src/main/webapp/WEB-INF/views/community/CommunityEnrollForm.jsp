@@ -25,6 +25,10 @@
                         <td><input type="text" id="title" class="form-control" name="ComTitle" required></td>
                     </tr>
                     <tr style="display: none;">
+                        <th><label for="company">회사 번호 번호</label></th>
+                        <td><input type="text" id="company" class="form-control" value="${ sessionScope.loginUser.CNo }" name="CNo"></td>
+                    </tr>
+                    <tr style="display: none;">
                         <th><label for="writer">작성자</label></th>
                         <td><input type="text" id="writer" class="form-control" value="${ sessionScope.loginUser.MNo }" name="ComWrite" readonly></td>
                     </tr>

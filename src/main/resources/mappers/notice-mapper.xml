@@ -3,9 +3,11 @@
 <mapper namespace="noticeMapper">
 	<resultMap type="Notice" id="noticeResultSet">
 		<id column="No_Num" property="No_Num"/>
+		<id column="C_No" property="C_No"/>
 		<id column="No_Title" property="No_Title"/>
 		<id column="No_Content" property="No_Content"/>
 		<id column="No_Write" property="No_Write"/>
+		<id column="No_WriteName" property="No_WriteName"/>
 		<id column="No_Date" property="No_Date"/>
 		<id column="No_Important" property="No_Important"/>
 		<id column="No_Status" property="No_status"/>
@@ -14,18 +16,18 @@
 	
 	<select id="selectListCount" resultType="_int">
 		select count(*) from notice
-		where No_Status='Y'
+		where No_Status='Y' and C_No=#{companyNo}
 	</select>
 	
 	<select id="selectList" resultMap="noticeResultSet">
-		select No_Num,No_Title,No_Content, No_Write ,No_Date,No_Important,No_Status,m.M_NAME from notice, member m
-		where No_Status='Y' and m.M_No = No_write
+		select * from notice
+		where No_Status='Y' and C_No=#{companyNo}
 		order by DECODE( No_Important,'Y',1), No_Num desc
 	</select>
 
 	<select id="searchList" resultMap="noticeResultSet">
-		select No_Num,No_Title,No_Content, No_Write ,No_Date,No_Important,No_Status,m.M_NAME from notice, member m
-		where No_Status='Y' and m.M_No = No_write
+		select * from notice
+		where No_Status='Y' and C_No=#{cNo}
 		<if test="title != null">
 		AND No_Title LIKE '%'||#{title}||'%'
 		</if>
@@ -41,7 +43,7 @@
 	<select id="getListCount"  parameterType="com.uni.spring.common.SearchCondition" resultType="_int">
 		SELECT COUNT(*)
 		FROM notice
-		WHERE No_Status='Y'
+		WHERE No_Status='Y' and C_No=#{cNo}
 		<if test="title != null">
 		AND No_Title LIKE '%'||#{title}||'%'
 		</if>
@@ -60,7 +62,7 @@
 	
 	<insert id="insertNotice" parameterType="Notice">
 		INSERT INTO notice
-		VALUES(SEQ_NOTICE.NEXTVAL, #{No_Title}, #{No_Content}, #{No_Write}, SYSDATE, #{No_Important}, DEFAULT)
+		VALUES(SEQ_NOTICE.NEXTVAL, #{C_No}, #{No_Title}, #{No_Content}, #{No_Write}, #{No_WriteName}, SYSDATE, #{No_Important}, DEFAULT)
 	</insert>
 	
 	<update id="deleteNotice" parameterType="Notice">
