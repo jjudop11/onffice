@@ -48,4 +48,8 @@ public interface ChatService {
 
 	ArrayList<Message> selectCHList(Chat chat);
 
+	void exitChatRoom(Chat chat);
+
+	void disconnect(Chat mem);
+
 }

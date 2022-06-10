@@ -159,4 +159,16 @@ public class ChatServiceImpl implements ChatService{
 		return chatDao.selectCHList(sqlSession, chat);
 	}
 
+	@Override
+	public void exitChatRoom(Chat chat) {
+		// TODO Auto-generated method stub
+		chatDao.exitChatRoom(sqlSession, chat);
+	}
+
+	@Override
+	public void disconnect(Chat mem) {
+		// TODO Auto-generated method stub
+		chatDao.disconnect(sqlSession, mem);
+	}
+
 }

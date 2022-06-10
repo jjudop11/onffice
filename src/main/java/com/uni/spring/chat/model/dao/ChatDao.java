@@ -103,4 +103,14 @@ public class ChatDao {
 		return (ArrayList)sqlSession.selectList("chatMapper.selectCHList", chat);
 	}
 
+	public void exitChatRoom(SqlSessionTemplate sqlSession, Chat chat) {
+		// TODO Auto-generated method stub
+		sqlSession.delete("chatMapper.exitChatRoom" , chat);
+	}
+
+	public void disconnect(SqlSessionTemplate sqlSession, Chat mem) {
+		// TODO Auto-generated method stub
+		sqlSession.update("chatMapper.disconnect" , mem);
+	}
+
 }
