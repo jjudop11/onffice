@@ -200,15 +200,18 @@ tr, th {
 																		<br>
 
 																		<div class="form-reserveRoom">
-																			<label for="basicInput">회의명</label> 
-																			<input type="text" class="form-control" id="reservetitle" placeholder="회의 내용을 입력해주세요">
+																			<label for="basicInput">회의명</label> <input
+																				type="text" class="form-control" id="reservetitle"
+																				placeholder="회의 내용을 입력해주세요">
 																		</div>
 
 																		<br>
 
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약자</label>
-																			<br> <input type="text" class="form-control" id="reserveUser" value="${ userName } ${ userJob }" readonly>
+																			<br> <input type="text" class="form-control"
+																				id="reserveUser" value="${ userName } ${ userJob }"
+																				readonly>
 																		</div>
 																	</form>
 																</div>
@@ -320,17 +323,9 @@ tr, th {
 															</c:forEach>
 														</tbody>
 													</table>
-													<!-- 페이징 -->
 												</div>
-
 											</div>
-
-
-
 										</div>
-
-
-
 									</div>
 								</div>
 							</div>

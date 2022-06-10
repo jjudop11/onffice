@@ -73,14 +73,16 @@
 							<div class="card-body">
 								<div class="card-content">
 									<div class="card-body" id="inner-card-body">
-
-
+										
+										//히든태그에 예약번호 받기
+										<input type="hidden" id="reserveNo" value="">
+										
 										<h3>예약한 회의실 넘겨받기 ex)대회의실</h3>
 										<br>
 										
 										//value에 예약한 날짜 받기
 										<h5>예약일</h5>
-										<div><input type="date" value="2022-06-07"> </div>
+										<div><input type="date" id="date" value="2022-06-07"> </div>
 										<br>
 									
 										//value에 예약한 시간 받기
@@ -88,14 +90,19 @@
 										<input type="time" id="startTime" value="08:00"> ~ <input type="time" id="endTime" value="08:00"> <input type="checkbox" class="form-check-input"> 종일
 										<br><br>
 										
+										//value에 회의내용 받기
+										<h5>회의명</h5>
+										<input type="text" class="form-control" id="title" value="점심메뉴 고민">
+										<br>
+										
 										//text에 예약자 받기
 										<h5>예약자</h5>
 										<h5>김말이 연구원</h5>
 										<br>
 										
 										<div id="btns">
-										<button class="btn btn-primary">수정</button>
-										<button class="btn btn-danger">삭제</button>
+										<button class="btn btn-primary" id="updateReservation">수정</button>
+										<button class="btn btn-danger" onclick="deleteReservation()">삭제</button>
 										<button class="btn btn-light">돌아가기</button>
 										</div>
 
@@ -109,6 +116,62 @@
 
 		</div>
 	</div>
+
+	<script>
+		$(function(){
+			$("#updateReservation").click(function(){
+				
+				//예약자와 현재 로그인유저가 동일인인지 확인
+				
+				let date = $("#date");
+				let startTime = $("#startTime");
+				let endTime = $("#endTime");
+				
+				
+				
+				$.ajax({
+					url: "updateReservation.do",
+					data: {
+						
+						
+					}
+				})
+				
+			})
+		})
+		
+		//예약자==로그인유저 체크
+		let userCheck;
+		
+		function userCheck(){
+			
+			$.ajax({
+				url: "userCheck.do",
+				data: {
+					userName: userName
+				},
+				type: "post",
+				success: function(result){
+					//전역변수 user에 값 대입
+				},
+				error: function(e){
+					console.log("ajax 통신오류")
+				}
+			})
+			
+			
+		}
+		
+		
+		function deleteReservation(){		
+			//예약자와 현재 로그인유저가 동일인인지 확인
+			if(userCheck == true){
+				//삭제 진행~~
+			}
+			
+		}
+	</script>
+
 
 	<c:if test="${ !empty msg }">
 		<script>
