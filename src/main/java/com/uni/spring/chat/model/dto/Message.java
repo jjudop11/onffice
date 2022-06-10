@@ -15,6 +15,7 @@ public class Message {
 	private int chatSeq; // 채팅 순서
 	private String chatContent; // 채팅 내용
 	private String chatTime; // 채팅 입력시간
+	private String chatCTime; // 채팅 대화 시간
 	private String crImage; // 채팅방 이미지 파일명
 	private String crImageRoot; // 채팅방 이미지 파일 경로
 	private String sender; // 채팅 보낸 사람

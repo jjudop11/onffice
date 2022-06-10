@@ -23,12 +23,14 @@ import com.uni.spring.chat.model.dto.Message;
 import com.uni.spring.chat.model.service.ChatService;
 import com.uni.spring.member.model.dto.Member;
 
+import lombok.RequiredArgsConstructor;
+
 @SessionAttributes({"loginUser", "msg"})
 @Controller
-//@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
+@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
 public class ChatController {
 
-	@Autowired
+	
 	private SimpMessagingTemplate template;
 
 	
@@ -220,16 +222,18 @@ public class ChatController {
 		chat.setCrNo(Integer.parseInt(crNo));
 		chat.setMNo(mNo);
 		chat.setCNo(Integer.parseInt(cNo));
-		
-		
-		
-		System.out.println("exit 실행 ==================");
+		System.out.println("chat ========== " + chat);
+		//System.out.println("exit 실행 ==================");
 		Chat chatRoom = chatService.findRoomUser(chat);
-		System.out.println("chatRoom === " + chatRoom );
+		//System.out.println("chatRoom === " + chatRoom );
 		if(chatRoom.getMNo().equals(chatRoom.getCrFounderNo())) {
 			
-			System.out.println("삭제 됐나");
+			// 채팅방 자체 삭제
 			chatService.deleteRoom(chat);
+			
+		}else {
+			
+			chatService.exitChatRoom(chat);
 			
 		}
 
@@ -251,6 +255,7 @@ public class ChatController {
 				
 				// 채팅방 채팅내역 정보
 				ArrayList<Message> message = chatService.selectCHList(chat);	
+				//System.out.println("message ==== " + message);
 				
 				// 채팅방 입장 시간 입력
 				Date chatNo = new Date();
@@ -279,8 +284,11 @@ public class ChatController {
 							chatService.updateCAUser(chat);
 						}
 						
+						//System.out.println("message ==== " + message);
+						//System.out.println("mem ===== " + loginUser);
+						
 						model.addAttribute("message", message);
-						model.addAttribute("m", loginUser);
+						model.addAttribute("mem", loginUser);
 						model.addAttribute("chat", chat);
 						
 						return "chat/chat";
@@ -289,13 +297,13 @@ public class ChatController {
 	
 				}
 				
-				
-				chatService.insertCAUser(chat);
 				chat.setCrFounderNo(user.get(0).getCrFounderNo());
+				
+				chatService.insertCAUser(chat);				
 				chatService.insertChatUser(chat);
 				
 				model.addAttribute("message", message);
-				model.addAttribute("m", loginUser);
+				model.addAttribute("mem", loginUser);
 				model.addAttribute("chat", chat);
 				
 				return "chat/chat";
@@ -308,18 +316,21 @@ public class ChatController {
 
 			// message에 cNo넣어주기
 			Chat chat = new Chat();
-			System.out.println("message.getCNo === " + message.getCNo());
+			//System.out.println("message.getCNo === " + message.getCNo());
 			chat.setCNo(message.getCNo());
 			chat.setCrNo(message.getCrNo());
 			chat.setMNo(message.getMNo());
+			chat.setSender(message.getSender());
 			chat.setChatContent(message.getChatContent());
 			
 			Date chatNo = new Date();
-			SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 			chat.setChatTime(sd.format(chatNo));
+			message.setChatTime(sd.format(chatNo));
 			
 			SimpleDateFormat sd1 = new SimpleDateFormat("MM.dd a HH:mm");
-			message.setChatTime(sd1.format(chatNo));
+			chat.setChatCTime(sd1.format(chatNo));
+			message.setChatCTime(sd1.format(chatNo));
 			
 			System.out.println(chat);
 			Member m = chatService.loginUser(chat);
@@ -333,8 +344,9 @@ public class ChatController {
 			
 			Chat chatSeq = new Chat(); 
 			chatSeq = chatService.findCHSeq(chat);
+			System.out.println("chatSeq === " + chatSeq);
 			int seq = 1;
-			if(chatSeq.getChatSeq() == 0) {
+			if(chatSeq == null) {
 				
 				chat.setChatSeq(seq);
 				
@@ -343,9 +355,27 @@ public class ChatController {
 				chat.setChatSeq(seq1);
 			}
 		
-			System.out.println("message ==== " + message);
+			//System.out.println("message ==== " + message);
 			chatService.saveChat(chat);
 
 	    }
+		
+		
+		@RequestMapping("/chatRoom/disconnect")
+		public String disconnect(String crNo, String mNo) {
+			System.out.println("disconnect 실행");
+			Chat mem = new Chat();
+			
+			Date exitTime = new Date();
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+			mem.setChatExit(sd.format(exitTime));
+			
+			
+			mem.setCrNo(Integer.parseInt(crNo));
+			mem.setMNo(mNo);
+			
+			chatService.disconnect(mem);
+			return "redirect:/chatRoomListForm";
+		}
 		
 }
