@@ -73,35 +73,32 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-sm-6">
-								<div class="form-group">
-									
-									<div class="table-responsive apprTable">
-										<table id="apprTable" class="table table-bordered mb-0">
-											<tbody>
-												<tr>
-													<td rowspan="3" style="width: 150px">결재선</td>
-													<td id="jName1" style="width: 170px; height: 35px"></td>
-													<td id="jName2" style="width: 170px"></td>
-													<td id="jName3" style="width: 170px"></td>
-													<td id="jName4" style="width: 170px"></td>
-													<td id="jName5" style="width: 170px"></td>
-												</tr>
-												<tr>
-													<td style="height: 100px"></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tr>
-												<tr>
-													<td id="mName1" style="height: 35px"></td>
-													<td id="mName2"></td>
-													<td id="mName3"></td>
-													<td id="mName4"></td>
-													<td id="mName5"></td>
-												</tr>
-											</tbody>
-										</table>
+								<div class="form-group"><div class="table-responsive apprTable">
+									<table id="apprTable" class="table table-bordered mb-0">
+										<tbody><tr>
+												<td rowspan="3" style="width: 150px">결재선</td>
+												<td id="jName1" style="width: 170px; height: 35px">${jName}</td>
+												<td id="jName2" style="width: 170px"></td>
+												<td id="jName3" style="width: 170px"></td>
+												<td id="jName4" style="width: 170px"></td>
+												<td id="jName5" style="width: 170px"></td>
+											</tr>
+											<tr>
+												<td style="height: 100px"></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td id="mName1" style="height: 35px">${mName}</td>
+												<td id="mName2"></td>
+												<td id="mName3"></td>
+												<td id="mName4"></td>
+												<td id="mName5"></td>
+											</tr>
+										</tbody>
+									</table>
 									</div>
 								</div>
 							</div>
@@ -315,7 +312,7 @@
 				</div> 
 				
 				<div class="buttons" align="center">
-	                <button class="btn btn-primary" onclick="postFormSubmit(1);">결재수정</button>
+	                <button id="updateBtn" class="btn btn-primary" onclick="postFormSubmit(1);">결재수정</button>
 	                <button class="btn btn-danger" onclick="postFormSubmit(2);">결재취소</button>
 	            </div>
 	            
@@ -343,10 +340,19 @@
 	</div> 
 	
 	<script type="text/javascript">
+	
+		// 한명이라도 결재했으면 결재수정 버튼 비활성화
+		$(document).ready(function(){
+			console.log(${apStatus})
+			
+			if(${apStatus} !== 0){
+				$('#updateBtn').css({'display':'none'})
+			}
+		});
+	
 		// 폼 서식에 따라 폼화면 변경 
 		$(document).ready(function(){
 			console.log("foNo : " + ${ foNo })
-			/* console.log("apList : " + ${ apList }) */
 			
 			if(${ foNo } == 10) {
 				$('#dayoffForm').css({'display':'block'})

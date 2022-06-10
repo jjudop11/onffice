@@ -83,8 +83,8 @@ public class ApprovalDao {
 		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingAtt", apNo);
 	}
 
-	public ArrayList<Member> selectApprovalOngoingApLine(SqlSession sqlSession, int apNo) {
-		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectApprovalOngoingApLine", apNo);
+	public Member selectApprovalOngoingApLine(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectApprovalOngoingApLine", apNo);
 	}
 	
 	public int deleteApproval(SqlSession sqlSession, int apNo) {
@@ -118,6 +118,14 @@ public class ApprovalDao {
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
 		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectRequestList", listMap, rowBounds);
+	}
+
+	public int selecetApprovalStatus(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selecetApprovalStatus", apNo);
+	}
+
+	public Member selectApprovalWriter(SqlSession sqlSession, int apNo) {
+		return sqlSession.selectOne("ApprovalMapper.selectApprovalWriter", apNo);
 	}
 	
 }

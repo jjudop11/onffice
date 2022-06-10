@@ -35,11 +35,6 @@
 		<div id="main">
 			<!-- <form id="enrollForm" method="post" action="updateApproval.do" enctype="multipart/form-data"> -->
 			<div>
-				<!-- hidden 으로 넘길 정보 
-				<input type="hidden" id="cNo" name="cNo" value="${ loginUser.CNo }">
-				<input type="hidden" id="dNo" name="dNo" value="${ loginUser.DNo }">
-				<input type="hidden" id="mNo" name="mNo" value="${ loginUser.MNo }"> -->
-				
 				<!-- 기본설정 -->
 				<div class="card">
 					<div class="card-header">
@@ -51,13 +46,13 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="dept">부서</label>
-									<input type="text" id="dept" class="form-control round" value="${ loginUser.DName }" name="writer" readonly>
+									<input type="text" id="dept" class="form-control round" value="${writer.DName}" name="writer" readonly>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="writer">작성자</label>
-									<input type="text" id="writer" class="form-control round" value="${ loginUser.MName }" name="writer" readonly>
+									<input type="text" id="writer" class="form-control round" value="${writer.MName}" name="writer" readonly>
 								</div>
 							</div>
 						</div>
@@ -80,7 +75,7 @@
 											<tbody>
 												<tr>
 													<td rowspan="3" style="width: 150px">결재선</td>
-													<td id="jName1" style="width: 170px; height: 35px"></td>
+													<td id="jName1" style="width: 170px; height: 35px">${ jName }</td>
 													<td id="jName2" style="width: 170px"></td>
 													<td id="jName3" style="width: 170px"></td>
 													<td id="jName4" style="width: 170px"></td>
@@ -94,7 +89,7 @@
 													<td></td>
 												</tr>
 												<tr>
-													<td id="mName1" style="height: 35px"></td>
+													<td id="mName1" style="height: 35px">${ mName }</td>
 													<td id="mName2"></td>
 													<td id="mName3"></td>
 													<td id="mName4"></td>
@@ -338,6 +333,7 @@
 	</div> 
 	
 	<script type="text/javascript">
+	
 		// 폼 서식에 따라 폼화면 변경 
 		$(document).ready(function(){
 			console.log("foNo : " + ${ foNo })
@@ -363,6 +359,23 @@
 			$(":radio[name='doType'][value='" + ${ dayoffForm.doType } + "']").attr('checked', true);
 		});
 		
+		// 결재자=loginUser 같을 때 결재 버튼 생성 
+		$(document).ready(function(){
+			
+			let loginName = "${loginUser.MName}";
+			let name = "${mName}";
+			
+			let tr = $('#apprTable tbody tr');
+			let td = tr.children();
+			
+			if(loginName==name){
+				/* alert("같다"); */
+				console.log(tr.eq(2).find(td.eq(0).text()))
+				/* if(tr.eq(2).td.eq(0).innerText == loginName){
+					alert("tr이 로그인유저 네임일 때");
+				} */
+			}
+		});
 	</script>
 	
 </body>
