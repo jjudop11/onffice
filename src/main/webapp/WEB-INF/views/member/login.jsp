@@ -39,7 +39,6 @@
                                 <i class="bi bi-shield-lock"></i>
                             </div>
                         </div>
-
                         <button class="btn btn-primary btn-block btn-lg mt-5">로그인</button>
                     </form>
                     <div class="text-center mt-2 mb-2 text-lg">

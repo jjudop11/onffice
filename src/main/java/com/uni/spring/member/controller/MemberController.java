@@ -38,7 +38,7 @@ import com.uni.spring.dept.model.dto.Dept;
 import com.uni.spring.dept.model.service.DeptService;
 import com.uni.spring.job.model.dto.Job;
 import com.uni.spring.job.model.service.JobService;
-
+import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
 import com.uni.spring.member.model.service.MemberService;
@@ -68,6 +68,11 @@ public class MemberController {
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@GetMapping("/alarm")
+	public String alarm() {
+		return "common/alarm";
+	}
 	
 	@GetMapping("/")
 	public String defalut() {	
@@ -148,7 +153,7 @@ public class MemberController {
 	
 	@PostMapping("/login")
 	public ModelAndView loginUser(Member m, String username, @RequestParam(value = "remember", required = false) String remember, Model model, ModelAndView mv) { 
-		m.setMId(username);
+
 		Member loginUser;
 		
 		loginUser = memberService.loginUser(bCryptPasswordEncoder, m);
@@ -629,6 +634,40 @@ public class MemberController {
 
 		return result;
 	}
+	
+	@ResponseBody
+	@PostMapping(value ="/selectAlramList",produces = "application/json; charset=utf-8")
+	public Map<String, Object> selectAlramList(Model model) {	
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		ArrayList<Alram> list = memberService.selectAlramList(loginUser.getMNo());
+		
+		result.put("list", list);
+		result.put("count", list.size());
 
+		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping(value ="/deleteAlram",produces = "application/json; charset=utf-8")
+	public String deleteAlram(Model model, String content) {	
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		System.out.println("========================="+content.length());
+		String conString = "";
+		if(content.length() == 22) {
+			conString = content.substring(0,14) + "<br>" + content.substring(14);
+		}
+		Alram a = Alram.builder()
+				.mNo(loginUser.getMNo())
+				.alContent(conString)
+				.build();
+		int result = memberService.deleteAlram(a);
+		
+		return String.valueOf(result);
+	}
 
 }

@@ -9,6 +9,7 @@ import com.uni.spring.common.PageInfo;
 import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.dept.model.dto.Dept;
 import com.uni.spring.job.model.dto.Job;
+import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
 
@@ -46,5 +47,11 @@ public interface MemberService {
 	int searchMemListCount(Member m);
 
 	ArrayList<Member> searchMemList(PageInfo pi, Member m);
+
+	void insertAlram(ArrayList<Alram> aList);
+
+	ArrayList<Alram> selectAlramList(String mNo);
+
+	int deleteAlram(Alram a);
 
 }
