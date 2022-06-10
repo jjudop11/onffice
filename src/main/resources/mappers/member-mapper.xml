@@ -136,5 +136,27 @@
 		</if>
 		ORDER BY M_WORK DESC, M_NO
 	</select>
+	
+	<update id="insertAlram" parameterType="ArrayList">
+		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" ">
+		INTO ALRAM
+		VALUES
+		(SEQ_ALRAM.NEXTVAL, #{item.alContent}, '안읽음', #{item.mNo})
+		</foreach>	
+	</update>
+	
+	<select id="selectAlramList" parameterType="string" resultType="Alram">
+		SELECT *
+        FROM (SELECT * FROM ALRAM WHERE M_NO = #{mNo} AND AL_STATE = '안읽음')
+        <![CDATA[
+        WHERE ROWNUM <= 5
+        ]]>
+	</select>
+	
+	<update id="deleteAlram" parameterType="Alram">
+		UPDATE ALRAM
+		SET AL_STATE = '읽음'
+		WHERE M_NO = #{mNo} AND AL_CONTENT = #{alContent}
+	</update>
 
 </mapper>

@@ -43,15 +43,15 @@
                               </ul>
                           </li>
                           <li class="nav-item dropdown me-1">
-                              <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                          	  <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
                                   aria-expanded="false">
                                   <i class='bi bi-bell bi-sub fs-4 text-gray-600'></i>
+                                  <span class="count" style="color:red" id="count"></span>
                               </a>
-                              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                  <li>
-                                      <h6 class="dropdown-header">Notifications</h6>
-                                  </li>
-                                  <li><a class="dropdown-item">No notification available</a></li>
+                         	  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" id="ul_list">
+                         	  <li>
+                                   <h6 class="dropdown-header">알람</h6>
+                              </li>
                               </ul>
                           </li>
                       </ul>
@@ -241,7 +241,8 @@
                
             </div>
         </div>
-  
+  	
+
   	    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -250,5 +251,69 @@
     <script src="resources/assets/js/pages/dashboard.js"></script>
     <script src="resources/assets/vendors/choices.js/choices.min.js"></script>
     <script src="resources/assets/js/main.js"></script>
+    
+    <script>
+    
+    	$(function(){
+    		
+    		selectAlramList();
+
+    	})
+    	
+    	function selectAlramList() {
+    		let t = "";
+    		$.ajax({
+				url:"selectAlramList",
+				type:"post",
+
+				success:function(result){
+
+					if(result.list.length == 0) {
+						t +=  '<li><a class="dropdown-item" name="alram">새로운 알림이 없습니다</a></li>';
+					}
+					for(var i in result.list) {
+		            	t +=  '<li><a class="dropdown-item" name="alram">'+result.list[i].alContent+'</a></li>';
+		            }    
+					var ul_list = $("#ul_list");
+					ul_list.append(t);
+					$("#count").html(result.count);
+			
+					
+					$('#ul_list').children('li').off().on('mouseover', function(e) {
+						
+						let text = $(this).text();
+						let index = $(this).index()
+						if(text == "새로운 알림이 없습니다" || text.indexOf("알람") != -1) {
+							return false
+						} else {
+							
+							$.ajax({
+								url:"deleteAlram",
+								type:"post",
+								data:{
+									content: text
+								},
+								success:function(result){
+
+									if(result == 1) {
+										$('#ul_list').children('li').eq(index).text("")
+										selectAlramList();
+									}
+								},
+								error:function(){
+									console.log("선택 알람 삭제 ajax 통신 실패");
+								}
+							});
+						}
+						
+		            })
+				},
+				error:function(){
+					console.log("알람리스트 ajax 통신 실패");
+				}
+			});
+    	}
+
+    </script>
 </body>
 </html>

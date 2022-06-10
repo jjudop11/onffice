@@ -31,6 +31,7 @@
       <typeAlias alias="Timetable" type="com.uni.spring.timetable.model.dto.Timetable"/>
       <typeAlias alias="ApList" type="com.uni.spring.approval.model.dto.ApList"/>
       <typeAlias type="com.uni.spring.chat.model.dto.Message" alias="Message"/>
+      <typeAlias alias="Alram" type="com.uni.spring.member.model.dto.Alram"/>
    </typeAliases>
    
    <mappers>
