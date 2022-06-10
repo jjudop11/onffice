@@ -137,7 +137,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 	
 	@Override
-	public ArrayList<Member> selectApprovalOngoingApLine(int apNo) {
+	public Member selectApprovalOngoingApLine(int apNo) {
 		return approvalDao.selectApprovalOngoingApLine(sqlSession, apNo);
 	}
 
@@ -200,6 +200,16 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public ArrayList<ApList> selectRequestList(PageInfo pi, Map<String, Object> listMap) {
 		return approvalDao.selectRequestList(sqlSession, pi, listMap);
+	}
+
+	@Override
+	public int selecetApprovalStatus(int apNo) {
+		return approvalDao.selecetApprovalStatus(sqlSession, apNo);
+	}
+
+	@Override
+	public Member selectApprovalWriter(int apNo) {
+		return approvalDao.selectApprovalWriter(sqlSession, apNo);
 	}
 	
 }

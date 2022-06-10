@@ -304,15 +304,6 @@
 					                            <input type="hidden" name="changeName" value="${ formAtt.changeName }">
 					                            <input type="hidden" name="originName" value="${ formAtt.originName }">
 				                            </c:if>
-	                                        <%-- <c:if test="${ !empty formAtt.originName }">
-                                            	<a href="${ pageContext.servletContext.contextPath }/resources/upload_files/${formAtt.changeName}" download="${ formAtt.originName }">${ formAtt.originName }</a>
-	                                        </c:if>
-	                                        <c:if test="${ empty formAtt.originName }">
-	                                        	<label class="input-group-text" for="inputGroupFile01"><i
-	                                                class="bi bi-upload"></i></label>
-	                                        	<input type="file" class="form-control" id="inputGroupFile01 upfile" name="upfile">
-	                                        	첨부파일이 없습니다.
-	                                        </c:if> --%>
 	                                    </div>
 	                                </div>
 								</div>
@@ -333,7 +324,6 @@
 		// 폼 서식에 따라 폼화면 변경 
 		$(document).ready(function(){
 			console.log("foNo : " + ${ foNo })
-			console.log("apNo : " + ${ apNo })
 			
 			if(${ foNo } == 10) {
 				$('#dayoffForm').css({'display':'block'})
