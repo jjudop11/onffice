@@ -222,7 +222,7 @@
 		FROM APPROVAL_LINE A
 		JOIN MEMBER B ON A.APLINE_NO = B.M_NO
 		JOIN JOB C ON B.J_NO = C.J_NO
-		WHERE A.AP_NO = 3
+		WHERE A.AP_NO = #{apNo}
 	</select>
 	
 	<!-- 삭제 -->
@@ -232,71 +232,51 @@
 		WHERE AP_NO = #{apNo}
 	</update>
 	
+	<select id="selecetApprovalStatus" resultType="_int">
+		SELECT COUNT(*) 
+		FROM APPROVAL A
+		JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
+		WHERE B.AP_NO = #{apNo}
+		AND B.APLINE_STATUS IS NOT NULL
+	</select>
+	
 	<!-- 수정 -->
 	<update id="updateDayoffForm" parameterType="DayoffForm">
-		UPDATE DAYOFF_FORM A
-		SET A.DO_TITLE = #{doTitle}
-		    , A.DO_START_DATE = #{doStartDate}
-		    , A.DO_END_DATE = #{doEndDate}
-		    , A.DO_CONTENT = #{doContent}
-		    , A.DO_TYPE = #{doType}
-		WHERE A.AP_NO = #{apNo}
-		AND EXISTS (
-		    SELECT * 
-		    FROM DAYOFF_FORM A
-		    JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
-		    WHERE B.APLINE_STATUS IS NULL
-   			AND B.AP_NO = #{apNo}
-		)
+		UPDATE DAYOFF_FORM 
+		SET DO_TITLE = #{doTitle}
+		    , DO_START_DATE = #{doStartDate}
+		    , DO_END_DATE = #{doEndDate}
+		    , DO_CONTENT = #{doContent}
+		    , DO_TYPE = #{doType}
+		WHERE AP_NO = #{apNo}
 	</update>
 	
 	<update id="updateProposalForm" parameterType="ProposalForm">
-		UPDATE PROPOSAL_FORM A
-		SET A.PR_TITLE = #{prTitle}
-		    , A.PR_GOAL = #{prGoal}
-		    , A.PR_PLAN = #{prPlan}
-		    , A.PR_START_DATE = #{prStartDate}
-		    , A.PR_END_DATE = #{prEndDate}
-		    , A.PR_PERSON = #{prPerson}
-		    , A.PR_AMOUNT = #{prAmount}
-		WHERE A.AP_NO = #{apNo}
-		AND EXISTS (
-		    SELECT * 
-		    FROM PROPOSAL_FORM A
-		    JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
-		    WHERE B.APLINE_STATUS IS NULL
-   			AND B.AP_NO = #{apNo}
-		)
+		UPDATE PROPOSAL_FORM 
+		SET PR_TITLE = #{prTitle}
+		    , PR_GOAL = #{prGoal}
+		    , PR_PLAN = #{prPlan}
+		    , PR_START_DATE = #{prStartDate}
+		    , PR_END_DATE = #{prEndDate}
+		    , PR_PERSON = #{prPerson}
+		    , PR_AMOUNT = #{prAmount}
+		WHERE AP_NO = #{apNo}
 	</update>
 	
 	<update id="updatePaymentForm" parameterType="PaymentForm">
-		UPDATE PAYMENT_FORM A
-		SET A.PAY_TITLE = #{payTitle}
-		    , A.PAY_DAY = #{payDay}
-		    , A.PAY_LIST = #{payList}
-		    , A.PAY_AMOUNT = #{payAmount}
-		WHERE A.AP_NO = #{apNo}
-		AND EXISTS (
-		    SELECT * 
-		    FROM PAYMENT_FORM A
-		    JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
-		    WHERE B.APLINE_STATUS IS NULL
-   			AND B.AP_NO = #{apNo}
-		)
+		UPDATE PAYMENT_FORM 
+		SET PAY_TITLE = #{payTitle}
+		    , PAY_DAY = #{payDay}
+		    , PAY_LIST = #{payList}
+		    , PAY_AMOUNT = #{payAmount}
+		WHERE AP_NO = #{apNo}
 	</update>
 	
 	<update id="updateFormAtt" parameterType="FormAtt">
-		UPDATE FORM_ATT A
-		SET A.ORIGIN_NAME = #{originName}
-		    , A.CHANGE_NAME = #{changeName}
+		UPDATE FORM_ATT 
+		SET ORIGIN_NAME = #{originName}
+		    , CHANGE_NAME = #{changeName}
 		WHERE AP_NO = #{apNo}
-		AND EXISTS (
-		    SELECT * 
-		    FROM FORM_ATT A
-		    JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
-		    WHERE B.APLINE_STATUS IS NULL
-   			AND B.AP_NO = #{apNo}
-		)
 	</update>
 	
 	<!-- 결재 요청 listCount -->
@@ -360,6 +340,96 @@
 		AND A.STATUS = 'Y'
 		AND A.C_NO = #{cNo}
 		AND C.APLINE_NO = #{mNo}
+	</select>
+	
+	<select id="selectApprovalWriter" parameterType="Member" resultMap="memberResultSet">
+		SELECT 
+		    A.M_NAME,
+		    B.D_NAME
+		FROM MEMBER A
+		JOIN DEPT B ON A.D_NO = B.D_NO
+		JOIN APPROVAL C ON A.M_NO = C.M_NO
+		WHERE C.AP_NO = #{apNo}
+	</select>
+	
+	<!-- 승인 / 반려 -->
+	<select id="updateApprPermit" parameterType="Map" resultMap="approvalLineResultSet">
+		UPDATE APPROVAL_LINE
+		SET APLINE_STATUS = 'Y'
+		WHERE AP_NO = #{apNo}
+		AND APLINE_NO = #{aplineNo}
+	</select>
+	
+	<select id="updateApprRefuse" parameterType="Map" resultMap="approvalLineResultSet">
+		UPDATE APPROVAL_LINE
+		SET APLINE_STATUS = 'N'
+		WHERE AP_NO = #{apNo}
+		AND APLINE_NO = #{aplineNo}
+	</select>
+	
+	<!-- 결재선 상태값 확인 -->
+	<select id="selecetApLineStatus" parameterType="Map" resultMap="approvalLineResultSet">
+		SELECT APLINE_STATUS
+		FROM APPROVAL_LINE 
+		WHERE AP_NO = #{apNo}
+		AND APLINE_NO = #{aplineNo}
+	</select>
+	
+	<!-- 완료된 결재 -->
+	<select id="selectCompleteListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APPROVAL
+		WHERE AP_STATUS = 'Y'
+	</select>
+	
+	<select id="selectCompleteList" parameterType="ApList" resultMap="apListResultSet">
+		SELECT 
+		    B.AP_NO,
+		    B.FO_NO,
+		    B.DO_TITLE,
+		    B.DO_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN DAYOFF_FORM B ON A.AP_NO= B.AP_NO
+		WHERE A.AP_NO = B.AP_NO
+		AND A.AP_STATUS = 'Y'
+		AND A.STATUS = 'Y'
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    C.AP_NO,
+		    C.FO_NO,
+		    C.PR_TITLE,
+		    C.PR_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PROPOSAL_FORM C ON A.AP_NO = C.AP_NO
+		WHERE A.AP_NO = C.AP_NO
+		AND A.AP_STATUS = 'Y'
+		AND A.STATUS = 'Y'
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    D.AP_NO,
+		    D.FO_NO,
+		    D.PAY_TITLE,
+		    D.PAY_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PAYMENT_FORM D ON A.AP_NO = D.AP_NO
+		WHERE A.AP_NO = D.AP_NO
+		AND A.AP_STATUS = 'Y'
+		AND A.STATUS = 'Y'
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
 	</select>
 	
 </mapper>

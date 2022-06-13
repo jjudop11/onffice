@@ -77,4 +77,11 @@
 		where No_Num=#{No_Num}
 	</update>
 	
+	<select id="selectNoticeList" resultMap="noticeResultSet" parameterType="_int">
+		SELECT *
+		FROM (SELECT * FROM NOTICE WHERE C_NO = #{C_No} ORDER BY NO_DATE DESC)
+		<![CDATA[
+		WHERE ROWNUM <= 5
+		]]>
+	</select>
 </mapper>

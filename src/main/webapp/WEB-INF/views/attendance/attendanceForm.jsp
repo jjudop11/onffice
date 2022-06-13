@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+   	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <style>
 	body{
 	    background: #f5f5f5;
@@ -132,9 +133,10 @@
   </style>
 </head>
 
-<body style="background-color:#F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp"/>
+	<jsp:include page="../common/alarm.jsp"/>
 	
     <div id="app">        
         <div id="main">
@@ -359,6 +361,8 @@
 	</c:if>
 	
 	<script>
+		var socket = null;
+		
 		$(function(){
 			
 			getClock();
@@ -368,6 +372,7 @@
 			selectAttendanceW();
 			selectAttendanceM();
 			searchAttendanceList();
+			connectWs();
 			
 			
 			$("#plus").on('click', function() { 
@@ -377,14 +382,19 @@
 					url:"insertAtime",
 					type:"post",
 					success:function(result){
-						
-						if(result == "1") {
+				
+						if(result != null) {
 							getClock();
 							setInterval(getClock, 1000);
 							selectAttendance();
 							selectAttendanceW();
 							selectAttendanceM();
+							
+							let socketMsg = "출근," + result.mName + "," + result.jName + "," + result.dName;
+		        			console.log(socketMsg);
+		        			socket.send(socketMsg);
 						}
+						
 
 					},error:function(){
 						console.log("출근 등록 ajax 통신 실패");
@@ -402,14 +412,20 @@
 					type:"post",
 					success:function(result){
 						
-						if(result == "1") {
+						if(result != null) {
 							getClock();
 							setInterval(getClock, 1000);
 							selectAttendance();
 							selectAttendanceW();
 							selectAttendanceM();
+							
+							let socketMsg = "퇴근," + result.mName + "," + result.jName + "," + result.dName;
+		        			console.log(socketMsg);
+		        			socket.send(socketMsg);
 						}
-
+						
+	        			
+		           		
 					},error:function(){
 						alert("출근 먼저 등록해주세요")
 						console.log("퇴근 등록 ajax 통신 실패");
@@ -562,7 +578,7 @@
 				type:"post",
 				success:function(result){
 					
-					if(result != null) {
+					if(result != null && result.aAtime != null) {
 						$("#aTime").text("출근시간 : "+result.aAtime.substr(10,9)+" / "+result.aState)
 						$("#plus").attr("disabled", true);
 						
@@ -588,7 +604,7 @@
 					
 					let v = "";
 					for(let i in list) {
-						console.log(list[i])
+						
 						$("#attendanceW").text(list[0].allWtime);
 	
 						let h = list[i].allWtime.substr(0,2);
@@ -606,8 +622,9 @@
 						} else {
 							$("#minusW").text(String(parseInt(40-h-1)).padStart(2,"0") +":"+ String(parseInt(60-m-1)).padStart(2,"0")+":" + String(parseInt(60-s)).padStart(2,"0"));
 						}
-						
+
 						if(list[i].aLtime == null) {
+							
 							v += 
 								'<tr>'+
 									'<td><h6>'+list[i].aEntDate+'</h6></td>'+
@@ -617,6 +634,7 @@
 					                '<td><h6></h6></td>'+
 		                      	'</tr>';
 						} else {
+							
 							v += 
 								'<tr>'+
 									'<td><h6>'+list[i].aEntDate+'</h6></td>'+
@@ -628,8 +646,9 @@
 						}
 						
 					}
+
 					$("#here").html(v);
-					
+
 					let t = parseInt(list[0].allWtime.replace(":", "").substr(0, 2)) / 40 * 100
 					
 					if(Math.round(t) >= 100) {
@@ -669,9 +688,7 @@
 							}
 							
 						}
-						console.log(mList)
-						console.log(vList)
-						
+
 						$.ajax({
 				
 							url:"selectAttendanceAllM",
@@ -687,9 +704,7 @@
 									}
 									
 								}
-								console.log(mList2)
-								console.log(vList2)
-								
+
 								
 								new Chart(document.getElementById("line-chart"), {
 									type: 'bar',
@@ -725,6 +740,8 @@
 				});
 					
 			}
+		
+
 
 	</script>
 	<script src="resources/full/js/moment.min.js"></script>

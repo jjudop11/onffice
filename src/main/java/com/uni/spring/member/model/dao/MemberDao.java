@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.company.model.dto.Company;
+import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
+import com.uni.spring.member.model.dto.RememberLogin;
 
 
 @Repository
@@ -39,10 +41,15 @@ public class MemberDao {
 	}
 
 	public ArrayList<Member> selectMemList(SqlSessionTemplate sqlsession, PageInfo pi, int cNo) {
-
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)sqlsession.selectList("MemberMapper.selectMemList", cNo, rowBounds);
+		
+		if(pi == null) {
+			return (ArrayList)sqlsession.selectList("MemberMapper.selectMemList", cNo);
+		} else {
+			int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+			RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+			return (ArrayList)sqlsession.selectList("MemberMapper.selectMemList", cNo, rowBounds);
+		}
+		
 	}
 
 	public int insertMember(SqlSessionTemplate sqlsession, Member m) {
@@ -107,4 +114,33 @@ public class MemberDao {
 		return (ArrayList)sqlsession.selectList("MemberMapper.searchMemList", m, rowBounds);
 	}
 
+	public void insertAlram(SqlSessionTemplate sqlsession, ArrayList<Alram> aList) {
+		// TODO Auto-generated method stub
+		sqlsession.insert("MemberMapper.insertAlram", aList); 
+	}
+
+	public ArrayList<Alram> selectAlramList(SqlSessionTemplate sqlsession, String mNo) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlsession.selectList("MemberMapper.selectAlramList", mNo);
+	}
+
+	public int deleteAlram(SqlSessionTemplate sqlsession, Alram a) {
+		// TODO Auto-generated method stub
+		return sqlsession.update("MemberMapper.deleteAlram", a);
+	}
+
+	public void insertRemember(SqlSessionTemplate sqlsession, RememberLogin r) {
+		// TODO Auto-generated method stub
+		sqlsession.insert("MemberMapper.insertRemember", r); 
+	}
+
+	public Member selectRemember(SqlSessionTemplate sqlsession, String sessionId) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MemberMapper.selectRemember", sessionId);
+	}
+
+	public void deleteRemember(SqlSessionTemplate sqlsession, Member loginUser) {
+		// TODO Auto-generated method stub
+		sqlsession.delete("MemberMapper.deleteRemember", loginUser); 
+	}
 }

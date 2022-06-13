@@ -11,8 +11,10 @@ import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.exception.CommException;
 import com.uni.spring.company.model.dto.Company;
 import com.uni.spring.member.model.dao.MemberDao;
+import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
+import com.uni.spring.member.model.dto.RememberLogin;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -41,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		if(loginUser == null) {
 			throw new CommException("해당 ID로 가입한 계정이 없거나 잠긴계정입니다");
-		}
+		} 
 		
 		if(!bCryptPasswordEncoder.matches(m.getMPwd(), loginUser.getMPwd())) { // 일치하지않을때
 			
@@ -205,6 +207,43 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<Member> searchMemList(PageInfo pi, Member m) {
 		// TODO Auto-generated method stub
 		return memberDao.searchMemList(sqlsession, pi, m);
+	}
+
+	@Override
+	public void insertAlram(ArrayList<Alram> aList) {
+		// TODO Auto-generated method stub
+		memberDao.insertAlram(sqlsession, aList);
+		
+	}
+
+	@Override
+	public ArrayList<Alram> selectAlramList(String mNo) {
+		// TODO Auto-generated method stub
+		return memberDao.selectAlramList(sqlsession, mNo);
+	}
+
+	@Override
+	public int deleteAlram(Alram a) {
+		// TODO Auto-generated method stub
+		return memberDao.deleteAlram(sqlsession, a);
+	}
+
+	@Override
+	public void insertRemember(RememberLogin r) {
+		// TODO Auto-generated method stub
+		memberDao.insertRemember(sqlsession, r);
+	}
+
+	@Override
+	public Member selectRemember(String sessionId) {
+		// TODO Auto-generated method stub
+		return memberDao.selectRemember(sqlsession, sessionId);
+	}
+
+	@Override
+	public void deleteRemember(Member loginUser) {
+		// TODO Auto-generated method stub
+		memberDao.deleteRemember(sqlsession, loginUser);
 	}
 
 }

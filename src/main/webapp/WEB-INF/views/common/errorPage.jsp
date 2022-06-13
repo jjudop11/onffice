@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="resources/assets/css/pages/auth.css">
 </head>
 </head>
-<body style="background-color:#F0FFF0">
+<body>
 
    	<div class="login-form-bg h-100">
 	     <div class="container h-100">
@@ -40,7 +40,7 @@
 	                             </c:if>
 	                             <c:if test="${ requestScope['javax.servlet.error.message'] ne '해당 ID로 가입한 계정이 없거나 잠긴계정입니다'}">
 	                             <form class="mt-5 mb-5">                                  
-	                                 <div class="text-center mb-4 mt-5"><a href="javascript:history.back(-1)">뒤로가기</a>
+	                                 <div class="text-center mb-4 mt-5"><a href="javascript:history.back(-1)">뒤로가기</a> / <a href="main">메인화면으로가기</a>
 	                                 </div>
 	                             </form>
 	                             </c:if>

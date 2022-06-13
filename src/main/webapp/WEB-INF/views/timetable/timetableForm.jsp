@@ -296,11 +296,11 @@
 
  </style>
 </head>
-<body style="background-color:#F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp"/>
-	<script>
-	</script>
+	<jsp:include page="../common/alarm.jsp"/>
+
 	 <div id="app">        
         <div id="main">
 		 <div class="col-lg-12">

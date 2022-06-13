@@ -172,22 +172,29 @@ public class ApprovalController {
 		System.out.println("CONTROLLER : " + apNo);
 		System.out.println("CONTROLLER : " + foNo);
 		
+		// 결재여부 검사 
+		int apStatus = approvalService.selecetApprovalStatus(apNo);
+		System.out.println("CONTROLLER apStatus : " + apStatus);
+		
 		// 서식번호에 따라 다른 데이터 전달
 		if(foNo == 10) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
 			mv.addObject("foNo", foNo);
 			mv.addObject("apNo", apNo);
+			mv.addObject("apStatus", apStatus);
 		} else if(foNo == 20) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
 			mv.addObject("foNo", foNo);
 			mv.addObject("apNo", apNo);
+			mv.addObject("apStatus", apStatus);
 		} else if(foNo == 30) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
 			mv.addObject("foNo", foNo);
 			mv.addObject("apNo", apNo);
+			mv.addObject("apStatus", apStatus);
 		}
 		
 		// 첨부파일 
@@ -197,10 +204,10 @@ public class ApprovalController {
 		// 결재선 
 //		ApprovalLine apLine = approvalService.selectApprovalOngoingApLine(apNo);
 //		System.out.println("CONTROLLER : " + apLine);
-		
-		ArrayList<Member> apList = approvalService.selectApprovalOngoingApLine(apNo);
-		
-		mv.addObject("apList", apList);
+//		ArrayList<Member> apList = approvalService.selectApprovalOngoingApLine(apNo);
+		Member apList = approvalService.selectApprovalOngoingApLine(apNo);
+		mv.addObject("jName", apList.getJName());
+		mv.addObject("mName", apList.getMName());
 		System.out.println("CONTROLLER APLIST : " + apList);
 		
 		mv.setViewName("approval/approvalOngoingDetailView");
@@ -238,7 +245,7 @@ public class ApprovalController {
 	
 	// 결재 수정 
 	@RequestMapping(value = "updateApproval.do", method = RequestMethod.POST)
-	public ModelAndView updateApproval(Approval ap, ApprovalLine apline, FormAtt att, int apNo, Integer foNo,
+	public ModelAndView updateApproval(Approval ap, ApprovalLine apline, FormAtt att, int apNo, int foNo,
 			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
 			ModelAndView mv, HttpServletRequest request,
 			@RequestParam(name = "reUploadFile", required = false) MultipartFile file) { // 파일 선택 업로드
@@ -255,7 +262,6 @@ public class ApprovalController {
 		// 서식폼 선택 
 		if(ap.getFoNo() == 10) {
 			doForm.setApNo(apNo);
-			doForm.setFoNo(foNo);
 			approvalService.updateDayoffForm(doForm); // 휴가신청서 
 		} else if(ap.getFoNo() == 20) {
 			prForm.setApNo(apNo);
@@ -281,6 +287,7 @@ public class ApprovalController {
 			deleteFile(orgChangeName, request);
 		}
 		
+		mv.addObject("foNo", foNo);
 		mv.addObject("apNo", apNo).setViewName("redirect:approvalOngoingDetailView.do");
 		
 		return mv; 
@@ -350,37 +357,119 @@ public class ApprovalController {
 		if(foNo == 10) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
-			mv.addObject("foNo", foNo);
-			mv.addObject("apNo", apNo);
 		} else if(foNo == 20) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
-			mv.addObject("foNo", foNo);
-			mv.addObject("apNo", apNo);
 		} else if(foNo == 30) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
-			mv.addObject("foNo", foNo);
-			mv.addObject("apNo", apNo);
 		}
+		
+		//
+		mv.addObject("foNo", foNo);
+		mv.addObject("apNo", apNo);
+		
+		// 작성자 정보 
+		Member writer = approvalService.selectApprovalWriter(apNo);
+		mv.addObject("writer", writer);
+		System.out.println(writer);
 		
 		// 첨부파일 
 		FormAtt formAtt = approvalService.selectApprovalOngoingAtt(apNo);
 		mv.addObject("formAtt", formAtt);
 		
 		// 결재선 
-//		ApprovalLine apLine = approvalService.selectApprovalOngoingApLine(apNo);
-//		System.out.println("CONTROLLER : " + apLine);
-		
-		ArrayList<Member> apList = approvalService.selectApprovalOngoingApLine(apNo);
-		
-		mv.addObject("apList", apList);
-		System.out.println("CONTROLLER APLIST : " + apList);
+		Member apList = approvalService.selectApprovalOngoingApLine(apNo);
+		mv.addObject("jName", apList.getJName());
+		mv.addObject("mName", apList.getMName());
+		System.out.println(apList.getJName());
+		System.out.println(apList.getMName());
 		
 		mv.setViewName("approval/approvalRequestDetailView");
 		
 		return mv;
 		
+	}
+	
+	// 결재상태 확인 
+	@ResponseBody
+	@RequestMapping(value="selectApLineStatus.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String selectApLineStatus(@RequestParam(value="apNo", required=false) int apNo,
+			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+		
+		// Map 에 담아서 넘기기 
+		Map<String, Object> apprMap = new HashMap<>();
+		apprMap.put("apNo", apNo);
+		apprMap.put("aplineNo", aplineNo);
+		
+		int apLineStatus = approvalService.selecetApLineStatus(apprMap);
+		
+		System.out.println();
+		
+		return null;
+	}
+	
+	// 결재 승인
+	@ResponseBody
+	@RequestMapping(value="updateApprPermit.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String updateApprPermit(@RequestParam(value="apNo", required=false) int apNo,
+			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+		
+		System.out.println("CONTROLLER : " + apNo);
+		System.out.println("CONTROLLER : " + aplineNo);
+		
+		// Map 에 담아서 넘기기 
+		Map<String, Object> apprMap = new HashMap<>();
+		apprMap.put("apNo", apNo);
+		apprMap.put("aplineNo", aplineNo);
+		
+		approvalService.updateApprPermit(apprMap);
+		
+		return null;
+	}
+	
+	// 결재 반려 
+	@ResponseBody
+	@RequestMapping(value="updateApprRefuse.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String updateApprRefuse(@RequestParam(value="apNo", required=false) int apNo,
+			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+		
+		System.out.println("CONTROLLER : " + apNo);
+		System.out.println("CONTROLLER : " + aplineNo);
+		
+		// Map 에 담아서 넘기기 
+		Map<String, Object> apprMap = new HashMap<>();
+		apprMap.put("apNo", apNo);
+		apprMap.put("aplineNo", aplineNo);
+		
+		// 
+		approvalService.updateApprRefuse(apprMap);
+		
+		return null;
+	}
+	
+	// 결재 완료 리스트 이동 
+	@RequestMapping("approvalCompleteListView.do")
+	public String approvalCompleteListView(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model) {
+	
+		Member m = (Member) model.getAttribute("loginUser");
+
+		Map<String, Object> listMap = new HashMap<>();
+		listMap.put("mNo", m.getMNo());
+		listMap.put("cNo", m.getCNo());
+	
+		int listCount = approvalService.selectCompleteListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+
+		ArrayList<ApList> list = approvalService.selectCompleteList(pi, listMap);
+		
+		System.out.println("LIST : " + list);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		
+		return "approval/approvalCompleteListView";
+	
 	}
 	
 }

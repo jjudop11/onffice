@@ -32,6 +32,8 @@
       <typeAlias alias="ApList" type="com.uni.spring.approval.model.dto.ApList"/>
       <typeAlias type="com.uni.spring.chat.model.dto.Message" alias="Message"/>
       <typeAlias type="com.uni.spring.orgChart.model.dto.OrgChart" alias="OrgChart"/>
+      <typeAlias alias="Alram" type="com.uni.spring.member.model.dto.Alram"/>
+      <typeAlias alias="RememberLogin" type="com.uni.spring.member.model.dto.RememberLogin"/>
    </typeAliases>
    
    <mappers>

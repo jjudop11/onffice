@@ -56,7 +56,7 @@ public class AttendanceController {
 		
 		Attendance result = attendanceService.selectAttendance(m.getMNo());
 		
-		if(result.getAWtime() != null) {
+		if(result != null && result.getALtime() != null && result.getAWtime() != null) {
 
 			int hour = Integer.parseInt(result.getAWtime())/(60*60);
 	        int minute = Integer.parseInt(result.getAWtime())/60-(hour*60);
@@ -64,7 +64,6 @@ public class AttendanceController {
 	        
 	        result.setAWtime(String.format("%02d",hour)+":"+String.format("%02d",minute)+":"+String.format("%02d",second));
 		}
-		
 		
         return new GsonBuilder().create().toJson(result);
 		
@@ -160,8 +159,11 @@ public class AttendanceController {
 		}
 
 		int result = attendanceService.insertAtime(a);
-
-		return String.valueOf(result);
+		if(result == 1) {
+			return new GsonBuilder().create().toJson(m);
+		}
+		return String.valueOf(0);
+		
 		
 	}
 	
@@ -177,7 +179,10 @@ public class AttendanceController {
 				.build();
 		int result = attendanceService.insertLtime(a);
 
-		return String.valueOf(result);
+		if(result == 1) {
+			return new GsonBuilder().create().toJson(m);
+		}
+		return String.valueOf(0);
 		
 	}
 	

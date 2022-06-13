@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="MeetingroomMapper">
+<mapper namespace="MeetingRoomMapper">
  	
  	<!-- 회의실 관리권한 유저 -->
 	<select id="selecRoomSetUser" parameterType="string" resultType="_int">
@@ -66,7 +66,8 @@
 		(SEQ_RESERVE_NO.NEXTVAL, #{roomNo}, #{reserveDate}, #{startTime}, #{endTime}, #{reserveTitle}, #{mNo}, #{cNo})	
 	</insert>
 	
-	<select id="selectStartKey" parameterType="string" resultType="_double">
+	<!-- 예약시 시간 체크 -->
+	<!-- <select id="selectStartKey" parameterType="string" resultType="_double">
 		SELECT TIME_KEY
 		FROM TIME
 		WHERE TIME = #{startTime}
@@ -76,14 +77,7 @@
 		SELECT TIME_KEY
 		FROM TIME
 		WHERE TIME = #{endTime}
-	</select>
-	
-	<select id="selectReservedRooms" parameterType="ReserveRoom" resultType="ReserveRoom">
-		SELECT ROOM_NO, START_TIME, END_TIME
-		FROM RESERVE_ROOM
-		WHERE C_NO = #{cNo}
-		AND RESERVE_DATE = #{reserveDate}
-	</select>
+	</select>  -->
 	
 	<!-- isValidTime -->
 	<select id="checkReservedRooms" parameterType="ReserveRoom" resultType="ReserveRoom">
@@ -93,4 +87,77 @@
 		AND RESERVE_DATE = #{reserveDate}
 	</select>
 	
+	<select id="selectReservedRooms" parameterType="ReserveRoom" resultType="ReserveRoom">
+		SELECT ROOM_NO, START_TIME, END_TIME
+		FROM RESERVE_ROOM
+		WHERE C_NO = #{cNo}
+		AND RESERVE_DATE = #{reserveDate}
+	</select>
+	
+	<select id="selectRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
+		SELECT *
+		FROM RESERVE_ROOM
+		WHERE RESERVE_DATE = #{reserveDate}
+		AND START_TIME = #{startTime}
+		AND ROOM_NO = #{roomNo}
+	</select>
+	
+	<select id="selectMName" parameterType="string" resultType="string">
+		SELECT M_NAME
+		FROM MEMBER
+		WHERE M_NO = #{mNo}	
+	</select>
+	
+	<select id="selectMJobName" parameterType="string" resultType="string">
+		SELECT J_NAME
+		FROM JOB
+		WHERE J_NO = (SELECT J_NO
+		              FROM MEMBER 
+		              WHERE M_NO = #{mNo}) 
+	</select>
+	
+	<select id="selectRoomName" parameterType="string" resultType="string">
+		SELECT ROOM_NAME
+		FROM MEETING_ROOM
+		WHERE ROOM_NO = #{roomNo}
+	</select>
+	
+
+	<delete id="deleteReservation" parameterType="string">
+		DELETE
+		FROM RESERVE_ROOM
+		WHERE RESERVE_NO = #{reservationNo}
+	</delete>
+	
+	<!-- 예약 취소 후 타임테이블에 다시 뿌려줄 날짜 -->
+	<select id="selectReserveDate"  parameterType="string" resultType="string">
+		SELECT RESERVE_DATE
+		FROM RESERVE_ROOM
+		WHERE RESERVE_NO = #{reservationNo}	
+	</select>
+	
+	<!-- 예약 수정 -->
+	<update id="updateReservation" parameterType="ReserveRoom">
+		UPDATE RESERVE_ROOM
+		SET ROOM_NO = #{roomNo}, RESERVE_DATE = #{reserveDate}, 
+			START_TIME = #{startTime}, END_TIME = #{endTime}, RESERVE_TITLE = #{reserveTitle}, 
+			M_NO = #{mNo}, C_NO = #{cNo}
+		WHERE RESERVE_NO = #{reserveNo}
+	</update>
+	
+ </mapper>
+
+	<select id="selectreservedRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
+		SELECT B.RESERVE_TITLE "reserveTitle", C.M_NAME "mNo", D.J_NAME "reserveNo"
+        FROM MEETING_ROOM A
+        LEFT JOIN RESERVE_ROOM B ON A.ROOM_NO = B.ROOM_NO
+        LEFT JOIN MEMBER C ON B.M_NO = C.M_NO
+        LEFT JOIN JOB D ON C.J_NO = D.J_NO
+        WHERE A.ROOM_NAME = #{reserveNo}
+        AND B.START_TIME = #{startTime}
+        AND B.RESERVE_DATE = TO_CHAR(SYSDATE,'yyyy-mm-dd')
+        AND A.C_NO = #{cNo}
+	</select>
+	
 </mapper>
+

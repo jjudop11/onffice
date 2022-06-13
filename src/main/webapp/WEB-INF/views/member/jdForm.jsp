@@ -112,7 +112,7 @@
   </style>
 </head>
 
-<body style="background-color:#F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp"/>
 	
@@ -278,9 +278,11 @@
 		    					if(result == 1) {
 		    						selectJdList(value);
 		    						alert("명칭 변경 성공");
+		    					} else if(result == "중복") {
+		    						alert("중복된 명칭으로는 변경이 불가합니다");
 		    					} else {
 		    						alert("직급/부서 변경 실패");
-		    					}
+		    					} 
 		    					
 		    				},
 		    				error:function(){
@@ -325,7 +327,9 @@
    					if(result == 1) {
    						selectJdList(val);
    						alert("명칭 추가 성공");
-   					} else {
+   					} else if(result == "중복") {
+						alert("중복된 명칭으로는 변경이 불가합니다");
+					} else {
    						alert("직급/부서 추가 실패");
    					}
    					$("#ip").val("");
