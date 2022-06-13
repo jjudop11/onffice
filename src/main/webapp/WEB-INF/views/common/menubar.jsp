@@ -21,7 +21,7 @@
 
 </head>
 
-<body style="background-color:#F0FFF0">
+<body>
 
 	<div id="main" class='layout-navbar'>
       <header class='mb-3'>
@@ -43,7 +43,7 @@
                               </ul>
                           </li>
                           <li class="nav-item dropdown me-1">
-                          	  <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                          	  <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown" id="drop"
                                   aria-expanded="false">
                                   <i class='bi bi-bell bi-sub fs-4 text-gray-600'></i>
                                   <span class="count" style="color:red" id="count"></span>
@@ -115,7 +115,7 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item  ">
+                        <li class="sidebar-item">
                             <a href="timetableForm" class='sidebar-link'>
                                 <i class="bi bi-calendar3"></i>
                                 <span>일정관리</span>
@@ -245,7 +245,6 @@
 
   	    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="resources/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="resources/assets/js/bootstrap.bundle.min.js"></script>
     <script src="resources/assets/js/pages/dashboard.js"></script>
@@ -277,34 +276,29 @@
 					var ul_list = $("#ul_list");
 					ul_list.append(t);
 					$("#count").html(result.count);
-			
-					
-					$('#ul_list').children('li').off().on('mouseover', function(e) {
+
+					$('#ul_list').children('li').off().on('click', function(e) {
 						
 						let text = $(this).text();
 						let index = $(this).index()
-						if(text == "새로운 알림이 없습니다" || text.indexOf("알람") != -1) {
-							return false
-						} else {
-							
-							$.ajax({
-								url:"deleteAlram",
-								type:"post",
-								data:{
-									content: text
-								},
-								success:function(result){
+						
+						$.ajax({
+							url:"deleteAlram",
+							type:"post",
+							data:{
+								content: text
+							},
+							success:function(result){
 
-									if(result == 1) {
-										$('#ul_list').children('li').eq(index).text("")
-										selectAlramList();
-									}
-								},
-								error:function(){
-									console.log("선택 알람 삭제 ajax 통신 실패");
+								if(result == 1) {
+									$('#ul_list').children('li').eq(index).text("")
 								}
-							});
-						}
+								location.reload();
+							},
+							error:function(){
+								console.log("선택 알람 삭제 ajax 통신 실패");
+							}
+						});
 						
 		            })
 				},

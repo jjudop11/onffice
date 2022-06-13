@@ -412,7 +412,7 @@ tr, th {
 			$("#searchDateBtn").click(function() {
 	
 				let date = $("#datePicker").val();
-
+				console.log(date);
 				$.ajax({
 					url : "reservedRoomList.do",
 					data : {
@@ -423,6 +423,7 @@ tr, th {
 					//한글 깨짐 해결하기
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 					success : function(data, statusText, jqXHR) {
+						
 						const obj = JSON.parse(data);
 						const cells = $("#roomReserveTable tbody th");
 

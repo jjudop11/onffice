@@ -120,7 +120,7 @@
   </style>
 </head>
 
-<body style="background-color:#F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp"/>
 	
@@ -210,7 +210,7 @@
 		                <div class="form-group has-icon-left">
 		                  <label for="email-id-icon">Email</label>
                           <div class="position-relative">
-                              <input type="text" class="form-control" placeholder="Email" id="mEmail" name="mEmail" required>
+                              <input type="email" class="form-control" placeholder="Email" id="mEmail" name="mEmail" required>
                               <div class="form-control-icon">
                                   <i class="bi bi-envelope"></i>
                               </div>

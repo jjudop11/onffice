@@ -142,6 +142,11 @@ public class MeetingRoomDao {
 		return sqlsession.update("MeetingRoomMapper.updateReservation", updateRoom);
 	}
 
+	public ReserveRoom selectreservedRoom(SqlSessionTemplate sqlsession, ReserveRoom r) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MeetingroomMapper.selectreservedRoom", r);
+	}
+
 	
 
 }

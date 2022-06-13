@@ -85,6 +85,8 @@ input:not(:placeholder-shown) + button {
 <body>
 
     <jsp:include page="../common/menubar.jsp"/>
+    <jsp:include page="../common/alarm.jsp"/>
+    
     <div id="app">
 	<div id="main">
     <div class="content">
@@ -178,5 +180,24 @@ input:not(:placeholder-shown) + button {
     </div>
     </div>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <c:if test="${ !empty msg }">
+		<script>
+			var socket = null;
+			let socketMsg = "${msg}"
+
+			$(function(){
+				connectWs();
+				
+				setTimeout(function () {
+					console.log(socketMsg);
+					socket.send(socketMsg);
+				}, 1000);
+
+			})
+		</script>
+		<c:remove var="msg" scope="session"/>
+	</c:if>
 </body>
 </html>

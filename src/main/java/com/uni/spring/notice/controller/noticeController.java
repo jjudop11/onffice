@@ -8,10 +8,15 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.GsonBuilder;
+import com.uni.spring.attendance.model.dto.Attendance;
 import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 import com.uni.spring.common.SearchCondition;
@@ -20,6 +25,7 @@ import com.uni.spring.notice.model.notice;
 import com.uni.spring.notice.service.noticeService;
 
 @Controller
+@SessionAttributes({"loginUser", "msg"})
 public class noticeController {
 	
 	@Autowired
@@ -89,13 +95,13 @@ public class noticeController {
 	}
 
 	@RequestMapping("insertNotice.do")
-	public String insertBoard(notice n, HttpServletRequest request, @RequestParam(name="No_Important", required = false) String imp) {
+	public String insertBoard(notice n, HttpServletRequest request, @RequestParam(name="No_Important", required = false) String imp, Model model) {
 
 		if( imp == null || imp == "N" ) { n.setNo_Important("N"); }
 		if( imp == "Y") { n.setNo_Important("Y"); }
 		
 		noticeService.insertNotice(n);
-		
+		model.addAttribute("msg", "새로운 공지사항이 등록되었습니다");
 		return "redirect:listNotice.do";
 	}
 
@@ -128,5 +134,6 @@ public class noticeController {
 		
 		return mv;
 	}
+	
 	
 }

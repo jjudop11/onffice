@@ -44,6 +44,7 @@ public interface MeetingRoomService {
 
 	ArrayList<ReserveRoom> selectReservedRooms(int cNo, String date);
 
+
 	ReserveRoom selectRoom(ReserveRoom roomInfo);
 
 	String selectMName(String mNo);
@@ -58,5 +59,8 @@ public interface MeetingRoomService {
 
 	//예약 수정
 	int updateReservation(ReserveRoom updateRoom);
+
+	ReserveRoom selectreservedRoom(ReserveRoom r);
+
 
 }

@@ -112,7 +112,7 @@
   </style>
 </head>
 
-<body style="background-color:#F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp"/>
 	
@@ -336,6 +336,12 @@
 		            let maxpage = result.maxpage; // 최대페이지
 		            let c = result.c;
 		           	let s = result.s;
+
+		           	if(result.list.length == 0) {
+		           		v += '<tr align="center">'+
+		                        '<td colspan=4>검색결과가 없습니다</td>'+
+		                    '</tr>';
+		           	}
 
 		            for(var i in result.list) {
 		            	

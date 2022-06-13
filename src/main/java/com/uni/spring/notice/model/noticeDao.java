@@ -52,5 +52,10 @@ public class noticeDao {
 		return sqlsession.selectOne("noticeMapper.getListCount", sc);
 	}
 
+	public ArrayList<notice> selectNoticeList(SqlSessionTemplate sqlsession, int cNo) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlsession.selectList("noticeMapper.selectNoticeList", cNo);
+	}
+
 
 }

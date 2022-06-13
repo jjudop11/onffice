@@ -60,5 +60,15 @@ public interface ApprovalService {
 	int selecetApprovalStatus(int apNo); // 결재여부검사
 
 	Member selectApprovalWriter(int apNo); // 작성자 정보 가져오기
+
+	void updateApprPermit(Map<String, Object> apprMap);
+	
+	void updateApprRefuse(Map<String, Object> apprMap);
+	
+	int selecetApLineStatus(Map<String, Object> apprMap);
+
+	// 결재완료 리스트 조회 
+	int selectCompleteListCount();
+	ArrayList<ApList> selectCompleteList(PageInfo pi, Map<String, Object> listMap);
 	
 }

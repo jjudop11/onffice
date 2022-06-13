@@ -108,6 +108,7 @@ public class MeetingRoomServiceImple implements MeetingRoomService {
 	}
 
 	@Override
+
 	public ReserveRoom selectRoom(ReserveRoom roomInfo) {
 		// TODO Auto-generated method stub
 		return meetingRoomDao.selectRoom(sqlsession, roomInfo);
@@ -147,6 +148,12 @@ public class MeetingRoomServiceImple implements MeetingRoomService {
 	public int updateReservation(ReserveRoom updateRoom) {
 		// TODO Auto-generated method stub
 		return meetingRoomDao.updateReservation(sqlsession, updateRoom);
+
+  @Override
+	public ReserveRoom selectreservedRoom(ReserveRoom r) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectreservedRoom(sqlsession, r);
+
 	}
 
 

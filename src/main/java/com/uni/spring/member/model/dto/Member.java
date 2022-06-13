@@ -49,6 +49,9 @@ public class Member {
  	private int lCount; // 지각수
  	
  	private int apNo; // 전자결재문서번호
+ 	
+ 	private String sessionkey;
+	private Date sessionLimit;
 
 }
 
