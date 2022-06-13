@@ -148,8 +148,9 @@ public class MeetingRoomServiceImple implements MeetingRoomService {
 	public int updateReservation(ReserveRoom updateRoom) {
 		// TODO Auto-generated method stub
 		return meetingRoomDao.updateReservation(sqlsession, updateRoom);
+	}
 
-  @Override
+  	@Override
 	public ReserveRoom selectreservedRoom(ReserveRoom r) {
 		// TODO Auto-generated method stub
 		return meetingRoomDao.selectreservedRoom(sqlsession, r);
