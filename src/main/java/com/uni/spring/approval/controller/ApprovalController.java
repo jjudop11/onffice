@@ -391,4 +391,85 @@ public class ApprovalController {
 		
 	}
 	
+	// 결재상태 확인 
+	@ResponseBody
+	@RequestMapping(value="selectApLineStatus.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String selectApLineStatus(@RequestParam(value="apNo", required=false) int apNo,
+			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+		
+		// Map 에 담아서 넘기기 
+		Map<String, Object> apprMap = new HashMap<>();
+		apprMap.put("apNo", apNo);
+		apprMap.put("aplineNo", aplineNo);
+		
+		int apLineStatus = approvalService.selecetApLineStatus(apprMap);
+		
+		System.out.println();
+		
+		return null;
+	}
+	
+	// 결재 승인
+	@ResponseBody
+	@RequestMapping(value="updateApprPermit.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String updateApprPermit(@RequestParam(value="apNo", required=false) int apNo,
+			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+		
+		System.out.println("CONTROLLER : " + apNo);
+		System.out.println("CONTROLLER : " + aplineNo);
+		
+		// Map 에 담아서 넘기기 
+		Map<String, Object> apprMap = new HashMap<>();
+		apprMap.put("apNo", apNo);
+		apprMap.put("aplineNo", aplineNo);
+		
+		approvalService.updateApprPermit(apprMap);
+		
+		return null;
+	}
+	
+	// 결재 반려 
+	@ResponseBody
+	@RequestMapping(value="updateApprRefuse.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String updateApprRefuse(@RequestParam(value="apNo", required=false) int apNo,
+			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+		
+		System.out.println("CONTROLLER : " + apNo);
+		System.out.println("CONTROLLER : " + aplineNo);
+		
+		// Map 에 담아서 넘기기 
+		Map<String, Object> apprMap = new HashMap<>();
+		apprMap.put("apNo", apNo);
+		apprMap.put("aplineNo", aplineNo);
+		
+		// 
+		approvalService.updateApprRefuse(apprMap);
+		
+		return null;
+	}
+	
+	// 결재 완료 리스트 이동 
+	@RequestMapping("approvalCompleteListView.do")
+	public String approvalCompleteListView(@RequestParam(value="currentPage", required = false, defaultValue = "1") int currentPage, Model model) {
+	
+		Member m = (Member) model.getAttribute("loginUser");
+
+		Map<String, Object> listMap = new HashMap<>();
+		listMap.put("mNo", m.getMNo());
+		listMap.put("cNo", m.getCNo());
+	
+		int listCount = approvalService.selectCompleteListCount();
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+
+		ArrayList<ApList> list = approvalService.selectCompleteList(pi, listMap);
+		
+		System.out.println("LIST : " + list);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		
+		return "approval/approvalCompleteListView";
+	
+	}
+	
 }
