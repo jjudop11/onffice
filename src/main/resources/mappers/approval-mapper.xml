@@ -352,4 +352,84 @@
 		WHERE C.AP_NO = #{apNo}
 	</select>
 	
+	<!-- 승인 / 반려 -->
+	<select id="updateApprPermit" parameterType="Map" resultMap="approvalLineResultSet">
+		UPDATE APPROVAL_LINE
+		SET APLINE_STATUS = 'Y'
+		WHERE AP_NO = #{apNo}
+		AND APLINE_NO = #{aplineNo}
+	</select>
+	
+	<select id="updateApprRefuse" parameterType="Map" resultMap="approvalLineResultSet">
+		UPDATE APPROVAL_LINE
+		SET APLINE_STATUS = 'N'
+		WHERE AP_NO = #{apNo}
+		AND APLINE_NO = #{aplineNo}
+	</select>
+	
+	<!-- 결재선 상태값 확인 -->
+	<select id="selecetApLineStatus" parameterType="Map" resultMap="approvalLineResultSet">
+		SELECT APLINE_STATUS
+		FROM APPROVAL_LINE 
+		WHERE AP_NO = #{apNo}
+		AND APLINE_NO = #{aplineNo}
+	</select>
+	
+	<!-- 완료된 결재 -->
+	<select id="selectCompleteListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APPROVAL
+		WHERE AP_STATUS = 'Y'
+	</select>
+	
+	<select id="selectCompleteList" parameterType="ApList" resultMap="apListResultSet">
+		SELECT 
+		    B.AP_NO,
+		    B.FO_NO,
+		    B.DO_TITLE,
+		    B.DO_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN DAYOFF_FORM B ON A.AP_NO= B.AP_NO
+		WHERE A.AP_NO = B.AP_NO
+		AND A.AP_STATUS = 'Y'
+		AND A.STATUS = 'Y'
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    C.AP_NO,
+		    C.FO_NO,
+		    C.PR_TITLE,
+		    C.PR_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PROPOSAL_FORM C ON A.AP_NO = C.AP_NO
+		WHERE A.AP_NO = C.AP_NO
+		AND A.AP_STATUS = 'Y'
+		AND A.STATUS = 'Y'
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    D.AP_NO,
+		    D.FO_NO,
+		    D.PAY_TITLE,
+		    D.PAY_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PAYMENT_FORM D ON A.AP_NO = D.AP_NO
+		WHERE A.AP_NO = D.AP_NO
+		AND A.AP_STATUS = 'Y'
+		AND A.STATUS = 'Y'
+		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+	</select>
+	
 </mapper>

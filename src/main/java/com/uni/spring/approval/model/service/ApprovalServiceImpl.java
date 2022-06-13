@@ -211,5 +211,44 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public Member selectApprovalWriter(int apNo) {
 		return approvalDao.selectApprovalWriter(sqlSession, apNo);
 	}
+
+	@Override
+	public void updateApprPermit(Map<String, Object> apprMap) {
+		int result = approvalDao.updateApprPermit(sqlSession, apprMap);
+		
+		if(result < 0) {
+			throw new CommException("승인 실패");
+		}
+	}
+	
+	@Override
+	public void updateApprRefuse(Map<String, Object> apprMap) {
+		
+		int result = approvalDao.updateApprRefuse(sqlSession, apprMap);
+		
+		if(result < 0) {
+			throw new CommException("승인 실패");
+		}
+		
+	}
+
+	@Override
+	public int selectCompleteListCount() {
+		return approvalDao.selectCompleteListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<ApList> selectCompleteList(PageInfo pi, Map<String, Object> listMap) {
+		return approvalDao.selectCompleteList(sqlSession, pi, listMap);
+	}
+
+	@Override
+	public int selecetApLineStatus(Map<String, Object> apprMap) {
+		return approvalDao.selecetApLineStatus(sqlSession, apprMap);
+	}
+
+	
+
+	
 	
 }

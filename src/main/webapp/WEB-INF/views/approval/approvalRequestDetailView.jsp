@@ -81,14 +81,14 @@
 													<td id="jName4" style="width: 170px"></td>
 													<td id="jName5" style="width: 170px"></td>
 												</tr>
-												<tr>
+												<tr id="appr">
 													<td style="height: 100px"></td>
 													<td></td>
 													<td></td>
 													<td></td>
 													<td></td>
 												</tr>
-												<tr>
+												<tr id="apprName">
 													<td id="mName1" style="height: 35px">${ mName }</td>
 													<td id="mName2"></td>
 													<td id="mName3"></td>
@@ -97,6 +97,46 @@
 												</tr>
 											</tbody>
 										</table>
+										
+										<!-- 결재 모달 -->
+										<div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+											<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h4 class="modal-title" id="myModalLabel33">결재</h4>
+														<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+															<i data-feather="x"></i>
+														</button>
+													</div>
+													
+													<div class="col-sm-12">
+														<div class="form-group">
+															<div class="form-check"> 
+						                                        <input class="form-check-input" type="radio" name="apprBtn"
+						                                            id="flexRadioDefault1" value="승인"> 
+						                                        <label class="form-check-label" for="flexRadioDefault1">
+						                                            결재승인
+						                                        </label>
+						                                   </div>
+						                                   <div class="form-check"> 
+						                                        <input class="form-check-input" type="radio" name="apprBtn"
+						                                            id="flexRadioDefault1" value="반려"> 
+						                                        <label class="form-check-label" for="flexRadioDefault1">
+						                                            결재반려
+						                                        </label>
+						                                   </div>
+														</div>
+													</div>
+													
+													<div class="col=sm-6">
+														<button id="apprRefuse" type="button" class="btn btn-danger">취소</button>
+														<button id="apprPermit" type="button" class="btn btn-primary">확인</button>
+													</div>
+													
+												</div>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -363,19 +403,103 @@
 		$(document).ready(function(){
 			
 			let loginName = "${loginUser.MName}";
-			let name = "${mName}";
+			
+			let apprTd = $('#appr td'); // 승인 버튼 
+			let apprNameTd = $('#apprName td'); // 승인자 이름 
+			let value="";
 			
 			let tr = $('#apprTable tbody tr');
 			let td = tr.children();
 			
-			if(loginName==name){
-				/* alert("같다"); */
-				console.log(tr.eq(2).find(td.eq(0).text()))
-				/* if(tr.eq(2).td.eq(0).innerText == loginName){
-					alert("tr이 로그인유저 네임일 때");
-				} */
-			}
+			console.log(" ${ loginUser.MNo } : " +  ${ loginUser.MNo })
+			
+			$.ajax({
+				url : "selectApLineStatus.do",
+				type : "post",
+				data : {
+					apNo : ${ apNo },
+					aplineNo : ${ loginUser.MNo }
+				},
+				dataType : "text",
+				success : function(){
+					alert("조회 성공")
+				}, 
+				error : function(){
+					alert("조회 실패");
+				}
+			})
+			
+			for(let i = 0; i < 5; i++){
+				if(apprNameTd.eq(i).text()==loginName){
+					value = "<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#inlineForm'>결재</button>"
+					apprTd.eq(i).html(value);
+					
+					$("#apprPermit").click(function(){
+						if($('input[name="apprBtn"]:checked').val() == '승인'){
+							
+							// 승인일 때 ajax
+							$.ajax({
+								url : "updateApprPermit.do",
+								type : "post",
+								data : {
+									apNo : ${ apNo },
+									aplineNo : ${ loginUser.MNo }
+								},
+								dataType : "text",
+								success : function(){
+									alert("승인 성공")
+								}, 
+								error : function(){
+									alert("승인 실패");
+								}
+							})
+							
+						} else if($('input[name="apprBtn"]:checked').val() == '반려'){
+							
+							// 반려일 때 ajax
+							$.ajax({
+								url : "updateApprRefuse.do",
+								type : "post",
+								data : {
+									apNo : ${ apNo },
+									aplineNo : ${ loginUser.MNo }
+								},
+								dataType : "text",
+								success : function(){
+									alert("승인 반려")
+								}, 
+								error : function(){
+									alert("승인 실패");
+								}
+							})
+						}
+						
+						value=""
+						apprTd.eq(i).html(value); // 버튼 없애기
+						$('.modal').modal('hide'); // 모달 닫기
+					
+					});
+					
+					
+					// 확인 버튼 눌렀을 때 
+					/*  */
+						/* value = "승인"; 
+						apprTd.eq(i).html(value);
+						$('.modal').modal('hide'); // 모달 닫기 */
+						/* .val(['Banana']); */
+						/* alert($('input[name="permit"]').val());
+						alert($('input[name="refuse"]').val()); */
+					/*  */
+				}
+			} 
+			
+			// 취소 버튼 눌렀을 때 모달 닫기 
+			$("#apprRefuse").click(function(){
+				$('.modal').modal('hide'); // 모달 닫기 
+			});
+			
 		});
+		
 	</script>
 	
 </body>
