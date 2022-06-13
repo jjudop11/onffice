@@ -1,19 +1,9 @@
 package com.uni.spring.chat.model.dto;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor

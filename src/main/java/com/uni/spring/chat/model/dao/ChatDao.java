@@ -113,4 +113,9 @@ public class ChatDao {
 		sqlSession.update("chatMapper.disconnect" , mem);
 	}
 
+	public void deleteCAUser(SqlSessionTemplate sqlSession, Chat chat) {
+		// TODO Auto-generated method stub
+		sqlSession.update("chatMapper.deleteCAUser" , chat);
+	}
+
 }

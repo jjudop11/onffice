@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
 <style>
 @import url('https://fonts.googleapis.com/css?family=Amatic+SC');

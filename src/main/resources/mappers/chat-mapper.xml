@@ -134,10 +134,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE CR_ACCESS SET CHAT_EXIT = #{chatExit} WHERE CR_NO = #{crNo} AND M_NO = #{mNo}
 	</update>
 	
+	<!-- 채팅방 유저 목록에서 삭제 -->
 	<delete id="exitChatRoom" parameterType="Chat">
 		DELETE FROM CR_USER WHERE CR_NO = #{crNo} AND M_NO = #{mNo}
 	</delete>
 	
-	
+	<!-- 채팅방 출입 목록에서 삭제 -->
+	<delete id="deleteCAUser" parameterType="Chat">
+		DELETE FROM CR_ACCESS WHERE CR_NO = #{crNo} AND M_NO = #{mNo}
+	</delete>
 	
 </mapper>
