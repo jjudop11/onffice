@@ -145,8 +145,6 @@
 		WHERE RESERVE_NO = #{reserveNo}
 	</update>
 	
- </mapper>
-
 	<select id="selectreservedRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
 		SELECT B.RESERVE_TITLE "reserveTitle", C.M_NAME "mNo", D.J_NAME "reserveNo"
         FROM MEETING_ROOM A
@@ -159,5 +157,5 @@
         AND A.C_NO = #{cNo}
 	</select>
 	
-</mapper>
+ </mapper>
 
