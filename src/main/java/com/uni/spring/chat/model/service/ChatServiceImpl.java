@@ -171,4 +171,11 @@ public class ChatServiceImpl implements ChatService{
 		chatDao.disconnect(sqlSession, mem);
 	}
 
+	@Override
+	public void deleteCAUser(Chat chat) {
+		// TODO Auto-generated method stub
+		System.out.println("serviceImpl deleteCAUser 작동");
+		chatDao.deleteCAUser(sqlSession, chat);
+	}
+
 }

@@ -52,4 +52,6 @@ public interface ChatService {
 
 	void disconnect(Chat mem);
 
+	void deleteCAUser(Chat chat);
+
 }

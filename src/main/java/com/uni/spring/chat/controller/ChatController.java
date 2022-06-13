@@ -25,12 +25,14 @@ import com.uni.spring.member.model.dto.Member;
 
 import lombok.RequiredArgsConstructor;
 
+import lombok.RequiredArgsConstructor;
+
 @SessionAttributes({"loginUser", "msg"})
 @Controller
-@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
+//@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
 public class ChatController {
 
-	
+	@Autowired
 	private SimpMessagingTemplate template;
 
 	
@@ -234,6 +236,8 @@ public class ChatController {
 		}else {
 			
 			chatService.exitChatRoom(chat);
+			
+			chatService.deleteCAUser(chat);
 			
 		}
 
