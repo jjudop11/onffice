@@ -107,6 +107,48 @@ public class MeetingRoomServiceImple implements MeetingRoomService {
 		return meetingRoomDao.checkReservedRooms(sqlsession, roomNo, date);
 	}
 
+	@Override
+	public ReserveRoom selectRoom(ReserveRoom roomInfo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectRoom(sqlsession, roomInfo);
+	}
+
+	@Override
+	public String selectMName(String mNo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectMName(sqlsession, mNo);
+	}
+
+	@Override
+	public String selectMJobName(String mNo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectMJobName(sqlsession, mNo);
+	}
+
+	@Override
+	public String selectRoomName(String roomNo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectRoomName(sqlsession, roomNo);
+	}
+
+	@Override
+	public int deleteReservation(String reservationNo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.deleteReservation(sqlsession, reservationNo);
+	}
+
+	@Override
+	public String selectReserveDate(String reservationNo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectReserveDate(sqlsession, reservationNo);
+	}
+
+	@Override
+	public int updateReservation(ReserveRoom updateRoom) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.updateReservation(sqlsession, updateRoom);
+	}
+
 
 
 

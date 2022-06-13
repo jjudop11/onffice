@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-//로그인유저 세션에서 받아와서 그 사람 회사번호 뿌리고, 그거 회사번호 텍스트 태그에 반영하기
+
 %>
 <!DOCTYPE html>
 <head>
@@ -104,9 +104,9 @@ tr, th {
 																		<th><input type="checkbox" id="checkbox-Top"
 																			class="form-check-input"></th>
 																		<th>No</th>
-																		<th>MettingRoom</th>
-																		<th>Capacity</th>
-																		<th>Note</th>
+																		<th>회의실명</th>
+																		<th>수용인원</th>
+																		<th>비고</th>
 																		<th></th>
 																	</tr>
 																</thead>
@@ -121,15 +121,7 @@ tr, th {
 																			<th class="roomName">${ r.roomName }</th>
 																			<th class="roomCapa">${ r.roomCapa }</th>
 																			<th class="roomNote">${ r.roomNote }</th>
-																			<th>
-																				<div class="modifyBtns">
-																					<button type="button" class="btn btn-light"
-																						id="modifyBtn" data-toggle="modal"
-																						data-target="#modify-Modal">수정</button>
-
-
-																				</div>
-																			</th>
+																			<th><button id="modifyRoom">수정</button></th>
 																		</tr>
 																	</c:forEach>
 																</tbody>
@@ -194,6 +186,13 @@ tr, th {
 														<div class="buttons">
 															<button type="button" class="btn btn-primary"
 																data-toggle="modal" data-target="#myModal">추가</button>
+															
+															<div class="modifyBtns">
+																<button type="button" class="btn btn-light"
+																	id="modifyBtn" data-toggle="modal"
+																	data-target="#modify-Modal">수정</button>
+															</div>
+															
 															<button href="#" class="btn btn-danger" id="deleteRoom">삭제</button>
 
 															<div class="modal" id="myModal">
@@ -319,48 +318,38 @@ tr, th {
 	</div>
 
 	<script>
-		$(function(){
-			$("#modifyBtn").click(function(){
-				
-				
-				let aaa = $("#modifyBtn").text()
-				console.log(aaa)
-			})
-		})
 	
-	
-		/* $(function() {
-			$("#saveRoom").click(function() {
-				let addRoomNo = $("#addRoomNo").val();
-				let addRoomName = $("#addRoomName").val();
-				let addRoomCapa = $("#addRoomCapa").val();
-				let addRoomNote = $("#addRoomNote").val();
-
-				//let roomObject = {
-				//addRoomNo: addRoomNo,
-				//addRoomName: addRoomName,
-				//addRoomCapa: addRoomCapa,
-				//addRoomNote: addRoomNote
+		//회의실 수정 //체크
+		$(function() {
+			$("#modifyRoom").click(function() {							
 				
-
+				let modifyRow = 
+				console.log(checkedRow);
+						
+				let roomNo = checkedRow.children().eq(1).text(); 
+				console.log(roomNo);
+		
+				checkedRow.remove();
+				console.log("행 삭제 완료");
+				
 				$.ajax({
-					url : "saveRoom.do",
+					url : "deleteRoom.do",
 					data : {
-						addRoomNo : addRoomNo,
-						addRoomName : addRoomName,
-						addRoomCapa : addRoomCapa,
-						addRoomNote : addRoomNote
+						roomNo : roomNo,
 					},
 					type : "post",
-					success : function(success) {
-						console.log("데이터 전달 성공" + success)
+					success : function(obj) {
+						alert("회의실을 삭제하였습니다.");
+						console.log(obj)
+					
+						location.reload();		
 					},
 					error : function(error) {
-						console.log("ajax 통신 실패")
+						alert("회의실 삭제에 실패하였습니다.");
 					}
-				})
+				})					
 			})
-		}) */
+		}) 
 
 		//체크박스 전체체크, 해제
 		$(function() {
@@ -372,29 +361,18 @@ tr, th {
 				}
 			})
 
-			if ($(".form-check-input").is(":unchecked")) {
-				$("#checkbox-Top").prop("checked", false);
-			}
+			$("input[name=under-checkbox]").click(function(){
+				const total = $("input[name=under-checkbox]").length;
+				const checked = $("input[name=under-checkbox]:checked").length;
+				
+				if (total != checked)
+					$("#checkbox-Top").prop("checked", false);
+				else
+					$("#checkbox-Top").prop("checked", true);
+			})
 		})
 
-		//체크박스 하나 해제시 최상단 체크박스도 해제... 왜안돼?
-		/* $(function(){
-			$("input[name='under-checkbox']").click(function(){
-				if($("input[name='under-checkbox']").is(":unchecked")){
-					$("#checkbox-Top").prop("checked", false);
-				}
-			})
-		})*/
-
-		/* let checkbox_top = $("#checkbox-Top");
-		let checkbox = $(".form-check-input");
-		
-		for(let i = 0; i < checkbox.length; i++){
-			if(checkbox.attr("checked", false)){
-				$("#checkbox_top").prop("checked", false);
-			}
-		} */
-
+	
 		//회의실 추가 모달에서 Controller로 데이터 넘기기 -> 성공
 		//Controller에서 데이터 받고 화면에 뿌리기 -> 페이지 새로고침 메소드 추가, 성공
 		$(function() {
@@ -416,7 +394,6 @@ tr, th {
 					success : function(obj) {
 						alert("회의실을 추가하였습니다.");
 						console.log(obj)
-						location.reload();
 					},
 					error : function(error) {
 						alert("회의실 추가에 실패하였습니다.");
@@ -457,7 +434,7 @@ tr, th {
 			})
 		}) */
 
-		//회의실 여러개 삭제
+		//회의실 삭제
 		$(function() {
 			$("#deleteRoom").click(function() {
 
@@ -563,14 +540,7 @@ tr, th {
 			$("#room_no_check").empty();
 		})
 
-		$(function() {
-			$("#modifyBtn").click(function() {
-
-				//해당 행 정보 넘기기
-
-			})
-
-		})
+		
 	</script>
 
 	<c:if test="${ !empty msg }">
