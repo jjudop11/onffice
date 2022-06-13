@@ -1,5 +1,6 @@
-
 package com.uni.spring.member.model.dto;
+
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +15,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class Alram {
+public class RememberLogin {
 	
-	private int alNo;
-	private String alContent;
-	private String alState;
 	private String mNo;
+	private String sessionkey;
+	private Date sessionLimit;
 }

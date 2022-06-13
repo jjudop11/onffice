@@ -74,4 +74,10 @@ public class noticeServiceImpl implements noticeService {
 		return noticedao.getsearchList(sqlsession, sc);
 	}
 
+	@Override
+	public ArrayList<notice> selectNoticeList(int cNo) {
+		// TODO Auto-generated method stub
+		return  noticedao.selectNoticeList(sqlsession, cNo);
+	}
+
 }

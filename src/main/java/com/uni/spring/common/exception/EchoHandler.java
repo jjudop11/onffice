@@ -49,62 +49,101 @@ public class EchoHandler extends TextWebSocketHandler {
 		String loginUserName = loginUser.getMName();
 
 		String msg = message.getPayload();
-		
-		String[] strs = msg.split(",");
-		
-		String category = strs[0];
-		String name = strs[1];
-		String jName = strs[2];
-		String dName = strs[3];
-		
+		String category = "";
+		String name = "";
+		String jName = "";
+		String dName = "";
+
+		if(msg.equals("새로운 공지사항이 등록되었습니다")) {
+			category = msg;
+		} else {
+			String[] strs = msg.split(",");
+			
+			category = strs[0];
+			name = strs[1];
+			jName = strs[2];
+			dName = strs[3];
+		}
+
 		Map<String,Object> map = new HashMap<String, Object>();
 		ArrayList<Member> allList = memberService.selectMemList(null, loginUser.getCNo());
 		ArrayList<Alram> aList = new ArrayList<Alram>();
 		System.out.println("==================================리스트 길이" + sessions.size());
-		 for(WebSocketSession sess : sessions){
-			 System.out.println("sess.getAttributes() ==============="+ sess.getAttributes());
-			 if(sess.getAttributes() != null) {
-				 
-				 map = sess.getAttributes();
-				 Member m = (Member) map.get("loginUser");
-
-				if(!m.getMName().equals(loginUserName)) {
-					 
-					 if(category.equals("퇴근")) {
-				         for(Member m2 : allList) {
-				        	 if(!m2.getMName().equals(loginUserName)) {
-				        		 Alram a = Alram.builder()
-						        		 .alContent(dName +"부서의 "+name + jName + "님이" + "<br> 퇴근하셨습니다")
-						        		 .mNo(m2.getMNo())
-						        		 .build();
-				        		 aList.add(a);
-				        	 }
-				         }
-				         memberService.insertAlram(aList);
-						 
-						 TextMessage tmpMsg = new TextMessage(dName +"부서의 "+name + jName + "님이" + "<br> 퇴근하셨습니다");
+		
+		if(category.equals("퇴근")) {
+			// 알림창
+			for(WebSocketSession sess : sessions){ // 로그인한 사람 리스트 돌려서
+				if(sess.getAttributes() != null) {
+					map = sess.getAttributes();
+					Member m = (Member) map.get("loginUser"); // 로그인 유저 뽑아서
+					
+					if(!m.getMName().equals(loginUserName)) { // 퇴근 유저아닌 유저한테 알림 띄우고
+						TextMessage tmpMsg = new TextMessage(dName +"부서의 "+name + jName + "님이" + "<br>퇴근하셨습니다");
 				         sess.sendMessage(tmpMsg);
-				         
-					 } else if(category.equals("출근")) {
-						
-						 for(Member m2 : allList) {
-				        	 if(!m2.getMName().equals(loginUserName)) {
-				        		 Alram a = Alram.builder()
-						        		 .alContent(dName +"부서의 "+name + jName + "님이" + "<br> 출근하셨습니다")
-						        		 .mNo(m2.getMNo())
-						        		 .build();
-				        		 aList.add(a);
-				        	 }
-						 }
-						 memberService.insertAlram(aList);
-
-						 TextMessage tmpMsg = new TextMessage(dName +"부서의 "+name + jName + "님이" + "<br> 출근하셨습니다");
+					}
+				}
+			}
+			// DB 저장
+			for(Member mem : allList) { // 전체 리스트 에서
+				if(!mem.getMName().equals(loginUserName)) { // 지금 출퇴근자 제외
+					Alram a = Alram.builder()
+			        		 .alContent(dName +"부서의 "+name + jName + "님이" + "<br>퇴근하셨습니다")
+			        		 .mNo(mem.getMNo())
+			        		 .build();
+	       		 	aList.add(a);
+				}
+			}
+			
+		} else if(category.equals("출근")) {
+			
+			for(WebSocketSession sess : sessions){ // 로그인한 사람 리스트 돌려서
+				if(sess.getAttributes() != null) {
+					map = sess.getAttributes();
+					Member m = (Member) map.get("loginUser"); // 로그인 유저 뽑아서
+					
+					if(!m.getMName().equals(loginUserName)) { // 출근 유저아닌 유저한테 알림 띄우고
+						TextMessage tmpMsg = new TextMessage(dName +"부서의 "+name + jName + "님이" + "<br>출근하셨습니다");
 				         sess.sendMessage(tmpMsg);
-					 }
-				} 
-			 }
-	     }
-						
+					}
+				}
+			}
+			
+			for(Member mem : allList) { // 전체 리스트 에서
+				if(!mem.getMName().equals(loginUserName)) { // 출퇴근자 제외
+					Alram a = Alram.builder()
+			        		 .alContent(dName +"부서의 "+name + jName + "님이" + "<br>출근하셨습니다")
+			        		 .mNo(mem.getMNo())
+			        		 .build();
+	        		 aList.add(a);
+				}
+			}
+			
+		} else {
+			
+			for(WebSocketSession sess : sessions){ // 로그인한 사람 리스트 돌려서
+				if(sess.getAttributes() != null) {
+					map = sess.getAttributes();
+					Member m = (Member) map.get("loginUser"); // 로그인 유저 뽑아서
+					
+					if(!m.getMName().equals(loginUserName)) { // 출근 유저아닌 유저한테 알림 띄우고
+						TextMessage tmpMsg = new TextMessage(msg);
+				         sess.sendMessage(tmpMsg);
+					}
+				}
+			}
+			
+			for(Member mem : allList) { // 전체 리스트 에서
+				if(!mem.getMName().equals(loginUserName)) { // 출퇴근자 제외
+					Alram a = Alram.builder()
+			        		 .alContent("새로운 공지사항이<br> 등록되었습니다")
+			        		 .mNo(mem.getMNo())
+			        		 .build();
+	        		 aList.add(a);
+				}
+			}
+			
+		}
+		memberService.insertAlram(aList);
 	}
 	
 	@Override

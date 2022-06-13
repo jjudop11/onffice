@@ -12,6 +12,7 @@ import com.uni.spring.job.model.dto.Job;
 import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
+import com.uni.spring.member.model.dto.RememberLogin;
 
 
 public interface MemberService {
@@ -53,5 +54,11 @@ public interface MemberService {
 	ArrayList<Alram> selectAlramList(String mNo);
 
 	int deleteAlram(Alram a);
+
+	void insertRemember(RememberLogin r);
+
+	Member selectRemember(String sessionId);
+
+	void deleteRemember(Member loginUser);
 
 }

@@ -55,7 +55,7 @@ public class AttendanceController {
 		Member m = (Member) model.getAttribute("loginUser");
 		
 		Attendance result = attendanceService.selectAttendance(m.getMNo());
-		System.out.println("===================여기왜 "+ result);
+		
 		if(result != null && result.getALtime() != null && result.getAWtime() != null) {
 
 			int hour = Integer.parseInt(result.getAWtime())/(60*60);

@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -38,10 +41,15 @@ import com.uni.spring.dept.model.dto.Dept;
 import com.uni.spring.dept.model.service.DeptService;
 import com.uni.spring.job.model.dto.Job;
 import com.uni.spring.job.model.service.JobService;
+import com.uni.spring.meetingRoom.model.dto.MeetingRoom;
+import com.uni.spring.meetingRoom.model.service.MeetingRoomService;
 import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
+import com.uni.spring.member.model.dto.RememberLogin;
 import com.uni.spring.member.model.service.MemberService;
+import com.uni.spring.notice.model.notice;
+import com.uni.spring.notice.service.noticeService;
 
 import javax.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -67,6 +75,12 @@ public class MemberController {
 	private DeptService deptService;
 	
 	@Autowired
+	private noticeService noticeService;
+	
+	@Autowired
+	private MeetingRoomService meetingRoomService;
+	
+	@Autowired
 	private JavaMailSender mailSender;
 	
 	@GetMapping("/alarm")
@@ -79,8 +93,28 @@ public class MemberController {
 		return "main";
 	}
 	
+	@GetMapping("/loginpage")
+	public String loginform() {	
+		return "member/login";
+	}
+	
 	@GetMapping("/main")
-	public void main() {	
+	public void main(Model model, @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage) {	
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		ArrayList<notice> list = noticeService.selectNoticeList(loginUser.getCNo());
+		
+		int userCNo = loginUser.getCNo(); 
+		// 페이징 처리
+		int listCount = meetingRoomService.selectRoomListCount(userCNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectRoomList(pi, userCNo);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("pi", pi);
+		model.addAttribute("roomList", roomList);
+		
 	}
 
 	@GetMapping("/passwordForm")
@@ -100,7 +134,7 @@ public class MemberController {
 		String from = "jjudop11@naver.com";
 		String to = mem.getMEmail(); // DB에서 가져온 Member객체의 이메일주소
 		String title = "[ONFFICE] 비밀번호변경 인증 이메일 입니다"; 
-		String content = "<img src=\"https://s3.us-west-2.amazonaws.com/secure.notion-static.com/eb5fa8b3-51d6-4643-88a7-363e92bf78be/logo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220526%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220526T024331Z&X-Amz-Expires=86400&X-Amz-Signature=a1903135bee523ddd3e526112cc83ded0a196da6867fffc15ad94adb24ce9585&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22logo.PNG.png%22&x-id=GetObject\">" 
+		String content = "<img src=\"https://s3.us-west-2.amazonaws.com/secure.notion-static.com/eb5fa8b3-51d6-4643-88a7-363e92bf78be/logo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220613%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220613T033346Z&X-Amz-Expires=86400&X-Amz-Signature=30a4cf56c3bb0e4ccbc926622c49d0cf99804351094b2b6e282e7618c3dffc53&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22logo.PNG.png%22&x-id=GetObject\">" 
 				+"<br><br><br>" + "안녕하세요 "+ mem.getMName() +"님 " +"<br>"
 				+ "비밀번호찾기(변경) 인증번호는 " + num + " 입니다.";
 		
@@ -146,33 +180,75 @@ public class MemberController {
 	}
 	
 	@GetMapping("/logout")
-	public String logout(SessionStatus status) {
-		status.setComplete();
+	public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+		
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+		if ( loginCookie != null ){
+            // null이 아니면 존재하면!
+            loginCookie.setPath("/");
+            // 쿠키는 없앨 때 유효시간을 0으로 설정하는 것 !!! invalidate같은거 없음.
+            loginCookie.setMaxAge(0);
+            // 쿠키 설정을 적용한다.
+            response.addCookie(loginCookie);
+             
+            // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
+            memberService.deleteRemember(loginUser);
+        }
+		session.invalidate();
 		return "redirect:/";
 	}
 	
 	@PostMapping("/login")
-	public ModelAndView loginUser(Member m, String username, @RequestParam(value = "remember", required = false) String remember, Model model, ModelAndView mv) { 
+	public ModelAndView loginUser(HttpSession session, HttpServletResponse response, Member m, String remember, @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage, Model model, ModelAndView mv) { 
 
 		Member loginUser;
+
+		if(session.getAttribute("loginUser") != null) {
+			session.removeAttribute("loginUser"); // 기존값을 제거해 준다.
+		}
 		
 		loginUser = memberService.loginUser(bCryptPasswordEncoder, m);
+
+		int userCNo = loginUser.getCNo(); 
+		// 페이징 처리
+		int listCount = meetingRoomService.selectRoomListCount(userCNo);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		ArrayList<MeetingRoom> roomList = meetingRoomService.selectRoomList(pi, userCNo);
 		
 		System.out.println("DB정보: "+loginUser);
+		
 		
 		if(m.getMPwd().equals("0")) {
 			mv.addObject("loginUser", loginUser).addObject("msg","첫로그인 입니다. 비밀번호를 변경하세요").setViewName("member/updatePwdForm");
 		} else if (loginUser.getMPwd().equals("99")) {
-			mv.addObject("msg", "비밀번호를 틀렸습니다. 5번틀리면 계정이 잠깁니다").setViewName("member/login");
+			mv.addObject("msg", "비밀번호를 틀렸습니다. 5번틀리면 계정이 잠깁니다").setViewName("redirect:/");
 		} else {
-			mv.addObject("loginUser", loginUser).setViewName("main");
+			if(remember != null) {
+				Cookie cookie = new Cookie("loginCookie", session.getId());
+				cookie.setPath("/");
+				int amount = 60*60*24;
+				cookie.setMaxAge(amount); // 하루 유지
+				response.addCookie(cookie);
+				
+				Date sessionLimit = new Date(System.currentTimeMillis() + (1000*amount));
+				RememberLogin r = RememberLogin.builder()
+						.mNo(loginUser.getMNo())
+						.sessionkey(session.getId())
+						.sessionLimit(sessionLimit)
+						.build();
+				memberService.insertRemember(r);
+			} 
+			ArrayList<notice> list = noticeService.selectNoticeList(loginUser.getCNo());
+			mv.addObject("loginUser", loginUser).addObject("list", list).addObject("pi", pi).addObject("roomList", roomList).setViewName("main");
 		}
 
 		return mv;
 
 	}
 	
-	@GetMapping("/mypageForm")
+	@GetMapping("mypageForm")
 	public String mypageForm() {	
 		return "member/mypageForm"; 
 	}
@@ -434,36 +510,7 @@ public class MemberController {
 	public String jdForm(Model model) {	
 		return "member/jdForm"; 
 	}
-	/*
-	@GetMapping("/jdForm")
-	public String jdForm(Model model) {	
-		
-		Member loginUser = (Member) model.getAttribute("loginUser");
-		ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
-		model.addAttribute("lists", jList);
-		model.addAttribute("set", "1");
-		
-		return "member/jdForm"; 
-	}
 	
-	@GetMapping("/updatejdList")
-	public String updatejdList(String val, Model model) {	
-		
-		Member loginUser = (Member) model.getAttribute("loginUser");
-		if(val.equals("1")) {
-			ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
-			model.addAttribute("lists", jList);
-			model.addAttribute("set", "1");
-		} else {
-			ArrayList<Dept> dList = deptService.selectDeptList(loginUser.getCNo());
-			model.addAttribute("lists", dList);
-			model.addAttribute("set", "2");
-		}
-		
-		return "member/jdForm"; 
-
-	}
-	*/
 	@ResponseBody
 	@PostMapping(value ="/deletejd",produces = "application/json; charset=utf-8")
 	public String deletejd(String del, String set, Model model) {	
@@ -495,6 +542,13 @@ public class MemberController {
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		
 		if(set.equals("1")) {
+			
+			ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
+			for (Job j : jList) {
+				if(j.getJName().equals(upd)) {
+					return String.valueOf("중복");
+				}
+			}
 			Job job = new Job().builder()
 					.jName(upd)
 					.oriName(ori)
@@ -503,6 +557,13 @@ public class MemberController {
 			int result = jobService.updatejd(job);
 			return String.valueOf(result);
 		} else {
+			
+			ArrayList<Dept> dList = deptService.selectDeptList(loginUser.getCNo());
+			for (Dept d : dList) {
+				if(d.getDName().equals(upd)) {
+					return String.valueOf("중복");
+				}
+			}
 			Dept dept = new Dept().builder()
 					.dName(upd)
 					.oriName(ori)
@@ -521,13 +582,28 @@ public class MemberController {
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		
 		if(set.equals("1")) {
+			
+			ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
+			for (Job j : jList) {
+				if(j.getJName().equals(ins)) {
+					return String.valueOf("중복");
+				}
+			}
 			Job job = Job.builder()
 					.jName(ins)
 					.cNo(loginUser.getCNo())
 					.build();
 			int result = jobService.insertjd(job);
 			return String.valueOf(result);
+			
 		} else {
+			
+			ArrayList<Dept> dList = deptService.selectDeptList(loginUser.getCNo());
+			for (Dept d : dList) {
+				if(d.getDName().equals(ins)) {
+					return String.valueOf("중복");
+				}
+			}
 			Dept dept = Dept.builder()
 					.dName(ins)
 					.cNo(loginUser.getCNo())
@@ -656,11 +732,13 @@ public class MemberController {
 	public String deleteAlram(Model model, String content) {	
 		
 		Member loginUser = (Member)model.getAttribute("loginUser");
-		System.out.println("========================="+content.length());
 		String conString = "";
-		if(content.length() == 22) {
-			conString = content.substring(0,14) + "<br>" + content.substring(14);
-		}
+		
+		int index = content.indexOf("이");
+		if(index > -1) {
+			conString = content.substring(0,index+1) + "<br>" + content.substring(index+1);
+		} 
+		
 		Alram a = Alram.builder()
 				.mNo(loginUser.getMNo())
 				.alContent(conString)

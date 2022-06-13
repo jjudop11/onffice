@@ -78,6 +78,13 @@ public class ReserveRoom {
 	public void setcNo(int cNo) {
 		this.cNo = cNo;
 	}
+
+	@Override
+	public String toString() {
+		return "ReserveRoom [reserveNo=" + reserveNo + ", roomNo=" + roomNo + ", reserveDate=" + reserveDate
+				+ ", startTime=" + startTime + ", endTime=" + endTime + ", reserveTitle=" + reserveTitle + ", mNo="
+				+ mNo + ", cNo=" + cNo + "]";
+	}
 	
 	
 

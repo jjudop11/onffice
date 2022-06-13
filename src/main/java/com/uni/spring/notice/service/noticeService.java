@@ -24,5 +24,7 @@ public interface noticeService  {
 
 	int searchListCount(SearchCondition sc);
 
+	ArrayList<notice> selectNoticeList(int cNo);
+
 
 }

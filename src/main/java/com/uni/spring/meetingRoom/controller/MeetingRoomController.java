@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -24,6 +26,7 @@ import com.uni.spring.meetingRoom.model.service.MeetingRoomService;
 import com.uni.spring.member.model.dto.Member;
 
 @Controller
+@SessionAttributes("loginUser")
 public class MeetingRoomController {
 
 	@Autowired
@@ -176,7 +179,7 @@ public class MeetingRoomController {
 	@RequestMapping("reservedRoomList.do")
 	@ResponseBody
 	public String reserveRoomList(@RequestParam("date") String date, HttpSession session) {
-		
+		System.out.println("===================" + date);
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		int cNo = loginUser.getCNo();
 
@@ -429,4 +432,22 @@ public class MeetingRoomController {
 
 		return "meetingRoom/onlineMeetingroom";
 	}
+	
+	@ResponseBody
+	@PostMapping(value = "/selectreservedRoom", produces = "application/json; charset=utf-8")
+	public String selectReservedRoom(Member m, Model model, String title, String time) { 
+
+		Member loginUser = (Member) model.getAttribute("loginUser");
+		
+		ReserveRoom r = new ReserveRoom();
+		r.setReserveNo(title);
+		r.setStartTime(time);
+		r.setmNo(loginUser.getMNo());
+		r.setcNo(loginUser.getCNo());
+		
+		ReserveRoom room = meetingRoomService.selectreservedRoom(r);
+		
+		return new GsonBuilder().create().toJson(room);
+	}
+	
 }

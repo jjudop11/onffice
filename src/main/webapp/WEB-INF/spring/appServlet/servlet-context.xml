@@ -36,4 +36,13 @@
 		<websocket:sockjs/>
 	</websocket:handlers>
 	
+	<beans:bean id="LoginSseionInterceptor" class="com.uni.spring.common.aop.LoginSseionInterceptor" />
+	<interceptors>
+		<interceptor>
+			<mapping path="/loginpage" />
+			<beans:ref bean="LoginSseionInterceptor" />
+		</interceptor> 
+	</interceptors>
+	
+	
 </beans:beans>
