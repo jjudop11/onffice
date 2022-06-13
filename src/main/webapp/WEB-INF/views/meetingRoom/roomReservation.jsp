@@ -101,6 +101,17 @@ tr, th {
 .time {
 	height: 38px;
 }
+
+#startTime, #endTime {
+	width: 220px;
+	float: left;
+}
+
+#wiggle {
+	float: left;
+	margin-left: 9.1px;
+	margin-right: 9px;
+}
 </style>
 
 </head>
@@ -141,7 +152,7 @@ tr, th {
 
 												<!-- 데이트피커 -->
 												<div id="datePicker-div">
-													<input type="date" id="datePicker" class="datepicker-form">
+													<input type="date" id="datePicker" class="datepicker-form" value="${ today }">
 												</div>
 
 												<div>
@@ -151,40 +162,86 @@ tr, th {
 
 												<div class="buttons" id="reserve-btn-div">
 													<button type="button" class="btn btn-primary"
-														id="reserveRoomBtn" data-toggle="modal"
-														data-target="#myModal">예약</button>
+														id="reserveRoomBtn">예약</button>
 
 													<div class="modal" id="myModal">
-														<div class="modal-dialog">
-															<div class="modal-content">
+														<form name="insertRoom">
+															<div class="modal-dialog">
+																<div class="modal-content">
 
-																<div class="modal-header">
-																	<h4 class="modal-title">회의실 예약</h4>
-																	<button type="button" class="close"
-																		data-dismiss="modal"></button>
-																</div>
+																	<div class="modal-header">
+																		<h4 class="modal-title">회의실 예약</h4>
+																		<button type="button" class="close"
+																			data-dismiss="modal"></button>
+																	</div>
 
-																<div class="modal-body" id="modal-body">
-																	<form name="insertRoom" method="post" action="#">
+																	<div class="modal-body" id="modal-body">
+
 
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약일</label><br>
-																			<input type="date" id="modal-datePicker"
-																				class="datepicker-form">
+																			<input type="date" id="modal-datePicker" class="datepicker-form" required>
 																		</div>
 																		<br>
 
-																		<div class="form-reserveRoom">
+																		<div class="form-reserveRoom" id="timeSelect">
 																			<label for="label-reserveRoom" class="control-label">예약시간</label>
-																			<br> <input type="time" class="timepicker"
-																				id="startTime"> ~ <input type="time"
-																				class="timepicker" id="endTime">
+																			<br> <select id="startTime" class="form-control">
+																				<script>
+																		          let hour = '';
+																		          let min = '00';
+	
+																		          for (var i = 14; i < 42; i++) {
+																		              hour = (Math.floor(i / 2));
+	
+																		              if (hour < 10) {
+																		                  hour = '0' + hour;
+																		              }
+																		              if (i % 2 != 0) {
+																		                  min = '30';
+																		              } else {
+																		            	  min = '00';
+																		              }
+																		              
+																		              document
+																		                  .write('<option value=' + hour + ':' + min + '>'
+																		                      + hour
+																		                      + ':'
+																		                      + min
+																		                      + '</option>');
+																		          }
+																	          </script>
+																			</select>
+
+																			<div id="wiggle">~</div>
+
+																			<select id="endTime" class="form-control">
+																				<script>
+																		          for (var i = 15; i < 43; i++) {
+																		              hour = (Math.floor(i / 2));
+	
+																		              if (hour < 10) {
+																		                  hour = '0' + hour;
+																		              }
+																		              if (i % 2 != 0) {
+																		                  min = '30';
+																		              } else {
+																		            	  min = '00';
+																		              }
+																		              
+																		              document
+																		                  .write('<option value=' + hour + ':' + min + '>'
+																		                      + hour
+																		                      + ':'
+																		                      + min
+																		                      + '</option>');
+																		          }
+																	          </script>
+																			</select>
 																		</div>
 
-																		<div>
-																			<a id="timeCheck"></a>
-																		</div>
-
+																		<br>
+																		<br>
 																		<br>
 
 																		<div class="form-reserveRoom">
@@ -202,7 +259,7 @@ tr, th {
 																		<div class="form-reserveRoom">
 																			<label for="basicInput">회의명</label> <input
 																				type="text" class="form-control" id="reservetitle"
-																				placeholder="회의 내용을 입력해주세요">
+																				placeholder="회의 내용을 입력해주세요" required>
 																		</div>
 
 																		<br>
@@ -213,23 +270,22 @@ tr, th {
 																				id="reserveUser" value="${ userName } ${ userJob }"
 																				readonly>
 																		</div>
-																	</form>
+
+																	</div>
+
+																	<div class="modal-footer">
+																		<input type="submit" class="btn btn-primary"
+																			id="reserveRoom" onclick="reserveRoom()" value="확인">
+																		<!-- data-dismiss="modal" -->
+																		<button type="button" id="btnCloseModal"
+																			class="btn btn-danger">닫기</button>
+																	</div>
 																</div>
-
-																<div class="modal-footer">
-																	<button type="button" class="btn btn-primary"
-																		id="reserveRoom" data-dismiss="modal"
-																		onclick="reserveRoom()" disabled>확인</button>
-
-																	<button type="button" class="btn btn-danger"
-																		data-dismiss="modal">닫기</button>
-																</div>
-
-
 															</div>
-														</div>
+														</form>
 													</div>
 												</div>
+
 												<!-- 예약 테이블 -->
 												<div id="div-table">
 													<table class="table table-bordered mb-0"
@@ -255,7 +311,7 @@ tr, th {
 														</thead>
 														<tbody>
 															<c:forEach items="${ roomList }" var="r">
-																<tr>
+																<tr data-roomno="${r.roomNo}">
 																	<th colspan="2">${ r.roomName }</th>
 																	<th id="07:00" title="툴팁 줄 수 있을까?"></th>
 																	<th id="07:30"></th>
@@ -293,6 +349,14 @@ tr, th {
 											</div>
 
 											<br> <br>
+											
+											<form id="hiddenForm" action="reservationDetails.do" method="post">
+												<div id="hiddenDiv">
+													<input type="hidden" name="dateD" id="dateD" value="">
+													<input type="hidden" name="roomNoD" id="roomNoD" value="">
+													<input type="hidden" name="startTimeD" id="startTimeD" value="">
+												</div>
+											</form>
 
 											<!-- 하단 회의실 현황 -->
 											<div id="meetingroomList">
@@ -338,58 +402,11 @@ tr, th {
 
 	<script>
 	
-		//룸네임 어떻게 받을거야
-		$(function(){
-			$("#trBtn").click(function(){				
-				let tr = $("#07:00").parent();
-				let th = tr.children().eq(1).text();
-				
-				console.log(th)
-			})
-		})
-	
-		//데이트피커
-		$(function() {
-			$("#testBtn").click(function() {
-				let datepicker = $("#datePicker");
-				console.log(datepicker.val(), typeof (datepicker.val()));
-			})
-		})
-
-		//타임피커
+		//화면 진입시 value에 지정된 날짜 자동 조회
+		window.onload = function(){
+			$("#searchDateBtn").trigger('click');
+		}
 		
-		
-		//회의실 예약 관련
-		/* let time_0700 = $("tbody th").eq(1);
-		let time_0730 = $("tbody th").eq(2);
-		let time_0800 = $("tbody th").eq(3);
-		let time_0830 = $("tbody th").eq(4);
-		let time_0900 = $("tbody th").eq(5);
-		let time_0930 = $("tbody th").eq(6);
-		let time_1000 = $("tbody th").eq(7);
-		let time_1030 = $("tbody th").eq(8);
-		let time_1100 = $("tbody th").eq(9);
-		let time_1130 = $("tbody th").eq(10);
-		let time_1200 = $("tbody th").eq(11);
-		let time_1230 = $("tbody th").eq(12);
-		let time_1300 = $("tbody th").eq(13);
-		let time_1330 = $("tbody th").eq(14);
-		let time_1400 = $("tbody th").eq(15);
-		let time_1430 = $("tbody th").eq(16);
-		let time_1500 = $("tbody th").eq(17);
-		let time_1530 = $("tbody th").eq(18);
-		let time_1600 = $("tbody th").eq(19);
-		let time_1630 = $("tbody th").eq(20);
-		let time_1700 = $("tbody th").eq(21);
-		let time_1730 = $("tbody th").eq(22);
-		let time_1800 = $("tbody th").eq(23);
-		let time_1830 = $("tbody th").eq(24);
-		let time_1900 = $("tbody th").eq(25);
-		let time_1930 = $("tbody th").eq(26);
-		let time_2000 = $("tbody th").eq(27);
-		let time_2030 = $("tbody th").eq(28);
-		let time_2030_1 = $("tbody th").eq(30); */
-
 		//예약된 일정 화면에 뿌리기
 		$(function() {
 			$("#searchDateBtn").click(function() {
@@ -408,24 +425,50 @@ tr, th {
 					success : function(data, statusText, jqXHR) {
 						
 						const obj = JSON.parse(data);
-						
-						console.log(data)
-						console.log(obj)
-						
+						const cells = $("#roomReserveTable tbody th");
+
 						let offset = 0;
 
-						$("tbody th").css("background", "");
-						
+						cells.css("background", "");
+						cells.removeData("st-time");
+						cells.removeData("ed-time");
+
 						for (const room of obj.rooms){					
 							for (const time of room.times){
+								
+								const stTime = cells.eq(time[0] + offset + 1).attr('id');
+								let edTime = cells.eq(time[1] + offset).attr('id');
+
+								let splitedTime = edTime.split(':');
+								let edTimeHour = parseInt(splitedTime[0]);
+								let edTimeMinute = parseInt(splitedTime[1]);
+								
+								if (edTimeMinute == 30){
+									edTimeHour++;
+									edTimeMinute = '00';
+								} else {
+									edTimeMinute = '30';
+								}
+								
+								if (edTimeHour < 10){
+									edTimeHour = '0' + edTimeHour;
+								}
+								
+								edTime = edTimeHour + ':' + edTimeMinute;
+								
 								for (let i = time[0]; i < time[1]; i++){
-									$("tbody th").eq(i + offset + 1).css("background", "#2146b5"); //i + offset + 1 -> +1은 eq(0)이 회의실명 적힌 칸이라서
+									
+									const item = cells.eq(i + offset + 1); //i + offset + 1 -> +1은 eq(0)이 회의실명 적힌 칸이라서
+
+									item.css('background', '#2146b5'); 
+									item.data('st-time', stTime);
+									item.data('ed-time', edTime);
+									item.prop('title', stTime + ' ~ ' + edTime)
 								}
 							}
 							
 							offset += 29; //한 행에 29칸임, +29 해서 한칸씩 내려갈 것
 						}
-						//location.reload(); //
 					},
 					error : function(error) {
 						alert("조회에 실패하였습니다.");
@@ -437,13 +480,13 @@ tr, th {
 
 		//예약하기
 		$(function() {
-			$("#reserveRoom").click(function() {
+			$("#reserveRoom").click(function(e) {
 				let date = $("#modal-datePicker").val();
 				let startTime = $("#startTime").val();
 				let endTime = $("#endTime").val();
 				let selectRoom = $("#selectRoom").val();
 				let title = $("#reservetitle").val();
-				
+							
 				$.ajax({
 					url : "reserveRoom.do",
 					data : {
@@ -459,37 +502,34 @@ tr, th {
 					success: function(result){
 						if(result > 0){
 							alert("예약이 완료되었습니다.");
+							$("#searchDateBtn").trigger('click');
 						}else if(result == -1){
 							alert("이미 예약된 시간입니다.")
 						}		
 					},
 					error: function(error){
-						alert("예약에 실패하였습니다.")
+						alert("예약에 실패하였습니다. 예약정보를 입력해주세요.")
 					}
-			 	 /* success : function(obj, statusText, jqXHR) {
-						console.log("예약을 완료하였습니다.");
-						//location.reload();
-					},
-					error : function(error) {
-						console.log("예약에 실패하였습니다.");
-					} */
 				})
+				
+				$('#myModal').modal('hide');
+				e.preventDefault(); //페이지 새로고침되지 않게 //새로고침되면 datepicker 초기화됨
 			})
 		})
 		
-		//종료시간 체크용
-		$(function(){
-			$("#endTime").on("change", function(){
-				console.log($("#endTime").val())
-			})
+		$('#reserveRoomBtn').click(function(e) {
+			//모달 열기
+			$('#myModal').modal('toggle');
 		})
-				
+		
+		$('#btnCloseModal').click(function(e) {
+			//수동으로 모달 닫기. 여백 클릭해도 닫히지 않음.
+			$('#myModal').modal('hide');
+		})
+
 		//예약시작시간보다 종료시간이 작을 수 없음
 		$(function(){
-	
-			let endTimeCheck = $("#endTime"); //종료시간이 선택 될 때 이벤트 발생시키기
-			
-			endTimeCheck.on("change", function(){			
+			const fn = function(){			
 				let startTime = $("#startTime").val();
 				let endTime = $("#endTime").val();
 				
@@ -503,37 +543,65 @@ tr, th {
 					success:function(result){
 						if(result > 0){
 							console.log("OK")
-							$("#reserveRoom").attr("disabled", false)
+							$("#reserveRoom").attr("disabled", false);
 						}else if(result == 0){
-							alert("시작시간과 종료시간은 같을 수 없습니다.")
-							$("#reserveRoom").attr("disabled", false)
+							alert("시작시간과 종료시간은 같을 수 없습니다.");
+							//$("#reserveRoom").attr("disabled", true)
 						}else{
-							alert("종료시간은 시작시간보다 빠를 수 없습니다.")
-							$("#reserveRoom").attr("disabled", true)
+							alert("종료시간은 시작시간보다 빠를 수 없습니다.");
+							//$("#reserveRoom").attr("disabled", true)
 						}
 					},
 					error: function(){
 						console.log("ajax 통신 실패")
 					}
 				})
-			})
-			
+			};
+
+			$("#startTime").on("change", fn); // 시작시간이 선택 될 때 이벤트 발생
+			$("#endTime").on("change", fn); // 종료시간이 선택 될 때 이벤트 발생
 		}) 
-		
+				
 		//에약 상세로 진입
 		$(function(){
 			$("#roomReserveTable tbody th").click(function(){
-				location.href="reservationDetails.do";
-			})
-		})
+				const item = $(this);
+				const id = item.attr('id');
+				const roomno = item.parent().data("roomno");
+				const stTime = item.data('st-time');
+				const edTime = item.data('ed-time');
 		
-		//모달 종료시 
+				const date = $("#datePicker").val();
+				
+				if (typeof id == "undefined" || id == "" || id == null ||
+				    typeof stTime == "undefined" || stTime == "" || stTime == null ||
+				    typeof edTime == "undefined" || edTime == "" || edTime == null){
+					
+					return;
+				}else{
+					
+					console.log(id, typeof(id))
+					console.log(roomno, typeof(roomno))
+					console.log(stTime, typeof(stTime))
+					console.log(edTime, typeof(edTime))
+					console.log(date, typeof(date))
+									
+					$("input[name=dateD]").attr("value", date);
+					$("input[name=roomNoD]").attr("value", roomno);
+					$("input[name=startTimeD]").attr("value", stTime);
+					//console.log($("#dateD").val())
+					//console.log($("#roomNoD").val())
+					//console.log($("#startTimeD").val())		
+					$("#hiddenForm").submit();
+				}
+				
+			})
+		}) 
+		
+		//모달 닫을 시 내용 초기화
 		$(".modal").on("hidden.bs.modal", function(e){
 			$(this).find("form")[0].reset();
 		})
-		
-		
-		
 
 	</script>
 
