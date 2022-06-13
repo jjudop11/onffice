@@ -14,6 +14,7 @@ import com.uni.spring.member.model.dao.MemberDao;
 import com.uni.spring.member.model.dto.Alram;
 import com.uni.spring.member.model.dto.Member;
 import com.uni.spring.member.model.dto.Photo;
+import com.uni.spring.member.model.dto.RememberLogin;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -42,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		if(loginUser == null) {
 			throw new CommException("해당 ID로 가입한 계정이 없거나 잠긴계정입니다");
-		}
+		} 
 		
 		if(!bCryptPasswordEncoder.matches(m.getMPwd(), loginUser.getMPwd())) { // 일치하지않을때
 			
@@ -225,6 +226,24 @@ public class MemberServiceImpl implements MemberService {
 	public int deleteAlram(Alram a) {
 		// TODO Auto-generated method stub
 		return memberDao.deleteAlram(sqlsession, a);
+	}
+
+	@Override
+	public void insertRemember(RememberLogin r) {
+		// TODO Auto-generated method stub
+		memberDao.insertRemember(sqlsession, r);
+	}
+
+	@Override
+	public Member selectRemember(String sessionId) {
+		// TODO Auto-generated method stub
+		return memberDao.selectRemember(sqlsession, sessionId);
+	}
+
+	@Override
+	public void deleteRemember(Member loginUser) {
+		// TODO Auto-generated method stub
+		memberDao.deleteRemember(sqlsession, loginUser);
 	}
 
 }

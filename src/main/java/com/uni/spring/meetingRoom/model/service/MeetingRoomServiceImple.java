@@ -107,6 +107,12 @@ public class MeetingRoomServiceImple implements MeetingRoomService {
 		return meetingRoomDao.checkReservedRooms(sqlsession, roomNo, date);
 	}
 
+	@Override
+	public ReserveRoom selectreservedRoom(ReserveRoom r) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectreservedRoom(sqlsession, r);
+	}
+
 
 
 

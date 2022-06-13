@@ -105,6 +105,11 @@ public class MeetingRoomDao {
 		return (ArrayList) sqlsession.selectList("MeetingroomMapper.checkReservedRooms", room);
 	}
 
+	public ReserveRoom selectreservedRoom(SqlSessionTemplate sqlsession, ReserveRoom r) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MeetingroomMapper.selectreservedRoom", r);
+	}
+
 	
 
 }

@@ -39,6 +39,12 @@
                                 <i class="bi bi-shield-lock"></i>
                             </div>
                         </div>
+                        <div class="form-check form-check-lg d-flex align-items-end">
+                            <input class="form-check-input me-2" type="checkbox" value="on" id="remember" name="remember">
+                            <label class="form-check-label text-gray-600" for="remember">
+                                로그인 유지하기
+                            </label>
+                        </div>
                         <button class="btn btn-primary btn-block btn-lg mt-5">로그인</button>
                     </form>
                     <div class="text-center mt-2 mb-2 text-lg">

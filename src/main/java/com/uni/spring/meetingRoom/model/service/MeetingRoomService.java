@@ -44,4 +44,6 @@ public interface MeetingRoomService {
 
 	ArrayList<ReserveRoom> selectReservedRooms(int cNo, String date);
 
+	ReserveRoom selectreservedRoom(ReserveRoom r);
+
 }

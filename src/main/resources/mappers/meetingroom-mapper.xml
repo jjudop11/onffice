@@ -93,4 +93,16 @@
 		AND RESERVE_DATE = #{reserveDate}
 	</select>
 	
+	<select id="selectreservedRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
+		SELECT B.RESERVE_TITLE "reserveTitle", C.M_NAME "mNo", D.J_NAME "reserveNo"
+        FROM MEETING_ROOM A
+        LEFT JOIN RESERVE_ROOM B ON A.ROOM_NO = B.ROOM_NO
+        LEFT JOIN MEMBER C ON B.M_NO = C.M_NO
+        LEFT JOIN JOB D ON C.J_NO = D.J_NO
+        WHERE A.ROOM_NAME = #{reserveNo}
+        AND B.START_TIME = #{startTime}
+        AND B.RESERVE_DATE = TO_CHAR(SYSDATE,'yyyy-mm-dd')
+        AND A.C_NO = #{cNo}
+	</select>
+	
 </mapper>

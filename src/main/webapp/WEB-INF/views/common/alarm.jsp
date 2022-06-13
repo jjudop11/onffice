@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,8 +26,8 @@
 			  "preventDuplicates": false, // 중복 방지
 			  "onclick": null, 
 			  "showDuration": "200", // 등장 시간
-			  "hideDuration": "5000", // 사라지는 시간
-			  "timeOut": "5500", // 자동 사라지는 시간
+			  "hideDuration": "60000", // 사라지는 시간
+			  "timeOut": "60000", // 자동 사라지는 시간
 			  "extendedTimeOut": "1000", // 마우스 올렸다가 땟을때 사라지는 시간
 			  "showEasing": "swing", // 보일때 애니메이션
 			  "hideEasing": "linear", // 사라질때 애니메이션
@@ -39,8 +40,8 @@
 	})
 	
 	function connectWs(){
-		
-		var ws = new SockJS("http://localhost:8097/spring/alarm");
+		let path = "${pageContext.request.scheme}"+"://"+"${pageContext.request.serverName}"+":"+"${pageContext.request.serverPort}${pageContext.request.contextPath}"+"/alarm";
+		var ws = new SockJS(path);
 		socket = ws;
 	
 		ws.onopen = function() {
@@ -53,11 +54,6 @@
 			console.log("onmessage"+event.data);
 			toastr.info(event.data);
 			
-			setTimeout(function () {
-			    location.reload();
-			}, 10 * 1000);
-
-	
 		};
 	
 		ws.onclose = function() {
