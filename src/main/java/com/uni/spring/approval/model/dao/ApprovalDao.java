@@ -147,7 +147,9 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectCompleteList", listMap, rowBounds);
 	}
 
-	public int selecetApLineStatus(SqlSession sqlSession, Map<String, Object> apprMap) {
+	public ApprovalLine selecetApLineStatus(SqlSession sqlSession, Map<String, Object> apprMap) {
+		System.out.println("DAO : " + sqlSession.selectOne("ApprovalMapper.selecetApLineStatus", apprMap).getClass());
+		System.out.println("DAO : " + sqlSession.selectOne("ApprovalMapper.selecetApLineStatus", apprMap));
 		return sqlSession.selectOne("ApprovalMapper.selecetApLineStatus", apprMap);
 	}
 
