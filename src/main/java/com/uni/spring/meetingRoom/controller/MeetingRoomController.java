@@ -397,6 +397,9 @@ public class MeetingRoomController {
 		}
 
 	}
+	
+	//회의실 수정
+	
 
 	// 회의실 예약메뉴에서 설정메뉴로 진입
 	@RequestMapping("reserve-roomSetting.do")
