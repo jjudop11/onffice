@@ -395,18 +395,19 @@ public class ApprovalController {
 	@ResponseBody
 	@RequestMapping(value="selectApLineStatus.do", method=RequestMethod.POST, produces = "application/text; charset=utf8")
 	public String selectApLineStatus(@RequestParam(value="apNo", required=false) int apNo,
-			@RequestParam(value="aplineNo", required=false) int aplineNo) {
+			@RequestParam(value="aplineNo", required=false) String aplineNo) {
 		
 		// Map 에 담아서 넘기기 
 		Map<String, Object> apprMap = new HashMap<>();
 		apprMap.put("apNo", apNo);
 		apprMap.put("aplineNo", aplineNo);
 		
-		int apLineStatus = approvalService.selecetApLineStatus(apprMap);
+//		String apLineStatus = approvalService.selecetApLineStatus(apprMap);
+		ApprovalLine apLine = approvalService.selecetApLineStatus(apprMap);
 		
-		System.out.println();
+		System.out.println("CONTROLLER : " + apLine.getAplineStatus());
 		
-		return null;
+		return new GsonBuilder().create().toJson(apLine.getAplineStatus());
 	}
 	
 	// 결재 승인

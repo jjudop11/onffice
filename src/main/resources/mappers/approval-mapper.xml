@@ -360,6 +360,7 @@
 		AND APLINE_NO = #{aplineNo}
 	</select>
 	
+	
 	<select id="updateApprRefuse" parameterType="Map" resultMap="approvalLineResultSet">
 		UPDATE APPROVAL_LINE
 		SET APLINE_STATUS = 'N'

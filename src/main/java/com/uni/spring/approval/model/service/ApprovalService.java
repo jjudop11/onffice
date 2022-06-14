@@ -65,7 +65,7 @@ public interface ApprovalService {
 	
 	void updateApprRefuse(Map<String, Object> apprMap);
 	
-	int selecetApLineStatus(Map<String, Object> apprMap);
+	ApprovalLine selecetApLineStatus(Map<String, Object> apprMap);
 
 	// 결재완료 리스트 조회 
 	int selectCompleteListCount();

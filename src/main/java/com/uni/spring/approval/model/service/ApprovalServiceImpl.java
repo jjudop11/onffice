@@ -243,12 +243,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public int selecetApLineStatus(Map<String, Object> apprMap) {
+	public ApprovalLine selecetApLineStatus(Map<String, Object> apprMap) {
 		return approvalDao.selecetApLineStatus(sqlSession, apprMap);
 	}
 
-	
-
-	
-	
 }

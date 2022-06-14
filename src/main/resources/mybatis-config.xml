@@ -7,6 +7,10 @@
    <settings>
       <setting name="jdbcTypeForNull" value="NULL"/>
       <setting name="mapUnderscoreToCamelCase" value="true"/>
+      
+      <!-- select null 처리 -->
+      <setting name="callSettersOnNulls" value="true"/>    
+      <setting name="returnInstanceForEmptyRow" value="true"/>
    </settings>
    
    <typeAliases>

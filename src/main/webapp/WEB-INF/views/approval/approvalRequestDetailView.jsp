@@ -413,6 +413,7 @@
 			
 			console.log(" ${ loginUser.MNo } : " +  ${ loginUser.MNo })
 			
+			// selectAplineStatus 값 체크 
 			$.ajax({
 				url : "selectApLineStatus.do",
 				type : "post",
@@ -421,78 +422,88 @@
 					aplineNo : ${ loginUser.MNo }
 				},
 				dataType : "text",
-				success : function(){
-					alert("조회 성공")
+				success : function(apLineStatus){
+					
+					// null 일 때 버튼 생성 
+					if(apLineStatus == "null"){
+						for(let i = 0; i < 5; i++){
+							if(apprNameTd.eq(i).text()==loginName){
+								value = "<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#inlineForm'>결재</button>"
+								apprTd.eq(i).html(value);
+								
+								$("#apprPermit").click(function(){
+									if($('input[name="apprBtn"]:checked').val() == '승인'){
+										
+										// 승인일 때 ajax
+										$.ajax({
+											url : "updateApprPermit.do",
+											type : "post",
+											data : {
+												apNo : ${ apNo },
+												aplineNo : ${ loginUser.MNo }
+											},
+											dataType : "text",
+											success : function(){
+												apprTd.eq(i).html("승인");
+											}, 
+											error : function(){
+												alert("승인 실패");
+											}
+										})
+										
+									} else if($('input[name="apprBtn"]:checked').val() == '반려'){
+										
+										// 반려일 때 ajax
+										$.ajax({
+											url : "updateApprRefuse.do",
+											type : "post",
+											data : {
+												apNo : ${ apNo },
+												aplineNo : ${ loginUser.MNo }
+											},
+											dataType : "text",
+											success : function(){
+												apprTd.eq(i).html("반려");
+											}, 
+											error : function(){
+												alert("승인 실패");
+											}
+										})
+									}
+									
+									value=""
+									apprTd.eq(i).html(value); // 버튼 없애기
+									$('.modal').modal('hide'); // 모달 닫기
+								
+								});
+				
+							}
+						} 
+					} else {
+						for(let i = 0; i < 5; i++){
+							if(apprNameTd.eq(i).text()==loginName){
+								if(apLineStatus == '"Y"'){
+									apprTd.eq(i).html("승인");
+								} else if(apLineStatus == '"N"'){
+									apprTd.eq(i).html("반려");
+								}
+							}
+						}
+					}
 				}, 
 				error : function(){
 					alert("조회 실패");
 				}
 			})
 			
-			for(let i = 0; i < 5; i++){
-				if(apprNameTd.eq(i).text()==loginName){
-					value = "<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#inlineForm'>결재</button>"
-					apprTd.eq(i).html(value);
-					
-					$("#apprPermit").click(function(){
-						if($('input[name="apprBtn"]:checked').val() == '승인'){
-							
-							// 승인일 때 ajax
-							$.ajax({
-								url : "updateApprPermit.do",
-								type : "post",
-								data : {
-									apNo : ${ apNo },
-									aplineNo : ${ loginUser.MNo }
-								},
-								dataType : "text",
-								success : function(){
-									alert("승인 성공")
-								}, 
-								error : function(){
-									alert("승인 실패");
-								}
-							})
-							
-						} else if($('input[name="apprBtn"]:checked').val() == '반려'){
-							
-							// 반려일 때 ajax
-							$.ajax({
-								url : "updateApprRefuse.do",
-								type : "post",
-								data : {
-									apNo : ${ apNo },
-									aplineNo : ${ loginUser.MNo }
-								},
-								dataType : "text",
-								success : function(){
-									alert("승인 반려")
-								}, 
-								error : function(){
-									alert("승인 실패");
-								}
-							})
-						}
-						
-						value=""
-						apprTd.eq(i).html(value); // 버튼 없애기
-						$('.modal').modal('hide'); // 모달 닫기
-					
-					});
-					
-					
-					// 확인 버튼 눌렀을 때 
-					/*  */
-						/* value = "승인"; 
-						apprTd.eq(i).html(value);
-						$('.modal').modal('hide'); // 모달 닫기 */
-						/* .val(['Banana']); */
-						/* alert($('input[name="permit"]').val());
-						alert($('input[name="refuse"]').val()); */
-					/*  */
-				}
-			} 
-			
+			// 확인 버튼 눌렀을 때 
+			/* value = "승인"; 
+			apprTd.eq(i).html(value);
+			$('.modal').modal('hide'); // 모달 닫기 */
+			/* .val(['Banana']); */
+			/* alert($('input[name="permit"]').val());
+			alert($('input[name="refuse"]').val()); */
+								
 			// 취소 버튼 눌렀을 때 모달 닫기 
 			$("#apprRefuse").click(function(){
 				$('.modal').modal('hide'); // 모달 닫기 
