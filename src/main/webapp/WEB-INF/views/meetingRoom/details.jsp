@@ -69,8 +69,6 @@
 </style>
 </head>
 
-<body style="background-color: #F0FFF0">
-
 	<jsp:include page="../common/menubar.jsp" />
 
 	<div id="app">

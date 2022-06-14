@@ -16,12 +16,6 @@
 <link rel="stylesheet" href="resources/assets/css/app.css">
 <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">  -->
 
-<!-- timepicker -->
-
-<!-- fullcalendar -->
-
-<!-- jQuery library -->
-
 <!-- Popper JS -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
 
@@ -113,21 +107,15 @@ tr, th {
 	margin-right: 9px;
 }
 </style>
-
 </head>
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
-<body style="background-color: #F0FFF0">
-
+<body>
 	<jsp:include page="../common/menubar.jsp" />
 
 	<div id="app">
 		<div id="main">
 
 			<header class="mb-3">
-				<a href="#" class="burger-btn d-block d-xl-none"> <i
-					class="bi bi-justify fs-3"></i>
-				</a>
+				<a href="#" class="burger-btn d-block d-xl-none"> <i class="bi bi-justify fs-3"></i></a>
 			</header>
 
 			<div class="page-heading">
@@ -136,10 +124,7 @@ tr, th {
 			</div>
 
 			<div class="card">
-
 				<div class="card-body">
-					<!-- 콤보박스 -->
-
 					<section class="section">
 						<div class="row" id="basic-table">
 							<div class="col-12 col-md-6">
@@ -150,9 +135,9 @@ tr, th {
 										<div class="card-body">
 											<div class="card-body-room">
 
-												<!-- 데이트피커 -->
 												<div id="datePicker-div">
-													<input type="date" id="datePicker" class="datepicker-form" value="${ today }">
+													<input type="date" id="datePicker" class="datepicker-form"
+														value="${ today }">
 												</div>
 
 												<div>
@@ -180,7 +165,8 @@ tr, th {
 
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">예약일</label><br>
-																			<input type="date" id="modal-datePicker" class="datepicker-form" required>
+																			<input type="date" id="modal-datePicker"
+																				class="datepicker-form" required>
 																		</div>
 																		<br>
 
@@ -240,9 +226,7 @@ tr, th {
 																			</select>
 																		</div>
 
-																		<br>
-																		<br>
-																		<br>
+																		<br> <br> <br>
 
 																		<div class="form-reserveRoom">
 																			<label for="label-reserveRoom" class="control-label">회의실명</label>
@@ -349,12 +333,14 @@ tr, th {
 											</div>
 
 											<br> <br>
-											
-											<form id="hiddenForm" action="reservationDetails.do" method="post">
+
+											<form id="hiddenForm" action="reservationDetails.do"
+												method="post">
 												<div id="hiddenDiv">
 													<input type="hidden" name="dateD" id="dateD" value="">
 													<input type="hidden" name="roomNoD" id="roomNoD" value="">
-													<input type="hidden" name="startTimeD" id="startTimeD" value="">
+													<input type="hidden" name="startTimeD" id="startTimeD"
+														value="">
 												</div>
 											</form>
 
