@@ -46,4 +46,11 @@ public class OrgChartServiceImpl implements OrgChartService{
 		return orgChartDao.selectMemInfo(sqlSession, org);
 	}
 
+
+	@Override
+	public ArrayList<OrgChart> selectSearchMemList(int cNo) {
+		// TODO Auto-generated method stub
+		return orgChartDao.selectSearchMemList(sqlSession, cNo);
+	}
+
 }

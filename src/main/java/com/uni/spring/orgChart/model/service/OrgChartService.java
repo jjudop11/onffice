@@ -14,4 +14,6 @@ public interface OrgChartService {
 
 	OrgChart selectMemInfo(OrgChart org);
 
+	ArrayList<OrgChart> selectSearchMemList(int cNo);
+
 }

@@ -30,4 +30,9 @@ public class OrgChartDao {
 		return sqlSession.selectOne("orgChartMapper.selectMemInfo", org);
 	}
 
+	public ArrayList<OrgChart> selectSearchMemList(SqlSessionTemplate sqlSession, int cNo) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("orgChartMapper.selectSearchMemList", cNo);
+	}
+
 }

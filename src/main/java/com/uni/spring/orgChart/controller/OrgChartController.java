@@ -72,16 +72,37 @@ public class OrgChartController {
 		
 		int cNo = loginUser.getCNo();
 		
-		ArrayList<OrgChart> searchList = orgChartService.selectOrgChartList(cNo);
+		ArrayList<OrgChart> searchList = orgChartService.selectSearchMemList(cNo);
+		
+		ArrayList<OrgChart> resultList = new ArrayList<>(); System.out.println(searchList);
 		
 		for(int i = 0; i < searchList.size(); i++) {
 			
-			//if(searchList.get(i).)
+			if(searchList.get(i).getAState().contains(key)) {
+				
+				resultList.add(searchList.get(i));
+			}
+			
+			if(searchList.get(i).getMName().contains(key)) {
+				
+				resultList.add(searchList.get(i));
+			}
+			
+			if(searchList.get(i).getDName().contains(key)) {
+				
+				resultList.add(searchList.get(i));
+			}
+			
+			if(searchList.get(i).getJName().contains(key)) {
+				
+				resultList.add(searchList.get(i));
+			}
 			
 			
 		}
 		
-		return new GsonBuilder().create().toJson(searchList);
+		System.out.println("resultList =====  " + resultList);
+		return new GsonBuilder().create().toJson(resultList);
 		
 	}
 	

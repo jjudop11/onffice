@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		JOIN ATTENDANCE F ON B.M_NO = F.M_NO
 		WHERE F.A_ENT_DATE = '2022-05-23'
 		AND A.C_NO = #{cNo}
+		AND B.M_MANAGER = 'N'
 		ORDER BY C.J_NO DESC
 	</select>
 	
@@ -63,6 +64,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND A.C_NO = #{cNo}
 		AND B.M_NO = #{mNo}
 	
+	</select>
+	
+	<select id="selectSearchMemList" resultType="OrgChart" parameterType="_int">
+		SELECT	A.C_NAME, B.M_NO, B.M_NAME, B.M_EMAIL, B.M_PHONE, 
+				C.J_NO, C.J_NAME, D.D_NO, D.D_NAME, E.P_NAME, A.C_NO,
+				CASE F.A_STATE
+	                WHEN  '퇴근' THEN '출근전'
+	                WHEN '휴가' THEN '휴가중'
+	                ELSE '근무중'
+	            END AS A_STATE
+		FROM COMPANY A
+		JOIN MEMBER B ON A.C_NO = B.C_NO
+		JOIN JOB C ON B.J_NO = C.J_NO
+		JOIN DEPT D ON B.D_NO = D.D_NO
+		JOIN PHOTO E ON B.P_NO = E.P_NO
+		JOIN ATTENDANCE F ON B.M_NO = F.M_NO
+		WHERE F.A_ENT_DATE = '2022-05-23'
+		AND A.C_NO = #{cNo}
+		ORDER BY C.J_NO DESC
 	</select>
 	
 </mapper>
