@@ -68,7 +68,7 @@
 }
 </style>
 </head>
-
+<body>
 	<jsp:include page="../common/menubar.jsp" />
 
 	<div id="app">
