@@ -336,7 +336,7 @@
                                        <label class="col-xs-4" for="edit-title">일정명</label>
                                        <div class="position-relative">
                                            <input type="text" class="form-control"
-                                                type="text" name="edit-title" id="edit-title" required="required">
+                                                type="text" name="edit-title" id="edit-title" required Autofocus>
                                            <div class="form-control-icon">
                                                <i class="bi bi-calendar-check"></i>
                                            </div>
@@ -347,7 +347,7 @@
 									<div class="form-group has-icon-left">
                                        <label class="col-xs-4" for="edit-start">시작일</label>
                                        <div class="position-relative">
-                                           <input type="text" class="form-control" type="text" name="edit-start" id="edit-start">
+                                           <input type="text" class="form-control" type="text" name="edit-start" id="edit-start" required Autofocus>
                                            <div class="form-control-icon">
                                                <i class="bi bi-calendar-event"></i>
                                            </div>
@@ -358,7 +358,7 @@
                                    <div class="form-group has-icon-left">
                                        <label class="col-xs-4" for="edit-end">종료일</label>
                                        <div class="position-relative">
-                                           <input type="text" class="form-control" type="text" name="edit-end" id="edit-end">
+                                           <input type="text" class="form-control" type="text" name="edit-end" id="edit-end" required Autofocus>
                                            <div class="form-control-icon">
                                                <i class="bi bi-calendar-event-fill"></i>
                                            </div>
@@ -607,6 +607,9 @@
 					        if (eventData.tTitle === '') {
 					            alert('일정명은 필수입니다.');
 					            return false;
+					        } else if (eventData.tContent == '') {
+					        	alert('일정내용을 작성해주세요.');
+					            return false;
 					        }
 
 					        
@@ -672,6 +675,9 @@
 	
 					        if (eventData.tTitle === '') {
 					            alert('일정명은 필수입니다.');
+					            return false;
+					        } else if (eventData.tContent == '') {
+					        	alert('일정내용을 작성해주세요.');
 					            return false;
 					        }
 

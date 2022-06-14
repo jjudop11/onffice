@@ -278,14 +278,16 @@
 		    					if(result == 1) {
 		    						selectJdList(value);
 		    						alert("명칭 변경 성공");
-		    					} else if(result == "중복") {
-		    						alert("중복된 명칭으로는 변경이 불가합니다");
 		    					} else {
 		    						alert("직급/부서 변경 실패");
 		    					} 
 		    					
 		    				},
-		    				error:function(){
+		    				error:function(data){
+		    					if(data.responseText == "중복") {
+		    						selectJdList(value);
+		    						alert("중복된 명칭으로는 변경이 불가합니다");
+		    					}
 		    					console.log("직급리스트 조회 ajax 통신 실패");
 		    				}
 		    			});
@@ -323,19 +325,21 @@
    					ins:ins
    				},
    				success:function(result){
-   				
+   					console.log("==="+result)
    					if(result == 1) {
    						selectJdList(val);
    						alert("명칭 추가 성공");
-   					} else if(result == "중복") {
-						alert("중복된 명칭으로는 변경이 불가합니다");
-					} else {
+   					} else {
    						alert("직급/부서 추가 실패");
    					}
    					$("#ip").val("");
 
    				},
-   				error:function(){
+   				error:function(data){
+   					if(data.responseText == "중복") {
+   						tr.find('td:eq(1)').find('input').val("");
+						alert("중복된 명칭으로는 추가가 불가합니다");
+					}
    					console.log("직급/부서 추가 ajax 통신 실패");
    				}
 			});

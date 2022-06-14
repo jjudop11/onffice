@@ -579,11 +579,9 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping(value ="/insertjd",produces = "application/json; charset=utf-8")
 	public String insertjd(String ins, String set, Model model) {	
-
 		Member loginUser = (Member) model.getAttribute("loginUser");
 		
 		if(set.equals("1")) {
-			
 			ArrayList<Job> jList = jobService.selectJobList(loginUser.getCNo());
 			for (Job j : jList) {
 				if(j.getJName().equals(ins)) {
@@ -595,6 +593,7 @@ public class MemberController {
 					.cNo(loginUser.getCNo())
 					.build();
 			int result = jobService.insertjd(job);
+			System.out.println("===========result"+result);
 			return String.valueOf(result);
 			
 		} else {
@@ -610,6 +609,7 @@ public class MemberController {
 					.cNo(loginUser.getCNo())
 					.build();
 			int result = deptService.insertjd(dept);
+			System.out.println("===========result"+result);
 			return String.valueOf(result);
 		}
 
