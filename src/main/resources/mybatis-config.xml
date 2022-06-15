@@ -38,6 +38,7 @@
       <typeAlias type="com.uni.spring.orgChart.model.dto.OrgChart" alias="OrgChart"/>
       <typeAlias alias="Alram" type="com.uni.spring.member.model.dto.Alram"/>
       <typeAlias alias="RememberLogin" type="com.uni.spring.member.model.dto.RememberLogin"/>
+      <typeAlias type="com.uni.spring.surveyBoard.model.dto.SurveyBoard" alias="SurveyBoard"/>
    </typeAliases>
    
    <mappers>
@@ -53,6 +54,7 @@
        <mapper resource="/mappers/attendance-mapper.xml"/>
        <mapper resource="/mappers/timetable-mapper.xml"/>
        <mapper resource="/mappers/orgChart-mapper.xml"/>
+       <mapper resource="/mappers/surveyBoard-mapper.xml"/>
    </mappers>
    
 </configuration>
