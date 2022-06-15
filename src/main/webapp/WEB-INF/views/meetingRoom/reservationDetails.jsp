@@ -47,7 +47,7 @@
 </style>
 </head>
 
-<body style="background-color: #F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp" />
 
