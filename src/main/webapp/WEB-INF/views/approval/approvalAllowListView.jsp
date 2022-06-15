@@ -35,7 +35,7 @@
 	                            <div class="card-body">
 	                                <!-- Table with outer spacing -->
 	                                <div class="table-responsive">
-	                                    <table id="CompleteListView" class="table table-lg">
+	                                    <table id="AllowListView" class="table table-lg">
 	                                        <thead>
 	                                            <tr>
 	                                            	<th>글번호</th>
@@ -114,8 +114,8 @@
 		
 		// 페이지 이동 
     	$(function(){
-    		$("#CompleteListView tbody tr").click(function(){
-    			location.href="approvalCompleteDetailView.do?apNo=" + $(this).children().eq(0).text() + "&foNo=" + $(this).children().eq(1).text();
+    		$("#AllowListView tbody tr").click(function(){
+    			location.href="approvalAllowDetailView.do?apNo=" + $(this).children().eq(0).text() + "&foNo=" + $(this).children().eq(1).text();
     		});
     	});
     </script>

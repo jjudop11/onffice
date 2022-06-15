@@ -243,8 +243,27 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	@Override
-	public ApprovalLine selecetApLineStatus(Map<String, Object> apprMap) {
+	public Member selecetApLineStatus(Map<String, Object> apprMap) {
 		return approvalDao.selecetApLineStatus(sqlSession, apprMap);
+	}
+
+	@Override
+	public void updateApStatus(int apNo) {
+		int result = approvalDao.updateApStatus(sqlSession, apNo);
+		
+		if(result < 0) {
+			throw new CommException("최종 결재 상태 업데이트 실패");
+		}
+	}
+
+	@Override
+	public int selectAllowListCount() {
+		return approvalDao.selectAllowListCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<ApList> selectAllowList(PageInfo pi, Map<String, Object> listMap) {
+		return approvalDao.selectAllowList(sqlSession, pi, listMap);
 	}
 
 }

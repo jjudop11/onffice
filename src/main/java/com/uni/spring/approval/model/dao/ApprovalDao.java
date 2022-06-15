@@ -147,10 +147,25 @@ public class ApprovalDao {
 		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectCompleteList", listMap, rowBounds);
 	}
 
-	public ApprovalLine selecetApLineStatus(SqlSession sqlSession, Map<String, Object> apprMap) {
+	public Member selecetApLineStatus(SqlSession sqlSession, Map<String, Object> apprMap) {
 		System.out.println("DAO : " + sqlSession.selectOne("ApprovalMapper.selecetApLineStatus", apprMap).getClass());
 		System.out.println("DAO : " + sqlSession.selectOne("ApprovalMapper.selecetApLineStatus", apprMap));
 		return sqlSession.selectOne("ApprovalMapper.selecetApLineStatus", apprMap);
+	}
+
+	public int updateApStatus(SqlSession sqlSession, int apNo) {
+		return sqlSession.update("ApprovalMapper.updateApStatus", apNo);
+	}
+
+	public int selectAllowListCount(SqlSession sqlSession) {
+		return sqlSession.selectOne("ApprovalMapper.selectAllowListCount");
+	}
+
+	public ArrayList<ApList> selectAllowList(SqlSession sqlSession, PageInfo pi, Map<String, Object> listMap) {
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit(); 
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("ApprovalMapper.selectAllowList", listMap, rowBounds);
 	}
 
 	
