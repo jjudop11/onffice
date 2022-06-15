@@ -3,6 +3,7 @@ package com.uni.spring.meetingRoom.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,7 @@ public class MeetingRoomController {
 	MeetingRoomService meetingRoomService;
 
 	// 회의실 예약 메뉴 진입
-	@RequestMapping("reservationForm.do")
+	@RequestMapping("roomReservingForm.do")
 	public String roomReservation(HttpSession session, Model model,
 			@RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage) {
 
@@ -609,7 +610,7 @@ public class MeetingRoomController {
 				
 				//false 
 				session.setAttribute("msg", "이미 예약된 시간입니다.");
-				return "redirect:/reservationForm.do";
+				return "redirect:/roomReservingForm.do";
 				
 			} else {
 				
@@ -628,18 +629,18 @@ public class MeetingRoomController {
 				
 				if(result > 0) {
 					session.setAttribute("msg", "예약을 수정하였습니다.");
-					return "redirect:/reservationForm.do";
+					return "redirect:/roomReservingForm.do";
 					
 				}else {
 					session.setAttribute("msg", "예약 수정에 실패하였습니다.");
-					return "redirect:/reservationForm.do";
+					return "redirect:/roomReservingForm.do";
 				}
 			}
 		
 		}else {
 			
 			session.setAttribute("msg", "해당 예약은 수정할 수 없습니다.");
-			return "redirect:/reservationForm.do";
+			return "redirect:/roomReservingForm.do";
 		}
 		
 		
@@ -664,25 +665,31 @@ public class MeetingRoomController {
 				session.setAttribute("msg", "예약을 취소하였습니다.");
 			} else {
 				session.setAttribute("msg", "취소에 실패하였습니다.");
-				return "redirect:/reservationDetails.do";
+				//return "redirect:/reservationDetails.do";
+				
+				//String referer = request.getHeader("Referer");
+				//return "redirect:" + referer;
+				
+				return "redirect:/roomReservingForm.do";
+				
 			}
 
 		} else {
+			
 			session.setAttribute("msg", "해당 예약은 취소할 수 없습니다.");
-			return "redirect:/reservationForm.do";
+			
+			//String referer = request.getHeader("Referer");
+			//return "redirect:" + referer;
+			
+			return "redirect:/roomReservingForm.do";
+			
 		}
 
 		// 화면 이상하게 나옴; 체크
 		// return "meetingRoom/roomReservation";
 		// return "main";
 		// model.addAttribute("date", "2022-06-10");
-		return "redirect:/reservationForm.do";
-	}
-
-	@RequestMapping("onlineMeetingroom.do")
-	public String onlineMeetingroom() {
-
-		return "meetingRoom/onlineMeetingroom";
+		return "redirect:/roomReservingForm.do";
 	}
 	
 	@ResponseBody
@@ -702,4 +709,36 @@ public class MeetingRoomController {
 		return new GsonBuilder().create().toJson(room);
 	}
 	
+	
+	/* public static String getURL(HttpServletRequest request) {
+	    Enumeration<?> param = request.getParameterNames();
+
+	    StringBuffer strParam = new StringBuffer();
+	    StringBuffer strURL = new StringBuffer();
+
+	    if (param.hasMoreElements())
+	    {
+	    	strParam.append("?");
+	      //strParam.append(“?”);
+	    }
+
+	    while (param.hasMoreElements())
+	    {
+	      String name = (String) param.nextElement();
+	      String value = request.getParameter(name);
+	      strParam.append(name + "=" + value);
+	      //strParam.append(name + “=” + value);
+
+	      if (param.hasMoreElements())
+	      {
+	    	  strParam.append("&");
+	    	  //strParam.append(“&”);
+	      }
+	  }
+
+	  strURL.append(request.getRequestURI());
+	  strURL.append(strParam);
+
+	  return strURL.toString();
+	} */
 }

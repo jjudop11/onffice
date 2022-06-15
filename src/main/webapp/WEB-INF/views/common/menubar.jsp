@@ -153,17 +153,20 @@
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-hexagon-fill"></i>
-                                <span>회의실예약</span>
+                                <span>예약 관리</span>
                             </a>
                             <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="reservationForm.do">회의실 예약</a>
+                                <li class="submenu-item">
+                                    <a href="roomReservingForm.do">회의실 예약</a>
                                 </li>
-                                <li class="submenu-item ">
-                                    <a href="form-element-input.html">온라인 회의실</a>
+                                <li class="submenu-item">
+                                    <a href="carReservingForm.do">차량 예약</a>
                                 </li>
-                                <li class="submenu-item ">
+                                <li class="submenu-item">
                                     <a href="roomSetting.do">회의실 관리</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="carSetting.do">차량 관리</a>
                                 </li>
                             </ul>
                         </li>
