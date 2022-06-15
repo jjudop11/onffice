@@ -83,14 +83,14 @@
 												<td id="jName4" style="width: 170px"></td>
 												<td id="jName5" style="width: 170px"></td>
 											</tr>
-											<tr>
+											<tr id="appr">
 												<td style="height: 100px"></td>
 												<td></td>
 												<td></td>
 												<td></td>
 												<td></td>
 											</tr>
-											<tr>
+											<tr id="apprName">
 												<td id="mName1" style="height: 35px">${mName}</td>
 												<td id="mName2"></td>
 												<td id="mName3"></td>
@@ -372,6 +372,43 @@
 		// 휴가타입 라디오버튼 체크
 		$(document).ready(function(){
 			$(":radio[name='doType'][value='" + ${ dayoffForm.doType } + "']").attr('checked', true);
+		});
+		
+		// 결재선
+		$(document).ready(function(){
+			
+			let loginName = "${loginUser.MName}";
+			
+			let apprTd = $('#appr td');
+			let apprNameTd = $('#apprName td'); // 승인자 이름 
+			let value="";
+			
+			let tr = $('#apprTable tbody tr');
+			let td = tr.children();
+			
+			$.ajax({
+				url : "selectApLineStatus.do",
+				type : "post",
+				data : {
+					apNo : ${ apNo },
+					mName : "${ mName }"
+				},
+				dataType : "text",
+				success : function(apLineStatus){
+					for(let i = 0; i < 5; i++){
+						if(apprNameTd.eq(i).text() == "${ mName }"){
+							if(apLineStatus == '"Y"'){
+								apprTd.eq(i).html("승인");
+							} else if(apLineStatus == '"N"'){
+								apprTd.eq(i).html("반려");
+							}
+						}
+					}
+				},
+				error : function(){
+					alert("조회 실패");
+				}
+			}) 
 		});
 		
 	</script>

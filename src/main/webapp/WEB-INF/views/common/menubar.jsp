@@ -132,7 +132,7 @@
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-grid-1x2-fill"></i>
-                                <span>전자결재</span>
+                                <span>결재상신</span>
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
@@ -144,8 +144,20 @@
                                 <li class="submenu-item ">
                                     <a href="approvalCompleteListView.do">결재완료</a>
                                 </li>
+                            </ul>
+                        </li>
+                        
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>결재수신</span>
+                            </a>
+                            <ul class="submenu ">
                                 <li class="submenu-item ">
                                     <a href="approvalRequestListView.do">결재요청</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="approvalAllowListView.do">결재내역</a>
                                 </li>
                             </ul>
                         </li>

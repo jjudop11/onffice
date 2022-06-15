@@ -65,10 +65,18 @@ public interface ApprovalService {
 	
 	void updateApprRefuse(Map<String, Object> apprMap);
 	
-	ApprovalLine selecetApLineStatus(Map<String, Object> apprMap);
+	Member selecetApLineStatus(Map<String, Object> apprMap);
 
-	// 결재완료 리스트 조회 
+	// 결재완료 
 	int selectCompleteListCount();
+	
 	ArrayList<ApList> selectCompleteList(PageInfo pi, Map<String, Object> listMap);
+
+	void updateApStatus(int apNo);
+
+	// 결재내역 
+	int selectAllowListCount();
+	
+	ArrayList<ApList> selectAllowList(PageInfo pi, Map<String, Object> listMap);
 	
 }
