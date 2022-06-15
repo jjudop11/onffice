@@ -167,7 +167,7 @@
 	
 	<select id="selectRemember" parameterType="string" resultType="Member">
 		<![CDATA[
-		SELECT A.*, B.SESSIONKEY, to_date(B.SESSIONLIMIT, 'yyyy-mm-dd HH:mi:ss') "SESSIONLIMIT"
+		SELECT DISTINCT A.*, B.SESSIONKEY, to_date(B.SESSIONLIMIT, 'yyyy-mm-dd HH:mi:ss') "SESSIONLIMIT"
 		FROM VIEW_LOGINUSER A
         LEFT JOIN LOGINREMEMBER B ON A.M_NO = B.M_NO
 		WHERE B.SESSIONKEY = #{sessionId}

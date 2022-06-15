@@ -144,7 +144,7 @@ public class MeetingRoomDao {
 
 	public ReserveRoom selectreservedRoom(SqlSessionTemplate sqlsession, ReserveRoom r) {
 		// TODO Auto-generated method stub
-		return sqlsession.selectOne("MeetingroomMapper.selectreservedRoom", r);
+		return sqlsession.selectOne("MeetingRoomMapper.mainSelectreservedRoom", r);
 	}
 
 	
