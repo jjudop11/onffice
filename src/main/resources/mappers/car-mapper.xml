@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CarMapper">
+ 	
+ 	<!-- 차량 관리권한 유저 -->
+	<select id="selectCarSetUser" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE M_ID = #{carSetUserId}
+		AND M_SETTING = 'Y'	
+	</select>
+		
+	<!-- 페이징 처리용 -->
+	<select id="selectCarListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM CAR
+		WHERE C_NO = #{userCNo}
+	</select>
+	
+	<!-- 총 차량 목록 -->
+	<select id="selectCarList" parameterType="_int" resultType="Car">
+		SELECT *
+		FROM CAR
+		WHERE C_NO = #{userCNo}
+		ORDER BY NO
+	</select>
+	
+	<!-- 차량번호 중복체크 -->
+	<select id="carNoCheck" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM CAR
+		WHERE CAR_NO = #{carNo}
+	</select>
+
+	<!-- 차량 추가 -->
+	<insert id="insertCar" parameterType="Car">
+		INSERT INTO CAR
+		VALUES(CAR_REGIST_SEQ.NEXTVAL, #{carName}, #{carNo}, DEFAULT, #{cNo})
+	</insert>
+	
+	<!-- 차량 삭제 -->
+	<delete id="deleteCars" parameterType="string">
+		DELETE 
+		FROM CAR
+		WHERE CAR_NO = #{carNo}
+	</delete>
+</mapper>
+
+
