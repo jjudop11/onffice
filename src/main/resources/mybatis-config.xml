@@ -31,6 +31,8 @@
       <typeAlias alias="Photo" type="com.uni.spring.member.model.dto.Photo"/>
       <typeAlias alias="MeetingRoom" type="com.uni.spring.meetingRoom.model.dto.MeetingRoom"/>
       <typeAlias alias="ReserveRoom" type="com.uni.spring.meetingRoom.model.dto.ReserveRoom"/>
+      <typeAlias alias="Car" type="com.uni.spring.car.model.dto.Car"/>
+      <typeAlias alias="ReserveCar" type="com.uni.spring.car.model.dto.ReserveCar"/>
       <typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
       <typeAlias alias="Timetable" type="com.uni.spring.timetable.model.dto.Timetable"/>
       <typeAlias alias="ApList" type="com.uni.spring.approval.model.dto.ApList"/>
@@ -55,6 +57,7 @@
        <mapper resource="/mappers/timetable-mapper.xml"/>
        <mapper resource="/mappers/orgChart-mapper.xml"/>
        <mapper resource="/mappers/surveyBoard-mapper.xml"/>
+      <mapper resource="/mappers/car-mapper.xml"/>
    </mappers>
    
 </configuration>

@@ -18,13 +18,8 @@
 		}
 		
 		.apprTable {
-			padding: 0;
-			margin: 0;
-			width: 1000px;
-			height: 100%;
-			display: flex;
+			text-align: center;
 		}
-		
 	</style>
 </head>
 <body>
@@ -72,26 +67,26 @@
 					
 					<div class="card-body">
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group"><div class="table-responsive apprTable">
 									<table id="apprTable" class="table table-bordered mb-0">
 										<tbody><tr>
 												<td rowspan="3" style="width: 150px">결재선</td>
-												<td id="jName1" style="width: 170px; height: 35px">${jName}</td>
+												<td id="jName1" style="width: 170px; height: 40px">${jName}</td>
 												<td id="jName2" style="width: 170px"></td>
 												<td id="jName3" style="width: 170px"></td>
 												<td id="jName4" style="width: 170px"></td>
 												<td id="jName5" style="width: 170px"></td>
 											</tr>
-											<tr>
+											<tr id="appr">
 												<td style="height: 100px"></td>
 												<td></td>
 												<td></td>
 												<td></td>
 												<td></td>
 											</tr>
-											<tr>
-												<td id="mName1" style="height: 35px">${mName}</td>
+											<tr id="apprName">
+												<td id="mName1" style="height: 40px">${mName}</td>
 												<td id="mName2"></td>
 												<td id="mName3"></td>
 												<td id="mName4"></td>
@@ -372,6 +367,43 @@
 		// 휴가타입 라디오버튼 체크
 		$(document).ready(function(){
 			$(":radio[name='doType'][value='" + ${ dayoffForm.doType } + "']").attr('checked', true);
+		});
+		
+		// 결재선
+		$(document).ready(function(){
+			
+			let loginName = "${loginUser.MName}";
+			
+			let apprTd = $('#appr td');
+			let apprNameTd = $('#apprName td'); // 승인자 이름 
+			let value="";
+			
+			let tr = $('#apprTable tbody tr');
+			let td = tr.children();
+			
+			$.ajax({
+				url : "selectApLineStatus.do",
+				type : "post",
+				data : {
+					apNo : ${ apNo },
+					mName : "${ mName }"
+				},
+				dataType : "text",
+				success : function(apLineStatus){
+					for(let i = 0; i < 5; i++){
+						if(apprNameTd.eq(i).text() == "${ mName }"){
+							if(apLineStatus == '"Y"'){
+								apprTd.eq(i).html("승인");
+							} else if(apLineStatus == '"N"'){
+								apprTd.eq(i).html("반려");
+							}
+						}
+					}
+				},
+				error : function(){
+					alert("조회 실패");
+				}
+			}) 
 		});
 		
 	</script>

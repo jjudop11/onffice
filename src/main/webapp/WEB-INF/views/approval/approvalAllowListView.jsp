@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>결재완료</title>
+	<title>결재내역</title>
 	
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -29,13 +29,13 @@
 	                <div class="col-12 col-md-12">
 	                    <div class="card">
 	                        <div class="card-header">
-	                            <h4 class="card-title">결재완료</h4>
+	                            <h4 class="card-title">결재내역</h4>
 	                        </div>
 	                        <div class="card-content">
 	                            <div class="card-body">
 	                                <!-- Table with outer spacing -->
 	                                <div class="table-responsive">
-	                                    <table id="CompleteListView" class="table table-lg">
+	                                    <table id="AllowListView" class="table table-lg">
 	                                        <thead>
 	                                            <tr>
 	                                            	<th>글번호</th>
@@ -120,8 +120,8 @@
 		
 		// 페이지 이동 
     	$(function(){
-    		$("#CompleteListView tbody tr").click(function(){
-    			location.href="approvalCompleteDetailView.do?apNo=" + $(this).children().eq(0).text() + "&foNo=" + $(this).children().eq(1).text();
+    		$("#AllowListView tbody tr").click(function(){
+    			location.href="approvalAllowDetailView.do?apNo=" + $(this).children().eq(0).text() + "&foNo=" + $(this).children().eq(1).text();
     		});
     	});
     </script>

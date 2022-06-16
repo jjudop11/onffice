@@ -232,7 +232,7 @@
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-grid-1x2-fill"></i>
-                                <span>전자결재</span>
+                                <span>결재상신</span>
                             </a>
                             <ul class="submenu ">
                                 <li class="submenu-item ">
@@ -244,8 +244,20 @@
                                 <li class="submenu-item ">
                                     <a href="approvalCompleteListView.do">결재완료</a>
                                 </li>
+                            </ul>
+                        </li>
+                        
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-grid-1x2-fill"></i>
+                                <span>결재수신</span>
+                            </a>
+                            <ul class="submenu ">
                                 <li class="submenu-item ">
                                     <a href="approvalRequestListView.do">결재요청</a>
+                                </li>
+                                <li class="submenu-item ">
+                                    <a href="approvalAllowListView.do">결재내역</a>
                                 </li>
                             </ul>
                         </li>
@@ -253,17 +265,20 @@
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi bi-hexagon-fill"></i>
-                                <span>회의실예약</span>
+                                <span>예약 관리</span>
                             </a>
                             <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="reservationForm.do">회의실 예약</a>
+                                <li class="submenu-item">
+                                    <a href="roomReservingForm.do">회의실 예약</a>
                                 </li>
-                                <li class="submenu-item ">
-                                    <a href="form-element-input.html">온라인 회의실</a>
+                                <li class="submenu-item">
+                                    <a href="carReservingForm.do">차량 예약</a>
                                 </li>
-                                <li class="submenu-item ">
+                                <li class="submenu-item">
                                     <a href="roomSetting.do">회의실 관리</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a href="carSetting.do">차량 관리</a>
                                 </li>
                             </ul>
                         </li>

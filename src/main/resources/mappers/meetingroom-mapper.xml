@@ -21,7 +21,7 @@
 	<select id="roomNoCheck" parameterType="string" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEETING_ROOM
-		WHERE ROOM_NO=#{roomNo}
+		WHERE ROOM_NO = #{roomNo}
 	</select>
 	
 	<!-- 페이징 처리용 -->
@@ -145,7 +145,7 @@
 		WHERE RESERVE_NO = #{reserveNo}
 	</update>
 	
-	<select id="selectreservedRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
+	<select id="mainSelectreservedRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
 		SELECT B.RESERVE_TITLE "reserveTitle", C.M_NAME "mNo", D.J_NAME "reserveNo"
         FROM MEETING_ROOM A
         LEFT JOIN RESERVE_ROOM B ON A.ROOM_NO = B.ROOM_NO

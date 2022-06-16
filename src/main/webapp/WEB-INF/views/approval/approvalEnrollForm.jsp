@@ -25,11 +25,27 @@
 		}
 		
 		.apprTable {
-			padding: 0;
-			margin: 0;
-			width: 1000px;
-			height: 100%;
-			display: flex;
+			text-align: center;
+		}
+		
+		#apprTit {
+			position: relative;
+		}
+		
+		#plusAppr {
+			position: absolute;
+			top : 15px;
+			right: 15px;
+		}
+		
+		#searchName {
+			width: 78%;
+			float: left;
+			margin-right: 2%;
+		}
+		
+		#search {
+			width: 20%;
 		}
 		
 	</style>
@@ -86,13 +102,8 @@
 					
 					<div class="card-body">
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group">
-									
-									<!-- 결재선 추가 버튼 -->
-									<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#inlineForm">
-									+
-									</button>
 									
 								    <!-- 결재선 추가 모달 -->
 									<div class="modal fade text-left" id="inlineForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
@@ -106,7 +117,6 @@
 												</div>
 												
 												<div class="modal-body">
-													<label>사원명</label>
 													<div class="form-group">
 														<input hidden="hidden"/>
 														<input type="text" id="searchName" name="searchName" placeholder="사원명을 검색해주세요" class="form-control">
@@ -114,31 +124,28 @@
 													</div>
 												</div>
 												<div class="table-responsive">
-                                    				<table class="table table-lg mb-0">
-                                    					<thead>
-			                                                <tr>
-			                                                    <th>사번</th>
-			                                                    <th>부서</th>
-			                                                    <th>직급</th>
-			                                                    <th>이름</th>
-			                                                </tr>
-			                                            </thead>
-			                                            <tbody id="mList">
-		                                                </tbody>
+                                    				<table id="mList" class="table table-lg mb-0">
+                                    					
                                     				</table>
                                     			</div>
 											</div>
 										</div>
 									</div>
 									
-									<input type="hidden" id="aplineNo" name="aplineNo" class="form-control round">
+									<input type="hidden" id="aplineNo" name="aplineNo" class="form-control round"> 
 									
 									<div class="table-responsive apprTable">
 										<table id="apprTable" class="table table-bordered mb-0">
 											<tbody>
 												<tr>
-													<td rowspan="3" style="width: 150px">결재선</td>
-													<td id="jName1" style="width: 170px; height: 35px"></td>
+													<td id="apprTit" rowspan="3" style="width: 150px" align="center">
+														결재선
+														<!-- 결재선 추가 버튼 -->
+														<button id="plusAppr" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inlineForm">
+															+
+														</button>
+													</td>
+													<td id="jName1" style="width: 170px; height: 40px"></td>
 													<td id="jName2" style="width: 170px"></td>
 													<td id="jName3" style="width: 170px"></td>
 													<td id="jName4" style="width: 170px"></td>
@@ -152,7 +159,7 @@
 													<td></td>
 												</tr>
 												<tr>
-													<td id="mName1" style="height: 35px"></td>
+													<td id="mName1" style="height: 40px"></td>
 													<td id="mName2"></td>
 													<td id="mName3"></td>
 													<td id="mName4"></td>
@@ -275,11 +282,9 @@
 							<div class="col-sm-12">
 								<div class="form-group">
 									<label for="date">기간</label>
-									<div class="col-sm-3">
-										<input type="date" id="datePicker" name="prStartDate" class="form-control">
-										~
-										<input type="date" id="datePicker" name="prEndDate" class="form-control">
-									</div>
+									<input type="date" id="datePicker" name="prStartDate" class="form-control">
+									~
+									<input type="date" id="datePicker" name="prEndDate" class="form-control">
 								</div>
 							</div>
 							<div class="col-sm-12">
@@ -400,7 +405,7 @@
 	        });
 	    });
 		
-		/* let apprArr = new Array(); // 결재선 번호 담을 배열   */
+		let apprArr = new Array(); // 결재선 번호 담을 배열 
 		/* let j = 0; */
 		
 		// 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌
@@ -430,12 +435,22 @@
             	   $.each(mList, function(i, m){
             		   
 						value +=
-							"<tr>" + 
-							"<td>" + m.mNo + "</td>" +
-							"<td>" + m.dName + "</td>" +
-							"<td>" + m.jName + "</td>" +
-							'<td>' + m.mName + "</td>" +
-							"</tr>"
+							"<thead>" +
+								"<tr>" + 
+									"<td>사번</td>" +
+									"<td>부서</td>" +
+									"<td>직급</td>" +
+									"<td>이름</td>" +
+								"</tr>" +
+							"</thead>" +
+							"<tbody>" +
+								"<tr id='searchTr'>" + 
+									"<td>" + m.mNo + "</td>" +
+									"<td>" + m.dName + "</td>" +
+									"<td>" + m.jName + "</td>" +
+									'<td>' + m.mName + "</td>" +
+								"</tr>" + 
+							"</tbody>"
 						
 						mName = m.mName; // 사원명 
 						jName = m.jName; // 직급
@@ -448,7 +463,7 @@
 					// 사원 클릭했을 때 결재선에 추가 
 					$(document).ready(function(){
 						
-						$('table tr').click(function(){
+						$('#searchTr').click(function(){
 							
 							let mName1 = document.getElementById("mName1");
 							let jName1 = document.getElementById("jName1");
@@ -478,16 +493,34 @@
 								jName5.innerText = JSON.stringify(jName).replace(/\"/gi, "");
 							} 
 							
-							/* apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
-							console.log(apprArr) */
+							apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
+							console.log(apprArr) 
 							/* $("input[name='aplineNo[]']").eq(j).val(mNo)
 							j++; */
-							
-							$("input[name='aplineNo']").val(mNo);
+							/* $("input[name='aplineNo']").val(mNo); */
 							
 							$('.modal').modal('hide'); // 모달 닫기 
 							$('#mList').empty(); // html 요소 초기화
 							$('#searchName').val(''); // 인풋 박스 초기화 
+							
+							// 결재하기 버튼 눌렀을 때 결재선 배열도 전달 
+							$("#insertAppr").click(function(){
+								alert("컨트롤러에 배열 전달");
+								apprArr.submit();
+								/* $.ajax({
+					               url : "insertApproval.do",
+					               type : "post",
+					               data : { 
+					            	   apprArr : apprArr
+					            	   },
+					               success : function(){ 
+					            	   alert("배열 전달 성공")
+					               },
+					               error : function(){
+					            	   alert("배열 전달 실패")
+					               }
+								}) */
+							})
 							
 						})
 						
@@ -501,10 +534,10 @@
 		})
 		
 		//
-		$("#insertAppr").click(function(){
+		/* $("#insertAppr").click(function(){
 			console.log(apprArr)
 			$("aplineNo").val(apprArr);
-		}); 
+		});  */
 		
 	</script>
 	

@@ -237,7 +237,7 @@
 		FROM APPROVAL A
 		JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
 		WHERE B.AP_NO = #{apNo}
-		AND B.APLINE_STATUS IS NOT NULL
+		AND A.AP_STATUS IS NULL
 	</select>
 	
 	<!-- 수정 -->
@@ -360,7 +360,6 @@
 		AND APLINE_NO = #{aplineNo}
 	</select>
 	
-	
 	<select id="updateApprRefuse" parameterType="Map" resultMap="approvalLineResultSet">
 		UPDATE APPROVAL_LINE
 		SET APLINE_STATUS = 'N'
@@ -369,12 +368,38 @@
 	</select>
 	
 	<!-- 결재선 상태값 확인 -->
-	<select id="selecetApLineStatus" parameterType="Map" resultMap="approvalLineResultSet">
+	<select id="selecetApLineStatus" parameterType="Map" resultMap="memberResultSet">
 		SELECT APLINE_STATUS
-		FROM APPROVAL_LINE 
-		WHERE AP_NO = #{apNo}
-		AND APLINE_NO = #{aplineNo}
+		FROM APPROVAL_LINE A
+		JOIN MEMBER B ON A.APLINE_NO = B.M_NO
+		WHERE A.AP_NO = #{apNo}
+		AND B.M_NAME = #{mName}
 	</select>
+	
+	<!-- 최종결재상태 변경 -->
+	<update id="updateApStatus" parameterType="_int">
+		UPDATE APPROVAL 
+		SET AP_STATUS =
+		(
+		    CASE 
+		    WHEN (
+		            SELECT COUNT(*)
+		            FROM APPROVAL_LINE
+		            WHERE APLINE_STATUS NOT IN 'N'
+		            AND AP_NO = #{apNo}
+		        )=0 THEN 'N'
+		    ELSE 'Y'
+		    END
+		)
+		WHERE EXISTS
+		(
+		    SELECT * 
+		    FROM APPROVAL_LINE 
+		    WHERE AP_NO = #{apNo}
+		    AND APLINE_STATUS NOT IN 'NULL' 
+		)
+		AND AP_NO = #{apNo}
+	</update>
 	
 	<!-- 완료된 결재 -->
 	<select id="selectCompleteListCount" resultType="_int">
@@ -430,6 +455,69 @@
 		AND A.AP_STATUS = 'Y'
 		AND A.STATUS = 'Y'
 		AND A.M_NO = #{mNo}
+		AND A.C_NO = #{cNo}
+	</select>
+	
+	<!-- 결재내역 -->
+	<select id="selectAllowListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM APPROVAL A 
+		JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
+		WHERE A.AP_STATUS = 'Y'
+		AND B.APLINE_NO = 1
+		AND B.APLINE_STATUS IS NOT NULL
+	</select>
+	
+	<select id="selectAllowList" parameterType="ApList" resultMap="apListResultSet">
+		SELECT 
+		    B.AP_NO,
+		    B.FO_NO,
+		    B.DO_TITLE,
+		    B.DO_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN DAYOFF_FORM B ON A.AP_NO= B.AP_NO
+		JOIN APPROVAL_LINE E ON A.AP_NO = E.AP_NO
+		WHERE A.AP_NO = B.AP_NO
+		AND E.APLINE_STATUS IS NOT NULL
+		AND E.APLINE_NO = #{aplineNo}
+		AND A.STATUS = 'Y'
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    C.AP_NO,
+		    C.FO_NO,
+		    C.PR_TITLE,
+		    C.PR_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PROPOSAL_FORM C ON A.AP_NO = C.AP_NO
+		JOIN APPROVAL_LINE E ON A.AP_NO = E.AP_NO
+		WHERE A.AP_NO = C.AP_NO
+		AND E.APLINE_STATUS IS NOT NULL
+		AND E.APLINE_NO = #{aplineNo}
+		AND A.STATUS = 'Y'
+		AND A.C_NO = #{cNo}
+		UNION
+		SELECT 
+		    D.AP_NO,
+		    D.FO_NO,
+		    D.PAY_TITLE,
+		    D.PAY_DATE,
+		    A.M_NO,
+		    A.C_NO,
+		    A.AP_STATUS
+		FROM APPROVAL A
+		JOIN PAYMENT_FORM D ON A.AP_NO = D.AP_NO
+		JOIN APPROVAL_LINE E ON A.AP_NO = E.AP_NO
+		WHERE A.AP_NO = D.AP_NO
+		AND E.APLINE_STATUS IS NOT NULL
+		AND E.APLINE_NO = #{aplineNo}
+		AND A.STATUS = 'Y'
 		AND A.C_NO = #{cNo}
 	</select>
 	

@@ -49,6 +49,8 @@ public class Member {
  	private int lCount; // 지각수
  	
  	private int apNo; // 전자결재문서번호
+ 	private String aplineNo; // 결재자사원번호 
+ 	private String aplineStatus; // 결재여부
  	
  	private String sessionkey;
 	private Date sessionLimit;
