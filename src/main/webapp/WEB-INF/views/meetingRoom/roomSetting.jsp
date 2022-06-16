@@ -74,8 +74,7 @@ tr, th {
 			</header>
 
 			<div class="page-heading">
-				<h2>MeetingRoom Setting</h2>
-				<h5>회의실 관리</h5>
+				<h3>회의실 관리</h3>
 			</div>
 			<div class="page-content">
 
@@ -208,9 +207,9 @@ tr, th {
 																		</div>
 
 																		<div class="modal-footer">
-																			<button type="button" class="btn btn-primary"
-																				id="addRoom" data-dismiss="modal"
+																			<button type="button" class="btn btn-primary" id="addRoom" data-dismiss="modal"
 																				onclick="addRoom()">확인</button>
+																			<button type="button" id="btnCloseModal" class="btn btn-danger">닫기</button>
 																		</div>
 																	</div>
 																</div>

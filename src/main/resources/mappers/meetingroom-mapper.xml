@@ -21,7 +21,7 @@
 	<select id="roomNoCheck" parameterType="string" resultType="_int">
 		SELECT COUNT(*)
 		FROM MEETING_ROOM
-		WHERE ROOM_NO=#{roomNo}
+		WHERE ROOM_NO = #{roomNo}
 	</select>
 	
 	<!-- 페이징 처리용 -->
