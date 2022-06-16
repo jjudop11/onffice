@@ -18,13 +18,8 @@
 		}
 		
 		.apprTable {
-			padding: 0;
-			margin: 0;
-			width: 1000px;
-			height: 100%;
-			display: flex;
+			text-align: center;
 		}
-		
 	</style>
 </head>
 <body>
@@ -72,12 +67,12 @@
 					
 					<div class="card-body">
 						<div class="row">
-							<div class="col-sm-6">
+							<div class="col-sm-12">
 								<div class="form-group"><div class="table-responsive apprTable">
 									<table id="apprTable" class="table table-bordered mb-0">
 										<tbody><tr>
 												<td rowspan="3" style="width: 150px">결재선</td>
-												<td id="jName1" style="width: 170px; height: 35px">${jName}</td>
+												<td id="jName1" style="width: 170px; height: 40px">${jName}</td>
 												<td id="jName2" style="width: 170px"></td>
 												<td id="jName3" style="width: 170px"></td>
 												<td id="jName4" style="width: 170px"></td>
@@ -91,7 +86,7 @@
 												<td></td>
 											</tr>
 											<tr id="apprName">
-												<td id="mName1" style="height: 35px">${mName}</td>
+												<td id="mName1" style="height: 40px">${mName}</td>
 												<td id="mName2"></td>
 												<td id="mName3"></td>
 												<td id="mName4"></td>

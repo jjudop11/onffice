@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,12 +53,14 @@ public class ApprovalController {
 	@RequestMapping(value = "insertApproval.do", method = RequestMethod.POST)
 	public String insertApproval(Approval ap, ApprovalLine apline, FormAtt att,
 			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
+			@RequestParam(value="apprArr[]", required = false) List<String> apprArr, 
 			HttpServletRequest request, // 뷰단에서 컨트롤러로 데이터 전달 
 			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
 		
 		System.out.println("CONTROLLER : " + ap);
 		System.out.println("CONTROLLER : " + apline);
 		System.out.println("CONTROLLER : " + doForm);
+		System.out.println("CONTROLLER : " + apprArr);
 		
 		approvalService.insertApproval(ap); // 전자결재문서 
 		approvalService.insertApprovalLine(apline); // 결재선
@@ -547,7 +550,7 @@ public class ApprovalController {
 		Member m = (Member) model.getAttribute("loginUser");
 
 		Map<String, Object> listMap = new HashMap<>();
-		listMap.put("mNo", m.getMNo());
+		listMap.put("aplineNo", m.getMNo());
 		listMap.put("cNo", m.getCNo());
 	
 		int listCount = approvalService.selectAllowListCount();

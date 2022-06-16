@@ -45,15 +45,21 @@
 	                                            </tr>
 	                                        </thead>
 	                                        <tbody> 
-	                                        	<c:forEach items="${ list }" var="ap">
-		                                            <tr>
-		                                            	<td>${ ap.apNo }</td>
-		                                                <td id="foNo">${ ap.foNo }</td>
-		                                                <td>${ ap.doTitle }</td>
-		                                                <td>${ ap.doDate }</td>
-		                                            </tr>
-	                                            </c:forEach>
-	                                            
+	                                        	<c:choose>
+	                                        		<c:when test="${ !empty list }">
+			                                        	<c:forEach items="${ list }" var="ap">
+				                                            <tr>
+				                                            	<td>${ ap.apNo }</td>
+				                                                <td id="foNo">${ ap.foNo }</td>
+				                                                <td>${ ap.doTitle }</td>
+				                                                <td>${ ap.doDate }</td>
+				                                            </tr>
+			                                            </c:forEach>
+		                                            </c:when>
+		                                            <c:otherwise>
+		                                            	<tr><td colspan="4" align="center">작성된 기안이 없습니다.</td></tr>
+		                                            </c:otherwise>
+	                                            </c:choose>
 	                                        </tbody>
 	                                    </table>
 	                                </div>
