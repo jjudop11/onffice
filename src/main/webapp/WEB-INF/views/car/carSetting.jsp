@@ -74,8 +74,7 @@ tr, th {
 			</header>
 
 			<div class="page-heading">
-				<h2>MeetingRoom Setting</h2>
-				<h5>회의실 관리</h5>
+				<h3>차량관리</h3>
 			</div>
 			<div class="page-content">
 
@@ -88,30 +87,28 @@ tr, th {
 										<div class="col-12 col-md-6">
 											<div class="card">
 												<div class="card-content">
-													<div class="card-body">
+													<div class="card-body" id="in-card-body">
 														<div class="table-responsive">
-															<table class="table table-lg" id="meetingroom">
-																<thead id="meetingroomRow">
+															<table class="table table-lg" id="car">
+																<thead id="carRow">
 																	<tr>
 																		<th><input type="checkbox" id="checkbox-Top"
 																			class="form-check-input"></th>
-																		<th>No</th>
-																		<th>회의실명</th>
-																		<th>수용인원</th>
-																		<th>비고</th>
+																		<!-- <th>No</th>  -->
+																		<th>차량명</th>
+																		<th>차량번호</th>
 																	</tr>
 																</thead>
 																<tbody>
-																	<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
-																	<c:forEach items="${ roomList }" var="r">
+																	<!-- 로그인한 회원이 소속된 회사의 차량 리스트 -->
+																	<c:forEach items="${ carList }" var="c">
 																		<tr>
 																			<th><input type="checkbox" id="checkbox"
 																				class="form-check-input" name="under-checkbox"
-																				value="${ r.roomNo }"></th>
-																			<th class="roomNo">${ r.roomNo }</th>
-																			<th class="roomName">${ r.roomName }</th>
-																			<th class="roomCapa">${ r.roomCapa }</th>
-																			<th class="roomNote">${ r.roomNote }</th>
+																				value="${ c.carNo }"></th>
+																			<!-- <th class="roomNo">${ c.no }</th>  -->
+																			<th class="roomName">${ c.carName }</th>
+																			<th class="roomCapa">${ c.carNo }</th> <!-- 대여 버튼으로 바꾸기 -->
 																		</tr>
 																	</c:forEach>														
 																</tbody>
@@ -161,56 +158,39 @@ tr, th {
 														<div class="buttons">
 															<button type="button" class="btn btn-primary"
 																data-toggle="modal" data-target="#myModal">추가</button>
-															<button href="#" class="btn btn-danger" id="deleteRoom">삭제</button>
+															<button href="#" class="btn btn-danger" id="deleteCar">삭제</button>
 
 															<div class="modal" id="myModal">
 																<div class="modal-dialog">
 																	<div class="modal-content">
 
 																		<div class="modal-header">
-																			<h4 class="modal-title">회의실 추가</h4>
+																			<h4 class="modal-title">차량 추가</h4>
 																			<button type="button" class="close"
 																				data-dismiss="modal"></button>
 																		</div>
 
 																		<div class="modal-body" id="modal-body">
-																			<form name="insertRoom" method="post" action="#">
+																			<form name="insertCar" method="post" action="#">
 
-																				<div class="form-insertRoom">
-																					<label for="label-insertRoom" class="control-label">회의실번호</label>
-																					<input type="text" class="form-control"
-																						id="room_no" name="room_no" 
-																						placeholder="회사번호(0)-회의실번호(00)">	 <!-- 자동으로 회사번호 받아오는 방법 추가하기 -->
+																				<div class="form-insertCar">
+																					<label for="label-insertCar" class="control-label">차량명</label>
+																					<input type="text" class="form-control" id="car_name" name="car_name">
+																				</div>
+																				<br>
+																				<div class="form-insertCar">
+																					<label for="label-insertCar" class="control-label">차량번호</label>
+																					<input type="text" class="form-control" id="car_no" name="car_no">
 																				</div>
 																				<div>
-																					 <a id="room_no_check"></a>
+																					 <a id="car_no_check"></a>
 																				</div>
-																				<br>
-																				<div class="form-insertRoom">
-																					<label for="label-insertRoom" class="control-label">회의실명</label>
-																					<input type="text" class="form-control"
-																						id="room_name" name="room_name">
-																				</div>
-																				<br>
-																				<div class="form-insertRoom">
-																					<label for="label-insertRoom" class="control-label">수용인원</label>
-																					<input type="text" class="form-control"
-																						id="room_capa" name="room_capa">
-																				</div>
-																				<br>
-																				<div class="form-insertRoom">
-																					<label for="label-insertRoom" class="control-label">비고</label>
-																					<input type="text" class="form-control"
-																						id="room_note" name="room_note">
-																				</div>
-
+																				<br><br>
 																			</form>
 																		</div>
 
 																		<div class="modal-footer">
-																			<button type="button" class="btn btn-primary"
-																				id="addRoom" data-dismiss="modal"
-																				onclick="addRoom()">확인</button>
+																			<button type="button" class="btn btn-primary" id="addCar" data-dismiss="modal">확인</button>
 																		</div>
 																	</div>
 																</div>
@@ -255,106 +235,37 @@ tr, th {
 			})
 		})
 		
-		//체크박스 전체체크, 해제
-		/* $(function(){
-			$("#checkbox-Top").click(function(){
-				if($("#checkbox-Top").is(":checked")){
-					$(".form-check-input").prop("checked", true);			
-				}else{
-					$(".form-check-input").prop("checked", false);
-				}
-			})
-			
-			if($(".form-check-input").is(":unchecked")){
-				$("#checkbox-Top").prop("checked", false);
-			}
-		}) */
 		
-		//체크박스 하나 해제시 최상단 체크박스도 해제... 왜안돼?
-		/* $(function(){
-			$("input[name='under-checkbox']").click(function(){
-				if($("input[name='under-checkbox']").is(":unchecked")){
-					$("#checkbox-Top").prop("checked", false);
-				}
-			})
-		})*/ 
-		
-			
-		/* let checkbox_top = $("#checkbox-Top");
-		let checkbox = $(".form-check-input");
-	
-		for(let i = 0; i < checkbox.length; i++){
-			if(checkbox.attr("checked", false)){
-				$("#checkbox_top").prop("checked", false);
-			}
-		} */
-			
-				
-		//회의실 추가 모달에서 Controller로 데이터 넘기기 -> 성공
-		//Controller에서 데이터 받고 화면에 뿌리기 -> 페이지 새로고침 메소드 추가, 성공
+		//차량 추가
 		$(function() {
-			$("#addRoom").click(function() {
-				let addRoomNo = $("#room_no").val();
-				let addRoomName = $("#room_name").val();
-				let addRoomCapa = $("#room_capa").val();
-				let addRoomNote = $("#room_note").val();
+			$("#addCar").click(function() {
+				let addCarName = $("#car_name").val();
+				let addCarNo = $("#car_no").val();
+				console.log(addCarName, addCarNo);
 
 				$.ajax({
-					url : "insertRoom.do",
+					url : "insertCar.do",
 					data : {
-						roomNo : addRoomNo,
-						roomName : addRoomName,
-						roomCapa : addRoomCapa,
-						roomNote : addRoomNote
+						addCarName : addCarName,
+						addCarNo : addCarNo
 					},
 					type : "post",
 					success : function(obj) {
-						alert("회의실을 추가하였습니다.");
+						alert("차량을 추가하였습니다.");
 						console.log(obj)
-						location.reload();		
+						location.reload();	
+						
 					},
 					error : function(error) {
-						alert("회의실 추가에 실패하였습니다.");
+						alert("차량 추가에 실패하였습니다.");
 					}
 				})
 			})
 		})
 		
-		//회의실 삭제 -> 한개만 삭제할 떄 코드
-		/* $(function() {
-			$("#deleteRoom").click(function() {							
-				let checkedBox = $("#checkbox:checked") //제목행은 아이디 다르게 줘서 삭제되지 않게
-				let checkedRow = checkedBox.parent().parent(); //tr
-				console.log(checkedRow);
-						
-				let roomNo = checkedRow.children().eq(1).text(); //val()은 안되고 text()는 되네... 차이점은?
-				console.log(roomNo);
-	
-				checkedRow.remove();
-				console.log("행 삭제 완료");
-				
-				$.ajax({
-					url : "deleteRoom.do",
-					data : {
-						roomNo : roomNo,
-					},
-					type : "post",
-					success : function(obj) {
-						alert("회의실을 삭제하였습니다.");
-						console.log(obj)
-					
-						location.reload();		
-					},
-					error : function(error) {
-						alert("회의실 삭제에 실패하였습니다.");
-					}
-				})					
-			})
-		}) */
-		
-		//회의실 삭제
+		//차량 삭제
 		$(function() {
-			$("#deleteRoom").click(function() {
+			$("#deleteCar").click(function() {
 
 				let chk = $("input[name='under-checkbox']");
 				let checkedArr = [];
@@ -367,85 +278,59 @@ tr, th {
 				console.log("넘길 배열 : " + checkedArr)
 
 				$.ajax({
-					url: "deleteRooms.do",
+					url: "deleteCars.do",
 					type: "post",
 					data: {
 						checkedArr : checkedArr
 					},
 					success : function(data) {
-						alert("회의실을 삭제하였습니다.")					
+						alert("차량을 삭제하였습니다.");			
 						location.reload();
 					},
 					error : function() {
-						console.log("회의실 삭제에 실패하였습니다.");
+						console.log("차량 삭제에 실패하였습니다.");
 					}
 				})
 			})
 		})
-		
-		/* $(function() {
-			$("#deleteRoom").click(function() {			
-				let checkedArr = [];
-				$("#checkbox").each(function(i){   //each() : 모든 $("#checkbox") 요소를 검사함
-					
-					//배열에 체크된 행의 회의실번호 담기... i 
-					//checkedArr.push($('#checkbox:checked:eq(' + i + ')').next().val());
-					checkedArr.push($('#checkbox:checked:parent:parent:eq(' + i + ')').next().text());
-					console.log("넘어갈 배열 : " + checkedArr);
-				})
-					
-				$.ajax({
-					url: "deleteRooms.do",
-					type: "post",
-					dataType: 'json',
-					data: {
-						checkedRoomNo: checkedArr
-					},
-					success: function(data){
-						location.reload();
-					},
-					error: function(){
-						alert("회의실 삭제에 실패하였습니다.");
-					}
-				})		
-			})
-		}) */
-		
-		//회의실번호 중복체크
-		$(function(){
-			let roomNoCheck = $("#room_no");
 			
-			roomNoCheck.keyup(function(){		
-				if(roomNoCheck.val().length >= 4){
+		//차량번호 중복체크
+		$(function(){
+			let carNoCheck = $("#car_no");
+			
+			carNoCheck.keyup(function(){		
 					
+				if(carNoCheck.val().length >= 1){
 					$.ajax({
-						url: "roomNoCheck.do",
+						url: "carNoCheck.do",
 						data: {
-							roomNo: roomNoCheck.val()	
+							carNo: carNoCheck.val()	
 						},
 						type: "post",
 						success: function(result){
 							if(result > 0){
-								roomNoCheckValidate(1)
+								carNoCheckValidate(1)
 							}else{
-								roomNoCheckValidate(0)
+								carNoCheckValidate(0)
 							}			
 						},
 						error: function(){
 							console.log("ajax 통신 실패")
 						}	
 					})			
-				} else{
-					$("#room_no_check").css("color", "red").text("네자리 이상 작성하세요.");
+				
+				}else{
+					$("#car_no_check").css("color", "red").text("차량번호를 입력해주세요.");
 				}
+					
 			})
 		})
 		
-		function roomNoCheckValidate(num){
+		function carNoCheckValidate(num){
 			if(num > 0){
-				$("#room_no_check").css("color", "red").text("회의실번호는 중복될 수 없습니다.");
+				$("#car_no_check").css("color", "red").text("차량번호는 중복될 수 없습니다.");
 			}else if(num == 0){
-				$("#room_no_check").css("color", "green").text("사용가능한 회의실번호입니다.");
+				$("#car_no_check").css("color", "green").text("사용가능한 차량번호입니다.");
 			}
 		}
 		
