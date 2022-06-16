@@ -304,7 +304,7 @@
                             </a>
                         </li>
 
-                  <li class="sidebar-item">
+                  		<li class="sidebar-item">
                             <a href="surveyBoardForm" class='sidebar-link'>
                                 <i class="bi bi-egg-fill"></i>
                                 <span>설문게시판</span>

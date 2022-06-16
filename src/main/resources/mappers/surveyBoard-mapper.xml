@@ -4,6 +4,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="surveyBoardMapper">
 
-
+	<!-- 설문 게시판에 게시물 등록 -->
+	<select id="insertSurveyBoard" parameterType="SurveyBoard" resultType="_int">
+		INSERT INTO SURVEY_BOARD VALUES
+			(SEQ_SB_BNO.NEXTVAL, #{sbTitle}, #{sbSurveyInfo}, #{sbStartDate}, 
+			 #{sbEndDate}, #{sbResultState}, #{sbFounderNo}, #{cNo})
+	</select>
 
 </mapper>
