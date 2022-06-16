@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>결재완료</title>
+	<title>결재내역</title>
 	
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
@@ -29,7 +29,7 @@
 	                <div class="col-12 col-md-12">
 	                    <div class="card">
 	                        <div class="card-header">
-	                            <h4 class="card-title">결재완료</h4>
+	                            <h4 class="card-title">결재내역</h4>
 	                        </div>
 	                        <div class="card-content">
 	                            <div class="card-body">
@@ -45,15 +45,21 @@
 	                                            </tr>
 	                                        </thead>
 	                                        <tbody> 
-	                                        	<c:forEach items="${ list }" var="ap">
-		                                            <tr>
-		                                            	<td>${ ap.apNo }</td>
-		                                                <td id="foNo">${ ap.foNo }</td>
-		                                                <td>${ ap.doTitle }</td>
-		                                                <td>${ ap.doDate }</td>
-		                                            </tr>
-	                                            </c:forEach>
-	                                            
+	                                        	<c:choose>
+	                                        		<c:when test="${ !empty list }">
+			                                        	<c:forEach items="${ list }" var="ap">
+				                                            <tr>
+				                                            	<td>${ ap.apNo }</td>
+				                                                <td id="foNo">${ ap.foNo }</td>
+				                                                <td>${ ap.doTitle }</td>
+				                                                <td>${ ap.doDate }</td>
+				                                            </tr>
+			                                            </c:forEach>
+		                                            </c:when>
+		                                            <c:otherwise>
+		                                            	<tr><td colspan="4" align="center">작성된 기안이 없습니다.</td></tr>
+		                                            </c:otherwise>
+	                                            </c:choose>
 	                                        </tbody>
 	                                    </table>
 	                                </div>
