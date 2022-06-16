@@ -29,11 +29,13 @@ import lombok.RequiredArgsConstructor;
 
 @SessionAttributes({"loginUser", "msg"})
 @Controller
-@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
+//@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
 public class ChatController {
 
+	@Autowired
 	private SimpMessagingTemplate template;
 
+	
 	@Autowired
 	public ChatService chatService;
 	

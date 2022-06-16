@@ -78,7 +78,7 @@
 	
 		$(function(){
 		
-			selectSurveyBoard(1)
+			//selectSurveyBoard(1)
 			
 	
 			
