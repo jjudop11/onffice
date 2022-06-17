@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,18 +53,26 @@ public class ApprovalController {
 	// 기안작성 결재요청 
 	@RequestMapping(value = "insertApproval.do", method = RequestMethod.POST)
 	public String insertApproval(Approval ap, ApprovalLine apline, FormAtt att,
+			@RequestParam(value="aplineNoList", required=false) List<String> aplineNoList,
 			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
-			@RequestParam(value="apprArr[]", required = false) List<String> apprArr, 
 			HttpServletRequest request, // 뷰단에서 컨트롤러로 데이터 전달 
 			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
 		
 		System.out.println("CONTROLLER : " + ap);
 		System.out.println("CONTROLLER : " + apline);
 		System.out.println("CONTROLLER : " + doForm);
-		System.out.println("CONTROLLER : " + apprArr);
+		System.out.println("CONTROLLER : " + aplineNoList);
+//		System.out.println("CONTROLLER : " + Arrays.toString(apline.getAplineNoList()));
+//		System.out.println("CONTROLLER : " + aplineNoList.size());
 		
 		approvalService.insertApproval(ap); // 전자결재문서 
-		approvalService.insertApprovalLine(apline); // 결재선
+		
+		Map<String, Object> apprLineMap = new HashMap<>();
+		apprLineMap.put("aplineNo", aplineNoList); // 배열 파라미터는 리스트에 담아서 맵에 담기 
+		
+		System.out.println("CONTROLLER : " + apprLineMap);
+		
+		approvalService.insertApprovalLine(apprLineMap); // 결재선 
 		
 		// 서식폼 선택 
 		if(ap.getFoNo() == 10) {
@@ -92,6 +101,15 @@ public class ApprovalController {
 		return "redirect:/main"; 
 		
 	}
+	
+	// 결재선 배열 받기 
+//	@ResponseBody
+//	@RequestMapping(value = "selectApprArr.do", method = RequestMethod.POST)
+//	private List<String> selectApprArr(@RequestParam(value="apprArr[]", required=false) List<String> apprArr) { 
+//		System.out.println("CONTROLLER : " + apprArr);
+//		return apprArr; 
+//	}
+	 
 	
 	// 전달받은 파일을 업로드한 후 수정된 파일명을 리턴
 	private String saveFile(MultipartFile file, HttpServletRequest request) {

@@ -238,7 +238,7 @@
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-1x2-fill"></i>
+                                <i class="bi bi-file-earmark-plus"></i>
                                 <span>결재상신</span>
                             </a>
                             <ul class="submenu ">
@@ -256,7 +256,7 @@
                         
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-grid-1x2-fill"></i>
+                                <i class="bi bi-file-earmark-arrow-down"></i>
                                 <span>결재수신</span>
                             </a>
                             <ul class="submenu ">
