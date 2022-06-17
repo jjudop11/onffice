@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SurveyBoard {
 
-	private int sbNo; 				// 설문 게시글 번호
+	private long sbNo; 				// 설문 게시글 번호
 	private String sbTitle; 		// 설문 게시글 제목
 	private String sbSurveyInfo;    // 설문 게시글 설명
 	private String sbStartDate;		// 설문 게시글 시작 날짜
@@ -20,6 +20,7 @@ public class SurveyBoard {
 	private String sbResultState;	// 설문 게시글 결과 공개 상태 ('Y' , 'N')
 	private String sbFounderNo;		// 설문 게시글 작성자 번호
 	private int cNo;				// 회사번호
+	private int dNo;				// 부서번호
 	private int sbTDNo;				// 설문 게시글 공개 대상 부서 번호
 	private int sbINo;				// 설문 문항 번호
 	private String sbITitle; 		// 설문 문항 제목
