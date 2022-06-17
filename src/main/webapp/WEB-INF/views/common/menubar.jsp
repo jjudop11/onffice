@@ -214,6 +214,13 @@
                 <div class="sidebar-menu">
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
+                        
+                        <li class="sidebar-item  ">
+                            <a href="listNotice.do" class='sidebar-link'>
+                                <i class="bi bi-megaphone"></i>
+                                <span>공지사항</span>
+                            </a>
+                        </li>
 
                         <li class="sidebar-item">
                             <a href="timetableForm" class='sidebar-link'>
@@ -281,42 +288,6 @@
                                     <a href="carSetting.do">차량 관리</a>
                                 </li>
                             </ul>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a href="deptView.do" class='sidebar-link'>
-                                <i class="bi bi-pen-fill"></i>
-                                <span>부서보관함</span>
-                            </a>
-                        </li>
-                        
-						 <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-pentagon-fill"></i>
-                                <span>프로젝트보관함</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="ui-widgets-chatbox.html">전체 프로젝트</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="ui-widgets-pricing.html">내 프로젝트</a>
-                                </li>
-                            </ul>
-                        </li>
-                        
-                        <li class="sidebar-item  ">
-                            <a href="listNotice.do" class='sidebar-link'>
-                                <i class="bi bi-grid-1x2-fill"></i>
-                                <span>공지사항</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  ">
-                            <a href="listCommunity.do" class='sidebar-link'>
-                                <i class="bi bi-file-earmark-spreadsheet-fill"></i>
-                                <span>커뮤니티</span>
-                            </a>
                         </li>
 
                   		<li class="sidebar-item">
