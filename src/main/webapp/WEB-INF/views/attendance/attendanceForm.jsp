@@ -418,6 +418,7 @@
 							selectAttendance();
 							selectAttendanceW();
 							selectAttendanceM();
+							monthCount();
 							
 							let socketMsg = "퇴근," + result.mName + "," + result.jName + "," + result.dName;
 		        			console.log(socketMsg);
