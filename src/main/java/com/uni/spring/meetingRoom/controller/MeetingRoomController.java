@@ -66,8 +66,6 @@ public class MeetingRoomController {
 		Date date = new Date();
 		SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
 		String today = simpleDate.format(date);
-
-		System.out.println("오늘 며칠? : " + today);
 		model.addAttribute("today", today);
 
 		return "meetingRoom/roomReservation";

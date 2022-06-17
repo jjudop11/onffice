@@ -16,11 +16,15 @@
 <link rel="stylesheet" href="resources/assets/css/app.css">
 <link rel="shortcut icon" href="resources/assets/images/favicon.svg" type="image/x-icon">  -->
 
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Popper JS -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
-
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <!-- Latest compiled JavaScript -->
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <style>
 tr, th {
@@ -48,63 +52,13 @@ tr, th {
 	margin: auto;
 }
 
-.card-body-room {
-	margin: auto;
-}
-
-#roomSetting {
-	display: inline;
-}
-
 #roomSetting-button {
 	float: right;
 }
 
-#form-group-under {
-	width: 100%;
-	align: center;
-}
-
-#datePicker-div {
-	width: 141px;
-	float: left;
-}
-
-#datePicker {
-	height: 38px;
-}
-
-#modal-datePicker {
-	height: 38px;
-}
-
-#searchDateBtn {
-	float: left;
-	margin-left: 10px;
-}
-
-#reserve-btn-div {
-	float: right;
-	width: 58px;
-}
-
-#reserveRoomBtn {
-	width: 58px;
-}
-
-.time {
-	height: 38px;
-}
-
-#startTime, #endTime {
-	width: 220px;
-	float: left;
-}
-
-#wiggle {
-	float: left;
-	margin-left: 9.1px;
-	margin-right: 9px;
+#useNote {
+	height: 90px;
+	resize: none;
 }
 </style>
 </head>
@@ -115,7 +69,8 @@ tr, th {
 		<div id="main">
 
 			<header class="mb-3">
-				<a href="#" class="burger-btn d-block d-xl-none"> <i class="bi bi-justify fs-3"></i></a>
+				<a href="#" class="burger-btn d-block d-xl-none"> <i
+					class="bi bi-justify fs-3"></i></a>
 			</header>
 
 			<div class="page-heading">
@@ -130,249 +85,155 @@ tr, th {
 
 								<div class="card">
 									<div class="card-content">
-										<!-- 회의실 예약 -->
 										<div class="card-body">
-											<div class="card-body-room">
-
-												<div id="datePicker-div">
-													<input type="date" id="datePicker" class="datepicker-form"
-														value="${ today }">
-												</div>
-
-												<div>
-													<button type="button" class="btn btn-primary"
-														id="searchDateBtn">조회</button>
-												</div>
-
-												<div class="buttons" id="reserve-btn-div">
-													<button type="button" class="btn btn-primary"
-														id="reserveRoomBtn">예약</button>
-
-													<div class="modal" id="myModal">
-														<form name="insertRoom">
-															<div class="modal-dialog">
-																<div class="modal-content">
-
-																	<div class="modal-header">
-																		<h4 class="modal-title">회의실 예약</h4>
-																		<button type="button" class="close"
-																			data-dismiss="modal"></button>
-																	</div>
-
-																	<div class="modal-body" id="modal-body">
-
-
-																		<div class="form-reserveRoom">
-																			<label for="label-reserveRoom" class="control-label">예약일</label><br>
-																			<input type="date" id="modal-datePicker"
-																				class="datepicker-form" required>
-																		</div>
-																		<br>
-
-																		<div class="form-reserveRoom" id="timeSelect">
-																			<label for="label-reserveRoom" class="control-label">예약시간</label>
-																			<br> <select id="startTime" class="form-control">
-																				<script>
-																		          let hour = '';
-																		          let min = '00';
-	
-																		          for (var i = 14; i < 42; i++) {
-																		              hour = (Math.floor(i / 2));
-	
-																		              if (hour < 10) {
-																		                  hour = '0' + hour;
-																		              }
-																		              if (i % 2 != 0) {
-																		                  min = '30';
-																		              } else {
-																		            	  min = '00';
-																		              }
-																		              
-																		              document
-																		                  .write('<option value=' + hour + ':' + min + '>'
-																		                      + hour
-																		                      + ':'
-																		                      + min
-																		                      + '</option>');
-																		          }
-																	          </script>
-																			</select>
-
-																			<div id="wiggle">~</div>
-
-																			<select id="endTime" class="form-control">
-																				<script>
-																		          for (var i = 15; i < 43; i++) {
-																		              hour = (Math.floor(i / 2));
-	
-																		              if (hour < 10) {
-																		                  hour = '0' + hour;
-																		              }
-																		              if (i % 2 != 0) {
-																		                  min = '30';
-																		              } else {
-																		            	  min = '00';
-																		              }
-																		              
-																		              document
-																		                  .write('<option value=' + hour + ':' + min + '>'
-																		                      + hour
-																		                      + ':'
-																		                      + min
-																		                      + '</option>');
-																		          }
-																	          </script>
-																			</select>
-																		</div>
-
-																		<br> <br> <br>
-
-																		<div class="form-reserveRoom">
-																			<label for="label-reserveRoom" class="control-label">회의실명</label>
-
-																			<select class="form-select" id="selectRoom"
-																				name="selectRoom">
-																				<c:forEach items="${ roomList }" var="r">
-																					<option value="${ r.roomName }">${ r.roomName }</option>
-																				</c:forEach>
-																			</select>
-																		</div>
-																		<br>
-
-																		<div class="form-reserveRoom">
-																			<label for="basicInput">회의명</label> <input
-																				type="text" class="form-control" id="reservetitle"
-																				placeholder="회의 내용을 입력해주세요" required>
-																		</div>
-
-																		<br>
-
-																		<div class="form-reserveRoom">
-																			<label for="label-reserveRoom" class="control-label">예약자</label>
-																			<br> <input type="text" class="form-control"
-																				id="reserveUser" value="${ userName } ${ userJob }"
-																				readonly>
-																		</div>
-
-																	</div>
-
-																	<div class="modal-footer">
-																		<input type="submit" class="btn btn-primary"
-																			id="reserveRoom" onclick="reserveRoom()" value="확인">
-																		<!-- data-dismiss="modal" -->
-																		<button type="button" id="btnCloseModal"
-																			class="btn btn-danger">닫기</button>
-																	</div>
-																</div>
-															</div>
-														</form>
-													</div>
-												</div>
-
-												<!-- 예약 테이블 -->
-												<div id="div-table">
-													<table class="table table-bordered mb-0"
-														id="roomReserveTable">
-														<thead>
-															<tr>
-																<th colspan="2"></th>
-																<th colspan="2">07</th>
-																<th colspan="2">08</th>
-																<th colspan="2">09</th>
-																<th colspan="2">10</th>
-																<th colspan="2">11</th>
-																<th colspan="2">12</th>
-																<th colspan="2">13</th>
-																<th colspan="2">14</th>
-																<th colspan="2">15</th>
-																<th colspan="2">16</th>
-																<th colspan="2">17</th>
-																<th colspan="2">18</th>
-																<th colspan="2">19</th>
-																<th colspan="2">20</th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${ roomList }" var="r">
-																<tr data-roomno="${r.roomNo}">
-																	<th colspan="2">${ r.roomName }</th>
-																	<th id="07:00" title="툴팁 줄 수 있을까?"></th>
-																	<th id="07:30"></th>
-																	<th id="08:00"></th>
-																	<th id="08:30"></th>
-																	<th id="09:00"></th>
-																	<th id="09:30"></th>
-																	<th id="10:00"></th>
-																	<th id="10:30"></th>
-																	<th id="11:00"></th>
-																	<th id="11:30"></th>
-																	<th id="12:00"></th>
-																	<th id="12:30"></th>
-																	<th id="13:00"></th>
-																	<th id="13:30"></th>
-																	<th id="14:00"></th>
-																	<th id="14:30"></th>
-																	<th id="15:00"></th>
-																	<th id="15:30"></th>
-																	<th id="16:00"></th>
-																	<th id="16:30"></th>
-																	<th id="17:00"></th>
-																	<th id="17:30"></th>
-																	<th id="18:00"></th>
-																	<th id="18:30"></th>
-																	<th id="19:00"></th>
-																	<th id="19:30"></th>
-																	<th id="20:00"></th>
-																	<th id="20:30"></th>
-																</tr>
-															</c:forEach>
-														</tbody>
-													</table>
-												</div>
-											</div>
-
-											<br> <br>
-
-											<form id="hiddenForm" action="reservationDetails.do"
-												method="post">
-												<div id="hiddenDiv">
-													<input type="hidden" name="dateD" id="dateD" value="">
-													<input type="hidden" name="roomNoD" id="roomNoD" value="">
-													<input type="hidden" name="startTimeD" id="startTimeD"
-														value="">
-												</div>
-											</form>
 
 											<!-- 하단 회의실 현황 -->
 											<div id="meetingroomList">
-												<h3 id="roomSetting">회의실 현황</h3>
 												<button class="btn btn-primary" id="roomSetting-button"
 													onclick="location.href='reserve-roomSetting.do'">설정</button>
-												<br> <br>
+												<br> <br> <input type="hidden" id="today"
+													value="${ today }">
 												<div class="table-responsive">
-													<table class="table table-bordered mb-0"
-														id="meetingroomView">
-														<thead id="meetingroomView-head">
+													<table class="table table-bordered mb-0" id="ReservingCar">
+														<thead id="ReservingCar-head">
 															<tr>
-																<th>No</th>
-																<th>MettingRoom</th>
-																<th>Capacity</th>
-																<th>Note</th>
+																<th>차량명</th>
+																<th>차량번호</th>
+																<th>대여현황</th>
 															</tr>
 														</thead>
 														<tbody>
 															<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
-															<c:forEach items="${ roomList }" var="r">
+															<c:forEach items="${ carList }" var="c">
 																<tr>
-																	<th>${ r.roomNo }</th>
-																	<th>${ r.roomName }</th>
-																	<th>${ r.roomCapa }</th>
-																	<th>${ r.roomNote }</th>
+																	<th id="carName">${ c.carName }</th>
+																	<th id="carNo">${ c.carNo }</th>
+																	<c:choose>
+																		<c:when test="${c.carStatus eq 'N' }">
+																			<th><button class="btn btn-primary" id="able" name="ableBtn"
+																					data-toggle="modal" data-target="#myModal">대여가능</button></th>
+																		</c:when>
+																		<c:when test="${c.carStatus eq 'Y' }">
+																			<th><button class="btn btn-light" id="unable" name="unableBtn"
+																					data-toggle="modal" data-target="#returnModal">대여불가</button></th>
+																		</c:when>
+																	</c:choose>
 																</tr>
 															</c:forEach>
 														</tbody>
 													</table>
 												</div>
+		
+												<!-- 차량 예약 모달 -->
+												<div class="modal" id="myModal">
+													<div class="modal-dialog">
+														<div class="modal-content">
+
+															<div class="modal-header">
+																<h4 class="modal-title">차량 예약</h4>
+																<button type="button" class="close" data-dismiss="modal"></button>
+															</div>
+
+															<div class="modal-body" id="modal-body">
+																<form name="insertCar" method="post" action="#">
+
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">대여일자</label>
+																		<input type="text" class="form-control"
+																			id="reserveDate" value="${ today }" disabled>
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">차량번호</label>
+																		<input type="text" class="form-control"
+																			id="reserveCarNo" value="" disabled>
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">대여자</label>
+																		<input type="text" class="form-control"
+																			id="reserveMember" value="${ userName } ${ userJob }"
+																			disabled> <input type="hidden"
+																			id="reserveMemberNo" value="${ userNo }">
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">사용날짜</label>
+																		<input type="text" class="form-control" id="useDate">
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">내용</label>
+																		<textarea class="form-control" id="useNote"></textarea>
+																	</div>
+																</form>
+															</div>
+
+															<div class="modal-footer">
+																<button type="button" class="btn btn-primary"
+																	id="addCar" data-dismiss="modal">확인</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<!-- 차량 반납 모달 -->
+												<div class="modal" id="returnModal">
+													<div class="modal-dialog">
+														<div class="modal-content">
+
+															<div class="modal-header">
+																<h4 class="modal-title">예약 내역</h4>
+																<button type="button" class="close" data-dismiss="modal"></button>
+															</div>
+
+															<div class="modal-body" id="modal-body">
+																<form name="insertCar" method="post" action="#">
+
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">대여일자</label>
+																		<input type="text" class="form-control"
+																			id="reserveDate" value="${ today }" disabled>
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">차량번호</label>
+																		<input type="text" class="form-control"
+																			id="reserveCarNo" value="" disabled>
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">대여자</label>
+																		<input type="text" class="form-control"
+																			id="reserveMember" value="${ userName } ${ userJob }"
+																			disabled> <input type="hidden"
+																			id="reserveMemberNo" value="${ userNo }">
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">사용날짜</label>
+																		<input type="text" class="form-control" id="useDate">
+																	</div>
+																	<br>
+																	<div class="form-reservingCar">
+																		<label for="label-reservingCar" class="control-label">내용</label>
+																		<textarea class="form-control" id="useNote"></textarea>
+																	</div>
+																</form>
+															</div>
+
+															<div class="modal-footer">
+																<button type="button" class="btn btn-primary"
+																	id="addCar" data-dismiss="modal">확인</button>
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+												<!-- 차량 반납시 차량번호 저장용 //필요 없을듯. 체크 -->
+												<input type="hidden" id="returnCar">
+												
 											</div>
 										</div>
 									</div>
@@ -386,6 +247,104 @@ tr, th {
 	</div>
 
 	<script>
+		
+		$(function(){
+			$('#able').click(function(){
+				
+				let ableBtn = $('#able');
+					
+				//현재 행
+				let row = $(this).closest('tr');
+				let carNo = row.find('th:eq(1)').text();
+				console.log("차량번호 : ", carNo);
+				
+				$('#reserveCarNo').attr('value', carNo);
+
+			})
+		})
+		
+		//차량 사용일자 빈칸
+		/* $(function(){
+			var required = $('#useDate').filter('[required]:empty');
+			if(required.size() > 0) {
+				$('#useDate').focus();
+				$('#useDate').innerHTML = "사용일자를 입력하세요";
+			}
+		}) */
+		
+		//차량 대여 //
+		$(function(){
+			$('#addCar').click(function(){
+		
+				//예약할 차량번호
+				/* let ableBtn = $('#able');
+				let row = $(this).closest('tr');
+				let carNo = row.find('th:eq(1)').text();
+				console.log("차량번호 : ", carNo); */
+				
+				let reserveDate = $('#reserveDate').val();
+				let reserveCarNo = $('#reserveCarNo').val();
+				let memberNo = $('#reserveMemberNo').val(); //controller에서 사번
+				let useDate = $('#useDate').val();
+				let note = $('#useNote').val();
+					
+				console.log(reserveDate, memberNo, useDate, note);
+				
+				$.ajax({
+					url: "reservingCar",
+					data: {
+						reserveDate: reserveDate,
+						reserveCarNo: reserveCarNo,
+						useDate: useDate,
+						note: note
+					},
+					type: "post",
+					success: function(userNo){
+						console.log("성공");
+						alert("차량을 예약하였습니다.");
+						console.log(userNo);
+						console.log(${userNo})
+						location.reload();
+					},
+					error: function(){
+						console.log("통신 실패");
+					}
+				})
+				
+				/* if(userNo === ${userNo}){
+					$('#unable').text("반납");
+				}*/
+			})
+		})
+		
+		//차량 반납
+		$(function(){
+			$('#unable').click(function(){	
+				console.log("대여불가 클릭");
+				
+				//let unableBtn = $('#unable');
+				let row = $(this).closest('tr');
+				let reserveCarNo = row.find('th:eq(1)').text();
+				console.log("차량번호 : ", reserveCarNo);	
+				//$('#returnCar').attr('value', reserveCarNo);
+				
+				$.ajax({
+					url:"reserveDetails.do",
+					data:{
+						reserveCarNo: reserveCarNo
+					},
+					type:"post",
+					success: function(){
+						console.log("성공");
+					},
+					error: function(){
+						console.log("실패");
+					}
+				})
+			
+			})
+		})
+	
 	
 		//화면 진입시 value에 지정된 날짜 자동 조회
 		window.onload = function(){

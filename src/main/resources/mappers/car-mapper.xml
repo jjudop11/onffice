@@ -44,6 +44,54 @@
 		FROM CAR
 		WHERE CAR_NO = #{carNo}
 	</delete>
+	
+	<!-- 차량 예약 -->
+	<insert id="reserveingCar" parameterType="Car">
+		INSERT INTO
+		RESERVE_CAR
+		VALUES
+		(CAR_RESERVE_SEQ.NEXTVAL, #{reserveDate}, #{reserveCarNo}, #{reserveMNo}, #{useDate}, #{useNote}, #{cNo})
+	</insert>
+	
+	<update id="updateStatus" parameterType="string">
+		UPDATE CAR
+		SET CAR_STATUS = 'Y'
+		WHERE CAR_NO = #{reserveCarNo}
+	</update>
+	
+	<!-- <select id="selectReserveMNo" parameterType="string" resultType="Car">
+		SELECT *
+		FROM RESERVE_CAR
+		WHERE RESERVE_CAR_NO = #{reserveCarNo}
+	</select>  -->
+	
+	<update id="updateReturn" parameterType="string">
+		UPDATE CAR
+		SET CAR_STATUS = 'N'
+		WHERE CAR_NO = #{reserveCarNo}
+	</update>
+	
+	<select id="selectReserveCar" parameterType="string" resultType="Car">
+		SELECT *
+		FROM RESERVE_CAR
+		WHERE RESERVE_CAR_NO = #{reserveCarNo}
+	</select>
+	
+	<select id="selectUserName" parameterType="string" resultType="string">
+		SELECT M_NAME
+		FROM MEMBER
+		WHERE M_NO = #{userNo}
+	</select>
+	
+	<select id="selectUserJobName" parameterType="string" resultType="string">
+		SELECT J_NAME
+		FROM JOB
+		WHERE J_NO = (SELECT J_NO
+		              FROM MEMBER
+		              WHERE MEMBER.M_NO = #{userNo})
+	</select>
+	
+	
 </mapper>
 
 
