@@ -107,19 +107,17 @@
 	
 	<script>
 	
-		// 
-		$(document).ready(function(){
-
-			let form = document.getElementById("foNo");
-			console.log(foNo)
-			
-			if(foNo == 10){
-				$(this).innerText("휴가신청서");
-			}
-			
-			console.log($("#OngoingListView tbody tr").children().eq(0).text())
-			console.log($("#OngoingListView tbody tr").children().eq(1).text())
-	    });
+		// 서식이름 출력 
+		if($("#OngoingListView tbody tr").children().eq(1).text() == 10){
+			$("#foNo").text("휴가신청서");
+		} else if($("#OngoingListView tbody tr").children().eq(1).text() == 20){
+			$("#foNo").text("사업기획서");
+		} else {
+			$("#foNo").text("지출결의서");
+		}
+		
+		console.log($("#OngoingListView tbody tr").children().eq(0).text())
+		console.log($("#OngoingListView tbody tr").children().eq(1).text())
 		
 		// 페이지 이동 
     	$(function(){
