@@ -51,16 +51,14 @@ public class ApprovalController {
 	
 	// 기안작성 결재요청 
 	@RequestMapping(value = "insertApproval.do", method = RequestMethod.POST)
-	public String insertApproval(Approval ap, ApprovalLine apline, FormAtt att,
-			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm, 
-			@RequestParam(value="apprArr[]", required = false) List<String> apprArr, 
+	public String insertApproval(Approval ap, ApprovalLine apline, String aplineNo, FormAtt att,
+			DayoffForm doForm, ProposalForm prForm, PaymentForm payForm,  
 			HttpServletRequest request, // 뷰단에서 컨트롤러로 데이터 전달 
 			@RequestParam(name = "upfile", required = false) MultipartFile file) { // 파일 선택 업로드
 		
 		System.out.println("CONTROLLER : " + ap);
 		System.out.println("CONTROLLER : " + apline);
 		System.out.println("CONTROLLER : " + doForm);
-		System.out.println("CONTROLLER : " + apprArr);
 		
 		approvalService.insertApproval(ap); // 전자결재문서 
 		approvalService.insertApprovalLine(apline); // 결재선
@@ -171,7 +169,7 @@ public class ApprovalController {
 	
 	// 결재진행 디테일뷰 이동 
 	@RequestMapping("approvalOngoingDetailView")
-	public ModelAndView approvalOngoingDetailView(int apNo, int foNo, ModelAndView mv) {
+	public ModelAndView approvalOngoingDetailView(int apNo, String foNo, ModelAndView mv) {
 		System.out.println("CONTROLLER : " + apNo);
 		System.out.println("CONTROLLER : " + foNo);
 		
@@ -180,22 +178,22 @@ public class ApprovalController {
 		System.out.println("CONTROLLER apStatus : " + apStatus);
 		
 		// 서식번호에 따라 다른 데이터 전달
-		if(foNo == 10) {
+		if(foNo.equals("휴가신청서")) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 10);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
-		} else if(foNo == 20) {
+		} else if(foNo.equals("사업기획서")) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 20);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
-		} else if(foNo == 30) {
+		} else if(foNo.equals("지출결의서")) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 30);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
 		}
@@ -205,9 +203,6 @@ public class ApprovalController {
 		mv.addObject("formAtt", formAtt);
 		
 		// 결재선 
-//		ApprovalLine apLine = approvalService.selectApprovalOngoingApLine(apNo);
-//		System.out.println("CONTROLLER : " + apLine);
-//		ArrayList<Member> apList = approvalService.selectApprovalOngoingApLine(apNo);
 		Member apList = approvalService.selectApprovalOngoingApLine(apNo);
 		mv.addObject("jName", apList.getJName());
 		mv.addObject("mName", apList.getMName());
@@ -239,6 +234,11 @@ public class ApprovalController {
 			mv.addObject("foNo", foNo);
 			mv.addObject("apNo", apNo);
 		}
+		
+		// 결재선 
+		Member apList = approvalService.selectApprovalOngoingApLine(apNo);
+		mv.addObject("jName", apList.getJName());
+		mv.addObject("mName", apList.getMName());
 		
 		mv.setViewName("approval/approvalUpdateForm");
 		
@@ -290,8 +290,19 @@ public class ApprovalController {
 			deleteFile(orgChangeName, request);
 		}
 		
+		// 결재여부 검사 
+		int apStatus = approvalService.selecetApprovalStatus(apNo);
+		mv.addObject("apStatus", apStatus);
+		
+		// 결재선 
+		Member apList = approvalService.selectApprovalOngoingApLine(apNo);
+		mv.addObject("jName", apList.getJName());
+		mv.addObject("mName", apList.getMName());
+		
 		mv.addObject("foNo", foNo);
-		mv.addObject("apNo", apNo).setViewName("redirect:approvalOngoingDetailView.do");
+//		mv.addObject("apNo", apNo).setViewName("redirect:approvalOngoingDetailView.do");
+		mv.addObject("apNo", apNo);
+		mv.setViewName("approval/approvalOngoingDetailView");
 		
 		return mv; 
 		
@@ -352,24 +363,25 @@ public class ApprovalController {
 	
 	// 결재요청 디테일뷰로 이동 
 	@RequestMapping("approvalRequestDetailView")
-	public ModelAndView approvalRequestDetailView(int apNo, int foNo, ModelAndView mv) {
+	public ModelAndView approvalRequestDetailView(int apNo, String foNo, ModelAndView mv) {
 		System.out.println("CONTROLLER : " + apNo);
 		System.out.println("CONTROLLER : " + foNo);
 		
 		// 서식번호에 따라 다른 데이터 전달
-		if(foNo == 10) {
+		if(foNo.equals("휴가신청서")) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
-		} else if(foNo == 20) {
+			mv.addObject("foNo", 10);
+		} else if(foNo.equals("사업기획서")) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
-		} else if(foNo == 30) {
+			mv.addObject("foNo", 20);
+		} else if(foNo.equals("지출결의서")) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
+			mv.addObject("foNo", 30);
 		}
 		
-		//
-		mv.addObject("foNo", foNo);
 		mv.addObject("apNo", apNo);
 		
 		// 작성자 정보 
@@ -495,7 +507,7 @@ public class ApprovalController {
 	
 	// 결재완료 디테일뷰 이동 
 	@RequestMapping("approvalCompleteDetailView.do")
-	public ModelAndView approvalCompleteDetailView(int apNo, int foNo, ModelAndView mv) {
+	public ModelAndView approvalCompleteDetailView(int apNo, String foNo, ModelAndView mv) {
 		System.out.println("CONTROLLER : " + apNo);
 		System.out.println("CONTROLLER : " + foNo);
 		
@@ -504,22 +516,22 @@ public class ApprovalController {
 		System.out.println("CONTROLLER apStatus : " + apStatus);
 		
 		// 서식번호에 따라 다른 데이터 전달
-		if(foNo == 10) {
+		if(foNo.equals("휴가신청서")) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 10);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
-		} else if(foNo == 20) {
+		} else if(foNo.equals("사업기획서")) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 20);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
-		} else if(foNo == 30) {
+		} else if(foNo.equals("지출결의서")) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 30);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
 		}
@@ -529,9 +541,6 @@ public class ApprovalController {
 		mv.addObject("formAtt", formAtt);
 		
 		// 결재선 
-//			ApprovalLine apLine = approvalService.selectApprovalOngoingApLine(apNo);
-//			System.out.println("CONTROLLER : " + apLine);
-//			ArrayList<Member> apList = approvalService.selectApprovalOngoingApLine(apNo);
 		Member apList = approvalService.selectApprovalOngoingApLine(apNo);
 		mv.addObject("jName", apList.getJName());
 		mv.addObject("mName", apList.getMName());
@@ -569,7 +578,7 @@ public class ApprovalController {
 	
 	// 결재내역 디테일뷰 이동 
 	@RequestMapping("approvalAllowDetailView.do")
-	public ModelAndView approvalAllowDetailView(int apNo, int foNo, ModelAndView mv) {
+	public ModelAndView approvalAllowDetailView(int apNo, String foNo, ModelAndView mv) {
 		System.out.println("CONTROLLER : " + apNo);
 		System.out.println("CONTROLLER : " + foNo);
 		
@@ -578,22 +587,22 @@ public class ApprovalController {
 		System.out.println("CONTROLLER apStatus : " + apStatus);
 		
 		// 서식번호에 따라 다른 데이터 전달
-		if(foNo == 10) {
+		if(foNo.equals("휴가신청서")) {
 			DayoffForm dayoffForm = approvalService.selectApprovalOngoingDo(apNo);
 			mv.addObject("dayoffForm", dayoffForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 10);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
-		} else if(foNo == 20) {
+		} else if(foNo.equals("사업기획서")) {
 			ProposalForm prForm = approvalService.selectApprovalOngoingPr(apNo);
 			mv.addObject("prForm", prForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 20);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
-		} else if(foNo == 30) {
+		} else if(foNo.equals("지출결의서")) {
 			PaymentForm payForm = approvalService.selectApprovalOngoingPay(apNo);
 			mv.addObject("payForm", payForm);
-			mv.addObject("foNo", foNo);
+			mv.addObject("foNo", 30);
 			mv.addObject("apNo", apNo);
 			mv.addObject("apStatus", apStatus);
 		}

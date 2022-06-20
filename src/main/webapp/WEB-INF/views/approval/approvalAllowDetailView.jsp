@@ -134,21 +134,21 @@
 									<label for="dayoffType">반차 여부</label>
 									<div class="form-check"> 
                                         <input class="form-check-input" type="radio" name="doType"
-                                            id="flexRadioDefault1" value="10"> 
+                                            id="flexRadioDefault1" value="10" onclick="return(false);"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             일차
                                         </label>
                                    </div>
                                    <div class="form-check"> 
                                         <input class="form-check-input" type="radio" name="doType"
-                                            id="flexRadioDefault1" value="20"> 
+                                            id="flexRadioDefault1" value="20" onclick="return(false);"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             오전반차
                                         </label>
                                    </div>
                                    <div class="form-check"> 
                                         <input class="form-check-input" type="radio" name="doType"
-                                            id="flexRadioDefault1" value="30"> 
+                                            id="flexRadioDefault1" value="30" onclick="return(false);"> 
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             오후반차
                                         </label>

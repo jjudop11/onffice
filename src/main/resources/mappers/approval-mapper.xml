@@ -405,7 +405,7 @@
 	<select id="selectCompleteListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM APPROVAL
-		WHERE AP_STATUS = 'Y'
+		WHERE AP_STATUS IS NOT NULL
 	</select>
 	
 	<select id="selectCompleteList" parameterType="ApList" resultMap="apListResultSet">
@@ -464,7 +464,7 @@
 		FROM APPROVAL A 
 		JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
 		WHERE A.AP_STATUS = 'Y'
-		AND B.APLINE_NO = 1
+		AND B.APLINE_NO = #{aplineNo}
 		AND B.APLINE_STATUS IS NOT NULL
 	</select>
 	

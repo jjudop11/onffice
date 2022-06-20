@@ -405,9 +405,6 @@
 	        });
 	    });
 		
-		let apprArr = new Array(); // 결재선 번호 담을 배열 
-		/* let j = 0; */
-		
 		// 컨트롤러에 검색값 전달하고 해당하는 정보 리스트로 뿌려줌
 		$('#search').click(function(){
 			let searchName = $('#searchName').val();
@@ -493,34 +490,17 @@
 								jName5.innerText = JSON.stringify(jName).replace(/\"/gi, "");
 							} 
 							
-							apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
+							$("input[name='aplineNo']").val(mNo)
+							
+							/* apprArr.push(mNo); // 테이블에 추가될때마다 배열에 결재선 사원번호 담기 
 							console.log(apprArr) 
-							/* $("input[name='aplineNo[]']").eq(j).val(mNo)
+							$("input[name='aplineNo[]']").eq(j).val(mNo)
 							j++; */
 							/* $("input[name='aplineNo']").val(mNo); */
 							
 							$('.modal').modal('hide'); // 모달 닫기 
 							$('#mList').empty(); // html 요소 초기화
 							$('#searchName').val(''); // 인풋 박스 초기화 
-							
-							// 결재하기 버튼 눌렀을 때 결재선 배열도 전달 
-							$("#insertAppr").click(function(){
-								alert("컨트롤러에 배열 전달");
-								apprArr.submit();
-								/* $.ajax({
-					               url : "insertApproval.do",
-					               type : "post",
-					               data : { 
-					            	   apprArr : apprArr
-					            	   },
-					               success : function(){ 
-					            	   alert("배열 전달 성공")
-					               },
-					               error : function(){
-					            	   alert("배열 전달 실패")
-					               }
-								}) */
-							})
 							
 						})
 						
@@ -532,12 +512,6 @@
                }
             })
 		})
-		
-		//
-		/* $("#insertAppr").click(function(){
-			console.log(apprArr)
-			$("aplineNo").val(apprArr);
-		});  */
 		
 	</script>
 	
