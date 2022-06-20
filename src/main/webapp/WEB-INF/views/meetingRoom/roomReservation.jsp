@@ -119,8 +119,7 @@ tr, th {
 			</header>
 
 			<div class="page-heading">
-				<h2>MeetingRoom Reservation</h2>
-				<h5>회의실 예약</h5>
+				<h3>회의실 예약</h3>
 			</div>
 
 			<div class="card">
@@ -188,9 +187,8 @@ tr, th {
 																		              } else {
 																		            	  min = '00';
 																		              }
-																		              
-																		              document
-																		                  .write('<option value=' + hour + ':' + min + '>'
+																		            
+																		              document.write('<option value=' + hour + ':' + min + '>'
 																		                      + hour
 																		                      + ':'
 																		                      + min
@@ -214,9 +212,8 @@ tr, th {
 																		              } else {
 																		            	  min = '00';
 																		              }
-																		              
-																		              document
-																		                  .write('<option value=' + hour + ':' + min + '>'
+																		                       
+																		              document.write('<option value=' + hour + ':' + min + '>'
 																		                      + hour
 																		                      + ':'
 																		                      + min
@@ -356,9 +353,9 @@ tr, th {
 														<thead id="meetingroomView-head">
 															<tr>
 																<th>No</th>
-																<th>MettingRoom</th>
-																<th>Capacity</th>
-																<th>Note</th>
+																<th>회의실</th>
+																<th>수용인원</th>
+																<th>비고</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -390,34 +387,31 @@ tr, th {
 	
 		//화면 진입시 value에 지정된 날짜 자동 조회
 		window.onload = function(){
-			$("#searchDateBtn").trigger('click');
+			$('#searchDateBtn').trigger('click');
 		}
 		
 		//예약된 일정 화면에 뿌리기
 		$(function() {
-			$("#searchDateBtn").click(function() {
+			$('#searchDateBtn').click(function() {
 	
-				let date = $("#datePicker").val();
+				let date = $('#datePicker').val();
 				console.log(date);
 				$.ajax({
-					url : "reservedRoomList.do",
+					url : 'reservedRoomList.do',
 					data : {
 						date : date
 					},
-					type : "post",
-					
-					//한글 깨짐 해결하기
-					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					type : 'post',
 					success : function(data, statusText, jqXHR) {
-						
+					
 						const obj = JSON.parse(data);
-						const cells = $("#roomReserveTable tbody th");
+						const cells = $('#roomReserveTable tbody th');
 
 						let offset = 0;
 
-						cells.css("background", "");
-						cells.removeData("st-time");
-						cells.removeData("ed-time");
+						cells.css('background', '');
+						cells.removeData('st-time');
+						cells.removeData('ed-time');
 
 						for (const room of obj.rooms){					
 							for (const time of room.times){
@@ -451,13 +445,12 @@ tr, th {
 									item.data('ed-time', edTime);
 									item.prop('title', stTime + ' ~ ' + edTime)
 								}
-							}
-							
-							offset += 29; //한 행에 29칸임, +29 해서 한칸씩 내려갈 것
+							}							
+							offset += 29; //한 행에 29칸, +29 해서 한칸씩 내려갈 것
 						}
 					},
 					error : function(error) {
-						alert("조회에 실패하였습니다.");
+						alert('조회에 실패하였습니다.');
 					}
 				})
 					
@@ -466,38 +459,50 @@ tr, th {
 
 		//예약하기
 		$(function() {
-			$("#reserveRoom").click(function(e) {
-				let date = $("#modal-datePicker").val();
-				let startTime = $("#startTime").val();
-				let endTime = $("#endTime").val();
-				let selectRoom = $("#selectRoom").val();
-				let title = $("#reservetitle").val();
-							
-				$.ajax({
-					url : "reserveRoom.do",
-					data : {
-						date : date,
-						startTime : startTime,
-						endTime : endTime,
-						selectRoom : selectRoom,
-						title: title
-					},
-					type : "post",
+			$('#reserveRoom').click(function(e) {
+				let date = $('#modal-datePicker').val();
+				let startTime = $('#startTime').val();
+				let endTime = $('#endTime').val();
+				let selectRoom = $('#selectRoom').val();
+				let title = $('#reservetitle').val();
 					
-					//예약 완료시에 datepicker에 현재날짜 고정된채로 화면 reload 필요
-					success: function(result){
-						if(result > 0){
-							alert("예약이 완료되었습니다.");
-							$("#searchDateBtn").trigger('click');
-						}else if(result == -1){
-							alert("이미 예약된 시간입니다.")
-						}		
-					},
-					error: function(error){
-						alert("예약에 실패하였습니다. 예약정보를 입력해주세요.")
-					}
-				})
-				
+				if(date.length == 0){
+					alert('날짜를 선택해주세요.');
+					$('#modal-datePicker').focus();
+					return false;
+					
+				}else if(title.length == 0){
+					alert('회의명을 입력해주세요.');
+					$('#reservetitle').focus();
+					return false;
+					
+				}else{
+					$.ajax({
+						url: 'reserveRoom.do',
+						data: {
+							date : date,
+							startTime : startTime,
+							endTime : endTime,
+							selectRoom : selectRoom,
+							title: title
+						},
+						type: 'post',
+						
+						//예약 완료시에 datepicker에 현재날짜 고정된채로 화면 reload 필요
+						success: function(result){
+							if(result > 0){
+								alert('예약이 완료되었습니다.');
+								$('#searchDateBtn').trigger('click');
+							}else if(result == -1){
+								alert('이미 예약된 시간입니다.');
+							}		
+						},
+						error: function(error){
+							alert('예약에 실패하였습니다. 예약정보를 입력해주세요.');
+						}
+					})
+				}
+						
 				$('#myModal').modal('hide');
 				e.preventDefault(); //페이지 새로고침되지 않게 //새로고침되면 datepicker 초기화됨
 			})
@@ -516,52 +521,57 @@ tr, th {
 		//예약시작시간보다 종료시간이 작을 수 없음
 		$(function(){
 			const fn = function(){			
-				let startTime = $("#startTime").val();
-				let endTime = $("#endTime").val();
+				let startTime = $('#startTime').val();
+				let endTime = $('#endTime').val();
 				
 				$.ajax({
-					url: "timeCheck.do",
+					url: 'timeCheck.do',
 					data: {
 						startTime: startTime,
 						endTime: endTime						
 					},
-					type: "post",
+					type: 'post',
 					success:function(result){
 						if(result > 0){
-							console.log("OK")
-							$("#reserveRoom").attr("disabled", false);
+							console.log('OK');
+							$('#reserveRoom').attr('disabled', false);
+							
 						}else if(result == 0){
-							alert("시작시간과 종료시간은 같을 수 없습니다.");
-							//$("#reserveRoom").attr("disabled", true)
+							alert('시작시간과 종료시간은 같을 수 없습니다.');
+							//return false;
+							$('#reserveRoom').attr('disabled', true);
+							
 						}else{
-							alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-							//$("#reserveRoom").attr("disabled", true)
+							alert('종료시간은 시작시간보다 빠를 수 없습니다.');
+							//return false;
+							$('#reserveRoom').attr('disabled', true);
 						}
 					},
 					error: function(){
-						console.log("ajax 통신 실패")
+						console.log('통신 실패');
 					}
 				})
 			};
 
-			$("#startTime").on("change", fn); // 시작시간이 선택 될 때 이벤트 발생
-			$("#endTime").on("change", fn); // 종료시간이 선택 될 때 이벤트 발생
+			$('#startTime').on('change', fn); // 시작시간 선택시 이벤트 발생
+			$('#endTime').on('change', fn); // 종료시간 선택시
+			//$('#reserveRoom').on('click', fn); //예약버튼 클릭시 
 		}) 
 				
 		//에약 상세로 진입
 		$(function(){
-			$("#roomReserveTable tbody th").click(function(){
+			$('#roomReserveTable tbody th').click(function(){
 				const item = $(this);
 				const id = item.attr('id');
-				const roomno = item.parent().data("roomno");
+				const roomno = item.parent().data('roomno');
 				const stTime = item.data('st-time');
 				const edTime = item.data('ed-time');
 		
-				const date = $("#datePicker").val();
+				const date = $('#datePicker').val();
 				
-				if (typeof id == "undefined" || id == "" || id == null ||
-				    typeof stTime == "undefined" || stTime == "" || stTime == null ||
-				    typeof edTime == "undefined" || edTime == "" || edTime == null){
+				if (typeof id == 'undefined' || id == "" || id == null ||
+				    typeof stTime == 'undefined' || stTime == "" || stTime == null ||
+				    typeof edTime == 'undefined' || edTime == "" || edTime == null){
 					
 					return;
 				}else{
@@ -572,21 +582,21 @@ tr, th {
 					console.log(edTime, typeof(edTime))
 					console.log(date, typeof(date))
 									
-					$("input[name=dateD]").attr("value", date);
-					$("input[name=roomNoD]").attr("value", roomno);
-					$("input[name=startTimeD]").attr("value", stTime);
+					$('input[name=dateD]').attr('value', date);
+					$('input[name=roomNoD]').attr('value', roomno);
+					$('input[name=startTimeD]').attr('value', stTime);
 					//console.log($("#dateD").val())
 					//console.log($("#roomNoD").val())
 					//console.log($("#startTimeD").val())		
-					$("#hiddenForm").submit();
+					$('#hiddenForm').submit();
 				}
 				
 			})
 		}) 
 		
 		//모달 닫을 시 내용 초기화
-		$(".modal").on("hidden.bs.modal", function(e){
-			$(this).find("form")[0].reset();
+		$('.modal').on('hidden.bs.modal', function(e){
+			$(this).find('form')[0].reset();
 		})
 
 	</script>

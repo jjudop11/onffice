@@ -122,7 +122,7 @@ tr, th {
 															<ul class="pagination pagination-primary">
 																<c:choose>
 																	<c:when test="${ pi.currentPage ne 1 }">
-																		<li class="page-item"><a class="page-link" href="roomSetting.do?currentPage=${ pi.currentPage-1 }"><span aria-hidden="true"><i class="bi bi-chevron-left"></i></span></a>
+																		<li class="page-item"><a class="page-link" href="carSetting.do?currentPage=${ pi.currentPage-1 }"><span aria-hidden="true"><i class="bi bi-chevron-left"></i></span></a>
 																		</li>
 																	</c:when>
 																	<c:otherwise>
@@ -134,7 +134,7 @@ tr, th {
 																<c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
 																	<c:choose>
 																		<c:when test="${ pi.currentPage ne p }">
-																			<li class="page-item" id="nowPage"><a class="page-link" href="roomSetting.do?currentPage=${ p }">${ p }</a></li>
+																			<li class="page-item" id="nowPage"><a class="page-link" href="carSetting.do?currentPage=${ p }">${ p }</a></li>
 																		</c:when>
 																		<c:otherwise>
 																			<li class="page-item disalbed" id="nowPage" ><a class="page-link" href="">${ p }</a></li>
@@ -144,10 +144,10 @@ tr, th {
 																
 																<c:choose>
 																	<c:when test="${ pi.currentPage ne pi.maxPage }">
-																		<li class="page-item"><a class="page-link" href="roomSetting.do?currentPage=${ pi.currentPage + 1 }"><span aria-hidden="true"><i class="bi bi-chevron-right"></i></span></a></li>
+																		<li class="page-item"><a class="page-link" href="carSetting.do?currentPage=${ pi.currentPage + 1 }"><span aria-hidden="true"><i class="bi bi-chevron-right"></i></span></a></li>
 																	</c:when>
 																	<c:otherwise>
-																		<li class="page-item disabled"><a class="page-link" href="roomSetting.do?currentPage=${ pi.currentPage + 1 }"><span aria-hidden="true"><i class="bi bi-chevron-right"></i></span></a></li>
+																		<li class="page-item disabled"><a class="page-link" href="carSetting.do?currentPage=${ pi.currentPage + 1 }"><span aria-hidden="true"><i class="bi bi-chevron-right"></i></span></a></li>
 																	</c:otherwise>
 																</c:choose>												
 															</ul>
@@ -190,7 +190,7 @@ tr, th {
 																		</div>
 
 																		<div class="modal-footer">
-																			<button type="button" class="btn btn-primary" id="addCar" data-dismiss="modal">확인</button>
+																			<button type="button" class="btn btn-primary" id="addCar" data-dismiss="modal">등록</button>
 																		</div>
 																	</div>
 																</div>
@@ -296,7 +296,7 @@ tr, th {
 			
 		//차량번호 중복체크
 		$(function(){
-			let carNoCheck = $("#car_no");
+			let carNoCheck = $('#car_no');
 			
 			carNoCheck.keyup(function(){		
 					
@@ -326,13 +326,52 @@ tr, th {
 			})
 		})
 		
+		//차량번호 정규식
+		/* $(function(){
+			$('#car_no').blur(function(){
+				
+				let carNo = /^\d{2,3}[가-힣]{1}\s{1}\d{4}$/;
+				
+				if((carNo).test($('#car_no').val())){
+					console.log("true");
+					$('#car_no_check').css('color', 'green').text("올바른 형식입니다.");
+					$('#addCar').attr("disabled", false);
+				}else{
+					$('#car_no_check').css('color', 'red').text("올바른 형식이 아닙니다.");
+					$('#addCar').attr("disabled", true);
+					//return false;
+				}
+			})
+		}) */
+		
+		
+		//차량번호 중복검사 & 형식 검사
 		function carNoCheckValidate(num){
 			if(num > 0){
 				$("#car_no_check").css("color", "red").text("차량번호는 중복될 수 없습니다.");
+				$('#addCar').attr("disabled", true);
+			
 			}else if(num == 0){
 				$("#car_no_check").css("color", "green").text("사용가능한 차량번호입니다.");
+				
+				$('#car_no').blur(function(){
+					
+					let carNo = /^\d{2,3}[가-힣]{1}\s{1}\d{4}$/;
+					
+					if((carNo).test($('#car_no').val())){
+						console.log("true");
+						$('#car_no_check').css('color', 'green').text("올바른 형식입니다.");
+						$('#addCar').attr("disabled", false);
+					}else{
+						$('#car_no_check').css('color', 'red').text("올바른 형식이 아닙니다.");
+						$('#addCar').attr("disabled", true);
+						//return false;
+					}
+				})
 			}
 		}
+		
+		
 		
 		//모달 닫을 시 내용 초기화
 		$(".modal").on("hidden.bs.modal", function(e) {

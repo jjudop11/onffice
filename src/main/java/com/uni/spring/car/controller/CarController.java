@@ -25,6 +25,8 @@ import com.uni.spring.common.PageInfo;
 import com.uni.spring.common.Pagination;
 import com.uni.spring.member.model.dto.Member;
 
+import ch.qos.logback.classic.Logger;
+
 @Controller
 @SessionAttributes("loginUser")
 public class CarController {
@@ -84,15 +86,16 @@ public class CarController {
 		System.out.println("차량예약 : " + result);
 		carService.updateStatus(reserveCarNo); //해당 번호를 가진 차량 상태 업데이트
 		
-		return new GsonBuilder().create().toJson(userNo);
+		//return new GsonBuilder().create().toJson(userNo);
+		return "";
 	}
 	
 	//차량대여 상세정보 조회
-	@RequestMapping("reserveDetails.do")
+	@RequestMapping(value="/reserveDetails.do", produces="application/text; charset=UTF-8")
 	@ResponseBody
 	public String reserveDetails(@RequestParam("reserveCarNo") String reserveCarNo, HttpSession session) {
 		
-		//해당 차량번호로 예약된 내역 하나 select
+		//해당 차량번호로 예약된 내역 중 가장 최근것 하나 select 
 		ReserveCar car = carService.selectReserveCar(reserveCarNo);
 		String userNo = car.getReserveMNo();
 		String userName = carService.selectUserName(userNo);
@@ -101,34 +104,54 @@ public class CarController {
 		JsonObject carObj = new JsonObject();
 		carObj.addProperty("reserveDate", car.getReserveDate());
 		carObj.addProperty("reserveCarNo", car.getReserveCarNo());
+		carObj.addProperty("userNo", userNo);
 		carObj.addProperty("reserveMName", userName);
 		carObj.addProperty("reserveJName", userJobName);
-		carObj.addProperty("userDate", car.getUseDate());
-		carObj.addProperty("userNote", car.getUseNote());
+		carObj.addProperty("useDate", car.getUseDate());
+		carObj.addProperty("useNote", car.getUseNote());
+		
+		/* JsonObject obj = carObj;
+		String str = obj.toString();
+		System.out.println("str : " + str); */
 		
 		String str = carObj.toString();
+		System.out.println("str : " + str);
 		
-		return str;
+		return str; 
 		
-		/*Member loginUser = (Member) session.getAttribute("loginUser");
-		String userNo = loginUser.getMNo();
-		
-		ReserveCar car = carService.selectReserveMNo(reserveCarNo);
-		if(car.getReserveMNo().equals(userNo)) {
-			//예약자와 로그인유저가 동일인이면 반납 진행
-			carService.updateReturn(reserveCarNo);
-			return "1";			
-		
-		}else {
-			return "-1";
-		}
-			
-		//return "";*/
 	}
-
-	//차량반납. 받아온 차량넘버로 누가 예약했는지 조회후, 예약자랑 로그인유저랑 동일인인지 확인해야함
 	
+	//차량 예약내용 수정
+	//가장 최근 예약내역 불러와서 데이터 수정하기
+	@RequestMapping("updateReserveCar.do")
+	@ResponseBody
+	public String updateReserveCar(@RequestParam("reserveCarNo") String reserveCarNo, @RequestParam("updateUseDate") String updateUseDate, @RequestParam("updateUseNote") String updateUseNote, HttpSession session) {
+		
+		//해당 차량번호로 예약된 내역 중 가장 최근것 하나 select 
+		ReserveCar car = carService.selectReserveCar(reserveCarNo);
+		int reserveNo = car.getReserveNo();
+		
+		ReserveCar c = new ReserveCar();
+		c.setReserveNo(reserveNo);
+		c.setUseDate(updateUseDate);
+		c.setUseNote(updateUseNote);
+		
+		int result = carService.updateReserveCar(c);
+		System.out.println("수정완료 : " + result);
+			
+		return ""; 
+		
+	}
 	
+	//차량반납
+	@RequestMapping("returnCar.do")
+	@ResponseBody
+	public String returnCar(@RequestParam("reserveCarNo") String reserveCarno) {
+		
+		carService.updateReturn(reserveCarno);
+		
+		return "";
+	}
 	
 	
 	// 차량 관리 진입
@@ -144,7 +167,7 @@ public class CarController {
 
 		// 페이징 처리
 		int listCount = carService.selectCarListCount(userCNo);
-		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 5);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, 10, 10);
 		model.addAttribute("pi", pi);
 
 		ArrayList<Car> carList = carService.selectCarList(pi, userCNo);

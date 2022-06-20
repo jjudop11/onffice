@@ -111,6 +111,12 @@ public class CarServiceImple implements CarService {
 		return carDao.selectUserJobName(sqlsession, userNo);
 	}
 
+	@Override
+	public int updateReserveCar(ReserveCar c) {
+		// TODO Auto-generated method stub
+		return carDao.updateReserveCar(sqlsession, c);
+	}
+
 	
 
 }

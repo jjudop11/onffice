@@ -39,6 +39,20 @@
 		ORDER BY ROOM_NO
 	</select>
 	
+	<!-- 회의실정보 수정용 정보조회 -->
+	<select id="selectRoomInfo" parameterType="string" resultType="MeetingRoom">
+		SELECT *
+		FROM MEETING_ROOM
+		WHERE ROOM_NO = #{roomNo}
+	</select>
+	
+	<!-- 회의실정보 수정 -->
+	<update id="modifyRoom" parameterType="MeetingRoom">
+		UPDATE MEETING_ROOM
+		SET ROOM_NAME = #{roomName}, ROOM_CAPA = #{roomCapa}, ROOM_NOTE = #{roomNote}
+		WHERE ROOM_NO = #{roomNo}
+	</update>
+	
 	<!-- 회의실 삭제 -->
 	<delete id="deleteMeetingRoom" parameterType="string">
 		DELETE
@@ -81,7 +95,7 @@
 	
 	<!-- isValidTime -->
 	<select id="checkReservedRooms" parameterType="ReserveRoom" resultType="ReserveRoom">
-		SELECT ROOM_NO, START_TIME, END_TIME
+		SELECT RESERVE_NO, ROOM_NO, START_TIME, END_TIME
 		FROM RESERVE_ROOM
 		WHERE ROOM_NO = #{roomNo}
 		AND RESERVE_DATE = #{reserveDate}
@@ -94,6 +108,7 @@
 		AND RESERVE_DATE = #{reserveDate}
 	</select>
 	
+	<!-- 해당 날짜, 회의 시작시간으로 예약된 회의실 select -->
 	<select id="selectRoom" parameterType="ReserveRoom" resultType="ReserveRoom">
 		SELECT *
 		FROM RESERVE_ROOM

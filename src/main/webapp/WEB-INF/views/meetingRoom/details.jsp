@@ -82,8 +82,7 @@
 			</header>
 
 			<div class="page-heading">
-				<h2>Reservation Details</h2>
-				<h5>예약 상세</h5>
+				<h3>예약 상세</h3>
 			</div>
 
 			<div class="page-content">
@@ -127,8 +126,7 @@
 										</div> -->
 
 
-										<form id="detailView" action="deleteReservation.do"
-											method="post">
+										<form id="detailView" action="deleteReservation.do" method="post">
 
 											<!-- hidden태그 value에 예약번호 받음. 수정, 삭제에 사용 -->
 											<input type="hidden" name="reserveNo" id="reserveNo" value="${ room.reserveNo }">
@@ -236,15 +234,15 @@
 
 											<div id="btns"> 
 												<button class="btn btn-primary" type="button" id="updateReservation">수정</button>
-												<button class="btn btn-danger" type="submit">삭제</button>
-												<button class="btn btn-light" type="button">돌아가기</button>
+												<button class="btn btn-danger" type="submit">취소</button>
+												<button class="btn btn-light" type="button" onclick="location.href='roomReservingForm.do'">돌아가기</button>
 											</div>
 										</form>
 										
-										<!-- 수정버튼 누르면 여기 인풋태그에 값 들어가게  -->
+										<!-- 수정버튼 누르면 input태그에 값 들어가게  -->
 										<form id="updateForm" action="updateReservation.do" method="post">
 											<input type="hidden" name="reserveNoUpdate">
-											<input type="hidden" name="selectRoomUpdate">
+											<input type="hidden" name="selectRoomUpdate"> <!-- 회의실명 -->
 											<input type="hidden" name="dateUpdate">
 											<input type="hidden" name="startTimeUpdate">
 											<input type="hidden" name="endTimeUpdate">
@@ -263,7 +261,7 @@
 	</div>
 
 	<script>
-		//종일 체크박스 만들어보자
+		//종일 체크박스
 		/* $(function() {
 			$("#allTime").click(function() {
 				if ($("#allTime").is(":checked")) {
@@ -278,9 +276,9 @@
 		window.onload = function() {
 
 			//예약된 시작시간 잘 넘어옴
-			let startTime = "${ room.startTime }";
-			let endTime = "${ room.endTime }";
-			let roomName = "${ roomName }"
+			let startTime = '${ room.startTime }';
+			let endTime = '${ room.endTime }';
+			let roomName = '${ roomName }';
 			
 			console.log(startTime, endTime);
 
@@ -288,30 +286,17 @@
 			$('#endTime').val(endTime).prop('selected', true);
 			$('#selectRoom').val(roomName).prop('selected', true);
 			
-			/* //class="stTime"인 태그 
-			   let startList = $('.stTime');
-			
-			   for(let i = 0; i < startList.length; i++){		
+			 //class="stTime"인 태그 
+			 /* let startList = $('.stTime');
+			    for(let i = 0; i < startList.length; i++){		
 			   	
-				if(startList[i].value === startTime){
-					    startList[i].prop('selected', true);
+					if(startList[i].value === startTime){
+						 startList[i].prop('selected', true);
 					}		
 				} */
 
 		}
-		
-		/* $(function(){
-			$('#reserveNo').click(function() {
-				let reserveNo = $('#reserveNo').val();
-				let roomName = $('#selectRoom').val();
-				let startTime = $('#startTime').val();
-				let endTime = $('#endTime').val();
-				let reserveTitle = $('#reserveTitle').val();
-				
-				console.log(reserveNo, roomName, startTime, endTime, reserveTitle);	
-			})
-		}) */
-		
+			
 		//예약 수정
 		$(function(){
 			$('#updateReservation').click(function(){
@@ -322,32 +307,41 @@
 				let endTime = $('#endTime').val();
 				let reserveTitle = $('#reserveTitle').val();
 				let reserveUserNo = $('#reserveUserNo').val();
-														
-				console.log(reserveNo, roomName, startTime, endTime, reserveTitle, reserveUserNo);	
-				
-				
-				$("input[name='reserveNoUpdate']").attr('value', reserveNo);
-				$("input[name='selectRoomUpdate']").attr('value', roomName);
-				$("input[name='dateUpdate']").attr('value', date);
-				$("input[name='startTimeUpdate']").attr('value', startTime);
-				$("input[name='endTimeUpdate']").attr('value', endTime);
-				$("input[name='reserveTitleUpdate']").attr('value', reserveTitle);
-				$("input[name='reserveUserNoUpdate']").attr('value', reserveUserNo);
+
+				console.log(reserveNo, roomName, startTime, endTime, reserveTitle, reserveUserNo);				
+
+				$.ajax({
+					url: 'updateReservation.do',
+					data: {
+						reserveNoUpdate: reserveNo,
+						selectRoomUpdate: roomName,
+						dateUpdate: date,
+						startTimeUpdate: startTime,
+						endTimeUpdate: endTime,
+						reserveTitleUpdate: reserveTitle,
+						reserveUserNoUpdate: reserveUserNo
+					},
+					type: "post",
+					success:function(result){
+						alert(result);
+					},
+					error: function(){
+						console.log('통신 실패');
+					}
+				})
 				
 				console.log($("input[name='startTimeUpdate']").val())
-				
-				$('#updateForm').submit();		
 			})
 		})
 		
 		//예약시작시간보다 종료시간이 작을 수 없음
 		$(function(){
 			const fn = function(){			
-				let startTime = $("#startTime").val();
-				let endTime = $("#endTime").val();
+				let startTime = $('#startTime').val();
+				let endTime = $('#endTime').val();
 				
 				$.ajax({
-					url: "timeCheck.do",
+					url: 'timeCheck.do',
 					data: {
 						startTime: startTime,
 						endTime: endTime						
@@ -355,24 +349,27 @@
 					type: "post",
 					success:function(result){
 						if(result > 0){
-							console.log("OK")
-							$("#updateReservation").attr("disabled", false);
+							console.log("OK");
+							$('#updateReservation').attr('disabled', false);
+							
 						}else if(result == 0){
-							alert("시작시간과 종료시간은 같을 수 없습니다.");
-							$("#updateReservation").attr("disabled", true)
+							alert('시작시간과 종료시간은 같을 수 없습니다.');
+							$('#updateReservation').attr('disabled', true);
+							
 						}else{
-							alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-							$("#updateReservation").attr("disabled", true)
+							alert('종료시간은 시작시간보다 빠를 수 없습니다.');
+							$('#updateReservation').attr('disabled', true);
 						}
 					},
 					error: function(){
-						console.log("ajax 통신 실패")
+						console.log('통신 실패');
 					}
 				})
 			};
 
-			$("#startTime").on("change", fn); // 시작시간이 선택 될 때 이벤트 발생
-			$("#endTime").on("change", fn); // 종료시간이 선택 될 때 이벤트 발생
+			$('#startTime').on('change', fn); //시작시간 선택시 이벤트 발생
+			$('#endTime').on('change', fn); //종료시간 선택시
+			//$('#reserveRoom').on('click', fn); //예약버튼 클릭시		
 		}) 
 		
 	</script>
