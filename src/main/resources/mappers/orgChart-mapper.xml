@@ -4,6 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="orgChartMapper">
 
+	<!-- 사원 전체 리스트 -->
 	<select id="selectOrgChartList" resultType="OrgChart" parameterType="_int">
 		SELECT	A.C_NAME, B.M_NO, B.M_NAME, B.M_EMAIL, B.M_PHONE, 
 				C.J_NO, C.J_NAME, D.D_NO, D.D_NAME, E.P_NAME, A.C_NO,
@@ -24,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY C.J_NO DESC
 	</select>
 	
+	<!-- manager 사원 리스트 -->
 	<select id="selectOrgChartMList" resultType="OrgChart" parameterType="_int">
 		SELECT  A.C_NAME, B.M_NO, B.M_NAME, B.M_EMAIL, 
 		        B.M_PHONE, C.J_NO, C.J_NAME, E.P_NAME, A.C_NO,
@@ -43,10 +45,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY  C.J_NO DESC
 	</select>
 	
+	<!-- 부서명 목록 -->
 	<select id="selectDeptList" parameterType="_int" resultType="string">
-		SELECT DISTINCT A.D_NAME FROM DEPT A JOIN MEMBER B ON A.D_NO = B.D_NO WHERE B.C_NO = 1
+		SELECT DISTINCT A.D_NAME FROM DEPT A JOIN MEMBER B ON A.D_NO = B.D_NO WHERE B.C_NO = #{cNo} AND A.D_NAME != '대표'
 	</select>
 	
+	<!-- 개인 프로필 사원 정보 -->
 	<select id="selectMemInfo" parameterType="OrgChart" resultType="OrgChart">
 		SELECT  A.C_NAME, B.M_NO, B.M_NAME, B.M_EMAIL, 
 		        B.M_PHONE, C.J_NO, C.J_NAME, E.P_NAME, A.C_NO,
@@ -66,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	</select>
 	
+	<!-- 검색에 쓰일 리스트 -->
 	<select id="selectSearchMemList" resultType="OrgChart" parameterType="_int">
 		SELECT	A.C_NAME, B.M_NO, B.M_NAME, B.M_EMAIL, B.M_PHONE, 
 				C.J_NO, C.J_NAME, D.D_NO, D.D_NAME, E.P_NAME, A.C_NO,

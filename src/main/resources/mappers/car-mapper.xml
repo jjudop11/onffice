@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CarMapper">
+ 	
+ 	<!-- 차량 관리권한 유저 -->
+	<select id="selectCarSetUser" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE M_ID = #{carSetUserId}
+		AND M_SETTING = 'Y'	
+	</select>
+		
+	<!-- 페이징 처리용 -->
+	<select id="selectCarListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM CAR
+		WHERE C_NO = #{userCNo}
+	</select>
+	
+	<!-- 총 차량 목록 -->
+	<select id="selectCarList" parameterType="_int" resultType="Car">
+		SELECT *
+		FROM CAR
+		WHERE C_NO = #{userCNo}
+		ORDER BY NO
+	</select>
+	
+	<!-- 차량번호 중복체크 -->
+	<select id="carNoCheck" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM CAR
+		WHERE CAR_NO = #{carNo}
+	</select>
+
+	<!-- 차량 추가 -->
+	<insert id="insertCar" parameterType="Car">
+		INSERT INTO CAR
+		VALUES(CAR_REGIST_SEQ.NEXTVAL, #{carName}, #{carNo}, DEFAULT, #{cNo})
+	</insert>
+	
+	<!-- 차량 삭제 -->
+	<delete id="deleteCars" parameterType="string">
+		DELETE 
+		FROM CAR
+		WHERE CAR_NO = #{carNo}
+	</delete>
+	
+	<!-- 차량 예약 -->
+	<insert id="reserveingCar" parameterType="Car">
+		INSERT INTO
+		RESERVE_CAR
+		VALUES
+		(CAR_RESERVE_SEQ.NEXTVAL, #{reserveDate}, #{reserveCarNo}, #{reserveMNo}, #{useDate}, #{useNote}, #{cNo})
+	</insert>
+	
+	<update id="updateStatus" parameterType="string">
+		UPDATE CAR
+		SET CAR_STATUS = 'Y'
+		WHERE CAR_NO = #{reserveCarNo}
+	</update>
+	
+	<!-- <select id="selectReserveMNo" parameterType="string" resultType="Car">
+		SELECT *
+		FROM RESERVE_CAR
+		WHERE RESERVE_CAR_NO = #{reserveCarNo}
+	</select>  -->
+	
+	<!-- 차량 반납 -->
+	<update id="updateReturn" parameterType="string">
+		UPDATE CAR
+		SET CAR_STATUS = 'N'
+		WHERE CAR_NO = #{reserveCarNo}
+	</update>
+	
+	<select id="selectReserveCar" parameterType="string" resultType="ReserveCar">
+		<![CDATA[
+		SELECT *
+		FROM (SELECT *
+		      FROM RESERVE_CAR
+		      WHERE RESERVE_CAR_NO = #{reserveCarNo}
+		      ORDER BY RESERVE_NO DESC)
+		WHERE ROWNUM < 2
+		]]> 
+	</select>
+	
+	<select id="selectUserName" parameterType="string" resultType="string">
+		SELECT M_NAME
+		FROM MEMBER
+		WHERE M_NO = #{userNo}
+	</select>
+	
+	<select id="selectUserJobName" parameterType="string" resultType="string">
+		SELECT J_NAME
+		FROM JOB
+		WHERE J_NO = (SELECT J_NO
+		              FROM MEMBER
+		              WHERE MEMBER.M_NO = #{userNo})
+	</select>
+	
+	<update id="updateReserveCar" parameterType="ReserveCar">
+		UPDATE RESERVE_CAR
+		SET USE_DATE = #{useDate}, USE_NOTE = #{useNote}
+		WHERE RESERVE_NO = #{reserveNo}
+	</update>
+	
+</mapper>
+
+

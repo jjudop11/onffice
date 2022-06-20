@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -66,8 +67,6 @@ public class MeetingRoomController {
 		Date date = new Date();
 		SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd");
 		String today = simpleDate.format(date);
-
-		System.out.println("오늘 며칠? : " + today);
 		model.addAttribute("today", today);
 
 		return "meetingRoom/roomReservation";
@@ -105,8 +104,13 @@ public class MeetingRoomController {
 
 	}
 
+	private boolean isValidTime(String roomNo, String date, String startTime, String endTime) 
+	{
+		return isValidTime(roomNo, date, startTime, endTime, "");
+	}
+
 	// 회의실 예약시 예약시간 검사 //roomNo, date, startTime, endTime
-	private boolean isValidTime(String roomNo, String date, String startTime, String endTime) {
+	private boolean isValidTime(String roomNo, String date, String startTime, String endTime, String exceptNo) {
 
 		// 테스트용 코드 : 10시와 12시에 예약되었다고 가정하고 테스트
 		/*
@@ -128,6 +132,10 @@ public class MeetingRoomController {
 
 		// 위에서 룸넘버랑 날짜로 구해온 예약 목록 foreach로 돌리면서 예약된 시간이랑 예약할 시간이랑 비교
 		for (ReserveRoom r : reservedRooms) {
+			System.out.println("ReserveRoom: " + r.getReserveNo() + ", Except No: " + exceptNo);
+			
+			if (r.getReserveNo().equals(exceptNo))
+				continue;
 
 			int rStartTime = getTime(r.getStartTime());
 			int rEndTime = getTime(r.getEndTime());
@@ -222,7 +230,7 @@ public class MeetingRoomController {
 	}
 
 	// 예약일정 화면에 뿌리기
-	@RequestMapping("reservedRoomList.do")
+	@RequestMapping(value="reservedRoomList.do", produces="application/text; charset=UTF-8")
 	@ResponseBody
 	public String reserveRoomList(@RequestParam("date") String date, HttpSession session) {
 
@@ -241,8 +249,6 @@ public class MeetingRoomController {
 
 		ArrayList<MeetingRoom> roomList = meetingRoomService.selectList(cNo);
 
-		// java 10부터 var 도입
-		// 변수 선언시 타입 생략가능, 컴파일러가 타입 추론. 지역변수에만 사용.
 		for (var room : roomList) {
 
 			JsonObject roomObj = new JsonObject();
@@ -399,8 +405,41 @@ public class MeetingRoomController {
 
 	}
 	
-	//회의실 수정
+	//회의실 수정용 정보조회
+	@RequestMapping(value="roomInfo.do", produces="application/text; charset=UTF-8")
+	@ResponseBody
+	public String roomInfo(@RequestParam("roomNo") String roomNo, HttpSession session) {
+		
+		//전달받은 roomNo로 해당 회의실 정보 select
+		MeetingRoom room = meetingRoomService.selectRoomInfo(roomNo);
+		
+		JsonObject roomObj = new JsonObject();
+		roomObj.addProperty("roomNo", room.getRoomNo());
+		roomObj.addProperty("roomName", room.getRoomName());
+		roomObj.addProperty("roomCapa", room.getRoomCapa());
+		roomObj.addProperty("roomNote", room.getRoomNote());
+		
+		String str = roomObj.toString();
+		
+		return str;
+	}
 	
+	//회의실 수정
+	@RequestMapping("modifyRoom.do")
+	@ResponseBody
+	public String modifyRoom(@RequestParam("roomNo") String roomNo, @RequestParam("roomName") String roomName, 
+			@RequestParam("roomCapa") int roomCapa, @RequestParam("roomNote") String roomNote, HttpSession session) {
+		
+		MeetingRoom r = new MeetingRoom();
+		r.setRoomNo(roomNo);
+		r.setRoomName(roomName);
+		r.setRoomCapa(roomCapa);
+		r.setRoomNote(roomNote);
+		
+		int result = meetingRoomService.modifyRoom(r);
+		
+		return "";
+	}
 
 	// 회의실 예약메뉴에서 설정메뉴로 진입
 	@RequestMapping("reserve-roomSetting.do")
@@ -579,42 +618,40 @@ public class MeetingRoomController {
 	 */
 
 	// 예약 수정
-	@RequestMapping("updateReservation.do")
-	public String updateReservation(HttpServletRequest request, HttpSession session, Model model) {
-		
-		//그냥 delete 했다가 다시 insert 하면 안될까?
+	@RequestMapping(value="updateReservation.do", produces="application/text; charset=UTF-8")
+	@ResponseBody
+	public String updateReservation(@RequestParam Map<String, Object> params, HttpSession session, Model model) {
 		
 		// 예약번호
-		String reserveNoUpdate = request.getParameter("reserveNoUpdate");
+		String reserveNoUpdate = (String)params.get("reserveNoUpdate");
 
+		System.out.println(reserveNoUpdate);
+		
 		// 룸 이름으로 룸 번호 가져오기
-		String selectRoomUpdate = request.getParameter("selectRoomUpdate");
+		String selectRoomUpdate = (String)params.get("selectRoomUpdate");
 		String roomNo = meetingRoomService.selectRoomNo(selectRoomUpdate);
 
-		String dateUpdate = request.getParameter("dateUpdate");
+		String dateUpdate = (String)params.get("dateUpdate");
 
-		String startTimeUpdate = request.getParameter("startTimeUpdate");
-		String endTimeUpdate = request.getParameter("endTimeUpdate");
+		String startTimeUpdate = (String)params.get("startTimeUpdate");
+		String endTimeUpdate = (String)params.get("endTimeUpdate");
 
-		String reserveTitleUpdate = request.getParameter("reserveTitleUpdate");
-		String reserveUserNoUpdate = request.getParameter("reserveUserNoUpdate");
+		String reserveTitleUpdate = (String)params.get("reserveTitleUpdate");
+		String reserveUserNoUpdate = (String)params.get("reserveUserNoUpdate");
 
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		String mNo = loginUser.getMNo(); // 예약자랑 비교
 		int cNo = loginUser.getCNo();
 
-		if (mNo.equals(reserveUserNoUpdate)) {		
-			
+		if (mNo.equals(reserveUserNoUpdate)) {
 			// 예약일, 시간 검사
-			if (!isValidTime(roomNo, dateUpdate, startTimeUpdate, endTimeUpdate)) {
-				
-				//false 
-				session.setAttribute("msg", "이미 예약된 시간입니다.");
-				return "redirect:/roomReservingForm.do";
-				
+			if (!isValidTime(roomNo, dateUpdate, startTimeUpdate, endTimeUpdate, reserveNoUpdate)) {
+				//false
+
+				return "이미 예약된 시간입니다.";				
 			} else {
-				
 				//true
+
 				ReserveRoom updateRoom = new ReserveRoom();
 				updateRoom.setReserveNo(reserveNoUpdate);
 				updateRoom.setRoomNo(roomNo);
@@ -628,22 +665,14 @@ public class MeetingRoomController {
 				int result = meetingRoomService.updateReservation(updateRoom);
 				
 				if(result > 0) {
-					session.setAttribute("msg", "예약을 수정하였습니다.");
-					return "redirect:/roomReservingForm.do";
-					
-				}else {
-					session.setAttribute("msg", "예약 수정에 실패하였습니다.");
-					return "redirect:/roomReservingForm.do";
+					return "예약을 수정하였습니다.";
+				} else {
+					return "예약 수정에 실패하였습니다.";
 				}
 			}
-		
-		}else {
-			
-			session.setAttribute("msg", "해당 예약은 수정할 수 없습니다.");
-			return "redirect:/roomReservingForm.do";
+		} else {
+			return "해당 예약은 수정할 수 없습니다.";
 		}
-		
-		
 	}
 
 	// 예약 취소

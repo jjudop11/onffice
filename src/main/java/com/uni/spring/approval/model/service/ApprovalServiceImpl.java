@@ -42,9 +42,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 	
 	// 결재선 
 	@Override
-	public void insertApprovalLine(ApprovalLine apline) {
+	public void insertApprovalLine(Map<String, Object> apprLineMap) {
 		
-		int result = approvalDao.insertApprovalLine(sqlSession, apline);
+		int result = approvalDao.insertApprovalLine(sqlSession, apprLineMap);
 		
 		if(result < 0) {
 			throw new CommException("결재선 등록 실패");

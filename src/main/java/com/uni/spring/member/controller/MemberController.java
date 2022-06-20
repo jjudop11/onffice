@@ -134,19 +134,21 @@ public class MemberController {
 		String from = "jjudop11@naver.com";
 		String to = mem.getMEmail(); // DB에서 가져온 Member객체의 이메일주소
 		String title = "[ONFFICE] 비밀번호변경 인증 이메일 입니다"; 
-		String content = "<img src=\"https://s3.us-west-2.amazonaws.com/secure.notion-static.com/eb5fa8b3-51d6-4643-88a7-363e92bf78be/logo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220613%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220613T033346Z&X-Amz-Expires=86400&X-Amz-Signature=30a4cf56c3bb0e4ccbc926622c49d0cf99804351094b2b6e282e7618c3dffc53&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22logo.PNG.png%22&x-id=GetObject\">" 
+		String content = "<img src=\"https://s3.us-west-2.amazonaws.com/secure.notion-static.com/eb5fa8b3-51d6-4643-88a7-363e92bf78be/logo.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220616%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220616T041652Z&X-Amz-Expires=86400&X-Amz-Signature=aa544f87fd803e197f173a2c12a9189f19a189780c8f4fdc71337644959f1e9b&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22logo.PNG.png%22&x-id=GetObject\">" 
 				+"<br><br><br>" + "안녕하세요 "+ mem.getMName() +"님 " +"<br>"
 				+ "비밀번호찾기(변경) 인증번호는 " + num + " 입니다.";
 		
         try {
         	MimeMessage mail = mailSender.createMimeMessage();
-			MimeMessageHelper mailHelper = new MimeMessageHelper(mail,true,"UTF-8");  // true는 멀티파트 메세지를 사용 -> 파일첨부가능
+			MimeMessageHelper mailHelper = new MimeMessageHelper(mail , true, "UTF-8");  
+			// true는 멀티파트 메세지를 사용 -> 파일첨부가능
 			// MimeMessageHelper mailHelper = new MimeMessageHelper(mail,"UTF-8");
 			
 			mailHelper.setFrom(from);
-			mailHelper.setTo(to); // to 값을 넣어야하지만 테스트 및 시연을 위해 개인 이메일 작성
+			mailHelper.setTo(to);
 		 	mailHelper.setSubject(title);
-            mailHelper.setText(content, true); // true는 html을 사용
+            mailHelper.setText(content, true); 
+            // true는 html을 사용
             // mailHelper.setText(content);
             mailSender.send(mail);
             
@@ -185,23 +187,17 @@ public class MemberController {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 		
 		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
-		if ( loginCookie != null ){
-            // null이 아니면 존재하면!
+		if ( loginCookie != null ){ // 쿠기 있는 경우
             loginCookie.setPath("/");
-            // 쿠키는 없앨 때 유효시간을 0으로 설정하는 것 !!! invalidate같은거 없음.
-            loginCookie.setMaxAge(0);
-            // 쿠키 설정을 적용한다.
-            response.addCookie(loginCookie);
-             
-            // 사용자 테이블에서도 유효기간을 현재시간으로 다시 세팅해줘야함.
-            memberService.deleteRemember(loginUser);
+            loginCookie.setMaxAge(0); // 쿠키 유효시간 0 설정
+            response.addCookie(loginCookie);  // 쿠키 설정을 적용
+            memberService.deleteRemember(loginUser); // 자동로그인 DB 내역 삭제
         }
 		session.invalidate();
 		return "redirect:/";
 	}
 	
 	@PostMapping("/login")
-
 	public ModelAndView loginUser(HttpSession session, HttpServletResponse response, Member m, String remember, @RequestParam(value = "currentPage", required = false, defaultValue = "1") int currentPage, Model model, ModelAndView mv) { 
 
 		Member loginUser;

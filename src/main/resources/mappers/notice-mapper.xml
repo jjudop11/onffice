@@ -80,8 +80,9 @@
 	<select id="selectNoticeList" resultMap="noticeResultSet" parameterType="_int">
 		SELECT *
 		FROM (SELECT * FROM NOTICE WHERE C_NO = #{C_No} ORDER BY NO_DATE DESC)
+		WHERE NO_STATUS = 'Y'
 		<![CDATA[
-		WHERE ROWNUM <= 5
+		AND ROWNUM <= 5
 		]]>
 	</select>
 </mapper>

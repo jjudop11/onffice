@@ -4,6 +4,263 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="surveyBoardMapper">
 
+	<!-- 부서명 목록 -->
+	<select id="selectDeptList" parameterType="_int" resultType="Member">
+		SELECT 
+			DISTINCT A.D_NAME, A.D_NO 
+		FROM 
+			DEPT A JOIN MEMBER B ON A.D_NO = B.D_NO 
+		WHERE 1=1
+			AND B.C_NO = #{cNo}
+		ORDER BY D_NO
+	</select>
 
 
+	<!-- 설문 게시판에 게시물 등록 -->
+	<select id="insertSurveyBoard" parameterType="SurveyBoard" resultType="_int">
+		INSERT INTO SURVEY_BOARD VALUES
+			(#{sbNo}, #{sbTitle}, #{sbSurveyInfo}, #{sbStartDate}, 
+			 #{sbEndDate}, #{sbResultState}, #{sbFounderNo}, #{cNo})
+	</select>
+
+	<!-- 공개 범위 부서 등록 -->
+	<update id="insertSBTargetDept" parameterType="ArrayList">
+		<foreach collection="list" item="item" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" ">
+		INTO SB_TARGET_DEPT VALUES
+		(	
+			#{item.sbNo} , 
+			#{item.sbTDNo}
+		)
+		</foreach>	
+	</update>
+	
+	
+	<!-- 설문 게시물 문항 등록 -->
+	<insert id="insertSBInquiry" parameterType="SurveyBoard">
+		INSERT INTO SB_INQUIRY VALUES(#{sbINo} , #{sbNo}, #{sbITitle} , #{sbIType})
+	</insert>
+	
+	<!-- 질문 정보 입력 -->
+	<insert id="insertSBQuestion" parameterType="SurveyBoard" >
+		INSERT INTO SB_QUESTION VALUES(SEQ_SQ_BNO.NEXTVAL , #{sbINo} , #{sqContent})
+	</insert>
+	
+	
+	<!-- 홈 리스트 카운터 조회 -->
+	<select id="selectSBHomeListCount" parameterType="SurveyBoard" resultType="_int">
+		SELECT 
+	   		COUNT(*)
+		FROM SURVEY_BOARD A
+			JOIN SB_TARGET_DEPT B ON A.SB_NO = B.SB_NO
+		WHERE 1=1 
+			AND B.SB_TD_NO IN (#{dNo} , 0)
+			AND A.C_NO = #{cNo}
+			AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') > SYSDATE
+	</select>
+	
+	<!-- 홈 리스트 조회 -->
+	<select id="selectSBHomeList" parameterType="SurveyBoard" resultType="SurveyBoard">
+
+	SELECT 
+		A.* , C.M_NAME AS "SB_FOUNDERNAME", D.D_NAME AS "SB_FOUNDERDNAME",
+		
+        CASE
+           WHEN (A.SB_NO, #{mNo}) NOT IN (SELECT * FROM SB_ANSWER WHERE M_NO = #{mNo})THEN '미참여'
+           WHEN (A.SB_NO, #{mNo}) IN (SELECT * FROM SB_ANSWER WHERE M_NO = #{mNo}) THEN '참여 완료'
+        END AS "SB_ASTATE"
+          
+	FROM SURVEY_BOARD A
+		JOIN SB_TARGET_DEPT B ON A.SB_NO = B.SB_NO
+        JOIN MEMBER C ON A.SB_FOUNDERNO = C.M_NO
+        JOIN DEPT D ON C.D_NO = D.D_NO
+	WHERE 1=1 
+		AND B.SB_TD_NO IN (#{dNo}, 0)
+		AND A.C_NO = #{cNo}
+	 	<![CDATA[
+		AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') > SYSDATE-1
+		]]>
+	ORDER BY A.SB_STARTDATE DESC
+	</select>
+	
+	
+	<!-- 모든 리스트 카운터 조회 -->
+	<select id="selectSBAllListCount" parameterType="SurveyBoard" resultType="_int">
+	
+		SELECT 
+	   		COUNT(*)
+		FROM SURVEY_BOARD 
+		WHERE C_NO = #{cNo}
+			
+	</select>
+	
+	<!-- 모든 리스트 조회 -->
+	<select id="selectSBAllList" parameterType="SurveyBoard" resultType="SurveyBoard">
+	
+		SELECT 
+		   DISTINCT A.*, C.M_NAME AS "SB_FOUNDERNAME", D.D_NAME AS "SB_FOUNDERDNAME",
+		   CASE
+	           WHEN (A.SB_NO, #{mNo}) NOT IN (SELECT * FROM SB_ANSWER WHERE M_NO = #{mNo}) AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') > SYSDATE THEN '미참여'
+	           WHEN (A.SB_NO, #{mNo}) IN (SELECT SB_NO , M_NO FROM SB_ANSWER WHERE M_NO = #{mNo}) AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') > SYSDATE-1 THEN '참여 완료'
+	           <![CDATA[
+	           WHEN TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') < SYSDATE-1 THEN '종료됨'
+	           ]]>
+           END AS "SB_ASTATE"
+		FROM SURVEY_BOARD A
+			JOIN SB_TARGET_DEPT B ON A.SB_NO = B.SB_NO
+			JOIN MEMBER C ON A.SB_FOUNDERNO = C.M_NO
+	        JOIN DEPT D ON C.D_NO = D.D_NO
+		WHERE A.C_NO = #{cNo}
+		ORDER BY A.SB_STARTDATE DESC
+	</select>
+	
+	
+	<!-- 나의 리스트 카운터 조회 -->
+	<select id="selectSBMyListCount" parameterType="SurveyBoard" resultType="_int">
+	
+	SELECT
+    	COUNT(*)
+	FROM SURVEY_BOARD 
+	WHERE 1=1
+	    AND C_NO = #{cNo}
+	    AND SB_NO IN (SELECT SB_NO FROM SURVEY_BOARD B WHERE SB_FOUNDERNO = #{mNo})
+	</select>
+	
+	<!-- 나의 리스트 조회 -->
+	<select id="selectSBMyList" parameterType="SurveyBoard" resultType="SurveyBoard">
+	
+		SELECT
+		   DISTINCT A.*, C.M_NAME AS "SB_FOUNDERNAME", D.D_NAME AS "SB_FOUNDERDNAME",
+		   CASE
+		   WHEN (A.SB_NO, #{mNo}) NOT IN (SELECT * FROM SB_ANSWER WHERE M_NO = #{mNo}) AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') > SYSDATE THEN '미참여'
+           WHEN (A.SB_NO, #{mNo}) IN (SELECT * FROM SB_ANSWER WHERE M_NO = #{mNo}) AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') > SYSDATE-1 THEN '참여 완료'
+           <![CDATA[
+           WHEN TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') < SYSDATE-1 THEN '종료됨'
+           ]]>
+           END AS "SB_ASTATE"
+		FROM SURVEY_BOARD A
+		JOIN SB_TARGET_DEPT B ON A.SB_NO = B.SB_NO
+		JOIN MEMBER C ON A.SB_FOUNDERNO = C.M_NO
+        JOIN DEPT D ON C.D_NO = D.D_NO
+        WHERE 1=1
+		AND A.C_NO = #{cNo}
+        AND A.SB_NO IN (SELECT SB_NO FROM SURVEY_BOARD B WHERE B.SB_FOUNDERNO = #{mNo})
+        ORDER BY A.SB_STARTDATE DESC
+		
+	</select>
+	
+	
+	<!-- 종료 리스트 카운터 조회 -->
+	<select id="selectSBEndListCount" parameterType="SurveyBoard" resultType="_int">
+	
+		SELECT 
+	   		COUNT(*)
+		FROM SURVEY_BOARD A		
+		WHERE 1=1
+		AND A.C_NO = #{cNo}
+	<![CDATA[	
+		AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') < SYSDATE-1
+	]]>
+		
+	</select>
+	
+	<!-- 종료 리스트 조회 -->
+	<select id="selectSBEndList" parameterType="SurveyBoard" resultType="SurveyBoard">
+	
+		SELECT 
+		   DISTINCT A.*, C.M_NAME AS "SB_FOUNDERNAME", D.D_NAME AS "SB_FOUNDERDNAME",
+		   CASE
+	       <![CDATA[
+	           WHEN TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') < SYSDATE-1 THEN '종료됨'
+	       ]]>
+           END AS "SB_ASTATE"
+		FROM SURVEY_BOARD A
+			JOIN SB_TARGET_DEPT B ON A.SB_NO = B.SB_NO		
+			JOIN MEMBER C ON A.SB_FOUNDERNO = C.M_NO
+	        JOIN DEPT D ON C.D_NO = D.D_NO	 
+		WHERE 1=1
+			AND A.C_NO = #{cNo}
+			<![CDATA[	
+				AND TO_DATE(A.SB_ENDDATE, 'YYYY-MM-DD') < SYSDATE-1
+			]]>
+		ORDER BY A.SB_STARTDATE DESC
+	</select>
+	
+	 <!-- 게시글 상세조회  -->
+	 <select id="selectBoardInfo" parameterType="SurveyBoard" resultType="SurveyBoard">
+		
+		SELECT  
+			A.*, B.SB_I_NO, B.SB_I_TITLE, B.SB_I_TYPE, C.SQ_NO, C.SQ_CONTENT, 
+			D.M_NAME AS "SB_FOUNDERNAME", E.D_NAME AS "SB_FOUNDERDNAME"
+		FROM SURVEY_BOARD A
+			JOIN SB_INQUIRY B ON A.SB_NO = B.SB_NO
+			JOIN SB_QUESTION C ON B.SB_I_NO = C.SB_I_NO
+	        JOIN MEMBER D ON A.SB_FOUNDERNO = D.M_NO
+	        JOIN DEPT E ON E.D_NO = D.D_NO
+		WHERE 1=1 
+			AND A.SB_NO = #{sbNo}
+			AND A.C_NO = #{cNo}
+		
+	 </select>
+	 
+	 <!-- 게시글 참여 인원 조회 -->
+	 <select id="selectSBDeptCount" parameterType="SurveyBoard" resultType="_int">
+	 	SELECT COUNT(*) FROM MEMBER WHERE D_NO = #{sbTDNo} AND C_NO = #{cNo}
+	 </select>
+	
+	<!-- 모든 참가자 조회 -->
+	 <select id="selectSBDeptAllCount" parameterType="SurveyBoard" resultType="_int">
+	 	SELECT COUNT(*) FROM MEMBER WHERE C_NO = #{cNo}
+	 </select>
+	
+	<!-- 참가 완료 조회 -->
+	<select id="selectComMemCount" parameterType="_int" resultType="_int">
+		SELECT COUNT(*) FROM SB_ANSWER WHERE SB_NO = #{sbNo}
+	</select>
+	
+	<!-- 게시글 부서 번호 조회 -->
+	<select id="selectDeptNoList" parameterType="_int" resultType="SurveyBoard"> 
+		SELECT SB_TD_NO FROM SB_TARGET_DEPT WHERE SB_NO = #{sbNo}
+	</select>
+	
+	<!-- 게시글 질문 답변 조회 -->
+	<select id="selectSBAnswerList" parameterType="_int" resultType="SurveyBoard"> 
+		SELECT SB_I_NO, SQ_NO FROM SB_A_INFO WHERE SB_NO = #{sbNo}
+	</select>
+	
+	<insert id="insertAnswerInfo" parameterType="SurveyBoard">
+		INSERT INTO SB_A_INFO VALUES(#{mNo} , #{sbNo} , #{sbINo} , ${sqNo})
+	</insert>
+	
+	<!-- 게시글 답변 저장 -->
+	<insert id="insertAnswerState" parameterType="SurveyBoard">
+		INSERT INTO SB_ANSWER VALUES(#{sbNo} , #{mNo})
+	</insert>
+	
+	
+	<!-- 수정을 위해 미리 있던 질문 정보 삭제 -->
+	<delete id="deleteSurveyBoardAnswer" parameterType="SurveyBoard">
+		DELETE FROM SB_ANSWER WHERE SB_NO = #{sbNo} AND M_NO = #{mNo}
+	</delete>
+	
+	<delete id="deleteSurveyBoardAnswerInfo" parameterType="SurveyBoard">
+		DELETE FROM SB_A_INFO WHERE SB_NO = #{sbNo} AND M_NO = #{mNo}
+	</delete>
+	
+	
+	
+	
+	<!-- 게시글 삭제 쿼리 -->
+	<delete id="deleteSurveyBoard" parameterType="_int">
+		DELETE FROM SURVEY_BOARD WHERE SB_NO = #{sbNo}
+	</delete>
+	<delete id="deleteSurveyBoardTD" parameterType="_int">
+		DELETE FROM SB_TARGET_DEPT WHERE SB_NO = #{sbNo}
+	</delete>
+	<delete id="deleteSurveyBoardInfo" parameterType="_int">
+		DELETE FROM SB_A_INFO WHERE SB_NO = #{sbNo}
+	</delete>
+	
+	
+	
+	
 </mapper>

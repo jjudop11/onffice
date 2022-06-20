@@ -106,29 +106,5 @@ public class OrgChartController {
 		
 	}
 	
-	
-	
-
-/*
-	@RequestMapping("orgChartList")
-	public void orgChartList(Model model) {
-		
-		Member loginUser = (Member)model.getAttribute("loginUser");
-		
-		int cNo = loginUser.getCNo();
-		
-		
-		ArrayList<OrgChart> chartList = orgChartService.selectOrgChartList(cNo);
-		ArrayList<OrgChart> chartMList = orgChartService.selectOrgChartMList(cNo);
-		
-		System.out.println("chartList ==== " + chartList);
-		System.out.println("chartMList ==== " + chartMList);
-		
-		model.addAttribute("cList", chartList);
-		model.addAttribute("cMList", chartMList);
-		
-		
-	}
-	*/
 }
 

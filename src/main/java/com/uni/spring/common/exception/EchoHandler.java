@@ -28,23 +28,19 @@ public class EchoHandler extends TextWebSocketHandler {
 	private Map<String, WebSocketSession> userSessionsMap = new HashMap<String, WebSocketSession>();
 	
 	@Override
-	public void afterConnectionEstablished(WebSocketSession session) throws Exception {//클라이언트와 서버가 연결
-		// TODO Auto-generated method stub
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception { //클라이언트와 서버가 연결
 		// 로그인한 Member 모두 list 저장
 		sessions.add(session);
-		/*
-		String senderId = currentUserName(session);
-		userSessionsMap.put(senderId,session);
-		*/
+
 	}
 	
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {// 메시지
+	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception { // 메시지 설정
 		// TODO Auto-generated method stub
 		
 		Map<String, Object> httpSession = session.getAttributes();
 		
-		Member loginUser = (Member)httpSession.get("loginUser");	
+		Member loginUser = (Member)httpSession.get("loginUser");
 		
 		String loginUserName = loginUser.getMName();
 
@@ -68,7 +64,6 @@ public class EchoHandler extends TextWebSocketHandler {
 		Map<String,Object> map = new HashMap<String, Object>();
 		ArrayList<Member> allList = memberService.selectMemList(null, loginUser.getCNo());
 		ArrayList<Alram> aList = new ArrayList<Alram>();
-		System.out.println("==================================리스트 길이" + sessions.size());
 		
 		if(category.equals("퇴근")) {
 			// 알림창
@@ -76,7 +71,7 @@ public class EchoHandler extends TextWebSocketHandler {
 				if(sess.getAttributes() != null) {
 					map = sess.getAttributes();
 					Member m = (Member) map.get("loginUser"); // 로그인 유저 뽑아서
-					
+					System.out.println("=============sess"+sess);
 					if(!m.getMName().equals(loginUserName)) { // 퇴근 유저아닌 유저한테 알림 띄우고
 						TextMessage tmpMsg = new TextMessage(dName +"부서의 "+name + jName + "님이" + "<br>퇴근하셨습니다");
 				         sess.sendMessage(tmpMsg);
