@@ -26,9 +26,9 @@ public class ApprovalDao {
 	}
 
 	// 결재선 
-	public int insertApprovalLine(SqlSession sqlSession, Map<String, Object> apprLineMap) {
+	public int insertApprovalLine(SqlSession sqlSession, ApprovalLine apline) {
 //		return sqlSession.insert("ApprovalMapper.insertApprovalLine", apprLineMap);
-		return sqlSession.update("ApprovalMapper.insertApprovalLine", apprLineMap);
+		return sqlSession.update("ApprovalMapper.insertApprovalLine", apline);
 	}
 
 	// 첨부파일 

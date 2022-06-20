@@ -17,7 +17,7 @@ public interface ApprovalService {
 
 	void insertApproval(Approval ap); // 전자결재문서
 	
-	void insertApprovalLine(Map<String, Object> apprLineMap); // 결재선 
+	void insertApprovalLine(ApprovalLine apline); // 결재선 
 
 	void insertFormAtt(FormAtt att); // 첨부파일 
 
