@@ -200,14 +200,24 @@
                 	 </div>
                 	 
                        <div class="card mt-4">
+                       	 <div class="card-header">
+                             <h3>설문게시판</h3>
+                         </div>
                        	 <div class="card-content">
                            <div class="card-body ">
-                             설문게시판
+                             <table class="list_table" style=" border-bottom:1px solid rgb(159, 160, 167); height:100%;">
+								<thead>
+									<tr style="font-size:12px; padding:0 0 10px 10px; border-bottom:1px solid rgb(159, 160, 167);">
+										<th style="width:450px">설문 제목</th>
+										<th style="width:300px">설문 기간</th>
+									</tr>
+								</thead>
+								<tbody class="tbody_list" >
+								
+								</tbody>
+							</table>
                           </div>
                         </div>
-                         <div class="card-footer d-flex justify-content-between">
-                           진행중인 설문
-                         </div>
                 	 </div>
                      </div>
                 </section>
@@ -223,7 +233,6 @@
                     <div class="float-end">
                         <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by 
                         <a href="">김영진</a> /
-                        <a href="">김지은</a> / 
                         <a href="">박주연</a> /
                         <a href="">이상화</a> /
                         <a href="">현주아</a></p>
@@ -250,6 +259,7 @@
 			selectAttendance();
 			selectAttendanceW();
 			reservedRoomList();
+			selectSurveyBoard(1);
 
 			$("#plus").on('click', function() { 
 				
@@ -448,6 +458,46 @@
 				}
 			})
 		}
+		
+	function selectSurveyBoard(num, pNum){
+			
+			$.ajax({
+				
+				url:"selectSBList",
+				type:"post",
+				data:{
+					
+					num:num,
+					page:pNum
+					
+				},
+				
+				success:function(sbList){
+					
+					let val = "";
+					
+					$.each(sbList.list, function(i, sb){
+	
+						val += 
+							'<tr class="go_detail" style="padding:10px 0 0 10px" onclick="goSurveyBoardDetail('+sb.sbNo+' , \''+ sb.sbAState +'\')">' +	
+							"<td>"+ sb.sbTitle +"</td>" +
+							"<td>"+ sb.sbStartDate +" ~ "+ sb.sbEndDate +"</td>" +				
+							"</tr>"
+					})
+					
+					$('.tbody_list').html(val);
+
+				}
+		
+			})
+			
+	}
+	
+	function goSurveyBoardDetail(sbNo, sbAState){
+		
+		location.href="surveyBoardDetail?sbNo="+sbNo+"&sbAState=" + sbAState;
+		
+	}
 		
 	</script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
