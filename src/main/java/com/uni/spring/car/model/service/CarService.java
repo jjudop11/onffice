@@ -36,6 +36,8 @@ public interface CarService {
 
 	String selectUserJobName(String userNo);
 
+	int updateReserveCar(ReserveCar c);
+
 	
 
 }

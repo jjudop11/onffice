@@ -62,5 +62,9 @@ public interface MeetingRoomService {
 
 	ReserveRoom selectreservedRoom(ReserveRoom r);
 
+	MeetingRoom selectRoomInfo(String roomNo);
+
+	int modifyRoom(MeetingRoom r);
+
 
 }

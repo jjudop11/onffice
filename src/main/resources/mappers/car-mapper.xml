@@ -65,16 +65,22 @@
 		WHERE RESERVE_CAR_NO = #{reserveCarNo}
 	</select>  -->
 	
+	<!-- 차량 반납 -->
 	<update id="updateReturn" parameterType="string">
 		UPDATE CAR
 		SET CAR_STATUS = 'N'
 		WHERE CAR_NO = #{reserveCarNo}
 	</update>
 	
-	<select id="selectReserveCar" parameterType="string" resultType="Car">
+	<select id="selectReserveCar" parameterType="string" resultType="ReserveCar">
+		<![CDATA[
 		SELECT *
-		FROM RESERVE_CAR
-		WHERE RESERVE_CAR_NO = #{reserveCarNo}
+		FROM (SELECT *
+		      FROM RESERVE_CAR
+		      WHERE RESERVE_CAR_NO = #{reserveCarNo}
+		      ORDER BY RESERVE_NO DESC)
+		WHERE ROWNUM < 2
+		]]> 
 	</select>
 	
 	<select id="selectUserName" parameterType="string" resultType="string">
@@ -91,6 +97,11 @@
 		              WHERE MEMBER.M_NO = #{userNo})
 	</select>
 	
+	<update id="updateReserveCar" parameterType="ReserveCar">
+		UPDATE RESERVE_CAR
+		SET USE_DATE = #{useDate}, USE_NOTE = #{useNote}
+		WHERE RESERVE_NO = #{reserveNo}
+	</update>
 	
 </mapper>
 

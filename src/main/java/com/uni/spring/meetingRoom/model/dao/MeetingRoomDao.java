@@ -147,6 +147,17 @@ public class MeetingRoomDao {
 		return sqlsession.selectOne("MeetingRoomMapper.mainSelectreservedRoom", r);
 	}
 
+	public MeetingRoom selectRoomInfo(SqlSessionTemplate sqlsession, String roomNo) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("MeetingRoomMapper.selectRoomInfo", roomNo);
+	}
+
+	//회의실 정보 수정
+	public int modifyRoom(SqlSessionTemplate sqlsession, MeetingRoom r) {
+		// TODO Auto-generated method stub
+		return sqlsession.update("MeetingRoomMapper.modifyRoom", r);
+	}
+
 	
 
 }

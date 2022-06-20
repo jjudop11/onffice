@@ -157,6 +157,20 @@ public class MeetingRoomServiceImple implements MeetingRoomService {
 
 	}
 
+  	//회의실 정보 수정용 정보조회
+	@Override
+	public MeetingRoom selectRoomInfo(String roomNo) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.selectRoomInfo(sqlsession, roomNo);
+	}
+
+	//회의실 정보 수정
+	@Override
+	public int modifyRoom(MeetingRoom r) {
+		// TODO Auto-generated method stub
+		return meetingRoomDao.modifyRoom(sqlsession, r);
+	}
+
 
 
 

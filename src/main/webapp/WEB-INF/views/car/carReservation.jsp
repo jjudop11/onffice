@@ -60,6 +60,20 @@ tr, th {
 	height: 90px;
 	resize: none;
 }
+
+.close{
+	border: 0.1px solid gray;
+}
+
+#carNotice{
+	width: 100%;
+	height: 262px;
+	background-color: rgb(247, 247, 247);
+	border: 0.3px solid rgb(161, 177, 200);
+	border-radius: 5px 5px 5px 5px;
+	padding: 20px;
+	
+}
 </style>
 </head>
 <body>
@@ -82,19 +96,25 @@ tr, th {
 					<section class="section">
 						<div class="row" id="basic-table">
 							<div class="col-12 col-md-6">
-
 								<div class="card">
 									<div class="card-content">
 										<div class="card-body">
+										
+											<div id="carNotice">
+												1. 차량은 사용 전일 예약						<br>
+												2. 예약 후 총무팀에서 차키와 운행일지 수령		<br>
+												3. 차량 내부 금연							<br>
+												4. 차량 반납시 내부의 개인 물품, 쓰레기 수거		<br>
+																						<br>
+												기타 문의사항 총무팀 이도현 사원 (☎ 0830)
+											</div>
 
-											<!-- 하단 회의실 현황 -->
-											<div id="meetingroomList">
-												<button class="btn btn-primary" id="roomSetting-button"
-													onclick="location.href='reserve-roomSetting.do'">설정</button>
+											<!-- 차량 예약 -->
+											<div id="carList">
 												<br> <br> <input type="hidden" id="today"
 													value="${ today }">
 												<div class="table-responsive">
-													<table class="table table-bordered mb-0" id="ReservingCar">
+													<table class="table mb-0" id="ReservingCar">
 														<thead id="ReservingCar-head">
 															<tr>
 																<th>차량명</th>
@@ -103,7 +123,7 @@ tr, th {
 															</tr>
 														</thead>
 														<tbody>
-															<!-- 로그인한 회원이 소속된 회사의 회의실 리스트 뿌리기 -->
+															<!-- 로그인한 회원이 소속된 회사의 차량 리스트 뿌리기 -->
 															<c:forEach items="${ carList }" var="c">
 																<tr>
 																	<th id="carName">${ c.carName }</th>
@@ -172,12 +192,14 @@ tr, th {
 															<div class="modal-footer">
 																<button type="button" class="btn btn-primary"
 																	id="addCar" data-dismiss="modal">확인</button>
+																<button type="button" class="btn btn-danger"
+																	id="closeModal" data-dismiss="modal">닫기</button>	
 															</div>
 														</div>
 													</div>
 												</div>
 												
-												<!-- 차량 반납 모달 -->
+												<!-- 차량 예약 수정, 차량 반납 모달 -->
 												<div class="modal" id="returnModal">
 													<div class="modal-dialog">
 														<div class="modal-content">
@@ -193,47 +215,42 @@ tr, th {
 																	<div class="form-reservingCar">
 																		<label for="label-reservingCar" class="control-label">대여일자</label>
 																		<input type="text" class="form-control"
-																			id="reserveDate" value="${ today }" disabled>
+																			id="reserveDate-return" disabled>
 																	</div>
 																	<br>
 																	<div class="form-reservingCar">
 																		<label for="label-reservingCar" class="control-label">차량번호</label>
 																		<input type="text" class="form-control"
-																			id="reserveCarNo" value="" disabled>
+																			id="reserveCarNo-return" disabled>
 																	</div>
 																	<br>
 																	<div class="form-reservingCar">
 																		<label for="label-reservingCar" class="control-label">대여자</label>
 																		<input type="text" class="form-control"
-																			id="reserveMember" value="${ userName } ${ userJob }"
-																			disabled> <input type="hidden"
-																			id="reserveMemberNo" value="${ userNo }">
+																			id="reserveMember-return" value="" disabled> 													
 																	</div>
 																	<br>
 																	<div class="form-reservingCar">
 																		<label for="label-reservingCar" class="control-label">사용날짜</label>
-																		<input type="text" class="form-control" id="useDate">
+																		<input type="text" class="form-control" id="useDate-return">
 																	</div>
 																	<br>
 																	<div class="form-reservingCar">
 																		<label for="label-reservingCar" class="control-label">내용</label>
-																		<textarea class="form-control" id="useNote"></textarea>
+																		<textarea class="form-control" id="useNote-return"></textarea>
 																	</div>
 																</form>
 															</div>
 
 															<div class="modal-footer">
+																<button type="button" class="btn btn-light"
+																	id="updateCar">수정</button>
 																<button type="button" class="btn btn-primary"
-																	id="addCar" data-dismiss="modal">확인</button>
+																	id="returnCar">반납</button>
 															</div>
 														</div>
 													</div>
-												</div>
-
-
-												<!-- 차량 반납시 차량번호 저장용 //필요 없을듯. 체크 -->
-												<input type="hidden" id="returnCar">
-												
+												</div>											
 											</div>
 										</div>
 									</div>
@@ -248,312 +265,218 @@ tr, th {
 
 	<script>
 		
-		$(function(){
-			$('#able').click(function(){
-				
-				let ableBtn = $('#able');
-					
-				//현재 행
-				let row = $(this).closest('tr');
-				let carNo = row.find('th:eq(1)').text();
-				console.log("차량번호 : ", carNo);
-				
-				$('#reserveCarNo').attr('value', carNo);
-
-			})
+	/* $(function(){
+		$('#able').click(function(){			
+			let ableBtn = $('#able');				
+			//현재 행
+			let row = $(this).closest('tr');
+			let carNo = row.find('th:eq(1)').text();
+			console.log("차량번호 : ", carNo);
+			
+			$('#reserveCarNo').attr('value', carNo);
 		})
+	}) */
+	
+	//차량 대여시 차량번호 자동입력. id는 고유값이므로 name 등 다른값으로 찾아야 함
+	$(function(){
+		$("[name='ableBtn']").click(function(){
+			
+			let row = $(this).closest('tr');
+			let carNo = row.find('th:eq(1)').text();
+			console.log('차량번호 : ', carNo);
+			
+			$('#reserveCarNo').attr('value', carNo);
+		})
+	})
 		
-		//차량 사용일자 빈칸
-		/* $(function(){
-			var required = $('#useDate').filter('[required]:empty');
-			if(required.size() > 0) {
+	//차량 사용일자 빈칸
+	/* $(function(){
+		var required = $('#useDate').filter('[required]:empty');
+		if(required.size() > 0) {
+			$('#useDate').focus();
+			$('#useDate').innerHTML = "사용일자를 입력하세요";
+		}
+	}) */
+		
+	//차량 대여
+	$(function(){
+		$('#addCar').click(function(){
+	
+			//예약할 차량번호
+			/* let ableBtn = $('#able');
+			let row = $(this).closest('tr');
+			let carNo = row.find('th:eq(1)').text();
+			console.log("차량번호 : ", carNo); */
+			
+			let reserveDate = $('#reserveDate').val();
+			let reserveCarNo = $('#reserveCarNo').val();
+			let memberNo = $('#reserveMemberNo').val(); //controller에서 사번
+			let useDate = $('#useDate').val();
+			let note = $('#useNote').val();
+				
+			console.log(reserveDate, memberNo, useDate, note);
+			
+			if(useDate.length == 0){
+				alert('사용일자를 입력해주세요.');
 				$('#useDate').focus();
-				$('#useDate').innerHTML = "사용일자를 입력하세요";
-			}
-		}) */
-		
-		//차량 대여 //
-		$(function(){
-			$('#addCar').click(function(){
-		
-				//예약할 차량번호
-				/* let ableBtn = $('#able');
-				let row = $(this).closest('tr');
-				let carNo = row.find('th:eq(1)').text();
-				console.log("차량번호 : ", carNo); */
+				return false;
 				
-				let reserveDate = $('#reserveDate').val();
-				let reserveCarNo = $('#reserveCarNo').val();
-				let memberNo = $('#reserveMemberNo').val(); //controller에서 사번
-				let useDate = $('#useDate').val();
-				let note = $('#useNote').val();
-					
-				console.log(reserveDate, memberNo, useDate, note);
-				
+			}else{		
 				$.ajax({
-					url: "reservingCar",
+					url: 'reservingCar',
 					data: {
 						reserveDate: reserveDate,
 						reserveCarNo: reserveCarNo,
 						useDate: useDate,
 						note: note
 					},
-					type: "post",
+					type: 'post',
 					success: function(userNo){
-						console.log("성공");
-						alert("차량을 예약하였습니다.");
-						console.log(userNo);
-						console.log(${userNo})
+						console.log('성공');
+						alert('차량을 예약하였습니다.');
+						//console.log(userNo);
+						//console.log(${userNo})
+						
+						location.reload();			
+					},
+					error: function(){
+						console.log('통신 실패');
+					}
+				})			
+			}			
+			 
+		})
+	})
+		
+	//차량 대여정보 조회
+	 $(function(){
+		 $("[name='unableBtn']").click(function(){	
+			console.log("대여불가 클릭");
+			
+			let row = $(this).closest('tr');
+			let reserveCarNo = row.find('th:eq(1)').text();
+			console.log("차량번호 : ", reserveCarNo);	
+			
+			$.ajax({
+				url: 'reserveDetails.do',
+				data: {
+					reserveCarNo: reserveCarNo
+				},
+				type: 'post',
+				success: function(data){		
+					console.log('성공');
+					const carObj = JSON.parse(data);	
+					//console.log(data);
+					
+					let reserveDate = carObj.reserveDate;
+					let reserveCarNo = carObj.reserveCarNo;
+					let reserveMName = carObj.reserveMName;
+					let reserveJName = carObj.reserveJName;
+					let userNo = carObj.userNo;
+					let useDate = carObj.useDate;
+					let useNote = carObj.useNote;
+					//console.log(reserveDate, reserveCarNo, reserveMName, reserveJName, userDate, userNote);
+					
+					$('#reserveDate-return').attr('value', reserveDate);
+					$('#reserveCarNo-return').attr('value', reserveCarNo);
+					$('#reserveMember-return').attr('value', reserveMName + " " + reserveJName);
+					$('#reserveCarNo-return').attr('value', reserveCarNo);
+					$('#useDate-return').attr('value', useDate);
+					//$('#useNote-return').attr('text', useNote);
+					//$('#useNote-return').innerHTML = useNote;
+					document.getElementById('useNote-return').value = useNote;
+					
+					//로그인유저와 예약자 동일하지 않을 시 반납버튼 비활성화
+					if(userNo != ${userNo}){
+						$('#returnCar').prop("disabled", true);
+						$('#updateCar').prop("disabled", true);
+						$('#useDate-return').prop("disabled", true);
+						$('#useNote-return').prop("disabled", true);
+						
+					}else{
+						$('#returnCar').prop("disabled", false);
+						$('#updateCar').prop("disabled", false);
+						$('#useDate-return').prop("disabled", false);
+						$('#useNote-return').prop("disabled", false);
+					}	
+				},
+				error: function(){
+					console.log('실패');
+				}
+			})
+		
+		})
+	}) 
+
+	//차량 반납
+	$(function(){
+		$('#returnCar').click(function(){
+			let reserveCarNo = $('#reserveCarNo-return').val();
+			console.log(reserveCarNo);
+			
+			$.ajax({
+				url: 'returnCar.do',
+				data: {
+					reserveCarNo: reserveCarNo
+				},
+				type: 'post',
+				success: function(){
+					alert('반납이 완료되었습니다.');
+					location.reload();
+				},
+				error: function(){
+					console.log('통신 실패');
+				}
+			})
+		})
+	})
+	
+	//대여내용 수정
+	$(function(){
+		$('#updateCar').click(function(){
+			
+			let reserveCarNo = $('#reserveCarNo-return').val();
+			let updateUseDate = $('#useDate-return').val();
+			let updateUseNote = $('#useNote-return').val();
+			console.log(updateUseDate, updateUseNote);
+			
+			if(updateUseDate.length == 0){
+				alert("사용일자를 입력해주세요.");
+				$('#useDate-return').focus();
+				return false;
+			}else{
+				$.ajax({
+					url: 'updateReserveCar.do',
+					data: {
+						reserveCarNo: reserveCarNo,
+						updateUseDate: updateUseDate,
+						updateUseNote: updateUseNote
+					},
+					type: 'post',
+					success: function(){
+						alert('예약을 수정하였습니다.');
 						location.reload();
 					},
 					error: function(){
-						console.log("통신 실패");
+						console.log('실패');
 					}
-				})
-				
-				/* if(userNo === ${userNo}){
-					$('#unable').text("반납");
-				}*/
-			})
+				}) 
+			}		
 		})
-		
-		//차량 반납
-		$(function(){
-			$('#unable').click(function(){	
-				console.log("대여불가 클릭");
-				
-				//let unableBtn = $('#unable');
-				let row = $(this).closest('tr');
-				let reserveCarNo = row.find('th:eq(1)').text();
-				console.log("차량번호 : ", reserveCarNo);	
-				//$('#returnCar').attr('value', reserveCarNo);
-				
-				$.ajax({
-					url:"reserveDetails.do",
-					data:{
-						reserveCarNo: reserveCarNo
-					},
-					type:"post",
-					success: function(){
-						console.log("성공");
-					},
-					error: function(){
-						console.log("실패");
-					}
-				})
-			
-			})
-		})
+	})
 	
-	
-		//화면 진입시 value에 지정된 날짜 자동 조회
-		window.onload = function(){
-			$("#searchDateBtn").trigger('click');
-		}
+	//모달 닫을 시 내용 초기화
+	$('.modal').on('hidden.bs.modal', function(e){
+		$(this).find('form')[0].reset();
+	})
 		
-		//예약된 일정 화면에 뿌리기
-		$(function() {
-			$("#searchDateBtn").click(function() {
-	
-				let date = $("#datePicker").val();
-				console.log(date);
-				$.ajax({
-					url : "reservedRoomList.do",
-					data : {
-						date : date
-					},
-					type : "post",
-					
-					//한글 깨짐 해결하기
-					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-					success : function(data, statusText, jqXHR) {
-						
-						const obj = JSON.parse(data);
-						const cells = $("#roomReserveTable tbody th");
-
-						let offset = 0;
-
-						cells.css("background", "");
-						cells.removeData("st-time");
-						cells.removeData("ed-time");
-
-						for (const room of obj.rooms){					
-							for (const time of room.times){
-								
-								const stTime = cells.eq(time[0] + offset + 1).attr('id');
-								let edTime = cells.eq(time[1] + offset).attr('id');
-
-								let splitedTime = edTime.split(':');
-								let edTimeHour = parseInt(splitedTime[0]);
-								let edTimeMinute = parseInt(splitedTime[1]);
-								
-								if (edTimeMinute == 30){
-									edTimeHour++;
-									edTimeMinute = '00';
-								} else {
-									edTimeMinute = '30';
-								}
-								
-								if (edTimeHour < 10){
-									edTimeHour = '0' + edTimeHour;
-								}
-								
-								edTime = edTimeHour + ':' + edTimeMinute;
-								
-								for (let i = time[0]; i < time[1]; i++){
-									
-									const item = cells.eq(i + offset + 1); //i + offset + 1 -> +1은 eq(0)이 회의실명 적힌 칸이라서
-
-									item.css('background', '#2146b5'); 
-									item.data('st-time', stTime);
-									item.data('ed-time', edTime);
-									item.prop('title', stTime + ' ~ ' + edTime)
-								}
-							}
-							
-							offset += 29; //한 행에 29칸임, +29 해서 한칸씩 내려갈 것
-						}
-					},
-					error : function(error) {
-						alert("조회에 실패하였습니다.");
-					}
-				})
-					
-			})
-		})
-
-		//예약하기
-		$(function() {
-			$("#reserveRoom").click(function(e) {
-				let date = $("#modal-datePicker").val();
-				let startTime = $("#startTime").val();
-				let endTime = $("#endTime").val();
-				let selectRoom = $("#selectRoom").val();
-				let title = $("#reservetitle").val();
-							
-				$.ajax({
-					url : "reserveRoom.do",
-					data : {
-						date : date,
-						startTime : startTime,
-						endTime : endTime,
-						selectRoom : selectRoom,
-						title: title
-					},
-					type : "post",
-					
-					//예약 완료시에 datepicker에 현재날짜 고정된채로 화면 reload 필요
-					success: function(result){
-						if(result > 0){
-							alert("예약이 완료되었습니다.");
-							$("#searchDateBtn").trigger('click');
-						}else if(result == -1){
-							alert("이미 예약된 시간입니다.")
-						}		
-					},
-					error: function(error){
-						alert("예약에 실패하였습니다. 예약정보를 입력해주세요.")
-					}
-				})
-				
-				$('#myModal').modal('hide');
-				e.preventDefault(); //페이지 새로고침되지 않게 //새로고침되면 datepicker 초기화됨
-			})
-		})
-		
-		$('#reserveRoomBtn').click(function(e) {
-			//모달 열기
-			$('#myModal').modal('toggle');
-		})
-		
-		$('#btnCloseModal').click(function(e) {
-			//수동으로 모달 닫기. 여백 클릭해도 닫히지 않음.
-			$('#myModal').modal('hide');
-		})
-
-		//예약시작시간보다 종료시간이 작을 수 없음
-		$(function(){
-			const fn = function(){			
-				let startTime = $("#startTime").val();
-				let endTime = $("#endTime").val();
-				
-				$.ajax({
-					url: "timeCheck.do",
-					data: {
-						startTime: startTime,
-						endTime: endTime						
-					},
-					type: "post",
-					success:function(result){
-						if(result > 0){
-							console.log("OK")
-							$("#reserveRoom").attr("disabled", false);
-						}else if(result == 0){
-							alert("시작시간과 종료시간은 같을 수 없습니다.");
-							//$("#reserveRoom").attr("disabled", true)
-						}else{
-							alert("종료시간은 시작시간보다 빠를 수 없습니다.");
-							//$("#reserveRoom").attr("disabled", true)
-						}
-					},
-					error: function(){
-						console.log("ajax 통신 실패")
-					}
-				})
-			};
-
-			$("#startTime").on("change", fn); // 시작시간이 선택 될 때 이벤트 발생
-			$("#endTime").on("change", fn); // 종료시간이 선택 될 때 이벤트 발생
-		}) 
-				
-		//에약 상세로 진입
-		$(function(){
-			$("#roomReserveTable tbody th").click(function(){
-				const item = $(this);
-				const id = item.attr('id');
-				const roomno = item.parent().data("roomno");
-				const stTime = item.data('st-time');
-				const edTime = item.data('ed-time');
-		
-				const date = $("#datePicker").val();
-				
-				if (typeof id == "undefined" || id == "" || id == null ||
-				    typeof stTime == "undefined" || stTime == "" || stTime == null ||
-				    typeof edTime == "undefined" || edTime == "" || edTime == null){
-					
-					return;
-				}else{
-					
-					console.log(id, typeof(id))
-					console.log(roomno, typeof(roomno))
-					console.log(stTime, typeof(stTime))
-					console.log(edTime, typeof(edTime))
-					console.log(date, typeof(date))
-									
-					$("input[name=dateD]").attr("value", date);
-					$("input[name=roomNoD]").attr("value", roomno);
-					$("input[name=startTimeD]").attr("value", stTime);
-					//console.log($("#dateD").val())
-					//console.log($("#roomNoD").val())
-					//console.log($("#startTimeD").val())		
-					$("#hiddenForm").submit();
-				}
-				
-			})
-		}) 
-		
-		//모달 닫을 시 내용 초기화
-		$(".modal").on("hidden.bs.modal", function(e){
-			$(this).find("form")[0].reset();
-		})
-
 	</script>
 
 	<c:if test="${ !empty msg }">
 		<script>
 			alert("${msg}");
 		</script>
-		<c:remove var="msg" scope="session" />
+		<c:remove var="msg" scope="session"/>
 	</c:if>
 
 </body>

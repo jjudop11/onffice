@@ -26,10 +26,14 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <style>
-tr, th {
+tr{
 	text-align: center;
 }
 
+th {
+	text-align: center;
+	width: 30px;
+}
 .btn btn-primary {
 	width: 70px;
 	height: 30px;
@@ -98,6 +102,7 @@ tr, th {
 																		<th>회의실명</th>
 																		<th>수용인원</th>
 																		<th>비고</th>
+																		<th></th>
 																	</tr>
 																</thead>
 																<tbody>
@@ -111,6 +116,7 @@ tr, th {
 																			<th class="roomName">${ r.roomName }</th>
 																			<th class="roomCapa">${ r.roomCapa }</th>
 																			<th class="roomNote">${ r.roomNote }</th>
+																			<th><button class="btn btn-light" name="modifyRoom" data-toggle="modal" data-target="#modifyRoomModal">수정</button></th>
 																		</tr>
 																	</c:forEach>														
 																</tbody>
@@ -179,7 +185,7 @@ tr, th {
 																					<label for="label-insertRoom" class="control-label">회의실번호</label>
 																					<input type="text" class="form-control"
 																						id="room_no" name="room_no" 
-																						placeholder="회사번호(0)-회의실번호(00)">	 <!-- 자동으로 회사번호 받아오는 방법 추가하기 -->
+																						placeholder="회사번호(00) 회의실번호(00)">
 																				</div>
 																				<div>
 																					 <a id="room_no_check"></a>
@@ -209,15 +215,64 @@ tr, th {
 																		<div class="modal-footer">
 																			<button type="button" class="btn btn-primary" id="addRoom" data-dismiss="modal"
 																				onclick="addRoom()">확인</button>
-																			<button type="button" id="btnCloseModal" class="btn btn-danger">닫기</button>
+																			<button type="button" id="insertModalCloseBtn" data-dismiss="modal" class="btn btn-danger">닫기</button>
 																		</div>
 																	</div>
 																</div>
 															</div>
+															
+															
+															<!-- 회의실 수정 Modal -->
+														<div class="modal" id="modifyRoomModal">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h4 class="modal-title">회의실 수정</h4>
+																		<button type="button" class="close"
+																			data-dismiss="modal"></button>
+																	</div>
+																	<div class="modal-body" id="modal-body">
+																		<form name="modifyRoom" method="post" action="#">
 
-
+																			<div class="form-modifyRoom">
+																				<label for="label-modifyRoom" class="control-label">회의실번호</label>
+																				<input type="text" class="form-control"
+																					id="room-no-modify" name="room-no-modify" disabled>	
+																			</div>
+																			<div>
+																				 <a id="room_no_check"></a>
+																			</div>
+																			<br>
+																			<div class="form-modifyRoom">
+																				<label for="label-modifyRoom" class="control-label">회의실명</label>
+																				<input type="text" class="form-control"
+																					id="room-name-modify" name="room-name-modify">
+																			</div>
+																			<br>
+																			<div class="form-modifyRoom">
+																				<label for="label-modifyRoom" class="control-label">수용인원</label>
+																				<input type="text" class="form-control"
+																					id="room-capa-modify" name="room-capa-modify">
+																			</div>
+																			<br>
+																			<div class="form-modifyRoom">
+																				<label for="label-modifyRoom" class="control-label">비고</label>
+																				<input type="text" class="form-control"
+																					id="room-note-modify" name="room-note-modify">
+																			</div>
+																		</form>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-primary" id="modifyRoom">수정</button>
+																	</div>
+																</div>
+															</div>
+														</div>	
+															
 														</div>
-													</div>
+														
+																									
+													</div>	
 												</div>
 											</div>
 										</div>
@@ -298,24 +353,40 @@ tr, th {
 				let addRoomCapa = $("#room_capa").val();
 				let addRoomNote = $("#room_note").val();
 
-				$.ajax({
-					url : "insertRoom.do",
-					data : {
-						roomNo : addRoomNo,
-						roomName : addRoomName,
-						roomCapa : addRoomCapa,
-						roomNote : addRoomNote
-					},
-					type : "post",
-					success : function(obj) {
-						alert("회의실을 추가하였습니다.");
-						console.log(obj)
-						location.reload();		
-					},
-					error : function(error) {
-						alert("회의실 추가에 실패하였습니다.");
-					}
-				})
+				if(addRoomNo.length == 0){
+					alert('회의실번호를 입력해주세요.');
+					$('#room_no').focus();
+					return false;
+					
+				}else if(addRoomName.length == 0){
+					alert('회의실명을 입력해주세요.');
+					$('#room_name').focus();
+					return false;
+				
+				}else {
+					$.ajax({
+						url : "insertRoom.do",
+						data : {
+							roomNo : addRoomNo,
+							roomName : addRoomName,
+							roomCapa : addRoomCapa,
+							roomNote : addRoomNote
+						},
+						type : "post",
+						success : function(obj) {
+							alert("회의실을 추가하였습니다.");
+							console.log(obj)
+							location.reload();		
+						},
+						error : function(error) {
+							alert("회의실 추가에 실패하였습니다.");
+						}
+					})
+					
+				}
+				
+				
+				
 			})
 		})
 		
@@ -448,12 +519,77 @@ tr, th {
 			}
 		}
 		
-		//모달 닫을 시 내용 초기화
-		$(".modal").on("hidden.bs.modal", function(e) {
-			$(this).find("form")[0].reset();
-			$("#room_no_check").empty();
+	//모달 닫을 시 내용 초기화
+	//수동 모달 닫기와 데이터 초기화가 안 먹힘
+	//모달창이 두개여서?
+	$("#myModal").on("hidden.bs.modal", function(e) {
+		$(this).find("form")[0].reset();
+		$("#room_no_check").empty();
+	})
+		
+	//회의실 정보 수정용 조회
+	$(function(){
+		$('[name="modifyRoom"]').click(function(){			
+			let row = $(this).closest('tr');
+			let roomNo = row.find('th:eq(1)').text();
+			console.log("회의실번호 : ", roomNo);
+			
+			$.ajax({
+				url: "roomInfo.do",
+				data: {
+					roomNo: roomNo
+				},
+				type: "post",
+				success: function(data){
+					console.log("성공");
+					const roomObj = JSON.parse(data);	
+					console.log(roomObj)
+					//let roomNo = roomObj.roomNo;
+					let roomName = roomObj.roomName;
+					let roomCapa = roomObj.roomCapa;
+					let roomNote = roomObj.roomNote;
+					
+					$('#room-no-modify').attr('value', roomNo);
+					$('#room-name-modify').attr('value', roomName);
+					$('#room-capa-modify').attr('value', roomCapa);
+					$('#room-note-modify').attr('value', roomNote);
+				},
+				error: function(){
+					console.log("실패");
+				}				
+			})
 		})
+	}) 
 	
+	//회의실 정보 수정
+	$(function(){
+		$('#modifyRoom').click(function(){
+			
+			let roomNo = $('#room-no-modify').val();
+			let roomName = $('#room-name-modify').val();
+			let roomCapa = $('#room-capa-modify').val();
+			let roomNote = $('#room-note-modify').val();
+			
+			$.ajax({
+				url: "modifyRoom.do",
+				data: {
+					roomNo: roomNo,
+					roomName: roomName,
+					roomCapa: roomCapa,
+					roomNote: roomNote
+				},
+				type: "post",
+				success: function(){
+					alert("회의실 정보를 수정하였습니다.");
+					location.reload();
+				},
+				error: function(){
+					console.log("실패")
+				}
+			})		
+		})
+	})
+		
 	</script>
 
 	<c:if test="${ !empty msg }">
