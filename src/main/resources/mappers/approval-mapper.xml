@@ -87,20 +87,12 @@
 		(SEQ_APPROVAL.NEXTVAL, null, DEFAULT, #{foNo}, #{cNo}, #{dNo}, #{mNo})
 	</insert>
 	
-	<!-- 결재선 
+	<!-- 결재선 -->
 	<insert id="insertApprovalLine" parameterType="ApprovalLine">
 		INSERT INTO APPROVAL_LINE
 		VALUES
 		(SEQ_APPROVAL.CURRVAL, null, #{aplineNo})
-	</insert> -->
-	
-	<update id="insertApprovalLine" parameterType="Map">
-		<foreach collection="aplineNoList" item="item" separator="" open="INSERT ALL" close="SELECT * FROM DUAL">
-			INTO APPROVAL_LINE
-			VALUES
-			(SEQ_APPROVAL.CURRVAL, null, #{item.aplineNo})
-		</foreach>
-	</update>
+	</insert>
 	
 	<!-- 첨부파일 -->
 	<insert id="insertFormAtt" parameterType="FormAtt">
@@ -413,7 +405,7 @@
 	<select id="selectCompleteListCount" resultType="_int">
 		SELECT COUNT(*)
 		FROM APPROVAL
-		WHERE AP_STATUS = 'Y'
+		WHERE AP_STATUS IS NOT NULL
 	</select>
 	
 	<select id="selectCompleteList" parameterType="ApList" resultMap="apListResultSet">
@@ -472,7 +464,7 @@
 		FROM APPROVAL A 
 		JOIN APPROVAL_LINE B ON A.AP_NO = B.AP_NO
 		WHERE A.AP_STATUS = 'Y'
-		AND B.APLINE_NO = 1
+		AND B.APLINE_NO = #{aplineNo}
 		AND B.APLINE_STATUS IS NOT NULL
 	</select>
 	
