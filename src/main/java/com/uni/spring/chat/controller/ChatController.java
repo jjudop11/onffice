@@ -29,11 +29,12 @@ import lombok.RequiredArgsConstructor;
 
 @SessionAttributes({"loginUser", "msg"})
 @Controller
-@RequiredArgsConstructor // Autowired를 안써도 되는 어노테이션
 public class ChatController {
 
+	@Autowired
 	private SimpMessagingTemplate template;
 
+	
 	@Autowired
 	public ChatService chatService;
 	
@@ -62,7 +63,7 @@ public class ChatController {
 			mv.setViewName("member/login");
 		}else{
 			mv.setViewName("chat/chatList");
-			//System.out.println("loginUser ==== " + loginUser);
+
 		}
 		
 		
@@ -85,9 +86,9 @@ public class ChatController {
 		// 채팅방 당 참가자 수 구하기
 		int cNo = loginUser.getCNo();
 		ArrayList<Chat> count = chatService.selectCount(cNo);
-		System.out.println("count === " + count);
+
 		ArrayList<Chat> list = chatService.selectChatRoomList(cNo);
-		System.out.println("list ========= " + list);
+
 		for(int i = 0; i < list.size(); i++) {
 			
 		
@@ -116,7 +117,7 @@ public class ChatController {
 	m.setMNo(loginUser.getMNo());
 	
 	ArrayList<Member> mList = chatService.selectMemList(m);
-	//System.out.println("mList -====- " + mList);
+	
 	return new GsonBuilder().create().toJson(mList);
 	}
 	
@@ -133,7 +134,6 @@ public class ChatController {
 			for(int i = 0; i < eList.size(); i++){
 			   
 				m.setMNo(eList.get(i));
-				System.out.println("eList.get(i) ================ " + eList.get(i));
 				chatService.insertSelectUserList(m);
 				
 			  }
@@ -165,7 +165,6 @@ public class ChatController {
 	@RequestMapping("deleteCheckedUser")
 	public int deleteCheckedUser(Model model) {
 		
-		System.out.println("컨트롤러 찍히는지 홧인");
 		Member loginUser = (Member)model.getAttribute("loginUser");
 		
 		Member m = new Member();	
@@ -196,14 +195,8 @@ public class ChatController {
 				chat.setCNo(loginUser.getCNo());
 				chatService.createChatRoom(chat);
 				
-				/*
-				Member m = new Member();	
-				
-				m.setCNo(loginUser.getCNo());
-				m.setMNo(loginUser.getMNo());	
-				*/
 				ArrayList<Member> mList = chatService.checkedUserList(loginUser);
-				System.out.println("mList.size === " + mList );
+
 				if(mList.size() > 0) {
 				
 					chatService.insertChatUser(chat, mList,loginUser);
@@ -215,17 +208,16 @@ public class ChatController {
 	}
 	
 
+	// 채팅방 완전 나가기
 	@GetMapping(value="/chatRoom/exitRoom")
 	public String exitRoom(Model model, String crNo, String mNo, String cNo) {
-		
+		System.out.println("crNo === " + crNo + " === mNo === " + mNo + " === cNo === " + cNo);
 		Chat chat = new Chat();
 		chat.setCrNo(Integer.parseInt(crNo));
 		chat.setMNo(mNo);
 		chat.setCNo(Integer.parseInt(cNo));
-		System.out.println("chat ========== " + chat);
-		//System.out.println("exit 실행 ==================");
+		
 		Chat chatRoom = chatService.findRoomUser(chat);
-		//System.out.println("chatRoom === " + chatRoom );
 		if(chatRoom.getMNo().equals(chatRoom.getCrFounderNo())) {
 			
 			// 채팅방 자체 삭제
@@ -257,7 +249,6 @@ public class ChatController {
 				
 				// 채팅방 채팅내역 정보
 				ArrayList<Message> message = chatService.selectCHList(chat);	
-				//System.out.println("message ==== " + message);
 				
 				// 채팅방 입장 시간 입력
 				Date chatNo = new Date();
@@ -267,17 +258,16 @@ public class ChatController {
 				chat.setChatEnter(chatEnter);
 				chat.setCNo(loginUser.getCNo());
 				chat.setMNo(loginUser.getMNo());
-				//System.out.println("chatNo ===  " + chatEnter);
 				
 				// 채팅방 출입 목록에 있는지 확인 = 한 번이라도 그 방에 들어간 적이 있는지 확인
 				Chat caUser = chatService.findCAUser(chat);
 				
 				// 들어가려는 채팅방의 맴버 정보 출력
 				ArrayList<Chat> user = chatService.findRoomUserList(chat);
-				
+				System.out.println("user ===> " + user);
 				for(Chat c : user) {
 					// 들어가려는 채팅방 목록에 맴버 정보가 있으면
-					if(c.getMNo().contains(chat.getMNo())) {
+					if(c.getMNo().equals(chat.getMNo())) {
 
 						// 출입 여부를 확인해서 입장 시간을 입력 or 수정 해줌 
 						if(caUser == null) {
@@ -285,9 +275,6 @@ public class ChatController {
 						}else {
 							chatService.updateCAUser(chat);
 						}
-						
-						//System.out.println("message ==== " + message);
-						//System.out.println("mem ===== " + loginUser);
 						
 						model.addAttribute("message", message);
 						model.addAttribute("mem", loginUser);
@@ -312,13 +299,11 @@ public class ChatController {
 			}
 		}
 
-		
+		// 채팅 내역 받아서 저장, 보내주는 메소드
 		@MessageMapping("/chat/send")
 	    public void sendMsg(Message message){
 
-			// message에 cNo넣어주기
 			Chat chat = new Chat();
-			//System.out.println("message.getCNo === " + message.getCNo());
 			chat.setCNo(message.getCNo());
 			chat.setCrNo(message.getCrNo());
 			chat.setMNo(message.getMNo());
@@ -336,7 +321,6 @@ public class ChatController {
 			
 			System.out.println(chat);
 			Member m = chatService.loginUser(chat);
-			System.out.println("loginUser m ====== " + m);
 			message.setPName(m.getPName());
 			
 			chat.setPName(m.getPName());
@@ -346,7 +330,6 @@ public class ChatController {
 			
 			Chat chatSeq = new Chat(); 
 			chatSeq = chatService.findCHSeq(chat);
-			System.out.println("chatSeq === " + chatSeq);
 			int seq = 1;
 			if(chatSeq == null) {
 				
@@ -357,15 +340,13 @@ public class ChatController {
 				chat.setChatSeq(seq1);
 			}
 		
-			//System.out.println("message ==== " + message);
 			chatService.saveChat(chat);
 
 	    }
 		
-		
+		// 채팅방 나가는 시간 기록
 		@RequestMapping("/chatRoom/disconnect")
 		public String disconnect(String crNo, String mNo) {
-			System.out.println("disconnect 실행");
 			Chat mem = new Chat();
 			
 			Date exitTime = new Date();
@@ -379,5 +360,43 @@ public class ChatController {
 			chatService.disconnect(mem);
 			return "redirect:/chatRoomListForm";
 		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value="checkCRUser" , produces="application/json; charset=utf-8")
+		public String checkChatRoomUser(Model model, int crNo) {
+			
+			Member loginUser = (Member)model.getAttribute("loginUser");
+			
+			Chat chat = new Chat();	
+			
+			chat.setCrNo(crNo);
+			chat.setMNo(loginUser.getMNo());	
+			
+			ArrayList<Chat> list = chatService.checkCRUserList(chat);
+			System.out.println("list =================> " + list);
+			
+			return new GsonBuilder().create().toJson(list);
+		}
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value="IMemberDelete")
+		public int deleteInviteMember(Model model, String mNo) {
+			
+			Member loginUser = (Member)model.getAttribute("loginUser");
+			
+			Member m = new Member();
+			
+			m.setCNo(loginUser.getCNo());
+			m.setMNo(mNo);
+			
+			chatService.deleteInviteMember(m);
+		
+			return 1;
+		}
+		
+		
 		
 }

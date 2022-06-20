@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 부서명 목록 -->
 	<select id="selectDeptList" parameterType="_int" resultType="string">
-		SELECT DISTINCT A.D_NAME FROM DEPT A JOIN MEMBER B ON A.D_NO = B.D_NO WHERE B.C_NO = #{cNo}
+		SELECT DISTINCT A.D_NAME FROM DEPT A JOIN MEMBER B ON A.D_NO = B.D_NO WHERE B.C_NO = #{cNo} AND A.D_NAME != '대표'
 	</select>
 	
 	<!-- 개인 프로필 사원 정보 -->

@@ -174,8 +174,19 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public void deleteCAUser(Chat chat) {
 		// TODO Auto-generated method stub
-		System.out.println("serviceImpl deleteCAUser 작동");
 		chatDao.deleteCAUser(sqlSession, chat);
+	}
+
+	@Override
+	public ArrayList<Chat> checkCRUserList(Chat chat) {
+		// TODO Auto-generated method stub
+		return chatDao.checkCRUserList(sqlSession, chat);
+	}
+
+	@Override
+	public void deleteInviteMember(Member m) {
+		// TODO Auto-generated method stub
+		chatDao.deleteInviteMember(sqlSession, m);
 	}
 
 }

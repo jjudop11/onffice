@@ -54,4 +54,8 @@ public interface ChatService {
 
 	void deleteCAUser(Chat chat);
 
+	ArrayList<Chat> checkCRUserList(Chat chat);
+
+	void deleteInviteMember(Member m);
+
 }

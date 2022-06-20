@@ -16,4 +16,32 @@ public interface SurveyBoardService {
 
 	ArrayList<SurveyBoard> selectHomeList(PageInfo pi, SurveyBoard sb);
 
+	int selectAllListCount(SurveyBoard sb);
+
+	ArrayList<SurveyBoard> selectAllList(PageInfo pi, SurveyBoard sb);
+
+	int selectMyListCount(SurveyBoard sb);
+
+	ArrayList<SurveyBoard> selectMyList(PageInfo pi, SurveyBoard sb);
+
+	int selectEndListCount(SurveyBoard sb);
+
+	ArrayList<SurveyBoard> selectEndList(PageInfo pi, SurveyBoard sb);
+
+	ArrayList<SurveyBoard> selectBoardInfo(SurveyBoard sb);
+
+	int selectDeptCount(SurveyBoard sb);
+
+	int selectDeptAllCount(SurveyBoard sb);
+
+	int selectComMemCount(int sbNo);
+
+	ArrayList<SurveyBoard> selectDeptNoList(int sbNo);
+
+	ArrayList<SurveyBoard> selectSBAnswerList(int sbNo);
+
+	void insertAnswerInfo(int sbNo, int[] sbQuestion, int sbINo, String mNo);
+
+	void deleteSurveyBoard(int sbNo);
+
 }

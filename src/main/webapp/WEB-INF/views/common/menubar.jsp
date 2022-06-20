@@ -117,7 +117,15 @@
 		
 		}
 		
+		.toggle_down .hide{
 		
+			display:none;
+		}
+		
+		.toggle_down a{
+		
+		cursor:pointer;
+		}
 	</style>
 </head>
 
@@ -138,7 +146,6 @@
                                   <li>
                                       <h6 class="dropdown-header">채팅</h6>
                                   </li>
-                                  <li><a class="dropdown-item" href="selectCommunityList">community</a></li>
                                   <li><a class="dropdown-item" href="chatRoomListForm">chat</a></li>
                               </ul>
                           </li>
@@ -292,7 +299,7 @@
 
                   		<li class="sidebar-item">
                             <a href="surveyBoardForm" class='sidebar-link'>
-                                <i class="bi bi-egg-fill"></i>
+                                <img src="${ pageContext.servletContext.contextPath }/resources/icon/surveyBoardIcon.png" style="width:20; height:20;"/>
                                 <span>설문게시판</span>
                             </a>
                         </li>
@@ -430,7 +437,7 @@
 
     </script>
     
-      <script>
+     <script>
 
 		$('#orgChart-link').click(function(){
 
@@ -479,7 +486,7 @@
                								"<img class='oc_list_icon' src='${ pageContext.servletContext.contextPath }/resources/icon/dash-circle-fill.svg'/>" +
                							"</a>" +
     									"<a class='oc_list_profile' style='margin:0 0 0 5px;'>"+ d +"</a>" +
-    									"<ul>"
+    									"<ul class='hide'>"
     									
     									
     									$.each(org.cList, function(j , c){
@@ -516,22 +523,58 @@
     }) <%--조직도 실행 함수 --%>
     	
     	
-			let count = 0;
-    	
-    	$('.oc_list_iconClick').click(function(){
+		<%--
+		$('.toggle_down').children().click(function(){
+			
+			console.log('함수 작동')
+			
+			var submenu = $(this).next('ul');
+			
+			if(submenu.is(':visible') ){
+				
+				submenu.slideUp();
+			}else{
+				submenu .slideDown();
+				
+			}
+			
+			
+		})
+		--%>
+		
+    	$(document).on('click' , '.oc_list_iconClick' , function(){
     		
-    		count++;
-    		
-    		if($(this).children().attr("src" , "${ pageContext.servletContext.contextPath }/resources/icon/dash-circle-fill.svg")) {
-    	
-        		$(this).children().attr("src" , "${ pageContext.servletContext.contextPath }/resources/icon/plus-circle-fill.svg")
-    		
-    		} else {
-    		
-    	   		$(this).children().attr("src" , "${ pageContext.servletContext.contextPath }/resources/icon/dash-circle-fill.svg")
-    		}
+    		let submenu = $(this).nextAll("ul");
 
+    		
+			if(submenu.is(':visible')){
+				
+				submenu.slideUp();
+			}else{
+				submenu.slideDown();
+				
+			}
+   
+    		
     	})
+    	
+    	
+    	$(document).on('click' , '.oc_list_icon' , function(){
+    		
+    		if($(this).prop("src" , "${ pageContext.servletContext.contextPath }/resources/icon/dash-circle-fill.svg")) {
+
+    			console.log('열기 조건')
+        		$(this).prop("src" , "${ pageContext.servletContext.contextPath }/resources/icon/plus-circle-fill.svg")
+    		
+    		}else if($(this).prop("src" , "${ pageContext.servletContext.contextPath }/resources/icon/plus-circle-fill.svg")){
+    		
+    			console.log('닫기 조건')
+    	   		$(this).prop("src" , "${ pageContext.servletContext.contextPath }/resources/icon/dash-circle-fill.svg")
+    		}
+    		
+    		
+    	})
+    	
     	
 
  		// 조직도 껐다 켰다
@@ -664,6 +707,7 @@
     		
     	})
     	
+    	// 조직도 검색 리스트 초기화
     	function searchListClean(){
     		
     		$('.orgChartList').html(null);

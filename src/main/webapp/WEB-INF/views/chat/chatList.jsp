@@ -5,7 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+ 
 <meta charset="UTF-8">
 <style>
 @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
@@ -101,50 +102,13 @@
 		display:flex; 
 	}
 	
-	/* 버튼 css */
-	.button {
-	  border: none;
-	  display: block;
-	  text-align: center;
-	  cursor: pointer;
-	  text-transform: uppercase;
-	  outline: none;
-	  overflow: hidden;
-	  position: relative;
-	  color: #fff;
-	  font-weight: 700;
-	  font-size: 15px;
-	  background-color: #222;
-	  /*padding: 17px 60px;*/
-	  margin: 0 auto;
-		 }
-	
-	.button span {
-	  position: relative; 
-	  z-index: 1;
+	.InviteUser:hover{
+		background:lightgray;
 	}
 	
-	.button:after {
-	  content: "";
-	  position: absolute;
-	  left: 0;
-	  top: 0;
-	  height: 490%;
-	  width: 140%;
-	  background: #78c7d2;
-	  -webkit-transition: all .5s ease-in-out;
-	  transition: all .5s ease-in-out;
-	  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
-	  transform: translateX(-98%) translateY(-25%) rotate(45deg);
-	}
-	
-	.button:hover:after {
-	  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
-	  transform: translateX(-9%) translateY(-25%) rotate(45deg);
-	}
 </style>
 </head>
-<body style="background-color:#F0FFF0">
+<body>
 
 	<jsp:include page="../common/menubar.jsp"/>
 
@@ -182,7 +146,7 @@
                     <a data-toggle="modal" href="#myModal2" class="btn btn-primary" id="inviteUser">추가하기</a>
                     
                     <!-- 선택된 사원 정보 -->
-                    <div class="form-control mb-2 mr-sm-2" id="inviteUserList" style="display:flex;"></div>
+                    <div class="form-control mb-2 mr-sm-2" id="inviteUserList" style="min-height:40px;"></div>
                    
                     <div id="inviteUserCheck" style="display:none; font-size:0.8em"></div> <br>
                     <label for="userPwd" class="mr-sm-2">비밀번호 설정 <input class="" type="checkbox" id="pwCheck"></label>
@@ -248,28 +212,27 @@
 						value += 
     				
 						"<tr>" +
-                        "<td class='countTd' style='width:100%;'><h4>" + c.crTitle+"</h4><h5>(" +  c.crCount  +" 명)</h5></td>" +
+                        	"<td class='countTd' style='width:100%;'><h4>" + c.crTitle+"</h4><h5>(" +  c.crCount  +" 명)</h5></td>" +
                         
-                        "<td style='width:20%;'><svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chat-heart' viewBox='0 0 16 16'>" +
-							  "<path fill-rule='evenodd' d='M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z'/>" +
-							"</svg></td>" +
+	                        "<td style='width:20%;'><svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chat-heart' viewBox='0 0 16 16'>" +
+								  "<path fill-rule='evenodd' d='M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z'/>" +
+								"</svg></td>" +
 						
-                        "<td id='lockIcon+"+i+"' style='width:20%;'>" +	                 
-                        "<svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-lock-fill' viewBox='0 0 16 16'>" +
-					  	   "<path d='M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z'/>" +
-						   "</svg> "+c.crPw+"" +
+	                        "<td id='lockIcon+"+i+"' style='width:20%;'>" +	                 
+		                        "<svg style='width:40px; height:40px;' xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-lock-fill' viewBox='0 0 16 16'>" +
+							  	   "<path d='M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z'/>" +
+								"</svg>" +
 							"</td>" +
-                   		"<td >" +
-                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post' onsubmit='return check( "+i+" );'>" +
-                   		"<input class='btn btn-primary' name='createRoom' type='submit' value='입장'/ style='width:60px; float:right;'>" +
-						"<input type='hidden'  value='"+c.crNo +"' name='crNo'>" +
-						"<input type='hidden'  value='"+c.crTitle+"' name='crTitle'>" +
-						"<input type='hidden'  value='"+c.crPw+"' name='crPw' id='pw"+i+"'>" +
-						"</form>" +
-						"</td>" +
+	                   		"<td >" +
+		                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post'>" +
+			                   		"<input onClick='check("+i+")' class='btn btn-primary' name='createRoom' type='button' value='입장'/ style='width:60px; float:right;'>" +
+									"<input type='hidden'  value='"+c.crNo +"' name='crNo' id='crNo"+i+"'>" +
+									"<input type='hidden'  value='"+c.crTitle+"' name='crTitle'>" +
+									"<input type='hidden'  value='"+c.crPw+"' name='crPw' id='pw"+i+"'>" +
+								"</form>" +
+							"</td>" +
 						"</tr>" +
                     	"<tr><td colspan=5><hr class='divLine1' ></td></tr>"
-                    	console.log("pw === " + typeof(c.crPw))
 							
     					}
 				
@@ -287,8 +250,8 @@
 								"</td>" +
 	                   		"<td >" +
 	                   		"<form action='chatRoom/"+ c.crNo +"' id='EnrollChatForm"+i+"' method='post'>" +
-	                   		"<input class='btn btn-primary' name='createRoom' type='submit' value='입장'/ style='width:60px; float:right'>" +
-							"<input type='hidden'  value='"+c.crNo +"' name='crNo'>" +
+	                   		"<input onClick='check("+i+")' class='btn btn-primary' name='createRoom' type='button' value='입장'/ style='width:60px; float:right'>" +
+							"<input type='hidden'  value='"+c.crNo +"' name='crNo' >" +
 							"<input type='hidden'  value='"+c.crTitle+"' name='crTitle'>" +
 							"</form>" +
 							"</td>" +
@@ -447,9 +410,9 @@
 				  console.log("모달종료함수")
 				});
 			
-			// 체크된 유저 삭제하는 ajax
+			// 체크된 유저 삭제하는 함수
 			function deleteCheckedUser(crNo){
-				
+				console.log('삭제 함수 실행')
 				$.ajax({
 				
 				  url:"deleteCheckedUser",
@@ -593,13 +556,14 @@
 		
 		// 선택된 유저를 뿌려주는 함수
 		function checkedUserList(){ 
+
 		$.ajax({
 					
 			url : "checkedUserList",
 			type : "post",
 				
 			success : function (mList) {
-	        	//console.log(mList)
+	        	console.log(mList)
 				var count = mList.length;
 				
 				var value= "";
@@ -607,42 +571,115 @@
 				$.each(mList, function(i, m){
 					
 					value += 
-						"<button id='userList"+i+"'  type='button' class='button' value='"+m.mName+"'></button>" +
-						"<label for='userList"+i+"'>&nbsp;X</label>"
-
+						"<span><input id='userList"+i+"' onclick='IUserDelete("+i+")'  type='text' class='InviteUser' value='"+m.mName+"' readonly style='border-radius:10px; width:17%; margin:0 5px 10px 0; text-align:center;'></input></span>" +
+						"<input type='hidden' value='"+m.mNo+"' id='inviteUserList"+i+"'>"
+			
 				})
 				
 				$('#inviteUserList').html(value);
-	            //alert("데이터 받기 성공")
+				
 			},error:function(request, error){
 	   	   		
 				
 	   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
 	   	   		
-		   		console.log("너냐?ajax통신실패");
+		   		console.log("ajax통신실패");
 
 				 }
 			})
 		}
 		
-		// 채팅방 입장시 비밀버호 체크해서 들어가는 함수
+		// 채팅방 입장시 비밀번호 체크해서 들어가는 함수
 		function check(i){
-			
+
+			crNo = $('#crNo'+i).val();
 			var pw = $('#pw'+i).val();
 
-			var checkPw = prompt("비밀번호를 입력하세요");
-			
-			if(checkPw == pw){
-				console.log(typeof(pw))
-				return true;
+			if(pw != ""){
+				
+				$.ajax({
+					
+					url:"checkCRUser",
+					type:"post",
+					data:{
+						crNo:crNo
+					},
+					
+					success:function(list){
+				
+					
+						if(list != ""){
+							
+							$('#EnrollChatForm'+i).submit();
+							
+						}else{
+							
+							var pw = $('#pw'+i).val();
+
+							console.log('pw ======= ' + pw)
+							
+							var checkPw = prompt("비밀번호를 입력하세요");
+							
+							
+							
+							if(checkPw == pw){
+								
+
+								$('#EnrollChatForm'+i).submit();
+								
+								
+							}else{
+								
+								alert('비밀번호가 일치하지 않습니다.');
+								
+
+							}
+							
+						}
+
+					}
+
+				})
 				
 			}else{
-				alert('비밀번호가 일치하지 않습니다.');
-				return false;
 				
+				$('#EnrollChatForm'+i).submit();
 			}
-				
+			
+
 		}
+		
+		function IUserDelete(i){
+			
+			let mNo = $('#inviteUserList'+i).val(); 
+
+			$.ajax({
+			
+				url:"IMemberDelete",
+				type:"post",
+				data:{
+					mNo:mNo
+				},
+				
+				success:function(e){
+					
+					if(e == 1){
+
+						checkedUserList();	
+					}
+					
+					
+				}
+				
+				
+			})
+			
+			
+			
+			
+		}
+		
+		
 		
 	</script>
 	

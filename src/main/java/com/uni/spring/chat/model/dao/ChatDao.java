@@ -118,4 +118,14 @@ public class ChatDao {
 		sqlSession.update("chatMapper.deleteCAUser" , chat);
 	}
 
+	public ArrayList<Chat> checkCRUserList(SqlSessionTemplate sqlSession, Chat chat) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("chatMapper.checkCRUserList", chat);
+	}
+
+	public void deleteInviteMember(SqlSessionTemplate sqlSession, Member m) {
+		// TODO Auto-generated method stub
+		sqlSession.update("chatMapper.deleteInviteMember" , m);
+	}
+
 }

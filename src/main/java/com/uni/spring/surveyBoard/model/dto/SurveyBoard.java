@@ -19,6 +19,8 @@ public class SurveyBoard {
 	private String sbEndDate;		// 설문 게시글 끝 날짜
 	private String sbResultState;	// 설문 게시글 결과 공개 상태 ('Y' , 'N')
 	private String sbFounderNo;		// 설문 게시글 작성자 번호
+	private String sbFounderName;	// 설문 게시글 작성자 이름
+	private String sbFounderdName;	// 설문 게시글 작성자 부서명
 	private int cNo;				// 회사번호
 	private int dNo;				// 부서번호
 	private int sbTDNo;				// 설문 게시글 공개 대상 부서 번호

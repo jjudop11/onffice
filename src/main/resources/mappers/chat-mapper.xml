@@ -144,4 +144,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM CR_ACCESS WHERE CR_NO = #{crNo} AND M_NO = #{mNo}
 	</delete>
 	
+	<!-- 채팅방에 유저가 있는지 확인 -->
+	<select id="checkCRUserList" parameterType="Chat" resultType="Chat">
+		SELECT * FROM CR_USER WHERE CR_NO = #{crNo} AND M_NO = #{mNo}
+	</select>
+	
+	
+	<!-- 초대리스트 맴버 삭제 -->
+	<delete id="deleteInviteMember" parameterType="Member">
+		DELETE FROM CR_I_LIST WHERE C_NO = #{cNo} AND I_MEM_NO = #{mNo}
+	</delete>
+	
 </mapper>

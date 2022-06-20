@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,7 +95,7 @@ public class SurveyBoardController {
 			sb.setCNo(loginUser.getCNo());
 			sb.setMNo(loginUser.getMNo());
 			sb.setSbFounderNo(loginUser.getMNo());
-			int result = surveyBoardService.insertSurveyBoard(sb, target, questionContent);
+			surveyBoardService.insertSurveyBoard(sb, target, questionContent);
 			
 			
 			return "redirect:/surveyBoardForm";
@@ -117,14 +118,11 @@ public class SurveyBoardController {
 		sb.setMNo(loginUser.getMNo());
 		sb.setDNo(loginUser.getDNo());
 		
-		
-		//if(num == 1) {
-			int listCount = surveyBoardService.selectHomeListCount(sb);
-		//}
-		//if(listCount != null) {
+		// 홈 리스트
+		if(num == 1) {
 			
-		//}
-		PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
+			int listCount = surveyBoardService.selectHomeListCount(sb);
+			PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
 			
 			ArrayList<SurveyBoard> homeList = surveyBoardService.selectHomeList(pi, sb);
 			
@@ -133,8 +131,188 @@ public class SurveyBoardController {
 			result.put("startpage",  pi.getStartPage());
 			result.put("endpage",  pi.getEndPage());
 			result.put("maxpage",  pi.getMaxPage());
-		return result;
+			
+			return result;
+			
+		// 모든 리스트
+		}else if(num == 2){
+			
+			int listCount = surveyBoardService.selectAllListCount(sb);
+			PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
+			
+			ArrayList<SurveyBoard> AllList = surveyBoardService.selectAllList(pi, sb);
+			
+			result.put("list", AllList);
+			result.put("page",  pi.getCurrentPage());
+			result.put("startpage",  pi.getStartPage());
+			result.put("endpage",  pi.getEndPage());
+			result.put("maxpage",  pi.getMaxPage());
+			
+			return result;
+		
+		// 내가 작성한 리스트
+		}else if(num == 3){
+			
+			int listCount = surveyBoardService.selectMyListCount(sb);
+			PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
+			
+			ArrayList<SurveyBoard> MyList = surveyBoardService.selectMyList(pi, sb);
+			
+			result.put("list", MyList);
+			result.put("page",  pi.getCurrentPage());
+			result.put("startpage",  pi.getStartPage());
+			result.put("endpage",  pi.getEndPage());
+			result.put("maxpage",  pi.getMaxPage());
+			
+			return result;
+			
+		// 종료된 리스트
+		}else{
+			
+			int listCount = surveyBoardService.selectEndListCount(sb);
+			PageInfo pi = Pagination.getPageInfo(listCount, page, 10, 10);
+			
+			ArrayList<SurveyBoard> EndList = surveyBoardService.selectEndList(pi, sb);
+			
+			for(int i = 0; i < EndList.size(); i++) {
+				
+				System.out.println("EndList ==========> " + EndList.get(i));
+			}
+			
+			
+			
+			result.put("list", EndList);
+			result.put("page",  pi.getCurrentPage());
+			result.put("startpage",  pi.getStartPage());
+			result.put("endpage",  pi.getEndPage());
+			result.put("maxpage",  pi.getMaxPage());
+			
+			return result;
+		}
+
 	}
 	
+
+	@RequestMapping("surveyBoardDetail")
+	public String surveyBoardDetail(int sbNo, Model model, String sbAState) {
+		
+		
+		System.out.println("sbNo ==== " + sbNo + " === sbAState === " + sbAState);
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		if(loginUser == null) {
+			
+			model.addAttribute("msg", "로그인후 이용해 주세요.");
+			return "redirect:/";
+		}else {
+		
+		SurveyBoard sb= new SurveyBoard();
+		sb.setCNo(loginUser.getCNo());
+		sb.setSbNo(sbNo);
+		
+		//ArrayList<Member> deptList = surveyBoardService.selectDeptList(loginUser.getCNo());
+		ArrayList<SurveyBoard> list = surveyBoardService.selectBoardInfo(sb);
+		ArrayList<SurveyBoard> qList = surveyBoardService.selectSBAnswerList(sbNo);
+		System.out.println("list =========== " + list);
+		
+		int every = 0;
+		
+		if(list.get(0).getSbTDNo() == 0) {
+			
+			sb.setSbTDNo(0);
+			System.out.println("list.get(0).getSbTDNo() -====================>  " + list.get(0).getSbTDNo());
+			every = surveyBoardService.selectDeptAllCount(sb);
+			
+		}else {
+		
+			ArrayList<SurveyBoard> dlist = surveyBoardService.selectDeptNoList(sbNo);
+			
+			for(int i = 0; i < dlist.size(); i++) {
+				
+				sb.setSbTDNo(dlist.get(i).getSbTDNo());
+
+				
+				every += surveyBoardService.selectDeptCount(sb);
+
+			}
+		}
+		
+		int comMemCount = surveyBoardService.selectComMemCount(sbNo);
+		
+		model.addAttribute("comMemCount", comMemCount);
+		model.addAttribute("memCount", every);
+		model.addAttribute("sbList", list);
+		model.addAttribute("sbAState", sbAState);
+		model.addAttribute("qList", qList);
+
+		
+		
+		
+		return "surveyBoard/surveyBoardDetail";
+		}
+	}
+	
+	
+	@RequestMapping(value="insertQuestionAnswer")
+	public String insertQuestionAnswer(Model model, @RequestParam(value="sbNo" , required = false, defaultValue = "1") int sbNo, int[] sbQuestion,
+										@RequestParam(value="sbINo" , required = false, defaultValue = "1") int sbINo) {
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+		
+		if(loginUser == null) {
+			
+			model.addAttribute("msg", "로그인후 이용해 주세요.");
+			return "member/login";
+		}else {
+			String mNo = loginUser.getMNo();
+			//int sbNo1 = Integer.parseInt(sbNo);
+			System.out.println("sbNo =============== " + sbNo);
+			surveyBoardService.insertAnswerInfo(sbNo, sbQuestion, sbINo, mNo);
+
+			return "redirect:/surveyBoardForm";
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="chartInfoList", produces = "application/json; charset=utf-8")
+	public Map<String, Object> selectChartInfo(Model model, int sbNo) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+			SurveyBoard sb= new SurveyBoard();
+			sb.setCNo(loginUser.getCNo());
+			sb.setSbNo(sbNo);
+			
+			ArrayList<SurveyBoard> list = surveyBoardService.selectBoardInfo(sb);
+			ArrayList<SurveyBoard> qList = surveyBoardService.selectSBAnswerList(sbNo);
+			
+			result.put("sbList", list);
+			result.put("qList", qList);
+			
+			return result;
+		}
+	
+
+	@GetMapping(value="deleteSurveyBoard")
+	public String deleteSurveyBoard(Model model, int sbNo) {
+		
+		Member loginUser = (Member)model.getAttribute("loginUser");
+		
+			SurveyBoard sb= new SurveyBoard();
+			sb.setCNo(loginUser.getCNo());
+			sb.setSbNo(sbNo);
+			
+
+			System.out.println("sbNo ====== > " + sbNo);
+			surveyBoardService.deleteSurveyBoard(sbNo);
+			
+
+			
+			return "redirect:/surveyBoardForm";
+		}
 	
 }
