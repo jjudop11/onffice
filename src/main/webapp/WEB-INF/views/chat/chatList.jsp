@@ -119,85 +119,80 @@
 		</div>
 		<hr class="divLine">
   		<table id="boardList">
-           		<!-- 채팅방 리스트 -->
-                <tbody id="chatList">
-                	
-                </tbody>
-            </table>
+	   		<!-- 채팅방 리스트 -->
+	        <tbody id="chatList">
+	        	
+	        </tbody>
+        </table>
 	
-
-	 <!-- 채팅방 생성 클릭 시 뜨는 모달  -->
-    <div class="modal fade" id="createCRModal">
-        <div class="modal-dialog modal-fullsize" id="modalDialog">
-            <div class="modal-content modal-fullsize">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">채팅방 생성</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button> 
-            </div>
-
-            <form action="createChatRoom" method="post" id="createChatRoom">
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <label for="crTitle" class="mr-sm-2">그룹명 :</label>
-                    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="그룹명을 입력하세요." id="crTitle" name="crTitle"> 
-                    <div id="crTitleCheck" style="display:none; font-size:0.8em"></div> <br>
-                    <label for="userPwd" class="mr-sm-2">초대할 대상 :</label>
-                    <a data-toggle="modal" href="#myModal2" class="btn btn-primary" id="inviteUser">추가하기</a>
-                    
-                    <!-- 선택된 사원 정보 -->
-                    <div class="form-control mb-2 mr-sm-2" id="inviteUserList" style="min-height:40px;"></div>
-                   
-                    <div id="inviteUserCheck" style="display:none; font-size:0.8em"></div> <br>
-                    <label for="userPwd" class="mr-sm-2">비밀번호 설정 <input class="" type="checkbox" id="pwCheck"></label>
-                    <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="crPw" name="crPw" readOnly>
-                </div>
-                
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" id="encodeRoom" class="btn btn-primary">채팅방 생성</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-                </div>
-            </form>
-            </div>
-        </div>
-    </div>
+		<!-- 채팅방 생성 클릭 시 뜨는 모달  -->
+		<div class="modal fade" id="createCRModal">
+		    <div class="modal-dialog modal-fullsize" id="modalDialog">
+		        <div class="modal-content modal-fullsize">
+			        <!-- Modal Header -->
+			        <div class="modal-header">
+			            <h4 class="modal-title">채팅방 생성</h4>
+			            <button type="button" class="close" data-dismiss="modal">&times;</button> 
+			        </div>
+		
+			        <form action="createChatRoom" method="post" id="createChatRoom">
+			            <!-- Modal Body -->
+			            <div class="modal-body">
+			                <label for="crTitle" class="mr-sm-2">그룹명 :</label>
+			                <input type="text" class="form-control mb-2 mr-sm-2" placeholder="그룹명을 입력하세요." id="crTitle" name="crTitle"> 
+			                <div id="crTitleCheck" style="display:none; font-size:0.8em"></div> <br>
+			                <label for="userPwd" class="mr-sm-2">초대할 대상 :</label>
+			                <a data-toggle="modal" href="#myModal2" class="btn btn-primary" id="inviteUser">추가하기</a>
+			                
+			                <!-- 선택된 사원 정보 -->
+			                <div class="form-control mb-2 mr-sm-2" id="inviteUserList" style="min-height:40px;"></div>		               
+			                <div id="inviteUserCheck" style="display:none; font-size:0.8em"></div> <br>
+			                
+			                <label for="userPwd" class="mr-sm-2">비밀번호 설정 <input class="" type="checkbox" id="pwCheck"></label>
+			                <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="crPw" name="crPw" readOnly>
+			            </div>
+			            
+			            <!-- Modal footer -->
+			            <div class="modal-footer">
+			                <button type="button" id="encodeRoom" class="btn btn-primary">채팅방 생성</button>
+			                <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+			            </div>
+			        </form>
+		        </div>
+		    </div>
+		</div>
     
-     <div class="modal fade" id="myModal2">
-        <div class="modal-dialog modal-fullsize" >
-            <div class="modal-content modal-fullsize" >
-            	<!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">검색하기</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div><input type="text" class="form-control mb-2 mr-sm-2" placeholder="사원명 검색" id="searchUser" name="searchUser"></div>
-                <div class="container"></div>
-                <!-- Modal Body -->
-                <div class="modal-body" style="overflow:auto; height:500px;">
-                <!-- 사원 리스트 출력 테이블 -->
-                    <table class="form-CR_mList" id="CR_mlist">
-                    	
-                    </table>
-                    
-                </div>
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                	<a href="#" data-dismiss="modal" class="btn btn-primary" id="selectEnrollUser">추가하기</a>
-                    <a href="#" data-dismiss="modal" class="btn btn-danger">닫기</a>
-                    <input type="hidden" id="listCount" value=""></input> 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+		<div class="modal fade" id="myModal2">
+		   <div class="modal-dialog modal-fullsize" >
+		       <div class="modal-content modal-fullsize" >
+			       	<!-- Modal Header -->
+					<div class="modal-header">
+					    <h4 class="modal-title">검색하기</h4>
+					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					</div>
+					<div><input type="text" class="form-control mb-2 mr-sm-2" placeholder="사원명 검색" id="searchUser" name="searchUser"></div>
+					<div class="container"></div>
+					<!-- Modal Body -->
+					<div class="modal-body" style="overflow:auto; height:500px;">
+					<!-- 사원 리스트 출력 테이블 -->
+					    <table class="form-CR_mList" id="CR_mlist"></table>				    
+					</div>
+					<!-- Modal footer -->
+		            <div class="modal-footer">
+		            	<a href="#" data-dismiss="modal" class="btn btn-primary" id="selectEnrollUser">추가하기</a>
+		                <a href="#" data-dismiss="modal" class="btn btn-danger">닫기</a>
+		                <input type="hidden" id="listCount" value=""></input> 
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
     <br clear="both">
     
     <script>
     	
     	$(function(){
     		
-    		console.log("onload 함수 작동")
     		$.ajax({
     			
     			url:"selectChatRoomList",
@@ -260,26 +255,20 @@
 						
 							
 							
-	    					}
+	    				}
 	
 						
 					})
-					
-						
-					
+
 					$('#chatList').html(value);
-					
-					
-					
+
 				},error:function(request, error){
 		   	   		
-		
 		   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
 		   	   		
 			   		console.log("ajax통신실패");
-			   		//console.log(mList)
-	   		
-					 }
+			   		
+				}
     				
     		})
     		
@@ -340,6 +329,7 @@
     		
     			
     			if(num == 1){
+    				
     				$('#inviteUserCheck').css("color" , "red").text("초대할 대상을 선택해 주세요.");
     				$("#inviteUserCheck").show();
     				
@@ -353,6 +343,7 @@
     		
     		// 채팅방 생성 함수
     		 function CreateChatRoom(){
+    			
     			 $("#crTitleCheck").hide();
     			 
     			 // 채팅방 생성할 것인지 확인
@@ -366,6 +357,7 @@
     					url:"createChatRoom",
     					type:"post",
     					data:{
+    						
     						crTitle:crTitle,
     						crPw:crPw
     					},
@@ -381,10 +373,8 @@
     					},error:function(request, error){
 
     						alert("채팅방 생성에 실패하였습니다.");
-    				   		console.log("채팅방 생성 실패");
-    				   		//console.log(mList)
     		   		
-    						 }
+    					}
     				})
     				
     			}
@@ -394,25 +384,32 @@
 			// 비밀번호 체크박스 선택 시 바뀌는 이벤트
 			$("#pwCheck").change(checkedchange)
 			function checkedchange(){
+				
 				if($(this).prop("checked")){
+					
 					$("#crPw").attr("readOnly", false);
+					
 				}else{
+					
 					$("#crPw").attr("readOnly", true);
+					
 				}			
 	        }
 			
 			// 모달창 종료시 안에 입력된 값들 초기화 시키는 메소드
 			$('.modal').on('hidden.bs.modal', function exitModal(e) {
+				
 				  $(this).find('form')[0].reset()
 				  $('#pwCheck').attr("checked" , false);
 				  $("#crPw").attr("readOnly", true);
 				  deleteCheckedUser()
 				  console.log("모달종료함수")
-				});
+				  
+			});
 			
 			// 체크된 유저 삭제하는 함수
 			function deleteCheckedUser(crNo){
-				console.log('삭제 함수 실행')
+
 				$.ajax({
 				
 				  url:"deleteCheckedUser",
@@ -423,21 +420,22 @@
 					  if(data == 1){
 					  checkedUserList();
 					  }
-					}
+				  }
 				  
-			  })
+			    })
 			}
 	</script>
 	 
 	<script>
 	
-
 		// 채팅방 생성시 초대할 유저 목록 이벤트
 		$("#inviteUser").click(function(){
 
 			$.ajax({
+				
 				url:"crSelectUserList",
 				type:"post",
+				
 				success: function(mList){
 
 					$('#listCount').val(mList.length);
@@ -457,13 +455,10 @@
 							"<td rowspan=2><input class='form-radio' id='CK_User"+i+"' value='" + m.mNo + "' type='checkbox'></td>" +
 							"</tr>" +
 							
-							
 							"<tr>" +
 							"<td class='td1'>" + m.jName + "</td>" +
 							"<td class='td1'>" + m.dName + "</td>" +
-					
 							"</tr>" +
-							
 							
 							"<tr><td colspan=8><hr class='CRdivLine'></td></tr>" +
 							"<input type='hidden' id='mName"+i+"' value='"+m.mName+"'>"
@@ -471,18 +466,14 @@
 					})
 					
 					$('#CR_mlist').html(value);
-					
-					
-					
+						
 				},error:function(request, error){
 		   	   		
-		
 		   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
 		   	   		
 			   		console.log("ajax통신실패");
-			   		//console.log(mList)
 	   		
-					 }
+				  }
 				
 				})
 
@@ -492,7 +483,7 @@
 		$('#selectEnrollUser').click(function(){
 			
 			var mList = $('#listCount').val();
-			//console.log(mList)
+
 			var eList = [];
 			var arr = {};
 			for(let i = 0; i < mList; i++){
@@ -501,8 +492,7 @@
 				
 					var mName = $('#mName'+i).val();
 					var mNo = $('#CK_User'+i).val();
-					//console.log(mName)
-					//console.log(mNo)
+
 			 		arr = {
 			 			mName: mName,
 			 			mNo: mNo		
@@ -523,30 +513,26 @@
 					
 					url : "insertSelectUserList",
 					type : "post",
-					//contentType:'application/json; charset=UTF-8',
-					//dataType:'json' ,
-					//data:JSON.stringify(eList),
 					data:{eList:eList},
-					
-					
+						
 					success : function (data) {
 						
 						if(data == 1){
-						checkedUserList();
+							
+							checkedUserList();
 						
-						console.log("json전달 성공")
-						$("#inviteUserCheck").hide();
+							$("#inviteUserCheck").hide();
+							
 						}else{
 							
 							console.log(eList)
 						}
+						
 					},error:function(request, error){
 			   	   		
-						console.log(JSON.stringify(eList))
 			   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);
 			   	   		
 				   		console.log("ajax통신실패");
-				   		//console.log(mList)
 		   		
 						 }
 				})
@@ -563,7 +549,7 @@
 			type : "post",
 				
 			success : function (mList) {
-	        	console.log(mList)
+				
 				var count = mList.length;
 				
 				var value= "";
@@ -571,6 +557,7 @@
 				$.each(mList, function(i, m){
 					
 					value += 
+						
 						"<span><input id='userList"+i+"' onclick='IUserDelete("+i+")'  type='text' class='InviteUser' value='"+m.mName+"' readonly style='border-radius:10px; width:17%; margin:0 5px 10px 0; text-align:center;'></input></span>" +
 						"<input type='hidden' value='"+m.mNo+"' id='inviteUserList"+i+"'>"
 			
@@ -578,7 +565,7 @@
 				
 				$('#inviteUserList').html(value);
 				
-			},error:function(request, error){
+			 },error:function(request, error){
 	   	   		
 				
 	   	   		alert("code:" + request.status + "\n" + "message:" + request.reponseText + "\n" + "error:" + error);

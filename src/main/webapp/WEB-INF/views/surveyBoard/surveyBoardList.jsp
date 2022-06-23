@@ -203,10 +203,33 @@
 	
 	function goSurveyBoardDetail(sbNo, sbAState){
 		
-		
-		location.href="surveyBoardDetail?sbNo="+sbNo+"&sbAState=" + sbAState;
-		
-		
+		$.ajax({
+			
+			url:"checkDeptNo",
+			type:"POST",
+			data:{
+				
+				sbNo:sbNo,
+				sbAState:sbAState
+			},
+			success:function(b){
+				console.log(b)
+				if(b == 'false'){
+					
+					alert('공개되지 않은 게시물 입니다.');	
+					
+				}else{
+					
+					location.href=b+"?sbNo="+sbNo+"&sbAState="+sbAState;
+				}
+				
+			}
+			
+			
+			
+			
+		})
+
 	}
 	
 	</script>
