@@ -38,22 +38,7 @@ public class ChatController {
 	@Autowired
 	public ChatService chatService;
 	
-	@RequestMapping("selectCommunityList")
-	public ModelAndView selectCommunityList(ModelAndView mv, Model model) {
-
-		Member loginUser = (Member)model.getAttribute("loginUser");
-		
-		if(loginUser == null) {
-			mv.setViewName("member/login");
-		}else{
-			mv.setViewName("chat/community");
-		}
-		
-		
-	
-		return mv;
-	}
-	
+	// 채팅방 리스트로 이동
 	@RequestMapping("chatRoomListForm")
 	public ModelAndView chatRoomListForm(ModelAndView mv, Model model) {
 
@@ -65,9 +50,7 @@ public class ChatController {
 			mv.setViewName("chat/chatList");
 
 		}
-		
-		
-	
+
 		return mv;
 	}
 	
@@ -105,6 +88,7 @@ public class ChatController {
 	}
 	
 	
+	// 채팅방 초대인원 리스트 출력
 	@ResponseBody
 	@RequestMapping(value="crSelectUserList", produces="application/json; charset=utf-8")
 	public String selectUserList(Model model){
@@ -121,7 +105,7 @@ public class ChatController {
 	return new GsonBuilder().create().toJson(mList);
 	}
 	
-	
+	// 채팅방 초대 후보 맴버 입력
 	@ResponseBody
 	@RequestMapping(value="insertSelectUserList")
 	  public int insertSelectUserList(@RequestParam(value="eList[]") ArrayList<String> eList, Model model) {
@@ -161,6 +145,7 @@ public class ChatController {
 		return new GsonBuilder().create().toJson(mList);
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping("deleteCheckedUser")
 	public int deleteCheckedUser(Model model) {
@@ -179,7 +164,6 @@ public class ChatController {
 	
 	// 채팅방 생성
 	@RequestMapping("createChatRoom")
-	//public ModelAndView createChatRoom(ModelAndView mv, Chat chat, @RequestParam(value="eList[]") ArrayList<String> eList, Model model) {
 	public String createChatRoom(ModelAndView mv, Chat chat, Model model) {
 	
 			
@@ -203,7 +187,6 @@ public class ChatController {
 				
 				}
 				return "chat/chatList";
-			
 			
 	}
 	
@@ -319,13 +302,12 @@ public class ChatController {
 			chat.setChatCTime(sd1.format(chatNo));
 			message.setChatCTime(sd1.format(chatNo));
 			
-			System.out.println(chat);
 			Member m = chatService.loginUser(chat);
 			message.setPName(m.getPName());
 			
 			chat.setPName(m.getPName());
 	
-			
+			//메시지 템플릿으로 화면단에서 받아온 메시지를 가공해서 다시 화면에 보내줌
 			template.convertAndSend("/topic/" + message.getCrNo(), message);
 			
 			Chat chatSeq = new Chat(); 
@@ -362,6 +344,7 @@ public class ChatController {
 		}
 		
 		
+		// 채팅방에 등록된 유저인지 확인하는 메소드
 		@ResponseBody
 		@RequestMapping(value="checkCRUser" , produces="application/json; charset=utf-8")
 		public String checkChatRoomUser(Model model, int crNo) {
@@ -374,13 +357,12 @@ public class ChatController {
 			chat.setMNo(loginUser.getMNo());	
 			
 			ArrayList<Chat> list = chatService.checkCRUserList(chat);
-			System.out.println("list =================> " + list);
 			
 			return new GsonBuilder().create().toJson(list);
 		}
 		
 		
-		
+		// 초대 리스트 맴버 한 명 삭제
 		@ResponseBody
 		@RequestMapping(value="IMemberDelete")
 		public int deleteInviteMember(Model model, String mNo) {
@@ -396,7 +378,6 @@ public class ChatController {
 		
 			return 1;
 		}
-		
 		
 		
 }

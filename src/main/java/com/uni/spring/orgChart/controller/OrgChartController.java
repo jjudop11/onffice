@@ -17,7 +17,6 @@ import com.uni.spring.orgChart.model.dto.OrgChart;
 import com.uni.spring.orgChart.model.service.OrgChartService;
 
 @Controller
-//@RequiredArgsConstructor
 @SessionAttributes({"loginUser", "msg"})
 public class OrgChartController {
 
@@ -27,7 +26,7 @@ public class OrgChartController {
 	
 	
 	
-
+	// 조직도에 출력할 사원 정보 조회
 	@ResponseBody
 	@RequestMapping(value="orgChartList", produces="application/json; charset=utf-8")
 	public Map<String, Object> orgChartList(Model model) {
@@ -43,27 +42,28 @@ public class OrgChartController {
 		ArrayList<OrgChart> chartMList = orgChartService.selectOrgChartMList(cNo);
 		ArrayList<String> deptList = orgChartService.selectDeptList(cNo);
 		
+		
 		result.put("cList", chartList);
 		result.put("cMList", chartMList);
 		result.put("dList", deptList);
-		
-		
 		
 		return result;
 		
 	}
 	
+	// 선택된 사원정보 조회
 	@ResponseBody
 	@RequestMapping(value="selectMemProfile", produces="application/json; charset=utf-8")
 	public String selectMemProfile(Model model, OrgChart org) {
 		
 
 		OrgChart mem = orgChartService.selectMemInfo(org);
-		System.out.println("mem ==== " + mem);
 		return new GsonBuilder().create().toJson(mem);
 		
 	}
 	
+	
+	// 사원 검색 조회
 	@ResponseBody
 	@RequestMapping(value="searchMemList", produces="application/json; charset=utf-8")
 	public String searchMemList(Model model, String key) {
@@ -101,7 +101,6 @@ public class OrgChartController {
 			
 		}
 		
-		System.out.println("resultList =====  " + resultList);
 		return new GsonBuilder().create().toJson(resultList);
 		
 	}

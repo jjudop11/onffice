@@ -369,13 +369,11 @@ function chart(){
 						}else{
 							qCount[i] = qCount[i] + 1
 						}
-						console.log(qCount[i]);
+
 					}
 				})
 				
 			})
-			console.log(qCount);
-			console.log(qList);
 			
 			var context = document
 		    .getElementById('myChart')

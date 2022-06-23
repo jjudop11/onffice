@@ -57,7 +57,7 @@
 	.body{
 		height:550px;
 		position:relative;
-		overflow:auto;
+		overflow-y:scroll;
 		background-color: rgb(149, 217, 248);
 		width:400px;
 	}
@@ -125,12 +125,7 @@
 	    overflow: hidden;
 	    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
 	}
-	.chat-window {
-	    flex: auto;
-	    max-height: calc(100% - 60px);
-	    background: #2f323b;
-	    overflow: auto;
-	}
+
 	.chat-input {
 	    flex: 0 0 auto;
 	    height: 100%;
@@ -343,6 +338,14 @@
 	
 	
 <script type="text/javascript">
+	// 스크롤 맨 밑으로 내리기
+	$(function(){
+		
+		const $space = $('#space');
+		$space.scrollTop($space[0].scrollHeight);
+
+	})
+
 
 
 	//채팅방 나가기
@@ -350,13 +353,12 @@
 		
 			var crNo = ${chat.crNo};
 			var mNo = '${m.MNo}';
-			var cNo = ${chat.CNo};
-			
-			//location.href="exitRoom?crNo=" + crNo + "&mNo=" + mNo + "&cNo=" + cNo; 
+			var cNo = ${chat.CNo}; 
 			
 			disconnect();
 	};
 
+	// 채팅방 완전 나가기
 	$("#exitRoom").click(function(){
 		
 		var crNo = ${chat.crNo};
@@ -395,12 +397,8 @@
 	        	console.log('connect')
 	            stompClient.subscribe('/topic/' + crNo, function (e) { // 해당 페이지의 subscribe를 지정, 메세지를 보내면 이 주소로 받음을 명시
    			
-	          // 	console.log(e.body)
-	          //  console.log(JSON.parse(e.body))
 	            var p =	JSON.parse(e.body);
 	            
-	            	console.log(p)
-	            	//console.log(MNo)
 	            	if(p.mno == MNo){
 	            		
 	            		showMessageRight(p);
@@ -492,19 +490,6 @@
 	    	$('.sidebar').addClass("enter");
 	    	
 	    });
-	    
-	    
-	    <%--
-	    function alertClosing(selector, delay){
-	        console.log(selector);
-	        document.getElementById(selector).style.display = "block";
-	        window.setTimeout(function(){
-	            document.getElementById(selector).style.display = "none";
-	        },delay);
-	    }
-	    --%>
-	   
-	    
 
 </script>
 </body>
