@@ -294,7 +294,7 @@ tr, th {
 															<c:forEach items="${ roomList }" var="r">
 																<tr data-roomno="${r.roomNo}">
 																	<th colspan="2">${ r.roomName }</th>
-																	<th id="07:00" title="툴팁 줄 수 있을까?"></th>
+																	<th id="07:00"></th>
 																	<th id="07:30"></th>
 																	<th id="08:00"></th>
 																	<th id="08:30"></th>
@@ -393,27 +393,26 @@ tr, th {
 		//예약된 일정 화면에 뿌리기
 		$(function() {
 			$('#searchDateBtn').click(function() {
-	
 				let date = $('#datePicker').val();
-				console.log(date);
+				
 				$.ajax({
 					url : 'reservedRoomList.do',
 					data : {
 						date : date
 					},
 					type : 'post',
-					success : function(data, statusText, jqXHR) {
-					
+					success : function(data) {		
 						const obj = JSON.parse(data);
 						const cells = $('#roomReserveTable tbody th');
 
 						let offset = 0;
 
+						//아래 세개는 날짜를 새로 조회할때 배경색을 지우고, 시작시간과 종료시간이 저장된 데이터를 셀에서 지워줌
 						cells.css('background', '');
 						cells.removeData('st-time');
 						cells.removeData('ed-time');
 
-						for (const room of obj.rooms){					
+						for (const room of obj.rooms){ 				//obj.rooms에 담았던 회의실을 빼내서 돌릴 것				
 							for (const time of room.times){
 								
 								const stTime = cells.eq(time[0] + offset + 1).attr('id');
@@ -426,6 +425,7 @@ tr, th {
 								if (edTimeMinute == 30){
 									edTimeHour++;
 									edTimeMinute = '00';
+									
 								} else {
 									edTimeMinute = '30';
 								}
@@ -436,9 +436,8 @@ tr, th {
 								
 								edTime = edTimeHour + ':' + edTimeMinute;
 								
-								for (let i = time[0]; i < time[1]; i++){
-									
-									const item = cells.eq(i + offset + 1); //i + offset + 1 -> +1은 eq(0)이 회의실명 적힌 칸이라서
+								for (let i = time[0]; i < time[1]; i++){								
+									const item = cells.eq(i + offset + 1);
 
 									item.css('background', '#2146b5'); 
 									item.data('st-time', stTime);
@@ -446,14 +445,13 @@ tr, th {
 									item.prop('title', stTime + ' ~ ' + edTime)
 								}
 							}							
-							offset += 29; //한 행에 29칸, +29 해서 한칸씩 내려갈 것
+							offset += 29;
 						}
 					},
 					error : function(error) {
 						alert('조회에 실패하였습니다.');
 					}
-				})
-					
+				})				
 			})
 		})
 
@@ -486,13 +484,12 @@ tr, th {
 							selectRoom : selectRoom,
 							title: title
 						},
-						type: 'post',
-						
-						//예약 완료시에 datepicker에 현재날짜 고정된채로 화면 reload 필요
+						type: 'post',	
 						success: function(result){
 							if(result > 0){
 								alert('예약이 완료되었습니다.');
 								$('#searchDateBtn').trigger('click');
+								
 							}else if(result == -1){
 								alert('이미 예약된 시간입니다.');
 							}		
@@ -501,10 +498,9 @@ tr, th {
 							alert('예약에 실패하였습니다. 예약정보를 입력해주세요.');
 						}
 					})
-				}
-						
+				}					
 				$('#myModal').modal('hide');
-				e.preventDefault(); //페이지 새로고침되지 않게 //새로고침되면 datepicker 초기화됨
+				e.preventDefault(); 
 			})
 		})
 		
