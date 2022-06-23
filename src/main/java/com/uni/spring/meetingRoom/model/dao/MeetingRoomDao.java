@@ -62,33 +62,32 @@ public class MeetingRoomDao {
 	}
 
 	public int deleteRooms(SqlSessionTemplate sqlsession, String roomNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.delete("MeetingRoomMapper.deleteRooms", roomNo);
 	}
 
 	public String selectRoomNo(SqlSessionTemplate sqlsession, String selectRoom) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectRoomNo", selectRoom);
 	}
 
 	public int reserveRoom(SqlSessionTemplate sqlsession, ReserveRoom room) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.insert("MeetingRoomMapper.reserveRoom", room);
 	}
 
 	public double selectStartKey(SqlSessionTemplate sqlsession, String startTime) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectStartKey", startTime);
 	}
 
 	public double selectEndKey(SqlSessionTemplate sqlsession, String endTime) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectEndKey", endTime);
 	}
 
 	public ArrayList<ReserveRoom> selectReservedRooms(SqlSessionTemplate sqlsession, int cNo, String date) {
 		
-		//파라미터 두개 안 넘어감
 		ReserveRoom room = new ReserveRoom();
 		room.setcNo(cNo);
 		room.setReserveDate(date);
@@ -113,48 +112,48 @@ public class MeetingRoomDao {
 	}
 
 	public String selectMName(SqlSessionTemplate sqlsession, String mNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectMName", mNo);
 	}
 
 	public String selectMJobName(SqlSessionTemplate sqlsession, String mNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectMJobName", mNo);
 	}
 
 	public String selectRoomName(SqlSessionTemplate sqlsession, String roomNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectRoomName", roomNo);
 	}
 
 	public int deleteReservation(SqlSessionTemplate sqlsession, String reservationNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.delete("MeetingRoomMapper.deleteReservation", reservationNo);
 	}
 
 	public String selectReserveDate(SqlSessionTemplate sqlsession, String reservationNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectReserveDate", reservationNo);
 	}
 
 	public int updateReservation(SqlSessionTemplate sqlsession, ReserveRoom updateRoom) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.update("MeetingRoomMapper.updateReservation", updateRoom);
 	}
 
 	public ReserveRoom selectreservedRoom(SqlSessionTemplate sqlsession, ReserveRoom r) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.mainSelectreservedRoom", r);
 	}
 
 	public MeetingRoom selectRoomInfo(SqlSessionTemplate sqlsession, String roomNo) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.selectOne("MeetingRoomMapper.selectRoomInfo", roomNo);
 	}
 
 	//회의실 정보 수정
 	public int modifyRoom(SqlSessionTemplate sqlsession, MeetingRoom r) {
-		// TODO Auto-generated method stub
+		
 		return sqlsession.update("MeetingRoomMapper.modifyRoom", r);
 	}
 
