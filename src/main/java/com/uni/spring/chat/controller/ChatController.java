@@ -29,11 +29,10 @@ import lombok.RequiredArgsConstructor;
 
 @SessionAttributes({"loginUser", "msg"})
 @Controller
+@RequiredArgsConstructor
 public class ChatController {
 
-	@Autowired
 	private SimpMessagingTemplate template;
-
 	
 	@Autowired
 	public ChatService chatService;
