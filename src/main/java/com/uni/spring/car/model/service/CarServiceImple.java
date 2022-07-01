@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.uni.spring.car.model.dao.CarDao;
 import com.uni.spring.car.model.dto.Car;
+import com.uni.spring.car.model.dto.CarNotice;
 import com.uni.spring.car.model.dto.ReserveCar;
 import com.uni.spring.common.PageInfo;
 
@@ -115,6 +116,18 @@ public class CarServiceImple implements CarService {
 	public int updateReserveCar(ReserveCar c) {
 		// TODO Auto-generated method stub
 		return carDao.updateReserveCar(sqlsession, c);
+	}
+
+	@Override
+	public int insertNotice(CarNotice cn) {
+		// TODO Auto-generated method stub
+		return carDao.insertNotice(sqlsession, cn);
+	}
+
+	@Override
+	public CarNotice selectCarNotice(int cNo) {
+		// TODO Auto-generated method stub
+		return carDao.selectCarNotice(sqlsession, cNo);
 	}
 
 	

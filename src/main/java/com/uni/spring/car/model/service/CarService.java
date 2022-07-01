@@ -3,6 +3,7 @@ package com.uni.spring.car.model.service;
 import java.util.ArrayList;
 
 import com.uni.spring.car.model.dto.Car;
+import com.uni.spring.car.model.dto.CarNotice;
 import com.uni.spring.car.model.dto.ReserveCar;
 import com.uni.spring.common.PageInfo;
 
@@ -37,6 +38,10 @@ public interface CarService {
 	String selectUserJobName(String userNo);
 
 	int updateReserveCar(ReserveCar c);
+
+	int insertNotice(CarNotice cn);
+
+	CarNotice selectCarNotice(int cNo);
 
 	
 
