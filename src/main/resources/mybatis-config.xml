@@ -33,6 +33,7 @@
       <typeAlias alias="ReserveRoom" type="com.uni.spring.meetingRoom.model.dto.ReserveRoom"/>
       <typeAlias alias="Car" type="com.uni.spring.car.model.dto.Car"/>
       <typeAlias alias="ReserveCar" type="com.uni.spring.car.model.dto.ReserveCar"/>
+      <typeAlias alias="CarNotice" type="com.uni.spring.car.model.dto.CarNotice"/>
       <typeAlias alias="Attendance" type="com.uni.spring.attendance.model.dto.Attendance"/>
       <typeAlias alias="Timetable" type="com.uni.spring.timetable.model.dto.Timetable"/>
       <typeAlias alias="ApList" type="com.uni.spring.approval.model.dto.ApList"/>

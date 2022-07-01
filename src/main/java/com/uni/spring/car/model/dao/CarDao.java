@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.uni.spring.car.model.dto.Car;
+import com.uni.spring.car.model.dto.CarNotice;
 import com.uni.spring.car.model.dto.ReserveCar;
 import com.uni.spring.common.PageInfo;
 
@@ -88,6 +89,16 @@ public class CarDao {
 	public int updateReserveCar(SqlSessionTemplate sqlsession, ReserveCar c) {
 		
 		return sqlsession.update("CarMapper.updateReserveCar", c);
+	}
+
+	public int insertNotice(SqlSessionTemplate sqlsession, CarNotice cn) {
+		// TODO Auto-generated method stub
+		return sqlsession.insert("CarMapper.insertNotice", cn);
+	}
+
+	public CarNotice selectCarNotice(SqlSessionTemplate sqlsession, int cNo) {
+		// TODO Auto-generated method stub
+		return sqlsession.selectOne("CarMapper.selectCarNotice", cNo);
 	}
 
 	

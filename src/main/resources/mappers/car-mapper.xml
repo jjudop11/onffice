@@ -103,6 +103,25 @@
 		WHERE RESERVE_NO = #{reserveNo}
 	</update>
 	
+	<!-- 공지등록 -->
+	<insert id="insertNotice" parameterType="CarNotice">
+		INSERT INTO
+		CAR_NOTICE
+		VALUES
+		(CAR_NOTICE_SEQ.NEXTVAL, #{notice}, #{cNo})
+	</insert>
+	
+	<select id="selectCarNotice" parameterType="_int" resultType="CarNotice">
+		<![CDATA[
+		SELECT *
+		FROM (SELECT *
+		      FROM CAR_NOTICE
+		      WHERE C_NO = #{cNo}
+		      ORDER BY REGIST_NO DESC)
+		WHERE ROWNUM < 2
+		]]>
+	</select>
+	
 </mapper>
 
 
